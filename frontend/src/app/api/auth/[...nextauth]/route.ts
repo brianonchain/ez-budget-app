@@ -1,13 +1,13 @@
 import NextAuth from "next-auth";
+import type { User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import dbConnect from "@/db/dbConnect";
 import UserModel from "@/db/UserModel";
-import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
-export const handler = NextAuth({
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID ?? "",
@@ -47,7 +47,7 @@ export const handler = NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user }: { user: User }) {
       if (!user.email) return false;
       try {
         await dbConnect();
@@ -71,6 +71,8 @@ export const handler = NextAuth({
       }
     },
   },
-});
+};
+
+export const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
