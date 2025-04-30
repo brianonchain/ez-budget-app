@@ -131,7 +131,9 @@ export default function VerifyOtpPage() {
         {otp.map((digit, index) => (
           <input
             key={index}
-            ref={(el) => (inputsRef.current[index] = el)}
+            ref={(el) => {
+              inputsRef.current[index] = el;
+            }}
             type="text"
             inputMode="numeric"
             pattern="\d*"

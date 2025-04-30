@@ -51,7 +51,7 @@ export default function SaveToHome() {
         <div className="w-[350px] portrait:sm:w-[460px] landscape:lg:w-[460px] flex flex-col gap-[8px] portrait:sm:gap-[16px] landscape:lg:gap-[16px] textBaseApp">
           <p>To use this App, you need to add this website to your home screen.</p>
           <p>
-            In the {"ios" ? "bottom menu bar" : "top right corner"} of your browser, tap the share icon{" "}
+            In the {os === "ios" ? "bottom menu bar" : "top right corner"} of your browser, tap the share icon{" "}
             <span className="whitespace-nowrap">
               (<BsBoxArrowUp className="inline-block mx-[2px] text-[20px]" />)
             </span>{" "}
