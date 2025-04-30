@@ -15,6 +15,14 @@ export async function fetchPost(url: string, obj: { [key: string]: any }) {
     body: JSON.stringify(obj),
     headers: { "content-type": "application/json" },
   });
+  if (!res.ok) throw new Error();
+  const resJson = await res.json();
+  return resJson;
+}
+
+export async function fetchGet(url: string) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error();
   const resJson = await res.json();
   return resJson;
 }

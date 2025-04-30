@@ -1,16 +1,15 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { Settings, Item } from "@/db/UserModel";
 import { User } from "@/utils/types";
-import { fetchPost } from "./functions";
+import { fetchPost, fetchGet } from "./functions";
 
-export const useUserQuery = () => {
+export const useUserQuery = (email: string | null | undefined) => {
   return useQuery({
     queryKey: ["user"],
     queryFn: async (): Promise<User | null> => {
       console.log("useUserQuery queryFn ran");
-      const resJson = await fetchPost("/api/getUser", {}); // should throw error if !response.ok
+      const resJson = await fetchGet("/api/getUser");
       if (resJson.status === "success") {
-        console.log("user fetched", resJson.data);
         return resJson.data;
       }
       if (resJson === "error") {
@@ -18,6 +17,7 @@ export const useUserQuery = () => {
       }
       throw new Error();
     },
+    enabled: email ? true : false,
     staleTime: Infinity, // won't make network request unless query key invoked
     gcTime: Infinity, // query will always be cached
   });

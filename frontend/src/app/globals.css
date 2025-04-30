@@ -2,10 +2,44 @@
 @config "../../tailwind.config";
 @tailwind utilities;
 
+@theme {
+  --color-lightBg1: #f6f9fc;
+  --color-lightBg2: #f7edf7;
+  --color-lightBg3: #f0e7f0;
+  --color-lightText1: #212427;
+  --color-lightText2: #64748b;
+  --color-lightButton1Bg: oklch(62.3% 0.214 259.815);
+  --color-lightButton1BgHover: oklch(70.7% 0.165 254.624);
+  --color-lightButton1Text: #ffffff;
+  --color-lightButton2Bg: #64748b;
+  --color-lightButton2BgHover: #94a3b8;
+  --color-lightButton2Text: #64748b;
+  --color-darkBg1: #0a051f;
+  --color-darkBg2: #050b36;
+  --color-darkBg3: #251e51;
+  --color-darkText1: #e1dff1;
+  --color-darkText2: #64748b;
+  --color-darkButton1Bg: #0364ff;
+  --color-darkButton1BgHover: #2177ff;
+  --color-darkButton1Text: #ffffff;
+  --color-darkButton2Bg: #64748b;
+  --color-darkButton2BgHover: #94a3b8;
+  --color-darkButton2Text: #64748b;
+  --color-darkInput: #010c2a;
+  --color-darkInputBorder: #071e59;
+  --color-darkInputBorderFocus: #0444b7;
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 750px;
+  --breakpoint-lg: 980px;
+  --breakpoint-xl: 1250px;
+  --breakpoint-2xl: 1440px;
+}
+
 /*--- text size ---*/
 
 @utility textXsApp {
-  @apply text-sm desktop:text-xs;
+  @apply text-base desktop:text-xs;
 }
 
 @utility textSmApp {
@@ -13,7 +47,7 @@
 }
 
 @utility textBaseApp {
-  @apply text-lg desktop:text-base;
+  @apply text-lg desktop:text-sm;
 }
 
 @utility text2XlApp {
@@ -40,74 +74,76 @@
   @apply text-base desktop:text-sm;
 }
 
-@utility modalBase {
-  @apply fixed left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-[11] flex flex-col items-center rounded-[16px] bg-light-bg1 border-2 border-slate-400;
-}
-
-@utility modalFullBase {
-  @apply fixed left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-[11] flex flex-col items-center desktop:rounded-[16px] bg-light-bg1 desktop:border-2 desktop:border-slate-400;
-}
-
-@utility modalFullSize {
-  @apply w-full desktop:w-[480px] h-screen desktop:h-[90%];
-}
-
 @utility headerText {
   @apply text-center text-2xl leading-normal font-semibold;
 }
 
-/*--- buttons ---*/
+/*--- colors ---*/
 
-@utility homeButtonBase {
-  @apply flex items-center justify-center button1ColorLight font-medium rounded-full;
+@utility borderColor {
+  @apply border-slate-300 dark:border-slate-700;
 }
 
+/*--- buttons ---*/
+
 .homeButton {
-  @apply homeButtonBase px-[28px] desktop:px-[24px] h-[60px] desktop:h-[48px] text-lg desktop:text-base;
+  @apply button1ColorDark px-[1.3em] py-[0.65em] text-lg desktop:text-base font-medium rounded-full cursor-pointer;
 }
 
 .homeButtonSm {
-  @apply homeButtonBase px-[20px] desktop:px-[18px] h-[44px] desktop:h-[38px] text-base desktop:text-sm;
-}
-
-@utility button1ColorLight {
-  @apply text-light-button1-text bg-light-button1 border-2 border-light-button1 desktop:hover:bg-light-button1-hover desktop:hover:border-light-button1-hover outline-none focus:bg-light-button1-hover focus:border-light-button1-hover active:bg-light-button1-hover desktop:cursor-pointer;
-}
-
-@utility button1Color {
-  @apply button1ColorLight;
-}
-
-@utility button2Color {
-  @apply text-slate-500 bg-none border-2 border-slate-400 desktop:hover:brightness-[1.2] active:brightness-[1.2] desktop:cursor-pointer;
+  @apply px-[20px] desktop:px-[18px] h-[44px] desktop:h-[38px] text-base desktop:text-sm;
 }
 
 @utility buttonBase {
-  @apply h-[56px] desktop:h-[44px] text-lg desktop:text-sm font-semibold rounded-[10px] desktop:rounded-[8px] flex items-center justify-center;
+  @apply h-[56px] desktop:h-[40px] textBaseApp font-medium flex items-center justify-center desktop:cursor-pointer;
+}
+
+@utility buttonBaseLogin {
+  @apply h-[56px] desktop:h-[38px] textBaseApp font-semibold flex items-center justify-center;
+}
+
+@utility button1ColorLight {
+  @apply text-lightButton1Text bg-lightButton1Bg desktop:hover:bg-lightButton1BgHover active:bg-lightButton1BgHover transition-colors duration-300;
+}
+
+@utility button1ColorDark {
+  @apply text-darkButton1Text bg-darkButton1Bg desktop:hover:bg-darkButton1BgHover active:bg-darkButton1BgHover;
+}
+
+@utility button1Color {
+  @apply button1ColorLight dark:text-darkButton1Text dark:bg-darkButton1Bg dark:desktop:hover:bg-darkButton1BgHover dark:active:bg-darkButton1BgHover;
+}
+
+@utility button2Color {
+  @apply bg-none text-slate-500 box-border border-2 border-inherit desktop:hover:border-slate-400 active:border-slate-400 desktop:cursor-pointer;
 }
 
 .loginButton {
-  @apply buttonBase button1ColorLight;
+  @apply buttonBase button1Color rounded-[10px] desktop:rounded-[8px];
 }
 
 .button1 {
-  @apply buttonBase button1Color;
+  @apply buttonBase button1Color rounded-[10px] desktop:rounded-[8px];
 }
 
 .button2 {
-  @apply buttonBase button2Color;
+  @apply buttonBase button2Color rounded-[10px] desktop:rounded-[8px];
+}
+
+.button1RoundNoWidth {
+  @apply buttonBase button1Color rounded-full;
 }
 
 .buttonSettings {
-  @apply w-[80px] desktop:w-[68px] h-[36px] desktop:h-[32px] text-sm desktop:text-xs font-medium flex items-center justify-center gap-[4px] rounded-full button1Color;
+  @apply h-[36px] desktop:h-[32px] px-[0.8em] text-sm desktop:text-xs font-medium flex items-center justify-center gap-[4px] rounded-full button1Color cursor-pointer;
 }
 
 .xButton {
-  @apply absolute right-0 top-0 w-[64px] h-[64px] desktop:w-[52px] desktop:h-[52px] text-[32px] desktop:text-[24px] font-bold flex items-center justify-center desktop:rounded-bl-[14px] desktop:rounded-tr-[14px] cursor-pointer desktop:hover:bg-light-bg3 active:bg-light-bg3;
+  @apply absolute right-0 top-0 w-[64px] h-[64px] desktop:w-[52px] desktop:h-[52px] text-[32px] desktop:text-[24px] font-bold flex items-center justify-center desktop:rounded-bl-[14px] desktop:rounded-tr-[14px] cursor-pointer hover:bg-lightBg3 active:bg-lightBg3 dark:hover:bg-darkBg3 dark:active:bg-darkBg3;
 }
 
 .pageXButton {
-  @apply absolute right-[-8px] top-[4px] w-[60px] h-[60px] desktop:w-[50px] desktop:h-[50px] text-[32px] desktop:text-[28px] font-bold flex items-center justify-center rounded-[8px] cursor-pointer desktop:hover:bg-light-bg3 active:bg-light-bg3;
+  @apply absolute right-[-8px] top-[4px] w-[60px] h-[60px] desktop:w-[50px] desktop:h-[50px] text-[32px] desktop:text-[28px] font-bold flex items-center justify-center rounded-[8px] cursor-pointer hover:bg-lightBg3 active:bg-lightBg3 dark:hover:bg-darkBg3 dark:active:bg-darkBg3;
 }
 
 .mobileBack {
@@ -117,29 +153,35 @@
 /*--- input ---*/
 
 @utility inputColor {
-  @apply bg-white text-black rounded-[8px] outline-none border-[1.5px] border-slate-300 focus:border-blue-500 transition-[all] duration-[500ms];
+  @apply rounded-[8px] outline-none border-[1.5px] bg-white dark:bg-darkInput text-lightText1 dark:text-darkText1 border-slate-300 focus:border-blue-500 dark:border-darkInputBorder dark:focus:border-darkInputBorderFocus [transition:border-color_500ms];
 }
 
 @utility placeholderColor {
   @apply placeholder:italic placeholder:text-slate-400 dark:placeholder:text-slate-500;
 }
 
-.label {
-  @apply pb-[2px] font-semibold text-lg desktop:text-sm;
+.inputLabel {
+  @apply pb-[4px] font-semibold textBaseApp;
 }
 
 .input {
-  @apply w-full h-[52px] desktop:h-[40px] px-[10px] desktop:px-[8px] text-lg desktop:text-sm inputColor;
+  @apply w-full h-[52px] desktop:h-[40px] px-[0.7em] textBaseApp font-medium inputColor;
 }
 
 .inputCondensed {
-  @apply w-full h-[44px] desktop:h-[36px] px-[10px] desktop:px-[8px] text-lg desktop:text-sm inputColor;
+  @apply w-full h-[44px] desktop:h-[36px] px-[10px] desktop:px-[8px] textBaseApp inputColor;
+}
+
+/*--- landing ---*/
+
+.homeSectionSize {
+  @apply mx-[16px] xs:mx-[24px] lg:mx-[32px] w-full max-w-[550px] lg:max-w-[1100px] min-h-[700px];
 }
 
 /*--- components ---*/
 
 .menuContainer {
-  @apply fixed flex-none landscape:w-[120px] landscape:lg:w-[160px] landscape:desktop:!w-[200px] landscape:h-screen portrait:w-full portrait:h-[80px] portrait:sm:h-[140px] flex justify-center items-center portrait:border-t landscape:border-r border-slate-400;
+  @apply fixed flex-none landscape:w-[120px] landscape:lg:w-[160px] landscape:desktop:!w-[200px] landscape:h-screen portrait:w-full portrait:h-[80px] portrait:sm:h-[140px] flex justify-center items-center;
 }
 
 .menuThreeItemContainer {
@@ -159,27 +201,27 @@
 }
 
 .listHeaderHeight {
-  @apply h-[50px] portrait:sm:h-[60px] landscape:lg:h-[60px];
+  @apply h-[50px];
 }
 
-.listButtonHeight {
-  @apply h-[90px] portrait:sm:h-[110px] landscape:lg:h-[110px];
+.listButtonContainerHeight {
+  @apply flex-none h-[80px] portrait:sm:h-[110px] landscape:lg:h-[110px];
 }
 
 .listAllHeight {
-  @apply portrait:h-[calc(100vh-80px-140px)] portrait:sm:h-[calc(100vh-140px-170px)] landscape:h-[calc(100vh-140px)] landscape:lg:h-[calc(100vh-170px)];
+  @apply portrait:h-[calc(100vh-80px-80px-50px)] portrait:sm:h-[calc(100vh-140px-110px-50px-32px-2px)] landscape:h-[calc(100vh-80px-50px)] landscape:lg:h-[calc(100vh-110px-50px-32px-2px)];
 }
 
 .listItemHeight {
-  @apply portrait:h-[calc((100vh-80px-140px)/10)] portrait:sm:h-[calc((100vh-140px-140px)/10)] landscape:h-[calc((100vh-140px)/10)] landscape:lg:h-[calc((100vh-170px)/10)] min-h-[60px] max-h-[80px];
+  @apply portrait:h-[calc((100vh-80px-80px-50px)/10)] portrait:sm:h-[calc((100vh-140px-110px-50px-32px)/11)] landscape:h-[calc((100vh-80px-50px)/10)] landscape:lg:h-[calc((100vh-110px-50px-32px)/10)] min-h-[50px] max-h-[80px];
 }
 
 .settingsTitle {
-  @apply mt-[8px] h-[64px] portrait:sm:h-[80px] landscape:lg:h-[80px] portrait:lg:h-[90px] desktop:!h-[90px] text-2xl portrait:sm:text-3xl landscape:lg:text-3xl desktop:!text-2xl font-bold flex items-center justify-center flex-none text-blue-700 dark:text-white;
+  @apply flex-none mt-[8px] h-[64px] portrait:lg:h-[90px] desktop:h-[90px] text-2xl font-bold flex items-center justify-center text-blue-700 dark:text-darkText1;
 }
 
 .settingsField {
-  @apply w-full  h-[52px] desktop:h-[40px] flex items-center justify-between border-t-[1.5px] border-slate-300;
+  @apply w-full h-[52px] desktop:h-[40px] flex items-center justify-between border-t-[1.5px] borderColor;
 }
 
 .labelsField {
@@ -190,12 +232,16 @@
   @apply h-full flex items-center cursor-pointer;
 }
 
-.settingsLabelFont {
-  @apply font-medium text-slate-500;
+.settingsLabel {
+  @apply font-medium text-slate-500 dark:text-darkText1;
+}
+
+.settingsInputLabel {
+  @apply pb-[2px] font-medium text-slate-500 dark:text-darkText1;
 }
 
 .settingsInput {
-  @apply w-full h-full px-[12px] py-[4px] text-end cursor-pointer focus:cursor-text outline-none focus:ring-0 bg-transparent focus:bg-white border-[1.5px] border-transparent focus:border-blue-500 desktop:group-hover:text-slate-500 focus:desktop:group-hover:text-light-text1 transition-all duration-[300ms] placeholderColor placeholder:font-normal placeholder:pr-[2px] focus:placeholder:text-transparent rounded-[6px];
+  @apply w-full h-full px-[12px] py-[4px] text-end cursor-pointer focus:cursor-text outline-none focus:ring-0 bg-transparent focus:bg-white border-[1.5px] border-transparent focus:border-blue-500 desktop:group-hover:text-slate-500 focus:desktop:group-hover:text-lightText1 transition-all duration-[300ms] placeholderColor placeholder:font-normal placeholder:pr-[2px] focus:placeholder:text-transparent rounded-[6px];
 }
 
 .settingsFontFixed {
@@ -203,29 +249,53 @@
 }
 
 .settingsEditIcon {
-  @apply text-[24px] desktop:text-[18px] text-light-button1 desktop:cursor-pointer desktop:hover:brightness-[1.2];
+  @apply text-[24px] desktop:text-[18px] text-lightButton1Bg desktop:cursor-pointer desktop:hover:brightness-[1.2];
 }
 
 .settingsOptions {
   @apply w-full h-[50px] desktop:h-[40px] px-[12px] flex items-center border-[1.5px] border-slate-400;
 }
 
-.labelChip {
-  @apply flex-none h-[40px] px-[4px] desktop:px-[4px] w-full py-[8px] desktop:py-[8px] desktop:cursor-pointer desktop:hover:bg-slate-200 truncate;
+.labelOptionContainer {
+  @apply mt-[4px] grid grid-cols-1 rounded-[8px] border-[1.5px] divide-y-[1.5px] bg-white dark:bg-slate-900 divide-slate-300 dark:divide-slate-900 border-slate-300 dark:border-slate-800 overflow-y-auto;
+}
+
+.labelOption {
+  @apply flex-none h-[40px] px-[4px] desktop:px-[4px] w-full py-[8px] desktop:py-[8px] desktop:cursor-pointer desktop:hover:bg-slate-200 dark:desktop:hover:bg-darkBg3 truncate;
 }
 
 /*--- modal ---*/
 
+@utility modalBase {
+  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[11] flex flex-col items-center rounded-[16px] bg-lightBg1 dark:bg-darkBg1 border-2 dark:border border-slate-300 dark:border-slate-700;
+}
+
+@utility modalFullBase {
+  @apply fixed left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-[11] flex flex-col items-center desktop:rounded-[16px];
+}
+
+@utility modalFullColor {
+  @apply bg-lightBg1 dark:bg-darkBg1 desktop:border desktop:border-lightBg2 dark:desktop:border-darkBg3;
+}
+
+@utility modalFullSize {
+  @apply w-full desktop:w-[480px] h-screen desktop:h-[90%];
+}
+
+@utility modalXPadding {
+  @apply px-[16px] portrait:sm:px-[40px] landscape:lg:px-[40px] desktop:!px-[32px];
+}
+
 .modalSmall {
-  @apply modalBase w-[94%] max-w-[450px] max-h-[90%] py-[24px];
+  @apply modalBase w-[94%] max-w-[350px] desktop:max-w-[320px] h-[min(90%,380px)] desktop:h-[min(90%,350px)] py-[24px];
 }
 
 .modalFull {
-  @apply modalFullBase modalFullSize desktop:pb-[12px];
+  @apply modalFullBase modalFullColor modalFullSize desktop:pb-[12px];
 }
 
 .modalSmallContentContainer {
-  @apply w-full flex flex-col items-center px-[16px] portrait:sm:px-[40px] landscape:lg:px-[40px] desktop:!px-[32px] overflow-y-auto;
+  @apply modalXPadding w-full flex flex-col items-center overflow-y-auto;
 }
 
 .modalFullContentContainer {
@@ -233,15 +303,15 @@
 }
 
 .modalButtonContainer {
-  @apply w-full flex flex-col items-center pt-[36px] pb-[20px] gap-[24px];
+  @apply modalXPadding w-full flex flex-col items-center pt-[36px] pb-[20px] gap-[24px];
 }
 
 .modalButtonWidth {
-  @apply w-[300px];
+  @apply w-full;
 }
 
 .modalBlackout {
-  @apply opacity-[70%] dark:opacity-[88%] fixed inset-0 bg-black backdrop-blur-xl z-[10];
+  @apply opacity-[70%] dark:opacity-[80%] fixed inset-0 bg-black backdrop-blur-xl z-[10];
 }
 
 .modalFullHeader {
@@ -255,17 +325,64 @@
 /*--- utilities ---*/
 
 .link {
-  @apply cursor-pointer text-blue-600 dark:text-blue-400 xs:hover:underline active:underline;
+  @apply cursor-pointer text-blue-600 dark:text-blue-400;
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px white inset !important;
+/* input:-webkit-autofill {
+  background-color: white !important;
+  transition: background-color 9999s ease-in-out 0s;
 }
 
-.thinScrollbar::-webkit-scrollbar {
+.dark input:-webkit-autofill {
+  background-color: #010c2a !important;
+  transition: background-color 9999s ease-in-out 0s;
+} */
+
+body {
+  --input-bg: #ffffff;
+  --input-text: #212427;
+}
+
+.dark body {
+  --input-bg: #010c2a;
+  --input-text: #e1dff1;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px var(--input-bg) inset !important;
+  -webkit-text-fill-color: var(--input-text) !important;
+}
+
+@utility thinScrollbar {
+  &::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 6px;
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 6px;
+    background-color: #f6f9fc;
+  }
+
+  .dark &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    opacity: 20%;
+  }
+  .dark &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .dark &::-webkit-scrollbar-track {
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.07);
+  }
+}
+
+/* .thinScrollbar::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
@@ -278,4 +395,584 @@ input:-webkit-autofill:active {
 .thinScrollbar::-webkit-scrollbar-thumb {
   background-color: #cbd5e1;
   border-radius: 6px;
+}
+
+.dark .thinScrollbar::-webkit-scrollbar-track {
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.dark .thinScrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.1);
+  opacity: 20%;
+  border-radius: 6px;
+} */
+
+.underline-animate {
+  position: relative;
+  display: inline-block;
+}
+
+.underline-animate::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 0;
+  background-color: currentColor;
+  transition: all 0.3s ease;
+}
+
+.underline-animate:hover::after {
+  width: 100%;
+}
+
+.gradient-header {
+  @apply relative overflow-hidden;
+
+  background: radial-gradient(120px 80px at 10% 50%, rgba(196, 181, 253, 0.6), transparent 80%),
+    /* light purple */ radial-gradient(100px 100px at 70% 30%, rgba(191, 219, 254, 0.5), transparent 80%),
+    /* light blue */ radial-gradient(150px 80px at 90% 90%, rgba(255, 213, 153, 0.5), transparent 85%); /* light orange */
+
+  background-color: #fef9ff; /* subtle pinkish background to help glow show */
+}
+
+.animate-page1 {
+  animation: page1 10s linear infinite;
+}
+.animate-page2 {
+  animation: page2 10s linear infinite;
+}
+.animate-page3 {
+  animation: page3 10s linear infinite;
+}
+.animate-page4 {
+  animation: page4 10s linear infinite;
+}
+.animate-page5 {
+  animation: page5 10s linear infinite;
+}
+
+@keyframes page1 {
+  0% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 1;
+  }
+  10.1% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes page2 {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0;
+  }
+  10.1% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  30.1% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes page3 {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  30.1% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  50.1% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes page4 {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  50.1% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  82.1% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes page5 {
+  0% {
+    opacity: 0;
+  }
+  82% {
+    opacity: 0;
+  }
+  82.1% {
+    opacity: 1;
+  }
+  99.9% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-arrow {
+  animation: arrowNew 10s ease-out infinite;
+  transform: translateZ(0);
+}
+@keyframes arrowNew {
+  /* page 1 */
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  5% {
+    transform: translateY(250px) scale(1);
+    opacity: 1;
+  }
+  6% {
+    transform: translateY(250px) scale(1);
+    opacity: 1;
+  }
+  8% {
+    transform: translateY(254px) scale(0.9);
+    opacity: 1;
+  }
+  10% {
+    transform: translateY(250px) scale(1);
+    opacity: 1;
+  }
+  /* page 2 */
+  10.1% {
+    transform: translateY(250px) scale(1);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(0px) scale(1);
+    opacity: 0;
+  }
+  20.1% {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+  25% {
+    transform: translateY(92px) scale(1);
+    opacity: 1;
+  }
+  26% {
+    transform: translateY(92px) scale(1);
+    opacity: 1;
+  }
+  28% {
+    transform: translateY(96px) scale(0.9);
+    opacity: 1;
+  }
+  30% {
+    transform: translateY(92px) scale(1);
+    opacity: 1;
+  }
+  /* page 3 */
+  30.1% {
+    transform: translateY(92px) scale(1);
+    opacity: 0;
+  }
+  40% {
+    transform: translateY(-240px) scale(1);
+    opacity: 0;
+  }
+  40.1% {
+    transform: translateY(-240px) scale(1);
+    opacity: 1;
+  }
+  45% {
+    transform: translateY(-50px) scale(1);
+    opacity: 1;
+  }
+  46% {
+    transform: translateY(-50px) scale(1);
+    opacity: 1;
+  }
+  48% {
+    transform: translateY(-46px) scale(0.9);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-50px) scale(1);
+    opacity: 1;
+  }
+  /* page 4 */
+  50.1% {
+    transform: translateY(-50px) scale(1);
+    opacity: 1;
+  }
+  58% {
+    transform: translateY(-160px) scale(1);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(-154px) scale(0.9);
+    opacity: 1;
+  }
+  62% {
+    transform: translateY(-160px) scale(1);
+    opacity: 1;
+  }
+  68% {
+    transform: translateY(-102px) scale(1);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(-98px) scale(0.9);
+    opacity: 1;
+  }
+  72% {
+    transform: translateY(-102px) scale(1);
+    opacity: 1;
+  }
+  78% {
+    transform: translateY(225px) scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(229px) scale(0.9);
+    opacity: 1;
+  }
+  82% {
+    transform: translateY(225px) scale(1);
+    opacity: 1;
+  }
+  /* page 5 */
+  82.1% {
+    transform: translateY(-200px) scale(1);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(225px) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes costText {
+  10.1% {
+    transform: translateX(4ch);
+  }
+  20% {
+    transform: translateX(0);
+  }
+}
+.animate-cost {
+  animation: costText 10s steps(4, end) infinite;
+}
+
+.animate-name {
+  animation: nameText 10s steps(15, end) infinite, nameCursor 10s step-end infinite;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid white;
+  display: inline-block;
+}
+@keyframes nameText {
+  30.1% {
+    width: 0;
+  }
+  40% {
+    width: 15ch;
+  }
+}
+@keyframes nameCursor {
+  30.1% {
+    border-color: transparent;
+  }
+  35% {
+    border-color: white;
+  }
+  40% {
+    border-color: transparent;
+  }
+  45% {
+    border-color: white;
+  }
+  50% {
+    border-color: transparent;
+  }
+}
+
+.animate-labelTypeBg1 {
+  animation: labelTypeBg1 10s ease-in-out infinite;
+}
+.animate-labelTypeBg2 {
+  animation: labelTypeBg2 10s ease-in-out infinite;
+}
+.animate-labelTypeBg3 {
+  animation: labelTypeBg3 10s ease-in-out infinite;
+}
+@keyframes labelTypeBg1 {
+  0% {
+    background-color: #0364ff;
+  }
+  60% {
+    background-color: #0364ff;
+  }
+  60.1% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+@keyframes labelTypeBg2 {
+  0% {
+    background-color: transparent;
+  }
+  60% {
+    background-color: transparent;
+  }
+  60.1% {
+    background-color: #0364ff;
+  }
+  70% {
+    background-color: #0364ff;
+  }
+  70.1% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+@keyframes labelTypeBg3 {
+  0% {
+    background-color: transparent;
+  }
+  70% {
+    background-color: transparent;
+  }
+  70.1% {
+    background-color: #0364ff;
+  }
+  100% {
+    background-color: #0364ff;
+  }
+}
+
+.animate-none1 {
+  animation: none1 10s ease-in-out infinite;
+}
+.animate-none2 {
+  animation: none2 10s ease-in-out infinite;
+}
+@keyframes none1 {
+  0% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  60.1% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes none2 {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  70.1% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-labelText1 {
+  animation: labelText1 10s ease-in-out infinite;
+}
+.animate-labelText2 {
+  animation: labelText2 10s ease-in-out infinite;
+}
+@keyframes labelText1 {
+  0% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  60.1% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes labelText2 {
+  0% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 0;
+  }
+  70.1% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-choices1 {
+  animation: choices1 10s ease-in-out infinite;
+}
+.animate-choices2 {
+  animation: choices2 10s ease-in-out infinite;
+}
+.animate-choices3 {
+  animation: choices3 10s ease-in-out infinite;
+}
+@keyframes choices1 {
+  0% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  60.1% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes choices2 {
+  0% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  60.1% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  70.1% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes choices3 {
+  0% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 0;
+  }
+  70.1% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  82.1% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-button1 {
+  animation: button1 10s ease-in-out infinite;
+}
+.animate-button2 {
+  animation: button2 10s ease-in-out infinite;
+}
+.animate-button3 {
+  animation: button3 10s ease-in-out infinite;
+}
+.animate-button4 {
+  animation: button4 10s ease-in-out infinite;
+}
+
+@keyframes button1 {
+  6% {
+    transform: scale(1);
+  }
+  8% {
+    transform: scale(0.92);
+  }
+  10% {
+    transform: scale(1);
+  }
+}
+@keyframes button2 {
+  26% {
+    transform: scale(1);
+  }
+  28% {
+    transform: scale(0.92);
+  }
+  30% {
+    transform: scale(1);
+  }
+}
+@keyframes button3 {
+  46% {
+    transform: scale(1);
+  }
+  48% {
+    transform: scale(0.92);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+@keyframes button4 {
+  78% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(0.92);
+  }
+  82% {
+    transform: scale(1);
+  }
 }
