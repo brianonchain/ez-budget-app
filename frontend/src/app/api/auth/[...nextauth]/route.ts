@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import type { User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import dbConnect from "@/db/dbConnect";
 import UserModel from "@/db/UserModel";
@@ -12,10 +11,11 @@ const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_ID ?? "",
       clientSecret: process.env.GOOGLE_SECRET ?? "",
-    }),
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID ?? "",
-      clientSecret: process.env.GITHUB_SECRET ?? "",
+      authorization: {
+        params: {
+          prompt: "select_account",
+        },
+      },
     }),
     CredentialsProvider({
       name: "Email/Password",

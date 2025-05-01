@@ -14,7 +14,6 @@ import LoginGlow from "../../(login)/_components/LoginGlow";
 
 export default function Items() {
   const { data: session } = useSession();
-  console.log("session", session);
   const { data, isPending, isError } = useUserQuery(session?.user?.email);
 
   // states

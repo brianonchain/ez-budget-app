@@ -9,7 +9,7 @@ export default function SignInGoogle({ label }: { label: string }) {
     // setIsLoading("email");
     var res = await signIn("google", {
       callbackUrl: "/app/items",
-      prompt: "login", // doesn't seem to work
+      prompt: "select_account", // doesn't seem to work
     });
     // if sign in error or success
     if (res?.error) {
