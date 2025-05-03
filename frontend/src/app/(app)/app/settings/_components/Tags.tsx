@@ -18,7 +18,7 @@ export default function Tags({ id, text }: { id: string; text: string }) {
       {...attributes}
       {...listeners}
       style={style}
-      className={`px-[4px] h-[52px] desktop:h-[40px] flex items-center justify-between border-t border-b border-dashed borderColor desktop:cursor-pointer desktop:hover:text-slate-400`}
+      className={`px-[4px] h-[52px] desktop:h-[40px] flex items-center justify-between border-t border-b border-dashed borderColorFaint desktop:cursor-pointer desktop:hover:text-slate-400`}
     >
       <div className="">
         <p className="font-medium leading-tight line-clamp-1">{text}</p>

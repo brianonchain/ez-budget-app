@@ -18,7 +18,7 @@
   --color-darkBg1: #0a051f;
   --color-darkBg2: #050b36;
   --color-darkBg3: #251e51;
-  --color-darkText1: #e1dff1;
+  --color-darkText1: #e9e8f6;
   --color-darkText2: #64748b;
   --color-darkButton1Bg: #0364ff;
   --color-darkButton1BgHover: #2177ff;
@@ -63,10 +63,6 @@
   @apply text-sm desktop:text-xs;
 }
 
-@utility menuText {
-  @apply text-base desktop:text-base;
-}
-
 @utility itemText {
   @apply text-base desktop:text-sm;
 }
@@ -82,7 +78,11 @@
 /*--- colors ---*/
 
 @utility borderColor {
-  @apply border-slate-300 dark:border-slate-700;
+  @apply border-slate-300 dark:border-slate-600;
+}
+
+@utility borderColorFaint {
+  @apply border-slate-200 dark:border-slate-700;
 }
 
 /*--- buttons ---*/
@@ -120,15 +120,15 @@
 }
 
 .loginButton {
-  @apply buttonBase button1Color rounded-[10px] desktop:rounded-[8px];
+  @apply buttonBase button1Color rounded-[8px];
 }
 
 .button1 {
-  @apply buttonBase button1Color rounded-[10px] desktop:rounded-[8px];
+  @apply buttonBase button1Color rounded-[8px];
 }
 
 .button2 {
-  @apply buttonBase button2Color rounded-[10px] desktop:rounded-[8px];
+  @apply buttonBase button2Color rounded-[8px];
 }
 
 .button1RoundNoWidth {
@@ -136,11 +136,11 @@
 }
 
 .buttonSettings {
-  @apply h-[36px] desktop:h-[32px] px-[0.8em] text-sm desktop:text-xs font-medium flex items-center justify-center gap-[4px] rounded-full button1Color cursor-pointer;
+  @apply h-[36px] desktop:h-[28px] px-[1em] text-sm desktop:text-xs font-medium flex items-center justify-center gap-[4px] rounded-full button1Color cursor-pointer;
 }
 
 .xButton {
-  @apply absolute right-0 top-0 w-[64px] h-[64px] desktop:w-[52px] desktop:h-[52px] text-[32px] desktop:text-[24px] font-bold flex items-center justify-center desktop:rounded-bl-[14px] desktop:rounded-tr-[14px] cursor-pointer hover:bg-lightBg3 active:bg-lightBg3 dark:hover:bg-darkBg3 dark:active:bg-darkBg3;
+  @apply absolute right-0 top-0 w-[64px] h-[64px] desktop:w-[52px] desktop:h-[52px] text-[32px] desktop:text-[24px] font-bold flex items-center justify-center desktop:rounded-bl-[14px] desktop:rounded-tr-[14px] cursor-pointer hover:bg-lightBg3 active:bg-lightBg3 dark:hover:bg-blue-400/15 dark:active:bg-blue-400/15 [transition:background-color_300ms];
 }
 
 .pageXButton {
@@ -181,12 +181,8 @@
 
 /*--- components ---*/
 
-.menuContainer {
+.menuSize {
   @apply fixed flex-none landscape:w-[120px] landscape:lg:w-[160px] landscape:desktop:!w-[200px] landscape:h-screen portrait:w-full portrait:h-[80px] portrait:sm:h-[140px] flex justify-center items-center;
-}
-
-.menuThreeItemContainer {
-  @apply landscape:w-full landscape:h-[80%] landscape:min-h-[360px] landscape:max-h-[600px] portrait:w-full portrait:min-w-[360px] portrait:max-w-[700px] portrait:pb-[10px] flex landscape:flex-col items-center justify-around;
 }
 
 .menuIcon {
@@ -217,12 +213,16 @@
   @apply portrait:h-[calc((100vh-80px-80px-50px)/10)] portrait:sm:h-[calc((100vh-140px-110px-50px-32px)/11)] landscape:h-[calc((100vh-80px-50px)/10)] landscape:lg:h-[calc((100vh-110px-50px-32px)/10)] min-h-[50px] max-h-[80px];
 }
 
+.settingsCard {
+  @apply mt-[16px] portrait:sm:mt-[32px] landscape:lg:mt-[32px] desktop:!mt-[16px] pb-[20px] px-[12px] portrait:sm:px-[20px] landscape:lg:px-[20px] desktop:px-[16px] w-full bg-lightBg1 dark:bg-blue-400/6 rounded-[16px] shadow-[0px_0px_16px_0px_rgba(0,0,0,0.1)] desktop:shadow-[6px_0px_10px_0px_rgba(0,0,0,0.02),_-6px_0px_10px_rgba(0,0,0,0.02)] dark:shadow-none;
+}
+
 .settingsTitle {
-  @apply flex-none mt-[8px] h-[64px] portrait:lg:h-[90px] desktop:h-[90px] text-2xl font-bold flex items-center justify-center text-blue-700 dark:text-darkText1;
+  @apply w-full py-[16px] text-2xl font-bold flex items-center justify-center text-blue-600 dark:text-darkText1;
 }
 
 .settingsField {
-  @apply w-full h-[52px] desktop:h-[40px] flex items-center justify-between border-t-[1.5px] borderColor;
+  @apply w-full h-[52px] desktop:h-[40px] flex items-center justify-between border-b-[1.5px] borderColor;
 }
 
 .labelsField {
@@ -234,7 +234,7 @@
 }
 
 .settingsLabel {
-  @apply font-medium text-slate-500 dark:text-darkText1;
+  @apply font-medium text-lightText1 dark:text-darkText1;
 }
 
 .settingsInputLabel {
@@ -265,22 +265,32 @@
   @apply flex-none h-[40px] px-[4px] desktop:px-[4px] w-full py-[8px] desktop:py-[8px] desktop:cursor-pointer desktop:hover:bg-slate-200 dark:desktop:hover:bg-darkBg3 truncate;
 }
 
-/*--- modal ---*/
-
-@utility modalBase {
-  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[11] flex flex-col items-center rounded-[16px] bg-lightBg1 dark:bg-darkBg1 border-2 dark:border border-slate-300 dark:border-slate-700;
-}
+/*--- modal full ---*/
 
 @utility modalFullBase {
-  @apply fixed left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-[11] flex flex-col items-center desktop:rounded-[16px];
+  @apply fixed left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-[11] flex flex-col items-center desktop:rounded-[16px] overflow-hidden;
 }
 
 @utility modalFullColor {
-  @apply bg-lightBg1 dark:bg-darkBg1 desktop:border desktop:border-lightBg2 dark:desktop:border-darkBg3;
+  @apply bg-lightBg1 dark:bg-darkBg1 desktop:border-1 desktop:border-slate-300 dark:desktop:border-slate-700;
 }
 
 @utility modalFullSize {
   @apply w-full desktop:w-[480px] h-screen desktop:h-[90%];
+}
+
+.modalFull {
+  @apply modalFullBase modalFullColor modalFullSize desktop:pb-[12px];
+}
+
+.modalFullContentContainer {
+  @apply w-full h-full pb-[40px] px-[12px] portrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[40px] overflow-y-auto;
+}
+
+/*--- modal ---*/
+
+@utility modalBase {
+  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[11] flex flex-col items-center rounded-[16px] bg-lightBg1 dark:bg-darkBg1 border-2 dark:border border-slate-300 dark:border-slate-700;
 }
 
 @utility modalXPadding {
@@ -291,16 +301,8 @@
   @apply modalBase w-[94%] max-w-[350px] desktop:max-w-[320px] h-[min(90%,380px)] desktop:h-[min(90%,350px)] py-[24px];
 }
 
-.modalFull {
-  @apply modalFullBase modalFullColor modalFullSize desktop:pb-[12px];
-}
-
 .modalSmallContentContainer {
   @apply modalXPadding w-full flex flex-col items-center overflow-y-auto;
-}
-
-.modalFullContentContainer {
-  @apply w-full h-full px-[12px] portrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[72px] flex flex-col items-center overflow-y-auto;
 }
 
 .modalButtonContainer {
@@ -312,7 +314,7 @@
 }
 
 .modalBlackout {
-  @apply opacity-[70%] dark:opacity-[80%] fixed inset-0 bg-black backdrop-blur-xl z-[10];
+  @apply fixed inset-0 bg-black/70 z-[10];
 }
 
 .modalFullHeader {
@@ -344,11 +346,30 @@ input:-webkit-autofill {
   -webkit-text-fill-color: var(--input-text) !important;
 }
 
+/* ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f6f9fc;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+  background-clip: content-box;
+  border: 2px solid transparent;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.14);
+  opacity: 0;
+  border-radius: 8px;
+} */
+
 @utility thinScrollbar {
-  &::-webkit-scrollbar-thumb {
-    background-color: #cbd5e1;
-    border-radius: 6px;
-  }
   &::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -357,47 +378,24 @@ input:-webkit-autofill {
     border-radius: 6px;
     background-color: #f6f9fc;
   }
-
-  .dark &::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.1);
+  &::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
     border-radius: 6px;
-    opacity: 20%;
   }
+
   .dark &::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   .dark &::-webkit-scrollbar-track {
-    border-radius: 6px;
     background-color: rgba(255, 255, 255, 0.07);
+    border-radius: 6px;
+  }
+  .dark &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
   }
 }
-
-/* .thinScrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.thinScrollbar::-webkit-scrollbar-track {
-  border-radius: 6px;
-  background-color: #f6f9fc;
-}
-
-.thinScrollbar::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 6px;
-}
-
-.dark .thinScrollbar::-webkit-scrollbar-track {
-  border-radius: 6px;
-  background-color: rgba(255, 255, 255, 0.07);
-}
-
-.dark .thinScrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.1);
-  opacity: 20%;
-  border-radius: 6px;
-} */
 
 .underline-animate {
   position: relative;
@@ -417,14 +415,4 @@ input:-webkit-autofill {
 
 .underline-animate:hover::after {
   width: 100%;
-}
-
-.gradient-header {
-  @apply relative overflow-hidden;
-
-  background: radial-gradient(120px 80px at 10% 50%, rgba(196, 181, 253, 0.6), transparent 80%),
-    /* light purple */ radial-gradient(100px 100px at 70% 30%, rgba(191, 219, 254, 0.5), transparent 80%),
-    /* light blue */ radial-gradient(150px 80px at 90% 90%, rgba(255, 213, 153, 0.5), transparent 85%); /* light orange */
-
-  background-color: #fef9ff; /* subtle pinkish background to help glow show */
 }

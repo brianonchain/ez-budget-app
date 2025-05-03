@@ -1,17 +1,17 @@
 .animate-page1 {
-  animation: page1 10s linear infinite;
+  animation: page1 15s linear infinite;
 }
 .animate-page2 {
-  animation: page2 10s linear infinite;
+  animation: page2 15s linear infinite;
 }
 .animate-page3 {
-  animation: page3 10s linear infinite;
+  animation: page3 15s linear infinite;
 }
 .animate-page4 {
-  animation: page4 10s linear infinite;
+  animation: page4 15s linear infinite;
 }
 .animate-page5 {
-  animation: page5 10s linear infinite;
+  animation: page5 15s linear infinite;
 }
 
 @keyframes page1 {
@@ -107,7 +107,7 @@
 }
 
 .animate-arrow {
-  animation: arrowNew 10s ease-out infinite;
+  animation: arrowNew 15s ease-out infinite;
   transform: translateZ(0);
 }
 @keyframes arrowNew {
@@ -196,27 +196,27 @@
     opacity: 1;
   }
   58% {
-    transform: translateY(-160px) scale(1);
+    transform: translateY(-166px) scale(1);
     opacity: 1;
   }
   60% {
-    transform: translateY(-154px) scale(0.9);
+    transform: translateY(-162px) scale(0.9);
     opacity: 1;
   }
   62% {
-    transform: translateY(-160px) scale(1);
+    transform: translateY(-166px) scale(1);
     opacity: 1;
   }
   68% {
-    transform: translateY(-102px) scale(1);
+    transform: translateY(-55px) scale(1);
     opacity: 1;
   }
   70% {
-    transform: translateY(-98px) scale(0.9);
+    transform: translateY(-51px) scale(0.9);
     opacity: 1;
   }
   72% {
-    transform: translateY(-102px) scale(1);
+    transform: translateY(-55px) scale(1);
     opacity: 1;
   }
   78% {
@@ -251,11 +251,11 @@
   }
 }
 .animate-cost {
-  animation: costText 10s steps(4, end) infinite;
+  animation: costText 15s steps(4, end) infinite;
 }
 
 .animate-name {
-  animation: nameText 10s steps(15, end) infinite, nameCursor 10s step-end infinite;
+  animation: nameText 15s steps(15, end) infinite, nameCursor 15s step-end infinite;
   overflow: hidden;
   white-space: nowrap;
   border-right: 2px solid white;
@@ -288,13 +288,13 @@
 }
 
 .animate-labelTypeBg1 {
-  animation: labelTypeBg1 10s ease-in-out infinite;
+  animation: labelTypeBg1 15s ease-in-out infinite;
 }
 .animate-labelTypeBg2 {
-  animation: labelTypeBg2 10s ease-in-out infinite;
+  animation: labelTypeBg2 15s ease-in-out infinite;
 }
 .animate-labelTypeBg3 {
-  animation: labelTypeBg3 10s ease-in-out infinite;
+  animation: labelTypeBg3 15s ease-in-out infinite;
 }
 @keyframes labelTypeBg1 {
   0% {
@@ -346,10 +346,10 @@
 }
 
 .animate-none1 {
-  animation: none1 10s ease-in-out infinite;
+  animation: none1 15s ease-in-out infinite;
 }
 .animate-none2 {
-  animation: none2 10s ease-in-out infinite;
+  animation: none2 15s ease-in-out infinite;
 }
 @keyframes none1 {
   0% {
@@ -381,10 +381,10 @@
 }
 
 .animate-labelText1 {
-  animation: labelText1 10s ease-in-out infinite;
+  animation: labelText1 15s ease-in-out infinite;
 }
 .animate-labelText2 {
-  animation: labelText2 10s ease-in-out infinite;
+  animation: labelText2 15s ease-in-out infinite;
 }
 @keyframes labelText1 {
   0% {
@@ -416,13 +416,13 @@
 }
 
 .animate-choices1 {
-  animation: choices1 10s ease-in-out infinite;
+  animation: choices1 15s ease-in-out infinite;
 }
 .animate-choices2 {
-  animation: choices2 10s ease-in-out infinite;
+  animation: choices2 15s ease-in-out infinite;
 }
 .animate-choices3 {
-  animation: choices3 10s ease-in-out infinite;
+  animation: choices3 15s ease-in-out infinite;
 }
 @keyframes choices1 {
   0% {
@@ -480,16 +480,16 @@
 }
 
 .animate-button1 {
-  animation: button1 10s ease-in-out infinite;
+  animation: button1 15s ease-in-out infinite;
 }
 .animate-button2 {
-  animation: button2 10s ease-in-out infinite;
+  animation: button2 15s ease-in-out infinite;
 }
 .animate-button3 {
-  animation: button3 10s ease-in-out infinite;
+  animation: button3 15s ease-in-out infinite;
 }
 .animate-button4 {
-  animation: button4 10s ease-in-out infinite;
+  animation: button4 15s ease-in-out infinite;
 }
 
 @keyframes button1 {

@@ -15,7 +15,6 @@ export default function themeToggle() {
   if (!mounted) return <div className="w-[72px] h-[40px] bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse"></div>; // or a skeleton loader
 
   const isDark = resolvedTheme === "dark";
-  console.log("resolvedTheme", resolvedTheme);
 
   return (
     <button

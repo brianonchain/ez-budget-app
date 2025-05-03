@@ -1,49 +1,39 @@
-// nextjs
-import { useState, useRef } from "react";
+import { useState } from "react";
+import { ImSpinner2 } from "react-icons/im";
 // utils
 import { checkPassword, fetchPost } from "@/utils/functions";
-// images
-import { PiEyeLight, PiEyeSlashLight } from "react-icons/pi";
-import { ImSpinner2 } from "react-icons/im";
+import InputPassword from "@/utils/components/InputPassword";
+import { FaCircleCheck } from "react-icons/fa6";
 
-const defaultErrors = { oldPassword: "", newPassword: "", newPassword2: "", submit: "" };
+const defaultErrors = { newPassword1: "", newPassword2: "", submit: "" };
 
-export default function PasswordModal({ setPasswordModal }: { setPasswordModal: any }) {
-  // hooks
-  const oldPasswordInputRef = useRef<HTMLInputElement | null>(null); // needed to focus on input when eye is clicked
-  const newPasswordInputRef = useRef<HTMLInputElement | null>(null); // needed to focus on input when eye is clicked
-  const newPasswordInputRef2 = useRef<HTMLInputElement | null>(null); // needed to focus on input when eye is clicked
-
-  // states
+export default function PasswordModal({ setPasswordModal, email }: { setPasswordModal: any; email: string }) {
   const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [newPassword1, setNewPassword1] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
-  const [show, setShow] = useState(false); // eye - show/hide password
-  const [show2, setShow2] = useState(false); // eye - show/hide repeat password
-  const [show3, setShow3] = useState(false); // eye - show/hide repeat password
   const [errors, setErrors] = useState(defaultErrors);
   const [isSamePassword, setIsSamePassword] = useState(false);
   const [status, setStatus] = useState("initial"); // "initial" | "loading" | "sent"
 
-  async function validatePassword(password: string) {
-    if (password) {
-      const isPasswordValid = checkPassword(password);
+  async function validatePassword1(_newPassword: string) {
+    if (_newPassword) {
+      const isPasswordValid = checkPassword(_newPassword);
       if (!isPasswordValid) {
-        setErrors((errors) => ({ ...errors, newPassword: "Must be at least 8 characters and contain a lowercase letter, an uppercase letter, and a number" }));
+        setErrors((errors) => ({ ...errors, newPassword1: "Must be at least 8 characters and contain a lowercase letter, an uppercase letter, and a number" }));
         return false;
       }
     }
-    setErrors((errors) => ({ ...errors, newPassword: "" }));
+    setErrors((errors) => ({ ...errors, newPassword1: "" }));
     return true; // returns true even if no password because don't want error to show
   }
 
-  function validatePassword2(newPassword: string, newPassword2: string) {
-    if (!newPassword2) {
-      // don't want to show error if no repeatedPassword
+  function validatePassword2(_newPassword: string, _newPassword2: string) {
+    if (!_newPassword2) {
+      // don't want to show error if no newPassword2
       setIsSamePassword(false);
-      setErrors((errors) => ({ ...errors, newPassword2: "" })); // requires to get prevState as validatePassword & validatePassword2 might be run at same time
+      setErrors((errors) => ({ ...errors, newPassword2: "" })); // requires prevState as validatePassword1 & validatePassword2 runs at same time at newPassword1 input onBlur
     } else {
-      if (newPassword === newPassword2) {
+      if (_newPassword === _newPassword2) {
         setIsSamePassword(true);
         setErrors((errors) => ({ ...errors, newPassword2: "" }));
       } else {
@@ -57,29 +47,33 @@ export default function PasswordModal({ setPasswordModal }: { setPasswordModal: 
     if (status === "sent") {
       setPasswordModal(false);
     } else if (status === "initial") {
-      if (!newPassword || !isSamePassword || errors.newPassword || errors.newPassword2) return; // "!password" is needed because no prior validation if password is empty
+      if (!newPassword1 || !newPassword2 || !isSamePassword || errors.newPassword1 || errors.newPassword2) return; // !newPassword1/!newPassword2 needed because no prior validation
       setStatus("loading");
       try {
-        const resJson = await fetchPost("/api/changePassword", { oldPassword, newPassword });
-        console.log(resJson);
-        if (resJson === "saved") {
+        const resJson = await fetchPost("/api/changePassword", { oldPassword, newPassword: newPassword1 });
+        if (resJson.status === "success") {
           setErrors(defaultErrors);
           setStatus("sent");
+          setNewPassword1("");
+          setNewPassword2("");
+          setOldPassword("");
           return;
-        } else if (resJson === "unauthorized") {
+        } else if (resJson.status === "error") {
+          setErrors({ ...errors, submit: resJson.message });
           setStatus("initial");
-          setErrors({ ...errors, submit: "Incorrect password" });
           return;
         }
       } catch (e) {}
-      setStatus("initial");
       setErrors({ ...errors, submit: "Server error. Please try again." });
+      setStatus("initial");
     }
   }
 
   return (
     <div>
       <div className="modalFull">
+        {/*--- glow ---*/}
+        <div className="absolute w-full h-full left-0 top-0 bg-gradient-to-br from-lightBg1 to-lightBg1 dark:from-blue-500/20 dark:to-blue-500/10 z-[-1]"></div>
         {/*--- close ---*/}
         <div className="xButton" onClick={() => setPasswordModal(false)}>
           &#10005;
@@ -88,94 +82,56 @@ export default function PasswordModal({ setPasswordModal }: { setPasswordModal: 
         <div className="modalFullHeader">Change Password</div>
         {/*--- content ---*/}
         <div className="modalFullContentContainer">
-          {/*--- old password ---*/}
-          <p className="mt-[16px] w-full label">Enter current password</p>
-          <div className="w-full relative">
-            <input
-              className={`input peer ${errors.oldPassword ? "!border-red-500 !focus:border-red-500" : ""}`}
-              ref={oldPasswordInputRef}
-              type={show ? "text" : "password"}
-              autoComplete="none"
-              autoCapitalize="none"
-              onBlur={(e) => setOldPassword(e.target.value)}
-              disabled={status === "initial" ? false : true}
-            ></input>
-            <div
-              className="absolute h-full right-4 top-0 flex justify-center items-center desktop:cursor-pointer text-slate-400 peer-focus:text-lightText1 [transition:color_500ms]"
-              onClick={() => {
-                setShow(!show);
-                oldPasswordInputRef.current?.focus();
-              }}
-            >
-              {show ? <PiEyeLight className="text-[24px]" /> : <PiEyeSlashLight className="text-[24px]" />}
-            </div>
-            {errors.oldPassword && <p className="loginError">{errors.oldPassword}</p>}
+          <div className="mx-auto pt-[24px] w-full max-w-[380px] desktop:!max-w-[300px]">
+            {status != "sent" ? (
+              <div className="w-full h-[300px] desktop:h-[240px] space-y-[23px]">
+                {/*--- hidden email input ---*/}
+                {/* <input className="absolute left-[9999px] w-[1px] h-[1px]" type="text" name="username" autoComplete="username" value={email} readOnly /> */}
+                <InputPassword
+                  className=""
+                  label="Old Password"
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  value={oldPassword}
+                  autoComplete="current-password"
+                  disabled={status === "initial" ? false : true}
+                />
+                <InputPassword
+                  className=""
+                  label="New Password"
+                  tooltip={true}
+                  error={errors.newPassword1}
+                  onBlur={(e) => validatePassword1(e.target.value)}
+                  onChange={(e) => setNewPassword1(e.target.value)}
+                  value={newPassword1}
+                  autoComplete="new-password"
+                  disabled={status === "initial" ? false : true}
+                />
+                <InputPassword
+                  className=""
+                  label="Re-enter New Password"
+                  error={errors.newPassword2}
+                  onBlur={(e) => validatePassword2(newPassword1, e.target.value)}
+                  onChange={(e) => setNewPassword2(e.target.value)}
+                  value={newPassword2}
+                  autoComplete="new-password"
+                  disabled={status === "initial" ? false : true}
+                />
+              </div>
+            ) : (
+              <div className="w-full h-[300px] desktop:h-[240px] flex items-center justify-center gap-[6px] font-medium">
+                <FaCircleCheck className="text-[20px] desktop:text-[18px] text-green-500" />
+                Password successfully changed!
+              </div>
+            )}
+            {/*--- button ---*/}
+            <button onClick={onButtonClick} className="button1 mt-[40px] w-full flex justify-center items-center" type="button">
+              {status === "initial" && <p>Submit</p>}
+              {status === "loading" && <ImSpinner2 className="animate-spin text-[32px] desktop:text-[24px]" />}
+              {status === "sent" && !errors.submit && <p>Close</p>}
+            </button>
+            {/*--- error message ---*/}
+            {errors.submit && <div className="mt-[8px] mb-[40px] text-red-500 font-medium">{errors.submit}</div>}
           </div>
-
-          {/*--- new passwod 1---*/}
-          <div className="mt-[30px] w-full label">Enter new password</div>
-          <div className="w-full relative">
-            <input
-              className={`input peer ${errors.newPassword ? "!border-red-500 !focus:border-red-500" : ""}`}
-              ref={newPasswordInputRef}
-              type={show2 ? "text" : "password"}
-              autoComplete="none"
-              autoCapitalize="none"
-              onBlur={(e) => {
-                setNewPassword(e.target.value);
-                validatePassword(e.target.value);
-                validatePassword2(e.target.value, newPassword2);
-              }}
-              disabled={status === "initial" ? false : true}
-            ></input>
-            <div
-              className="absolute h-full right-4 top-0 flex justify-center items-center desktop:cursor-pointer text-slate-400 peer-focus:text-lightText1 [transition:color_500ms]"
-              onClick={() => {
-                setShow2(!show2);
-                newPasswordInputRef.current?.focus();
-              }}
-            >
-              {show2 ? <PiEyeLight className="text-[24px]" /> : <PiEyeSlashLight className="text-[24px]" />}
-            </div>
-            {errors.newPassword && <p className="loginError">{errors.newPassword}</p>}
-          </div>
-
-          {/*--- new passwod 2---*/}
-          <div className="mt-[30px] w-full label">Repeat new password</div>
-          <div className="w-full relative">
-            <input
-              className={`input peer ${errors.newPassword2 ? "!border-red-500 !focus:border-red-500" : ""}`}
-              ref={newPasswordInputRef2}
-              type={show3 ? "text" : "password"}
-              autoComplete="none"
-              autoCapitalize="none"
-              onBlur={(e) => {
-                setNewPassword2(e.currentTarget.value);
-                validatePassword2(newPassword, e.currentTarget.value);
-              }}
-              disabled={status === "initial" ? false : true}
-            ></input>
-            <div
-              className="absolute h-full right-4 top-0 flex justify-center items-center desktop:cursor-pointer text-slate-400 peer-focus:text-lightText1 [transition:color_500ms]"
-              onClick={() => {
-                setShow3(!show3);
-                newPasswordInputRef2.current?.focus();
-              }}
-            >
-              {show3 ? <PiEyeLight className="text-[24px]" /> : <PiEyeSlashLight className="text-[24px]" />}
-            </div>
-            {errors.newPassword2 && <p className="loginError">{errors.newPassword2}</p>}
-          </div>
-
-          {/*--- button ---*/}
-          <button onClick={onButtonClick} className="mt-[40px] button1  w-full flex justify-center items-center">
-            {status === "initial" && <p>Submit</p>}
-            {status === "loading" && <ImSpinner2 className="animate-spin text-[28px]" />}
-            {status === "sent" && !errors.submit && <p>Close</p>}
-          </button>
-          {/*--- status message ---*/}
-          {errors.submit && <div className="mt-[8px] mb-[40px] text-red-500 text-lg font-medium">{errors.submit}</div>}
-          {status === "sent" && !errors.submit && <div className="mt-[8px] mb-[40px] text-green-600 text-lg font-medium">Password successfully changed!</div>}
         </div>
       </div>
       <div className="modalBlackout"></div>

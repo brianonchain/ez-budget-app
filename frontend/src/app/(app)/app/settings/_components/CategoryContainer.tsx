@@ -34,7 +34,7 @@ export default function CategoryContainer({ category }: { category: { [key: stri
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        <div className="w-[100%] flex flex-col textXsApp border-t border-b border-dashed borderColor">
+        <div className="w-[90%] flex flex-col textXsApp border-t border-b border-dashed borderColorFaint">
           {items.map((item) => (
             <Category key={item.id} id={item.id} text={item.text} subtext={item.subtext} />
           ))}

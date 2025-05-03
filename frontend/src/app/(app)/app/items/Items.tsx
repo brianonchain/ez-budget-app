@@ -13,8 +13,9 @@ import Details from "./_components/Details";
 import LoginGlow from "../../(login)/_components/LoginGlow";
 
 export default function Items() {
-  const { data: session } = useSession();
-  const { data, isPending, isError } = useUserQuery(session?.user?.email);
+  const session = useSession();
+
+  const { data, isPending, isError } = useUserQuery(session?.data?.user?.email);
 
   // states
   const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
@@ -26,7 +27,7 @@ export default function Items() {
   // }, [isError]);
 
   return (
-    <div className="appPageContainer overflow-hidden overflow-y-auto text-base desktop:text-sm relative z-0">
+    <div className="appPageContainer overflow-x-hidden overflow-y-auto relative z-0">
       {page === "list" && <List setPage={setPage} setErrorModal={setErrorModal} data={data} setNewItem={setNewItem} />}
       {page === "cost" && <EnterCost setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}
       {page === "name" && <EnterName setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}

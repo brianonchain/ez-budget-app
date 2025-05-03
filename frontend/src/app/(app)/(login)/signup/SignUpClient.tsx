@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 // components
 import SignInGoogle from "../_components/SignInGoogle";
 import Separator from "../_components/Separator";
-import InputEmail from "../_components/InputEmail";
-import InputPassword from "../_components/InputPassword";
 import LoginThemeToggle from "../_components/LoginThemeToggle";
 // utils
 import { checkEmail, checkPassword, fetchPost } from "@/utils/functions";
+import InputEmail from "@/utils/components/InputEmail";
+import InputPassword from "@/utils/components/InputPassword";
 import ErrorModal from "@/utils/components/ErrorModal";
 import Button from "@/utils/components/Button";
 
@@ -107,7 +107,14 @@ export default function Login() {
 
       {/*--- form ---*/}
       <form className="w-full flex flex-col gap-[12px]">
-        <InputEmail error={errors.email} onBlur={(e) => validateEmail(e.target.value)} onChange={(e) => setEmail(e.target.value)} value={email} autoComplete="email" />
+        <InputEmail
+          label="Email"
+          error={errors.email}
+          onBlur={(e) => validateEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+          autoComplete="email"
+        />
         <InputPassword
           label="Password"
           tooltip={true}

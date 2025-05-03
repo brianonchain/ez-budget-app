@@ -29,7 +29,7 @@ export default function TagsContainer({ tags }: { tags: string[] }) {
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        <div className="w-[100%] flex flex-col text-base desktop:text-xs border-t border-b border-dashed borderColor">
+        <div className="w-[90%] flex flex-col text-base desktop:text-xs border-t border-b border-dashed borderColorFaint">
           {items.map((item) => (
             <Tags key={item.id} id={item.id} text={item.text} />
           ))}
