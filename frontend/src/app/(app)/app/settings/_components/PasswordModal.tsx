@@ -86,7 +86,6 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
             {status != "sent" ? (
               <div className="w-full h-[300px] desktop:h-[240px] space-y-[23px]">
                 {/*--- hidden email input ---*/}
-                {/* <input className="absolute left-[9999px] w-[1px] h-[1px]" type="text" name="username" autoComplete="username" value={email} readOnly /> */}
                 <InputPassword
                   className=""
                   label="Old Password"

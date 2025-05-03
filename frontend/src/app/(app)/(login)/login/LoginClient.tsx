@@ -70,11 +70,12 @@ export default function Login() {
     var res = await signIn("credentials", {
       email: email,
       password: password,
-      redirect: true,
+      redirect: false,
       callbackUrl: "/app/items",
     });
     // if sign in error or success
     if (res?.error) {
+      console.log("res.error", res.error);
       setErrorModal(res.error);
       setIsLoading(false);
       setPassword("");
@@ -98,20 +99,20 @@ export default function Login() {
           autoComplete="username"
           name="username"
         />
-        {/* <Accordion isOpen={isEmailVerified}> */}
-        <InputPassword
-          className="pt-[14px] pb-[8px]"
-          label="Password"
-          error={errors.password}
-          onBlur={validatePassword}
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          autoComplete="current-password"
-          name="password"
-        />
-        {/* </Accordion> */}
-        {/* {isEmailVerified ? (
-          <Button className="mt-[16px]" label={"Sign In"} isLoading={isLoading ? true : false} onClick={submit} />
+        <Accordion isOpen={isEmailVerified}>
+          <InputPassword
+            className="pt-[14px] pb-[8px]"
+            label="Password"
+            error={errors.password}
+            onBlur={validatePassword}
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            autoComplete="current-password"
+            name="password"
+          />
+        </Accordion>
+        {isEmailVerified ? (
+          <Button className="mt-[16px]" label={"Sign In"} type="submit" isLoading={isLoading ? true : false} />
         ) : (
           <Button
             className="mt-[16px]"
@@ -119,14 +120,11 @@ export default function Login() {
             type="button"
             onClick={(e) => {
               if (email && !errors.email) {
-                console.log("setIsEmailVerified to true");
                 setIsEmailVerified(true);
               }
             }}
           />
-        )} */}
-
-        <Button className="mt-[16px]" label={"Sign In"} isLoading={isLoading ? true : false} type="submit" />
+        )}
       </form>
 
       {/*--- other options ---*/}

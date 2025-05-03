@@ -346,6 +346,10 @@ input:-webkit-autofill {
   -webkit-text-fill-color: var(--input-text) !important;
 }
 
+&:-webkit-autofill::first-line {
+  font-family: Inter;
+}
+
 /* ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
