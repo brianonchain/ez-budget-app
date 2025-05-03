@@ -55,7 +55,7 @@ export default function Login() {
     if (password) {
       const isPasswordValid = checkPassword(password);
       if (!isPasswordValid) {
-        setErrors((errors) => ({ ...errors, password: "Incorrect password" }));
+        setErrors((errors) => ({ ...errors, password: "Must be \u2265 8 characters and contain a lowercase letter, an uppercase letter, and a number" }));
         return false;
       }
     }
@@ -111,22 +111,20 @@ export default function Login() {
             name="password"
           />
         </Accordion>
-        {isEmailVerified ? (
-          <Button className="mt-[16px]" label={"Sign In"} type="submit" isLoading={isLoading ? true : false} />
-        ) : (
-          <Button
-            className="mt-[16px]"
-            label="Next"
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              if (email && !errors.email) {
-                setIsEmailVerified(true);
-              }
-            }}
-          />
-        )}
+        {isEmailVerified && <Button className="mt-[16px]" label={"Sign In"} type="submit" isLoading={isLoading ? true : false} />}
       </form>
+      {!isEmailVerified && (
+        <Button
+          className="mt-[16px]"
+          label="Next"
+          type="button"
+          onClick={(e) => {
+            if (email && !errors.email) {
+              setIsEmailVerified(true);
+            }
+          }}
+        />
+      )}
 
       {/*--- other options ---*/}
       <div className="mt-[60px] desktop:mt-[50px] w-full flex flex-col gap-[40px] desktop:gap-[30px] items-center textSmApp">

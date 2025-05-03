@@ -28,9 +28,9 @@ export default function PasswordModal({ setEmailModal }: { setEmailModal: any })
 
   async function onButtonClick() {
     if (status === "sent") {
-      setPasswordModal(false);
+      setEmailModal(false);
     } else if (status === "initial") {
-      if (!newPassword1 || !newPassword2 || !isSamePassword || errors.newPassword1 || errors.newPassword2) return; // !newPassword1/!newPassword2 needed because no prior validation
+      if (!email || errors.email) return; // !email needed because no prior validation
       setStatus("loading");
       try {
         const resJson = await fetchPost("/api/changeEmail", { email });
