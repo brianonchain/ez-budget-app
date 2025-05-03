@@ -119,6 +119,7 @@ export default function Login() {
             label="Next"
             type="button"
             onClick={(e) => {
+              e.preventDefault();
               if (email && !errors.email) {
                 setIsEmailVerified(true);
               }

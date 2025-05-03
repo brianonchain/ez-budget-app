@@ -85,7 +85,6 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
           <div className="mx-auto pt-[24px] w-full max-w-[380px] desktop:!max-w-[300px]">
             {status != "sent" ? (
               <div className="w-full h-[300px] desktop:h-[240px] space-y-[23px]">
-                {/*--- hidden email input ---*/}
                 <InputPassword
                   className=""
                   label="Old Password"
