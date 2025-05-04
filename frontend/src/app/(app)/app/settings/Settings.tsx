@@ -11,6 +11,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 // components
 import PasswordModal from "./_components/PasswordModal";
+import EmailModal from "./_components/EmailModal";
 import CategoryContainer from "./_components/CategoryContainer";
 import TagsContainer from "./_components/TagsContainer";
 // utils
@@ -148,6 +149,7 @@ export default function Settings({ provider, email }: { provider: string; email:
       </div>
 
       {passwordModal && <PasswordModal setPasswordModal={setPasswordModal} email={email} />}
+      {emailModal && <EmailModal setEmailModal={setEmailModal} email={email} />}
 
       {addCategoryModal && (
         <div>

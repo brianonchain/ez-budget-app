@@ -15,7 +15,7 @@ const PendingUserSchema: Schema = new Schema<IPendingUser>({
   otp: String,
   createdAt: {
     type: Date,
-    expires: 310, // 300 seconds = 5 minutes + 10s delay
+    expires: 190, // 180s = 3min + 10s delay
   },
 });
 

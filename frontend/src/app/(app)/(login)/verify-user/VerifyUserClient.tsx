@@ -10,13 +10,12 @@ export default function VerifyOtpPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email"); // automatically decodes percent encoding
+  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [errorModal, setErrorModal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [resendStatus, setResendStatus] = useState("initial");
-
-  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>, index: number) {
     const value = e.target.value.replace(/\D/g, ""); // only digits

@@ -22,23 +22,21 @@ const rateLimiter = new Ratelimit({
 
 export async function POST(req: Request) {
   const { email, otp } = await req.json();
-  if (!email || !otp) return NextResponse.json({ status: "error", message: "Missing fields" }, { status: 400 });
+  if (!email || !otp) return NextResponse.json({ status: "error", message: "Missing fields" });
 
   const { success } = await rateLimiter.limit(email);
   if (!success) {
-    return NextResponse.json({ status: "error", message: "Too many attempts, please resend email to request a new OTP." }, { status: 429 });
+    return NextResponse.json({ status: "error", message: "Too many attempts, please resend email to request a new 6-digit code." });
   }
 
   await dbConnect();
 
   const existing = await UserModel.findOne({ "settings.email": email });
-  if (existing) return NextResponse.json({ status: "error", message: "User already exists" }, { status: 400 });
+  if (existing) return NextResponse.json({ status: "error", message: "User already exists" });
 
   const doc = await PendingUserModel.findOne({ email: email });
-  if (!doc) return NextResponse.json({ status: "error", message: "OTP expired" }, { status: 400 }); // doc self-deletes in 5min
-
-  const isValidOtp = otp === doc.otp;
-  if (!isValidOtp) return NextResponse.json({ status: "error", message: "Invalid OTP" }, { status: 400 });
+  if (!doc) return NextResponse.json({ status: "error", message: "6-digit code expired" }); // doc self-deletes in 3min
+  if (!otp === doc.otp) return NextResponse.json({ status: "error", message: "Invalid 6-digit code" });
 
   // create user
   await UserModel.create({
