@@ -145,7 +145,7 @@ export default function Ani() {
             {/*--- header ---*/}
             <div className="pageHeader">
               Enter Cost
-              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-[8px] cursor-pointer hover:bg-darkBg3 active:bg-darkBg3">
+              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-lg cursor-pointer hover:bg-darkBg3 active:bg-darkBg3">
                 &#10005;
               </div>
             </div>
@@ -177,7 +177,7 @@ export default function Ani() {
             {/*--- header ---*/}
             <div className="pageHeader">
               Enter Name
-              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-[8px] cursor-pointer hover:bg-darkBg3 active:bg-darkBg3">
+              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-lg cursor-pointer hover:bg-darkBg3 active:bg-darkBg3">
                 &#10005;
               </div>
             </div>
@@ -195,7 +195,7 @@ export default function Ani() {
           <div className="absolute left-0 top-0 w-full h-full flex flex-col items-center animate-page4">
             <div className="pageHeader">
               Enter Category <br />& Subcategory
-              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-[8px] cursor-pointer hover:bg-darkBg3 active:bg-darkBg3">
+              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-lg cursor-pointer hover:bg-darkBg3 active:bg-darkBg3">
                 &#10005;
               </div>
             </div>
@@ -203,7 +203,7 @@ export default function Ani() {
             <div className="w-[360px] grid grid-cols-3 gap-[4px]">
               {/*--- Category ---*/}
               <div
-                className={`animate-labelTypeBg1 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkButton1Bg rounded-[8px] relative desktop:cursor-pointer desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
+                className={`animate-labelTypeBg1 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkButton1Bg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
               >
                 <p className="text-base font-medium tracking-tighter text-center">Category</p>
                 <div className="w-full  flex justify-center relative">
@@ -214,7 +214,7 @@ export default function Ani() {
               </div>
               {/*--- Subcategory ---*/}
               <div
-                className={`animate-labelTypeBg2 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkButton1Bg rounded-[8px] relative desktop:cursor-pointer desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
+                className={`animate-labelTypeBg2 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkButton1Bg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
               >
                 <p className="text-base font-medium tracking-tighter text-center">Subcategory</p>
                 <div className="w-full text-sm text-center tracking-tighter flex justify-center relative">
@@ -225,7 +225,7 @@ export default function Ani() {
               </div>
               {/*--- Tags ---*/}
               <div
-                className={`animate-labelTypeBg3 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkButton1Bg rounded-[8px] relative desktop:cursor-pointer desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
+                className={`animate-labelTypeBg3 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkButton1Bg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
               >
                 <p className="text-base font-medium tracking-tighter text-center">Tags</p>
                 <div className="w-full text-sm text-center tracking-tighter flex justify-center relative">none</div>
@@ -241,7 +241,7 @@ export default function Ani() {
                     key={index}
                     className={`${
                       i === "None" ? "border-darkButton1Bg" : "border-transparent"
-                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-[8px] cursor-pointer bg-blue-100/10 hover:border-darkButton1Bg`}
+                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-lg cursor-pointer bg-blue-100/10 hover:border-darkButton1Bg`}
                   >
                     <p>{i.charAt(0).toUpperCase() + i.slice(1)}</p>
                   </div>
@@ -254,7 +254,7 @@ export default function Ani() {
                     key={index}
                     className={`${
                       i === "None" ? "border-darkButton1Bg" : "border-transparent"
-                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-[8px] cursor-pointer bg-blue-100/10 hover:border-darkButton1Bg`}
+                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-lg cursor-pointer bg-blue-100/10 hover:border-darkButton1Bg`}
                   >
                     <p>{i.charAt(0).toUpperCase() + i.slice(1)}</p>
                   </div>
@@ -267,7 +267,7 @@ export default function Ani() {
                     key={index}
                     className={`${
                       i === "None" ? "border-darkButton1Bg" : "border-transparent"
-                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-[8px] cursor-pointer bg-blue-100/10 hover:border-darkButton1Bg`}
+                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-lg cursor-pointer bg-blue-100/10 hover:border-darkButton1Bg`}
                   >
                     <p>{i.charAt(0).toUpperCase() + i.slice(1)}</p>
                   </div>

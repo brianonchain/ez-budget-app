@@ -16,7 +16,7 @@ export default function EnterName({ setPage, setErrorModal, setNewItem }: { setP
 
       {/*--- content ---*/}
       <div className="pt-[80px] flex-none w-[350px] h-[500px]">
-        <textarea ref={inputRef} className="p-[16px] w-full h-[200px] text-2xl border rounded-[16px] border-slate-400" placeholder="Enter a short item description" />
+        <textarea ref={inputRef} className="p-[16px] w-full h-[200px] text-2xl border rounded-2xl border-slate-400" placeholder="Enter a short item description" />
         <Button
           className="w-full"
           text="Enter"

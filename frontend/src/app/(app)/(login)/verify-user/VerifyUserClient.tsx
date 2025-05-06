@@ -141,7 +141,7 @@ export default function VerifyOtpPage() {
             onKeyDown={(e) => handleKeyDown(e, index)}
             onChange={(e) => handleChange(e, index)}
             onPaste={index === 0 ? handlePaste : undefined}
-            className="w-[50px] h-[50px] text-[24px] text-center border-2 rounded-[8px] inputColor text-lightButton1Bg dark:text-darkButton1Bg"
+            className="w-[50px] h-[50px] text-[24px] text-center border-2 rounded-lg inputColor text-lightButton1Bg dark:text-darkButton1Bg"
             disabled={isLoading}
           />
         ))}

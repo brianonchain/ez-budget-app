@@ -75,6 +75,10 @@
   @apply text-center text-2xl leading-normal font-semibold;
 }
 
+@utility errorText {
+  @apply text-base desktop:text-sm font-medium text-red-500 dark:text-red-400;
+}
+
 /*--- colors ---*/
 
 @utility borderColor {
@@ -85,10 +89,14 @@
   @apply border-slate-200 dark:border-slate-700;
 }
 
+@utility borderColorError {
+  @apply !border-red-500 focus:!border-red-500 dark:!border-red-400 dark:focus:!border-red-400;
+}
+
 /*--- buttons ---*/
 
 .homeButton {
-  @apply button1ColorDark px-[1.3em] py-[0.65em] text-lg desktop:text-base font-medium rounded-full cursor-pointer;
+  @apply button1ColorDark px-[1.3em] py-[0.65em] textBaseApp font-medium rounded-full cursor-pointer;
 }
 
 .homeButtonSm {
@@ -96,11 +104,7 @@
 }
 
 @utility buttonBase {
-  @apply h-[56px] desktop:h-[40px] textBaseApp font-medium flex items-center justify-center desktop:cursor-pointer;
-}
-
-@utility buttonBaseLogin {
-  @apply h-[56px] desktop:h-[38px] textBaseApp font-semibold flex items-center justify-center;
+  @apply h-[3em] textBaseApp font-medium flex items-center justify-center desktop:cursor-pointer;
 }
 
 @utility button1ColorLight {
@@ -119,16 +123,12 @@
   @apply bg-none text-slate-500 box-border border-2 border-inherit desktop:hover:border-slate-400 active:border-slate-400 desktop:cursor-pointer;
 }
 
-.loginButton {
-  @apply buttonBase button1Color rounded-[8px];
-}
-
 .button1 {
-  @apply buttonBase button1Color rounded-[8px];
+  @apply buttonBase button1Color rounded-lg;
 }
 
 .button2 {
-  @apply buttonBase button2Color rounded-[8px];
+  @apply buttonBase button2Color rounded-lg;
 }
 
 .button1RoundNoWidth {
@@ -144,7 +144,7 @@
 }
 
 .pageXButton {
-  @apply absolute right-[-8px] top-[4px] w-[60px] h-[60px] desktop:w-[50px] desktop:h-[50px] text-[32px] desktop:text-[28px] font-bold flex items-center justify-center rounded-[8px] cursor-pointer hover:bg-lightBg3 active:bg-lightBg3 dark:hover:bg-darkBg3 dark:active:bg-darkBg3;
+  @apply absolute right-[-8px] top-[4px] w-[60px] h-[60px] desktop:w-[50px] desktop:h-[50px] text-[32px] desktop:text-[28px] font-bold flex items-center justify-center rounded-lg cursor-pointer hover:bg-lightBg3 active:bg-lightBg3 dark:hover:bg-darkBg3 dark:active:bg-darkBg3;
 }
 
 .mobileBack {
@@ -154,7 +154,7 @@
 /*--- input ---*/
 
 @utility inputColor {
-  @apply rounded-[8px] outline-none border-[1.5px] bg-white dark:bg-darkInput text-lightText1 dark:text-darkText1 border-slate-300 focus:border-blue-500 dark:border-darkInputBorder dark:focus:border-darkInputBorderFocus [transition:border-color_500ms];
+  @apply rounded-lg outline-none border-[1.5px] bg-white dark:bg-darkInput text-lightText1 dark:text-darkText1 border-slate-300 focus:border-blue-500 dark:border-darkInputBorder dark:focus:border-darkInputBorderFocus [transition:border-color_500ms];
 }
 
 @utility placeholderColor {
@@ -162,11 +162,11 @@
 }
 
 .inputLabel {
-  @apply pb-[4px] font-semibold textBaseApp;
+  @apply font-semibold textBaseApp;
 }
 
 .input {
-  @apply w-full h-[52px] desktop:h-[40px] px-[0.7em] textBaseApp font-medium inputColor;
+  @apply w-full h-[3em] px-[0.8em] textBaseApp inputColor;
 }
 
 .inputCondensed {
@@ -214,7 +214,7 @@
 }
 
 .settingsCard {
-  @apply mt-[16px] portrait:sm:mt-[32px] landscape:lg:mt-[32px] desktop:!mt-[16px] pb-[20px] px-[12px] portrait:sm:px-[20px] landscape:lg:px-[20px] desktop:px-[16px] w-full bg-lightBg1 dark:bg-blue-400/6 rounded-[16px] shadow-[0px_0px_16px_0px_rgba(0,0,0,0.1)] desktop:shadow-[6px_0px_10px_0px_rgba(0,0,0,0.02),_-6px_0px_10px_rgba(0,0,0,0.02)] dark:shadow-none;
+  @apply mt-[16px] portrait:sm:mt-[32px] landscape:lg:mt-[32px] desktop:!mt-[16px] pb-[20px] px-[12px] portrait:sm:px-[20px] landscape:lg:px-[20px] desktop:px-[16px] w-full bg-lightBg1 dark:bg-blue-400/6 rounded-2xl shadow-[0px_0px_16px_0px_rgba(0,0,0,0.1)] desktop:shadow-[6px_0px_10px_0px_rgba(0,0,0,0.02),_-6px_0px_10px_rgba(0,0,0,0.02)] dark:shadow-none;
 }
 
 .settingsTitle {
@@ -242,7 +242,7 @@
 }
 
 .settingsInput {
-  @apply w-full h-full px-[12px] py-[4px] text-end cursor-pointer focus:cursor-text outline-none focus:ring-0 bg-transparent focus:bg-white border-[1.5px] border-transparent focus:border-blue-500 desktop:group-hover:text-slate-500 focus:desktop:group-hover:text-lightText1 transition-all duration-[300ms] placeholderColor placeholder:font-normal placeholder:pr-[2px] focus:placeholder:text-transparent rounded-[6px];
+  @apply w-full h-full px-[12px] py-[4px] text-end cursor-pointer focus:cursor-text outline-none focus:ring-0 bg-transparent focus:bg-white border-[1.5px] border-transparent focus:border-blue-500 desktop:group-hover:text-slate-500 focus:desktop:group-hover:text-lightText1 transition-all duration-[300ms] placeholderColor placeholder:font-normal placeholder:pr-[2px] focus:placeholder:text-transparent rounded-lg;
 }
 
 .settingsFontFixed {
@@ -258,7 +258,7 @@
 }
 
 .labelOptionContainer {
-  @apply mt-[4px] grid grid-cols-1 rounded-[8px] border-[1.5px] divide-y-[1.5px] bg-white dark:bg-slate-900 divide-slate-300 dark:divide-slate-900 border-slate-300 dark:border-slate-800 overflow-y-auto;
+  @apply mt-[4px] grid grid-cols-1 rounded-lg border-[1.5px] divide-y-[1.5px] bg-white dark:bg-slate-900 divide-slate-300 dark:divide-slate-900 border-slate-300 dark:border-slate-800 overflow-y-auto;
 }
 
 .labelOption {
@@ -268,7 +268,7 @@
 /*--- modal full ---*/
 
 @utility modalFullBase {
-  @apply fixed left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-[11] flex flex-col items-center desktop:rounded-[16px] overflow-hidden;
+  @apply fixed left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-[11] flex flex-col items-center desktop:rounded-2xl overflow-hidden;
 }
 
 @utility modalFullColor {
@@ -290,7 +290,7 @@
 /*--- modal ---*/
 
 @utility modalBase {
-  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[11] flex flex-col items-center rounded-[16px] bg-lightBg1 dark:bg-darkBg1 border-2 dark:border border-slate-300 dark:border-slate-700;
+  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[11] flex flex-col items-center rounded-2xl bg-lightBg1 dark:bg-darkBg1 border-2 dark:border border-slate-300 dark:border-slate-700;
 }
 
 @utility modalXPadding {

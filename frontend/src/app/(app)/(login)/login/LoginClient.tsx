@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 // components
 import LoginThemeToggle from "../_components/LoginThemeToggle";
 import SignInGoogle from "../_components/SignInGoogle";
@@ -24,7 +25,7 @@ export default function Login() {
   // states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ email: "", password: "", password2: "" });
+  const [errors, setErrors] = useState({ email: false, password: false });
   const [isLoading, setIsLoading] = useState(false);
   const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
@@ -43,23 +44,23 @@ export default function Login() {
     if (email) {
       const isValidEmail = checkEmail(email); // returns undefined or false
       if (!isValidEmail) {
-        setErrors({ ...errors, email: "Email is invalid" });
+        setErrors({ ...errors, email: true });
         return false;
       }
     }
-    setErrors({ ...errors, email: "" });
+    setErrors({ ...errors, email: false });
     return true; // returns true even if no email because don't want error to show
   }
 
-  async function validatePassword() {
-    if (password) {
-      const isPasswordValid = checkPassword(password);
+  async function validatePassword(_password: string) {
+    if (_password) {
+      const isPasswordValid = checkPassword(_password);
       if (!isPasswordValid) {
-        setErrors((errors) => ({ ...errors, password: "Must be \u2265 8 characters and contain a lowercase letter, an uppercase letter, and a number" }));
+        setErrors((errors) => ({ ...errors, password: true }));
         return false;
       }
     }
-    setErrors((errors) => ({ ...errors, password: "" }));
+    setErrors((errors) => ({ ...errors, password: false }));
     return true; // returns true even if no password because don't want error to show
   }
 
@@ -86,13 +87,15 @@ export default function Login() {
 
   return (
     <>
-      <LoginThemeToggle />
+      {/* <LoginThemeToggle /> */}
       <SignInGoogle label="Sign in with Google" />
-      <Separator text="Or with email and password" />
+      <Separator />
       <form className="w-full flex flex-col" onSubmit={submit}>
         <InputEmail
           label="Email"
-          error={errors.email}
+          _id="email"
+          isError={errors.email}
+          errorMsg="Invalid email"
           onBlur={(e) => validateEmail(e.target.value)}
           onChange={(e) => setEmail(e.target.value)}
           value={email}
@@ -101,21 +104,23 @@ export default function Login() {
         />
         <Accordion isOpen={isEmailVerified}>
           <InputPassword
-            className="pt-[14px] pb-[8px]"
+            className="pt-4 pb-2"
             label="Password"
-            error={errors.password}
-            onBlur={validatePassword}
+            _id="password"
+            isError={errors.password}
+            errorMsg="Password should contain a lowercase letter, an uppercase letter, and a number"
+            onBlur={(e) => validatePassword(e.target.value)}
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             autoComplete="current-password"
             name="password"
           />
         </Accordion>
-        {isEmailVerified && <Button className="mt-[16px]" label={"Sign In"} type="submit" isLoading={isLoading ? true : false} />}
+        {isEmailVerified && <Button className="mt-4" label={"Sign In"} type="submit" isLoading={isLoading ? true : false} />}
       </form>
       {!isEmailVerified && (
         <Button
-          className="mt-[16px]"
+          className="mt-4"
           label="Next"
           type="button"
           onClick={(e) => {
@@ -127,13 +132,13 @@ export default function Login() {
       )}
 
       {/*--- other options ---*/}
-      <div className="mt-[60px] desktop:mt-[50px] w-full flex flex-col gap-[40px] desktop:gap-[30px] items-center textSmApp">
-        <div className="link underline-animate" onClick={() => router.push("/signup")}>
+      <div className="mt-14 desktop:mt-12 w-full flex flex-col gap-10 desktop:gap-8 items-center textSmApp">
+        <Link className="link underline-animate" href="/signup">
           New user? Sign up here
-        </div>
-        <div className="link underline-animate" onClick={() => router.push("/new-password")}>
+        </Link>
+        <Link className="link underline-animate" href="/new-password">
           Forget password?
-        </div>
+        </Link>
       </div>
       {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
     </>

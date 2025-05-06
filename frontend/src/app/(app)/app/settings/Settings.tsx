@@ -88,7 +88,7 @@ export default function Settings({ provider, email }: { provider: string; email:
                 <div className="text-center text-slate-500 italic">No categories</div>
               )
             ) : (
-              <div className="w-[90%] bg-blue-300/10 animate-pulse rounded-[6px] text-transparent point-events-none">0</div>
+              <div className="w-[90%] bg-blue-300/10 animate-pulse rounded-lg text-transparent point-events-none">0</div>
             )}
           </div>
 
@@ -108,7 +108,7 @@ export default function Settings({ provider, email }: { provider: string; email:
                 <div className="text-center text-slate-500 italic">No tags</div>
               )
             ) : (
-              <div className="w-[90%] bg-blue-300/10 animate-pulse rounded-[6px] text-transparent point-events-none">0</div>
+              <div className="w-[90%] bg-blue-300/10 animate-pulse rounded-lg text-transparent point-events-none">0</div>
             )}
           </div>
         </div>

@@ -1,9 +1,5 @@
-import ForgotPassword from "./NewPassword";
+import NewPassword from "./NewPassword";
 
 export default function page() {
-  return (
-    <>
-      <ForgotPassword />
-    </>
-  );
+  return <NewPassword />;
 }

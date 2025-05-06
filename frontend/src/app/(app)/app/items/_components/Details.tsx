@@ -19,7 +19,7 @@ export default function Details({ setPage, setErrorModal, data, newItem, setNewI
           <div className="inputCondensed w-full flex items-center relative z-[100]" onClick={() => setShowCalendar(true)}>
             {new Date(newItem.date).toLocaleString("en-US")}
             {showCalendar && (
-              <div className="absolute right-0 top-[calc(100%+8px)] px-[8px] py-[8px] desktop:py-[4px] rounded-[8px] bg-lightBg1 dark:bg-slate-900 border-[1.5px] border-slate-300 dark:border-slate-800">
+              <div className="absolute right-0 top-[calc(100%+8px)] px-[8px] py-[8px] desktop:py-[4px] rounded-lg bg-lightBg1 dark:bg-slate-900 border-[1.5px] border-slate-300 dark:border-slate-800">
                 <DayPicker
                   className="textSmApp"
                   classNames={{

@@ -21,7 +21,7 @@ export default function EnterCat({ setPage, setErrorModal, data, newItem, setNew
             key={index}
             className={`${
               labelType === i ? "bg-lightButton1Bg dark:bg-darkButton1Bg text-white" : ""
-            } p-[8px] desktop:p-[4px] h-[64px] desktop:h-[52px] flex flex-col justify-between border-2 border-lightButton1Bg dark:border-darkButton1Bg rounded-[8px] relative desktop:cursor-pointer desktop:hover:bg-lightButton1Bg dark:desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
+            } p-[8px] desktop:p-[4px] h-[64px] desktop:h-[52px] flex flex-col justify-between border-2 border-lightButton1Bg dark:border-darkButton1Bg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-lightButton1Bg dark:desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
             onClick={() => {
               setLabelType(i);
               if (i === "category") {
@@ -41,14 +41,14 @@ export default function EnterCat({ setPage, setErrorModal, data, newItem, setNew
       </div>
 
       {/*--- label choices ---*/}
-      <div className="grow mt-[20px] py-[20px] w-[350px] flex justify-center overflow-hidden bg-slate-200 dark:bg-darkBg3 rounded-[12px] relative">
+      <div className="grow mt-[20px] py-[20px] w-[350px] flex justify-center overflow-hidden bg-slate-200 dark:bg-darkBg3 rounded-lg relative">
         <div className="w-full px-[20px] h-full flex flex-col gap-[4px] overflow-y-auto thinScrollbar">
           {labelOptions.map((i, index) => (
             <div
               key={index}
               className={`${
                 newItem[labelType] === i ? "border-lightButton1Bg dark:border-darkButton1Bg" : "border-slate-300 dark:border-transparent"
-              } flex-none px-[12px] w-full h-[56px] desktop:h-[40px] flex items-center justify-between  font-medium border-2 rounded-[8px] desktop:cursor-pointer bg-white dark:bg-blue-100/10 desktop:hover:border-lightButton1Bg dark:desktop:hover:border-darkButton1Bg`}
+              } flex-none px-[12px] w-full h-[56px] desktop:h-[40px] flex items-center justify-between  font-medium border-2 rounded-lg desktop:cursor-pointer bg-white dark:bg-blue-100/10 desktop:hover:border-lightButton1Bg dark:desktop:hover:border-darkButton1Bg`}
               onClick={() => {
                 if (labelType === "category") {
                   setLabelType("subcategory");

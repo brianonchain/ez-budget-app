@@ -41,7 +41,7 @@ export default function SaveToHome() {
   return (
     <div className="w-full min-h-[100dvh] pt-[30px] pb-[80px] flex flex-col items-center justify-center overflow-y-auto">
       {/*---image---*/}
-      <div className="h-[320px] w-[160px] rounded-[16px] shadow-[0px_2px_20px_0px_rgb(0,0,0,0.3)] relative">
+      <div className="h-[320px] w-[160px] rounded-2xl shadow-[0px_2px_20px_0px_rgb(0,0,0,0.3)] relative">
         <Image src="/PWA.png" alt="phone showing homescreen" fill />
       </div>
 

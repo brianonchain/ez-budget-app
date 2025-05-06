@@ -21,7 +21,7 @@ export default function EnterCost({ setPage, setErrorModal, setNewItem }: { setP
           {calc.map((i, index) => (
             <div
               key={index}
-              className="w-[90px] h-[72px] flex items-center justify-center text-xl font-medium bg-slate-200 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-[16px] cursor-pointer"
+              className="w-[90px] h-[72px] flex items-center justify-center text-xl font-medium bg-slate-200 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-2xl cursor-pointer"
               onClick={() => {
                 setAmount((amount) => amount + i);
               }}
@@ -30,7 +30,7 @@ export default function EnterCost({ setPage, setErrorModal, setNewItem }: { setP
             </div>
           ))}
           <div
-            className="w-[90px] h-[72px] flex items-center justify-center text-xl font-medium bg-slate-200 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-[16px] cursor-pointer"
+            className="w-[90px] h-[72px] flex items-center justify-center text-xl font-medium bg-slate-200 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-2xl cursor-pointer"
             onClick={() => {
               if (amount.length > 1) {
                 setAmount(amount.slice(0, -1));

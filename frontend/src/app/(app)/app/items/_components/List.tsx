@@ -6,7 +6,7 @@ export default function List({ setPage, setErrorModal, data, setNewItem }: { set
   return (
     <>
       <div className="portrait:sm:pt-[16px] landscape:lg:pt-[16px] w-full portrait:sm:max-w-[540px] landscape:lg:max-w-[540px]">
-        <div className="portrait:sm:pb-[16px] landscape:lg:pb-[16px] w-full bg-lightBg1 dark:bg-blue-400/6 portrait:sm:rounded-[16px] landscape:lg:rounded-[16px] portrait:sm:border-1 landscape:lg:border-1 border-white dark:border-white/10 overflow-hidden shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none">
+        <div className="portrait:sm:pb-[16px] landscape:lg:pb-[16px] w-full bg-lightBg1 dark:bg-blue-400/6 portrait:sm:rounded-2xl landscape:lg:rounded-2xl portrait:sm:border-1 landscape:lg:border-1 border-white dark:border-white/10 overflow-hidden shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none">
           {/*--- header, h=50px, use 2 divs to make scrollbar space aligned with list ---*/}
           <div className="text-slate-700 dark:text-slate-400 bg-lightBg2 dark:bg-blue-400/14 thinScrollbar overflow-y-auto" style={{ scrollbarGutter: "stable" }}>
             <div className="px-[3%] listHeaderHeight grid grid-cols-[50%_20%_30%] items-center font-bold">

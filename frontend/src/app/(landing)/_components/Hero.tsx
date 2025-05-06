@@ -1,8 +1,12 @@
-import React from "react";
 import Link from "next/link";
 import Ani from "./Ani";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/authOptions";
 
-export default function Hero() {
+export default async function Hero() {
+  const session = await getServerSession(authOptions);
+  console.log(session);
+
   return (
     <div className="homeSectionSize h-screen overflow-y-hidden min-h-[550px] flex flex-col items-center lg:flex-row lg:items-center z-[0]">
       {/*--- text ---*/}
@@ -11,9 +15,16 @@ export default function Hero() {
           Track expenses with <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#63CDF6] to-[#B568FF]">minimal keystrokes</span>
         </div>
         <div className="text-[20px]">Designed for speed and customizability, EZ Budget App is the easiest way to track daily expenses and maintain a budget.</div>
-        <Link className="mt-[4px] homeButton" href="/app/items">
-          Enter App
-        </Link>
+
+        {session ? (
+          <Link className="mt-1 homeButton" href="/app/items">
+            Enter App
+          </Link>
+        ) : (
+          <Link className="mt-1 homeButton" href="/login">
+            Enter App
+          </Link>
+        )}
       </div>
       {/*--- animation ---*/}
       <div className="w-[45%] flex justify-center">

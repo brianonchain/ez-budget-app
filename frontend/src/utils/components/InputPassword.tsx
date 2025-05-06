@@ -1,23 +1,29 @@
 import { useState, useRef } from "react";
 import { PiEyeLight, PiEyeSlashLight } from "react-icons/pi";
+import Accordion from "./Accordion";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  error?: string;
   className?: string;
+  label: string;
+  _id: string;
+  isError?: boolean;
+  errorMsg?: string;
   tooltip?: boolean;
 }
 
-export default function InputPassword({ label, tooltip, error = "", className = "", ...props }: InputProps) {
+export default function InputPassword({ className = "", label, _id, isError = false, errorMsg = "", tooltip, ...props }: InputProps) {
   const ref = useRef<HTMLInputElement | null>(null);
   const [show, setShow] = useState(false);
 
   return (
-    <div className={`flex flex-col ${className}`}>
-      <div className="inputLabel">{label}</div>
+    <div className={`flex flex-col items-start gap-1 ${className}`}>
+      <label className="inputLabel" htmlFor={_id}>
+        {label}
+      </label>
       <div className="w-full relative">
         <input
-          className={`input ${error ? "!border-red-500 !focus:border-red-500" : ""} peer`}
+          id={_id}
+          className={`input ${isError ? "borderColorError" : ""} peer`}
           ref={ref}
           type={show ? "text" : "password"}
           autoCapitalize="none"
@@ -37,18 +43,20 @@ export default function InputPassword({ label, tooltip, error = "", className = 
             }, 0);
           }}
         >
-          {show ? <PiEyeLight className="text-[28px] desktop:text-[22px]" /> : <PiEyeSlashLight className="text-[28px] desktop:text-[22px]" />}
+          {show ? <PiEyeLight className="text-3xl desktop:text-[1.4rem]" /> : <PiEyeSlashLight className="text-3xl desktop:text-[1.4rem]" />}
         </button>
-        {tooltip && !error && (
-          <div className="opacity-0 peer-focus:opacity-100 pointer-events-none absolute right-0 bottom-[calc(100%+8px)] px-2 py-1 bg-slate-800 text-white text-xs space-y-[8px] rounded-[8px] [transition:opacity_300ms]">
+        {tooltip && !isError && (
+          <div className="opacity-0 peer-focus:opacity-100 pointer-events-none absolute right-0 bottom-[calc(100%+8px)] px-3 py-2 desktop:px-2 desktop:py-1 bg-slate-800 text-white text-base desktop:text-xs space-y-[8px] rounded-lg [transition:opacity_300ms]">
             <p>&bull;&nbsp; min 8 characters</p>
             <p>&bull;&nbsp; have a lowercase letter</p>
             <p>&bull;&nbsp; have an uppercase letter</p>
             <p>&bull;&nbsp; have a number</p>
           </div>
         )}
-        {error && <p className="absolute right-0 bottom-[calc(100%+6px)] max-w-[70%] px-[8px] py-[6px] bg-red-500 text-white text-xs space-y-[8px] rounded-[8px]">{error}</p>}
       </div>
+      <Accordion isOpen={isError ? true : false}>
+        <p className="errorText">{errorMsg}</p>
+      </Accordion>
     </div>
   );
 }
