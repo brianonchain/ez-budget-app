@@ -76,7 +76,7 @@
 }
 
 @utility errorText {
-  @apply text-base desktop:text-sm font-medium text-red-500 dark:text-red-400;
+  @apply text-base desktop:text-sm text-red-500 dark:text-red-400;
 }
 
 /*--- colors ---*/
@@ -104,7 +104,7 @@
 }
 
 @utility buttonBase {
-  @apply h-[3em] textBaseApp font-medium flex items-center justify-center desktop:cursor-pointer;
+  @apply flex-none h-[3em] textBaseApp font-medium flex items-center justify-center desktop:cursor-pointer;
 }
 
 @utility button1ColorLight {
@@ -154,7 +154,7 @@
 /*--- input ---*/
 
 @utility inputColor {
-  @apply rounded-lg outline-none border-[1.5px] bg-white dark:bg-darkInput text-lightText1 dark:text-darkText1 border-slate-300 focus:border-blue-500 dark:border-darkInputBorder dark:focus:border-darkInputBorderFocus [transition:border-color_500ms];
+  @apply rounded-lg outline-none border-[1.5px] bg-white dark:bg-darkInput text-lightText1 dark:text-darkText1 border-slate-300 focus:border-blue-500 dark:border-darkInputBorder dark:focus:border-darkInputBorderFocus placeholder:text-slate-400 dark:placeholder:text-slate-600 [transition:border-color_500ms];
 }
 
 @utility placeholderColor {
@@ -222,7 +222,7 @@
 }
 
 .settingsField {
-  @apply w-full h-[52px] desktop:h-[40px] flex items-center justify-between border-b-[1.5px] borderColor;
+  @apply flex-none w-full h-[3em] flex items-center justify-between gap-2 border-b-[1.5px] borderColor;
 }
 
 .labelsField {
@@ -318,7 +318,7 @@
 }
 
 .modalFullHeader {
-  @apply w-[240px] desktop:!w-[300px] py-[24px] text-center text-2xl desktop:text-xl leading-normal desktop:leading-normal font-semibold;
+  @apply w-[240px] desktop:!w-[300px] py-6 text-center text-2xl desktop:text-xl leading-normal desktop:leading-normal font-semibold;
 }
 
 .pageHeader {

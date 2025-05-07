@@ -51,9 +51,9 @@ export default function Settings({ provider, email }: { provider: string; email:
           {/*--- email ---*/}
           <div className="settingsField">
             <p className="settingsLabel">Email</p>
-            <div className="flex items-center gap-[8px]">
-              <p className="font-medium">{email}</p>
-              {provider === "credentials" && <AiOutlineEdit className="settingsEditIcon" onClick={() => setEmailModal(true)} />}
+            <div className="w-full flex items-center gap-[8px] bg-red-300">
+              <p className="grow min-w-0 font-medium truncate">{email}</p>
+              {/* {provider === "credentials" && <AiOutlineEdit className="settingsEditIcon" onClick={() => setEmailModal(true)} />} */}
             </div>
           </div>
           {/*--- password ---*/}

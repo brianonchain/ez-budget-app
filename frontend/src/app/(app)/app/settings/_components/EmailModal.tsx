@@ -6,9 +6,9 @@ import { ImSpinner2 } from "react-icons/im";
 import { fetchPost, checkEmail } from "@/utils/functions";
 import InputEmail from "@/utils/components/InputEmail";
 
-const defaultErrors = { email: "", submit: "" };
+const defaultErrors = { email: false, submit: "" };
 
-export default function PasswordModal({ setEmailModal, email }: { setEmailModal: any; email: string }) {
+export default function EmailModal({ setEmailModal, email }: { setEmailModal: any; email: string }) {
   // hooks
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   // states
@@ -21,11 +21,11 @@ export default function PasswordModal({ setEmailModal, email }: { setEmailModal:
     if (_email) {
       const isValidEmail = checkEmail(_email); // returns undefined or false
       if (!isValidEmail) {
-        setErrors({ ...errors, email: "Email is invalid" });
+        setErrors({ ...errors, email: true });
         return false;
       }
     }
-    setErrors({ ...errors, email: "" });
+    setErrors({ ...errors, email: false });
     return true; // returns true even if no email because don't want error to show
   }
 
@@ -161,9 +161,11 @@ export default function PasswordModal({ setEmailModal, email }: { setEmailModal:
             {status.content === "changeEmail" && (
               <div className="w-full h-[100px] desktop:h-[80px] flex items-center">
                 <InputEmail
+                  _id="email"
                   className="w-full"
-                  label="Enter new email"
-                  error={errors.email}
+                  label="New Email"
+                  isError={errors.email}
+                  errorMsg="Invalid email"
                   onBlur={(e) => validateEmail(e.target.value)}
                   onChange={(e) => setNewEmail(e.target.value)}
                   value={newEmail}
