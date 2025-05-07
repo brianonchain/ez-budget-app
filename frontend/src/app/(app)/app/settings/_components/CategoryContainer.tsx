@@ -4,15 +4,22 @@ import { useState, useEffect } from "react";
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import Category from "./Category";
+import { CategoryObject } from "@/db/UserModel";
+import { useSettingsMutation } from "@/utils/hooks";
 
-export default function CategoryContainer({ category }: { category: { [key: string]: string[] } }) {
-  // need to memoize?
-  const initialItems = Object.keys(category)
-    .slice(1)
-    .map((i, index) => ({ id: (index + 1).toString(), text: i, subtext: category[i] }));
+function addId(categoryObjects: CategoryObject[]) {
+  return categoryObjects.slice(1).map((i, index) => ({ id: (index + 1).toString(), ...i }));
+}
 
-  // state
-  const [items, setItems] = useState(initialItems);
+export default function CategoryContainer({ categoryObjects, setAddCategoryModal }: { categoryObjects: CategoryObject[]; setAddCategoryModal: any }) {
+  const { mutateAsync: settingsMutateAsync } = useSettingsMutation();
+
+  const [items, setItems] = useState(() => addId(categoryObjects));
+
+  // needed if user adds new category
+  useEffect(() => {
+    setItems(addId(categoryObjects));
+  }, [categoryObjects]);
 
   // Set up sensors for better drag handling
   const sensors = useSensors(
@@ -21,22 +28,34 @@ export default function CategoryContainer({ category }: { category: { [key: stri
     })
   );
 
-  const onDragEnd = (event: any) => {
+  const onDragEnd = async (event: any) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
     const oldIndex = items.findIndex((item) => item.id === active.id);
     const newIndex = items.findIndex((item) => item.id === over.id);
 
-    setItems(arrayMove(items, oldIndex, newIndex));
+    const oldItems = [...items];
+    const newItems = arrayMove(items, oldIndex, newIndex);
+    setItems(newItems);
+
+    const newCategoryObjects = [{ category: "none", subcategories: ["none"] }];
+    newItems.forEach((i) => newCategoryObjects.push({ category: i.category, subcategories: i.subcategories }));
+
+    try {
+      await settingsMutateAsync({ "settings.categoryObjects": newCategoryObjects });
+    } catch (e) {
+      console.error("Failed to update category order");
+      setItems(oldItems);
+    }
   };
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
         <div className="w-[90%] flex flex-col textXsApp border-t border-b border-dashed borderColorFaint">
-          {items.map((item) => (
-            <Category key={item.id} id={item.id} text={item.text} subtext={item.subtext} />
+          {items.map((item, index) => (
+            <Category key={item.id} id={item.id} category={item.category} subcategories={item.subcategories.slice(1).join(", ")} setAddCategoryModal={setAddCategoryModal} />
           ))}
         </div>
       </SortableContext>

@@ -26,9 +26,9 @@ export const useUserQuery = (email: string | null | undefined) => {
 export const useSettingsMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ changes }: { changes: { [key: string]: any } }) => {
-      console.log("useSettingsMutation mutationFn ran");
-      const resJson = await fetchPost("/api/mutateSettings", { changes }); // should throw error if !response.ok
+    mutationFn: async (changes: { [key: string]: any }) => {
+      console.log("useSettingsMutation mutationFn");
+      const resJson = await fetchPost("/api/mutateSettings", { changes });
       if (resJson === "saved") return;
       throw new Error();
     },

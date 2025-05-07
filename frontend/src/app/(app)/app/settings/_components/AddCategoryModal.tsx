@@ -45,15 +45,15 @@ export default function AddCategoryModal({ setAddCategoryModal, data }: { setAdd
           {/*--- button ---*/}
           <button
             onClick={() => {
-              const categoryValue = categoryRef?.current?.value.trim();
-              if (categoryValue) {
+              const category = categoryRef?.current?.value.trim();
+              if (category) {
                 setError("");
                 const subcategories: string[] = ["none"];
                 subcategoryRefs.current.forEach((ref) => {
-                  const subcategoryValue = ref?.value?.trim();
-                  if (subcategoryValue) subcategories.push(subcategoryValue);
+                  const subcategory = ref?.value?.trim();
+                  if (subcategory) subcategories.push(subcategory);
                 });
-                settingsMutateAsync({ changes: { "settings.category": { ...data?.settings.category, [categoryValue]: subcategories } } });
+                settingsMutateAsync({ "settings.categoryObjects": [...data.settings.categoryObjects, { category: category, subcategories: subcategories }] });
                 setAddCategoryModal(false);
               } else {
                 setError("Please enter a category");

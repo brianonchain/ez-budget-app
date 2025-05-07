@@ -1,3 +1,9 @@
+import { CategoryObject } from "@/db/UserModel";
+
+export function addId(arr: CategoryObject[]) {
+  return arr.slice(1).map((i, index) => ({ id: (index + 1).toString(), ...i }));
+}
+
 export function checkEmail(email: string): undefined | boolean {
   return email.split("@")[1]?.includes("."); // returns undefined or false
 }

@@ -24,6 +24,7 @@ export default function Settings({ provider, email }: { provider: string; email:
   // hooks
   const { resolvedTheme, setTheme } = useTheme();
   const { data, isPending, isError } = useUserQuery(email);
+  console.log("Settings.tsx, data", data);
 
   // states
   const [passwordModal, setPasswordModal] = useState(false);
@@ -77,8 +78,8 @@ export default function Settings({ provider, email }: { provider: string; email:
             </div>
             {/*--- category options ---*/}
             {data ? (
-              Object.keys(data.settings.category).length > 1 ? (
-                <CategoryContainer category={data?.settings.category} key={JSON.stringify(data?.settings.category)} />
+              data.settings.categoryObjects.length > 1 ? (
+                <CategoryContainer categoryObjects={data.settings.categoryObjects} setAddCategoryModal={setAddCategoryModal} />
               ) : (
                 <div className="text-center text-slate-500 italic">No categories</div>
               )

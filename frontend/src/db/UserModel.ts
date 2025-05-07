@@ -1,9 +1,12 @@
 import mongoose, { Document, Schema } from "mongoose";
 
+export type CategoryObject = { category: string; subcategories: string[] };
+
 export type Settings = {
   email: string;
   currency: string;
   category: { [key: string]: string[] };
+  categoryObjects: CategoryObject[];
   tags: string[];
 };
 
@@ -28,7 +31,13 @@ const UserSchema: Schema = new Schema<IUser>({
     email: { type: String, unique: true },
     currency: String,
     category: Object,
-    tags: Array,
+    categoryObjects: [
+      {
+        category: String,
+        subcategories: [String],
+      },
+    ],
+    tags: [String],
   },
   items: [
     {
