@@ -9,8 +9,8 @@ import "@/styles/globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "WebApp Template",
-  description: "template for web apps",
+  title: "EZ Budget App",
+  description: "Designed for speed and customizability, EZ Budget App is the easiest way to track daily expenses and maintain a budget.",
 };
 
 export default async function RootLayout({
