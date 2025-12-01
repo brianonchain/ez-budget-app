@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 // components
 import LoginThemeToggle from "../_components/LoginThemeToggle";
-import SignInGoogle from "../_components/SignInGoogle";
+import SignInButton from "../_components/SignInButton";
 import Separator from "../_components/Separator";
 import Button from "@/utils/components/Button";
 // utils
@@ -15,9 +15,11 @@ import InputEmail from "@/utils/components/InputEmail";
 import InputPassword from "@/utils/components/InputPassword";
 import ErrorModal from "@/utils/components/ErrorModal";
 import Accordion from "@/utils/components/Accordion";
+// images
+import { LuMail } from "react-icons/lu";
 
 export default function Login() {
-  console.log("(app)/login/_components/Login.tsx");
+  console.log("(app)/login/LoginClient.tsx");
 
   // hooks
   const router = useRouter();
@@ -85,10 +87,31 @@ export default function Login() {
     }
   }
 
+  // onClick functions
+  async function onClickGoogle() {
+    // setIsLoading("email");
+    var res = await signIn("google", {
+      callbackUrl: "/app/items",
+      prompt: "select_account", // doesn't seem to work
+    });
+    // if sign in error or success
+    if (res?.error) {
+      // setIsLoading(null);
+    } else if (res?.url) {
+      router.push(res.url);
+    }
+  }
+
+  async function onClickEmail() {
+    return;
+  }
+
   return (
     <>
-      {/* <LoginThemeToggle /> */}
-      <SignInGoogle label="Sign in with Google" />
+      {/*--- Buttons ---*/}
+      <SignInButton label="Sign in with Google" imageSrc="./google.svg" imageAlt="google" onClick={onClickGoogle} />
+      <SignInButton label="Sign in with Email / Password" imageSrc="./google.svg" imageAlt="email" onClick={onClickEmail} />
+
       <Separator />
       <form className="w-full flex flex-col" onSubmit={submit}>
         <InputEmail

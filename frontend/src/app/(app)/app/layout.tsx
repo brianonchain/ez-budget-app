@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  console.log("/(app)/app/layout.tsx");
   const session = await getServerSession();
   if (!session) redirect("/login");
 

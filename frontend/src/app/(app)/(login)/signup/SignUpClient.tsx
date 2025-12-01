@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 // components
-import SignInGoogle from "../_components/SignInGoogle";
+import SignInGoogle from "../_components/SignInButton";
 import Separator from "../_components/Separator";
 import LoginThemeToggle from "../_components/LoginThemeToggle";
 // utils

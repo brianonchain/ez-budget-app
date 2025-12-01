@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   description: "Designed for speed and customizability, EZ Budget App is the easiest way to track daily expenses and maintain a budget.",
 };
 
+// contains font color
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -21,7 +22,7 @@ export default async function RootLayout({
   const session = await getServerSession();
   return (
     <html suppressHydrationWarning lang="en">
-      <body className={`text-lightText1 dark:text-darkText1 ${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased`}>
         <SessionProvider session={session}>{children}</SessionProvider>
       </body>
     </html>

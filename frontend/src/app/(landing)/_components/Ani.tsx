@@ -83,10 +83,10 @@ export default function Ani() {
   ];
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="w-[390px] h-[844px] scale-[65%]">
+    <div className="justify-self-center lg:justify-self-end align-self-center w-[300px] h-[700px] lg:h-auto flex items-center justify-center overflow-hidden relative">
+      <div className="absolute w-[390px] h-[844px] scale-[65%]">
         {/*--- phone outline ---*/}
-        <div className="absolute left-[-155px] top-[-140px] w-[700px] h-[1092px]">
+        <div className="absolute left-[-155px] top-[-140px] w-[700px] h-[1092px] bg-red-500/0">
           <Image src="/phone.png" alt="phone" fill priority />
         </div>
         {/*--- animated arrow ---*/}

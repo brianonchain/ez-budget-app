@@ -96,7 +96,7 @@
 /*--- buttons ---*/
 
 .homeButton {
-  @apply button1ColorDark px-[1.3em] py-[0.65em] textBaseApp font-medium rounded-full cursor-pointer;
+  @apply button1ColorDark px-[1.2em] py-[0.6em] textLgApp font-medium rounded-full cursor-pointer;
 }
 
 .homeButtonSm {
@@ -176,7 +176,7 @@
 /*--- landing ---*/
 
 .homeSectionSize {
-  @apply mx-[16px] xs:mx-[24px] lg:mx-[32px] w-full max-w-[550px] lg:max-w-[1100px] min-h-[700px];
+  @apply px-[16px] xs:px-[24px] lg:px-[80px] w-full max-w-[650px] lg:max-w-[calc(1100px+160px)];
 }
 
 /*--- components ---*/

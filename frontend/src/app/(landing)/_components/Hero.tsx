@@ -8,32 +8,22 @@ export default async function Hero() {
   console.log(session);
 
   return (
-    <div className="homeSectionSize h-screen overflow-y-hidden min-h-[550px] flex flex-col items-center lg:flex-row lg:items-center z-[0]">
-      {/*--- text ---*/}
-      <div className="flex flex-col items-start w-[55%] gap-[20px]">
-        <div className="text-[50px] leading-[1.2] font-bold">
-          Track expenses with <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#63CDF6] to-[#B568FF]">minimal keystrokes</span>
-        </div>
-        <div className="text-[20px]">Designed for speed and customizability, EZ Budget App is the easiest way to track daily expenses and maintain a budget.</div>
+    <div className="homeSectionSize min-h-[max(100vh,700px)] grid grid-cols-1 lg:grid-cols-[55%_45%] gap-[12px] lg:gap-0 relative">
+      {/*--- radial gradient ---*/}
 
-        {session ? (
-          <Link className="mt-1 homeButton" href="/app/items">
-            Enter App
-          </Link>
-        ) : (
-          <Link className="mt-1 homeButton" href="/login">
-            Enter App
-          </Link>
-        )}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-screen h-full bg-[radial-gradient(circle_at_50%_150%,#0444B7,transparent_70%)] pointer-events-none" />
+      {/*--- text ---*/}
+      <div className="mt-[60px] lg:mt-0 w-full flex flex-col items-start lg:justify-center gap-[20px] text-center lg:text-start">
+        <div className="text-[58px] leading-[1.2] font-bold">
+          Track expenses <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#63CDF6] to-[#B568FF]">with fewer clicks</span>
+        </div>
+        <div className="text-xl leading-[1.6]">Use EZ Budget App to track your daily expenses with speed and customizability.</div>
+        <Link className="mt-4 homeButton mx-auto lg:mx-0" href={session ? "/app/items" : "/login"}>
+          Enter App
+        </Link>
       </div>
       {/*--- animation ---*/}
-      <div className="w-[45%] flex justify-center">
-        <Ani />
-      </div>
-      {/*--- glow ---*/}
-      <div className="absolute w-full h-full left-0 top-0 overflow-hidden z-[-1]">
-        <div className="absolute bottom-[0px] translate-y-[50%] left-1/2 -translate-x-1/2 w-[70%] h-[95%] xs:h-[70%] rounded-full bg-[#0444B7] blur-[300px] pointer-events-none"></div>
-      </div>
+      <Ani />
     </div>
   );
 }
