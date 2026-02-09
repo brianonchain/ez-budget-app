@@ -9,14 +9,14 @@ export const POST = async (request: Request) => {
 
   const session = await getServerSession();
   const email = session?.user?.email;
-  if (!email) return NextResponse.redirect(new URL("/login", request.url)); // TODO: delete session?
+  if (!email) return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
 
   // update db
   try {
     await dbConnect();
     await UserModel.findOneAndUpdate({ "settings.email": email }, { $set: changes });
-    return Response.json("saved");
+    return NextResponse.json({ status: "success" }, { status: 200 });
   } catch (e) {
-    return Response.json("error");
+    return NextResponse.json({ status: "error", message: "Database error" }, { status: 500 });
   }
 };

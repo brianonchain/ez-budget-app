@@ -9,7 +9,7 @@ export const POST = async (request: Request) => {
 
   const session = await getServerSession();
   const email = session?.user?.email;
-  if (!email) return NextResponse.redirect(new URL("/login", request.url)); // TODO: delete session?
+  if (!email) return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
 
   // save to db
   // if findOneAndUpdate fails, then error will be thrown => caught => respond with "not saved"
@@ -20,8 +20,8 @@ export const POST = async (request: Request) => {
     } else {
       await UserModel.findOneAndUpdate({ "settings.email": email }, { $push: { items: item } }); // if new item, then push
     }
-    return NextResponse.json("saved");
+    return NextResponse.json({ status: "success" }, { status: 200 });
   } catch (error) {
-    return NextResponse.json("error");
+    return NextResponse.json({ status: "error", message: "Database error" }, { status: 500 });
   }
 };

@@ -1,24 +1,17 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-export interface IPendingUser extends Document {
-  email: string;
-  password: string;
-  hashedPassword: string;
-  otp: string;
-  createdAt: Date;
-}
-
-const PendingUserSchema: Schema = new Schema<IPendingUser>({
-  email: String,
-  password: String,
-  hashedPassword: String,
-  otp: String,
-  createdAt: {
-    type: Date,
-    expires: 190, // 180s = 3min + 10s delay
+const PendingUserSchema = new Schema(
+  {
+    email: { type: String, required: true, index: true, unique: true },
+    hashedPassword: { type: String, required: true },
+    hashedOtp: { type: String, required: true },
+    otpExpiresAt: { type: Date, required: true },
+    docExpiresAt: { type: Date, required: true }, // TTL field
   },
-});
+  { timestamps: true }
+);
 
-const PendingUserModel = mongoose.models.PendingUser || mongoose.model<IPendingUser>("PendingUser", PendingUserSchema);
+// delete doc when docExpiresAt is reached
+PendingUserSchema.index({ docExpiresAt: 1 }, { expireAfterSeconds: 0 });
 
-export default PendingUserModel;
+export default mongoose.models.PendingUser || mongoose.model("PendingUser", PendingUserSchema);

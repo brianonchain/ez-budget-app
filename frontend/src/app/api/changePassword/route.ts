@@ -1,34 +1,39 @@
 import dbConnect from "@/db/dbConnect";
 import UserModel from "@/db/UserModel";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/authOptions";
 
-export const POST = async (request: Request) => {
-  console.log("/api/changePassword");
+export const POST = async (request: NextRequest) => {
   const { oldPassword, newPassword } = await request.json();
 
-  const session = await getServerSession();
+  // TODO: should add a rate limiter
+
+  // only logged in users can access this endpoint
+  const session = await getServerSession(authOptions);
   const email = session?.user?.email;
-  if (!email) return NextResponse.redirect(new URL("/login", request.url)); // TODO: delete session?
+  if (!email) return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
 
   try {
     await dbConnect();
-    var doc = await UserModel.findOne({ "settings.email": email }, { hashedPassword: 1 });
-    if (doc) {
-      const isPasswordCorrect = await bcrypt.compare(oldPassword, doc.hashedPassword);
-      if (isPasswordCorrect) {
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-        await UserModel.findOneAndUpdate({ "settings.email": email }, { $set: { hashedPassword: hashedPassword } });
-        return Response.json({ status: "success" });
-      } else {
-        return NextResponse.json({ status: "error", message: "Old password is incorrect." });
-      }
-    } else {
-      return NextResponse.json({ status: "error", message: "No matching user" });
+    const user = await UserModel.findOne({ "settings.email": email }, { hashedPassword: 1 });
+    if (!user) return NextResponse.json({ status: "error", message: "No matching user" }, { status: 404 });
+
+    // for users who created account with social login
+    if (!user.hashedPassword) {
+      return NextResponse.json({ status: "error", message: "Password login is not enabled for this account." }, { status: 400 });
     }
+
+    const isPasswordCorrect = await bcrypt.compare(oldPassword, user.hashedPassword);
+    if (!isPasswordCorrect)
+      return NextResponse.json({ status: "error", message: "Old password is incorrect. Please try again." }, { status: 400 });
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await UserModel.findOneAndUpdate({ "settings.email": email }, { $set: { hashedPassword: hashedPassword } });
+
+    return NextResponse.json({ status: "success" }, { status: 200 });
   } catch (e) {
-    return NextResponse.json({ status: "error", message: "An unknown error occurred. We apologize for the inconvenience." });
+    return NextResponse.json({ status: "error", message: "Server error. Please try again." }, { status: 500 });
   }
 };

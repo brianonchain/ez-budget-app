@@ -1,39 +1,42 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 import PendingUserModel from "@/db/PendingUserModel";
 import UserModel from "@/db/UserModel";
 import dbConnect from "@/db/dbConnect";
-// rate limiter
-import { Redis } from "@upstash/redis";
 // email
-const nodemailer = require("nodemailer"); // nodemailer does not suppot es6
+const nodemailer = require("nodemailer"); // nodemailer does not support es6
 import { google } from "googleapis";
 // utils
 import { generateOtp, normalizeEmail } from "@/utils/functions";
 import { hashOtp } from "@/utils/serverFunctions";
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
-
 export async function POST(req: Request) {
-  const { email, password } = await req.json();
+  // parse body safely
+  const { email } = (await req.json().catch(() => ({}))) as { email?: unknown };
   const _email = normalizeEmail(String(email || ""));
-  const _password = String(password || ""); // bcrypt expects string
 
-  if (!_email || !_password) return NextResponse.json({ status: "error", message: "Missing fields." }, { status: 400 });
-  if (_email.includes(" ")) return NextResponse.json({ status: "error", message: "Invalid email." }, { status: 400 });
+  if (!_email) {
+    return NextResponse.json({ status: "error", message: "Missing email." }, { status: 400 });
+  }
+  if (_email.includes(" ")) {
+    return NextResponse.json({ status: "error", message: "Invalid email." }, { status: 400 });
+  }
 
-  // READ/WRITE DATABASE
+  // DB: validate resend is allowed + update OTP
   let otp: string;
   try {
     await dbConnect();
+    // If user already exists, don't resend code
+    const user = await UserModel.findOne({ "settings.email": _email }).lean();
+    if (user) {
+      return NextResponse.json({ status: "error", message: "Account already exists." }, { status: 409 });
+    }
+    // If PendingUser is missing or docExpiredAt is in the past, then return error
+    const pendingUser = await PendingUserModel.findOne({ email: _email, docExpiresAt: { $gt: new Date() } });
+    if (!pendingUser) {
+      return NextResponse.json({ status: "error", message: "Verification session expired. Please sign up again." }, { status: 404 });
+    }
 
-    const user = await UserModel.findOne({ "settings.email": _email });
-    if (user) return NextResponse.json({ status: "error", message: "Email already in use" }, { status: 409 });
-
-    const hashedPassword = await bcrypt.hash(_password, 12);
+    // Generate new OTP + update expiry windows
     otp = generateOtp();
     const hashedOtp = hashOtp(otp);
 
@@ -41,26 +44,24 @@ export async function POST(req: Request) {
       { email: _email },
       {
         $set: {
-          email: _email,
-          hashedPassword,
           hashedOtp,
           otpExpiresAt: new Date(Date.now() + 2 * 60 * 1000),
           docExpiresAt: new Date(Date.now() + 10 * 60 * 1000),
         },
-      },
-      { upsert: true } // this means update or insert (if doc, then update; if no doc, then insert new)
+      }
     );
-  } catch {
+  } catch (e) {
     return NextResponse.json({ status: "error", message: "Database error" }, { status: 500 });
   }
 
+  // email HTML
   const html = `
   <div>
-    <p>Thank you for using the EZ Budget App (a subproject of Nulla Pay).</p>
-    <p>Your 6-digit code is:</p>
+    <p>Thank you for using EZ Budget!</p>
+    <p>Your verification code is:</p>
     <p style="font-size:20px;font-weight:bold;">${otp}</p>
     <p>This code will expire in 2 minutes.</p>
-    <p>Sincerely,<br/>The EZ Budget App & Nulla Pay Team</p>
+    <p>Sincerely,<br/>The EZ Budget & Nulla Pay Team</p>
   </div>
 `;
 
@@ -98,7 +99,7 @@ export async function POST(req: Request) {
     await transporter.sendMail({
       from: { name: "EZ Budget App", address: "support@nullapay.com" },
       to: _email,
-      subject: "Your 6-digit code",
+      subject: "EZ Budget verification code",
       html: html,
     });
 
@@ -114,8 +115,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         status: "error",
-        message:
-          "There was an error sending the 6-digit verification code to your email. Please try registering again or notify support@nullapay.com.",
+        message: "There was an error sending the code to your email. Please try registering again or notify support@nullapay.com.",
       },
       { status: 500 }
     );

@@ -7,57 +7,53 @@ import { fetchPost, checkEmail } from "@/utils/functions";
 import InputEmail from "@/utils/components/InputEmail";
 
 const defaultErrors = { email: false, submit: "" };
+const defaultStatus = { content: "changeEmail", button: "changeEmail" };
 
-export default function EmailModal({ setEmailModal, email }: { setEmailModal: any; email: string }) {
+export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
   // hooks
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   // states
   const [newEmail, setNewEmail] = useState("");
   const [errors, setErrors] = useState(defaultErrors);
-  const [status, setStatus] = useState({ content: "changeEmail", button: "changeEmail" }); // "changeEmail" | "verifyOtp" | "changed", button can be "loading"
+  const [status, setStatus] = useState(defaultStatus); // "changeEmail" | "verifyOtp" | "changed", button can be "loading"
   const [otp, setOtp] = useState(Array(6).fill(""));
 
-  function validateEmail(_email: string) {
-    if (_email) {
-      const isValidEmail = checkEmail(_email); // returns undefined or false
-      if (!isValidEmail) {
-        setErrors({ ...errors, email: true });
-        return false;
-      }
-    }
-    setErrors({ ...errors, email: false });
-    return true; // returns true even if no email because don't want error to show
+  function validateEmail(email: string) {
+    setErrors((prev) => ({ ...prev, email: !!email && !checkEmail(email) }));
   }
 
-  async function onButtonClick() {
+  async function onButtonClick(e: React.FormEvent) {
+    e.preventDefault();
     if (status.button === "changeEmail") createPendingEmailChange();
     if (status.button === "verifyOtp") verifyPendingEmailChange();
     if (status.button === "changed") {
       setStatus({ ...status, button: "loading" });
-      signOut({ callbackUrl: "/login" });
+      signOut({ callbackUrl: "/login" }); // user must re-login with new email
     }
-    if (status.button === "loading") return;
+    // if status.button = "loading", then nothing happens
   }
 
   async function createPendingEmailChange() {
-    if (!newEmail || errors.email) return; // !email needed because no prior validation
+    // re-validate email, as hitting "Enter" does not trigger onBlur
+    const _newEmail = newEmail.trim().toLowerCase();
+    const isEmailValid = !!_newEmail && checkEmail(_newEmail);
+    setErrors({ email: !isEmailValid, submit: isEmailValid ? "" : "Please enter a valid email." });
+    if (!isEmailValid) return;
 
-    setStatus({ ...status, button: "loading" });
-    setErrors(defaultErrors); // if there is errors.submit
+    setStatus((prev) => ({ ...prev, button: "loading" }));
 
     try {
-      const resJson = await fetchPost("/api/createPendingEmailChange", { newEmail });
+      const resJson = await fetchPost("/api/createPendingEmailChange", { newEmail: _newEmail });
       if (resJson.status === "success") {
         setStatus({ content: "verifyOtp", button: "verifyOtp" });
-        return;
-      } else if (resJson.status === "error") {
-        setErrors({ ...errors, submit: resJson.message });
-        setStatus({ content: "changeEmail", button: "changeEmail" });
-        return;
+      } else {
+        setErrors((prev) => ({ ...prev, submit: resJson.message || "Server error. Please try again." }));
+        setStatus(defaultStatus);
       }
-    } catch (e) {}
-    setErrors({ ...errors, submit: "Server error. Please try again." });
-    setStatus({ content: "changeEmail", button: "changeEmail" });
+    } catch (e: any) {
+      setErrors((prev) => ({ ...prev, submit: e?.message || "Server error. Please try again." }));
+      setStatus(defaultStatus);
+    }
   }
 
   async function verifyPendingEmailChange() {
@@ -77,13 +73,13 @@ export default function EmailModal({ setEmailModal, email }: { setEmailModal: an
         return;
       } else if (resJson.status === "error") {
         setErrors({ ...errors, submit: resJson.message });
-        setStatus({ content: "changeEmail", button: "changeEmail" });
+        setStatus(defaultStatus);
         setOtp(Array(6).fill(""));
         return;
       }
     } catch (e) {}
     setErrors({ ...errors, submit: "Server error. Please try again." });
-    setStatus({ content: "changeEmail", button: "changeEmail" });
+    setStatus(defaultStatus);
     setOtp(Array(6).fill(""));
   }
 
@@ -157,7 +153,7 @@ export default function EmailModal({ setEmailModal, email }: { setEmailModal: an
         <div className="modalFullHeader">Change Email</div>
         {/*--- content ---*/}
         <div className="modalFullContentContainer">
-          <div className="pt-[24px] w-full max-w-[380px] desktop:!max-w-[300px] mx-auto">
+          <form className="pt-[24px] w-full max-w-[380px] desktop:!max-w-[300px] mx-auto" onSubmit={onButtonClick}>
             {status.content === "changeEmail" && (
               <div className="w-full h-[100px] desktop:h-[80px] flex items-center">
                 <InputEmail
@@ -200,18 +196,20 @@ export default function EmailModal({ setEmailModal, email }: { setEmailModal: an
               </div>
             )}
             {status.content === "changed" && (
-              <div className="h-[100px] desktop:h-[80px] flex items-center justify-centerfont-medium">Email successfully changed! Please re-login with your new email.</div>
+              <div className="h-[100px] desktop:h-[80px] flex items-center justify-centerfont-medium">
+                Email successfully changed! Please re-login with your new email.
+              </div>
             )}
             {/*--- button ---*/}
-            <button onClick={onButtonClick} className="button1 mt-[24px] w-full flex justify-center items-center" type="button">
+            <button className="button1 mt-[24px] w-full flex justify-center items-center" type="submit">
               {status.button === "changeEmail" && <p>Change Email</p>}
               {status.button === "verifyOtp" && <p>Verify</p>}
               {status.button === "loading" && <ImSpinner2 className="animate-spin text-[32px] desktop:text-[24px]" />}
               {status.button === "changed" && !errors.submit && <p>Re-Login</p>}
             </button>
             {/*--- error message ---*/}
-            {errors.submit && <div className="mt-[8px] mb-[40px] text-red-500 font-medium">{errors.submit}</div>}
-          </div>
+            {errors.submit && <div className="mt-[8px] mb-[40px] errorText font-medium">{errors.submit}</div>}
+          </form>
         </div>
       </div>
       <div className="modalBlackout"></div>

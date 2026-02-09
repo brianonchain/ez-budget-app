@@ -2,10 +2,6 @@
 // nextjs
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-// components
-import SignInGoogle from "../_components/SignInButton";
-import Separator from "../_components/Separator";
-import LoginThemeToggle from "../_components/LoginThemeToggle";
 // utils
 import { checkEmail, checkPassword, fetchPost } from "@/utils/functions";
 import InputEmail from "@/utils/components/InputEmail";
@@ -13,21 +9,19 @@ import InputPassword from "@/utils/components/InputPassword";
 import ErrorModal from "@/utils/components/ErrorModal";
 import Button from "@/utils/components/Button";
 
-export default function Login() {
-  console.log("(app)/login/_components/Login.tsx");
+export default function SignUpClient() {
+  console.log("(app)/login/_components/SignUpClient.tsx");
 
   // hooks
   const router = useRouter();
 
   // states
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
-  const [errors, setErrors] = useState({ email: false, password: false, password2: false });
-  const [isSamePassword, setIsSamePassword] = useState(false);
+  const [errors, setErrors] = useState({ email: false, password1: false, password2: false });
   const [isLoading, setIsLoading] = useState(false);
   const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
-  const [open, setOpen] = useState(false);
 
   // redirect to /saveToHome if mobile & not standalone
   useEffect(() => {
@@ -40,73 +34,55 @@ export default function Login() {
   }, []);
 
   function validateEmail(email: string) {
-    if (email) {
-      const isValidEmail = checkEmail(email); // returns undefined or false
-      if (!isValidEmail) {
-        setErrors({ ...errors, email: true });
-        return false;
-      }
-    }
-    setErrors({ ...errors, email: false });
-    return true; // returns true even if no email because don't want error to show
+    setErrors((prev) => ({ ...prev, email: !!email && !checkEmail(email) }));
   }
 
-  async function validatePassword() {
-    if (password) {
-      const isPasswordValid = checkPassword(password);
-      if (!isPasswordValid) {
-        setErrors((errors) => ({ ...errors, password: true }));
-        return false;
-      }
-    }
-    setErrors((errors) => ({ ...errors, password: false }));
-    return true; // returns true even if no password because don't want error to show
+  function validatePassword1(fieldValue: string) {
+    setErrors((prev) => ({
+      ...prev,
+      password1: !!fieldValue && !checkPassword(fieldValue),
+      password2: !!password2 && fieldValue !== password2,
+    }));
   }
 
-  function validatePassword2() {
-    if (!password2) {
-      // don't want to show error if no repeatedPassword
-      setIsSamePassword(false);
-      setErrors((errors) => ({ ...errors, password2: false })); // requires to get prevState as validatePassword & validatePassword2 might be run at same time
-    } else {
-      if (password === password2) {
-        setIsSamePassword(true);
-        setErrors((errors) => ({ ...errors, password2: false }));
-      } else {
-        setIsSamePassword(false);
-        setErrors((errors) => ({ ...errors, password2: true }));
-      }
-    }
+  function validatePassword2(fieldValue: string) {
+    setErrors((prev) => ({ ...prev, password2: !!fieldValue && password1 !== fieldValue }));
   }
 
-  async function signUp() {
-    if (!email || !password || !isSamePassword || errors.email || errors.password || errors.password2) return; // "!email || !password" is needed because no prior validation if email/password is empty
+  async function signUp(e: React.FormEvent) {
+    e.preventDefault();
+    if (isLoading) return; // prevents calling API twice if users hits "Enter" twice
+
+    // re-validate email & password, as hitting "Enter" does not trigger onBlur
+    const _email = email.trim().toLowerCase();
+    const isEmailValid = !!_email && checkEmail(_email);
+    const isPassword1Valid = !!password1 && checkPassword(password1);
+    const isPassword2Valid = !!password2 && password1 === password2;
+    setErrors({ email: !isEmailValid, password1: !isPassword1Valid, password2: !isPassword2Valid });
+    if (!isEmailValid || !isPassword1Valid || !isPassword2Valid) {
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      const resJson = await fetchPost("/api/createPendingUser", { email, password });
-      if (resJson === "success") {
-        router.push(`/verify-user?email=${encodeURIComponent(email)}`);
-      } else if (resJson.status === "error") {
-        setErrorModal(resJson.message);
-        setIsLoading(false);
+      const resJson = await fetchPost("/api/createPendingUser", { email: _email, password: password1 });
+      if (resJson.status === "success") {
+        router.push(`/verify-user?email=${encodeURIComponent(_email)}`);
       } else {
-        setErrorModal("Server error");
+        setErrorModal(resJson.message || "Server error. Please try again.");
         setIsLoading(false);
       }
-    } catch (e) {
-      setErrorModal("Server error");
+    } catch (e: any) {
+      setErrorModal(e?.message || "Server error. Please try again."); // optional chaining is needed
       setIsLoading(false);
     }
   }
 
   return (
     <>
-      {/* <LoginThemeToggle /> */}
-      <SignInGoogle label="Sign up with Google" />
-      <Separator />
       {/*--- form ---*/}
-      <form className="w-full flex flex-col gap-4">
+      <form className="w-full flex flex-col gap-4" onSubmit={signUp}>
         <InputEmail
           label="Email"
           _id="email"
@@ -117,33 +93,40 @@ export default function Login() {
           value={email}
           autoComplete="email"
         />
-        <InputPassword
-          label="Password"
-          _id="password1"
-          tooltip={true}
-          isError={errors.password}
-          errorMsg="Must be &ge; 8 characters and contain a lowercase letter, an uppercase letter, and a number"
-          onBlur={validatePassword}
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          autoComplete="new-password"
-        />
+        <div className="group relative">
+          <InputPassword
+            label="Password"
+            _id="password1"
+            isError={errors.password1}
+            errorMsg="Must be &ge; 8 characters and contain a lowercase letter, an uppercase letter, and a number"
+            onBlur={(e) => validatePassword1(e.target.value)}
+            onChange={(e) => setPassword1(e.target.value)}
+            value={password1}
+            autoComplete="new-password"
+          />
+          <div className="absolute right-0 bottom-[calc(100%-16px)] pointer-events-none p-3 bg-slate-800 text-white text-base desktop:text-xs space-y-[8px] rounded-lg opacity-0 group-focus-within:opacity-100 [transition:opacity_300ms]">
+            <p>&bull;&nbsp; at least 8 characters</p>
+            <p>&bull;&nbsp; have a lowercase letter</p>
+            <p>&bull;&nbsp; have an uppercase letter</p>
+            <p>&bull;&nbsp; have a number</p>
+          </div>
+        </div>
         <InputPassword
           label="Re-enter Password"
           _id="password2"
           isError={errors.password2}
           errorMsg="Password does not match"
-          onBlur={validatePassword2}
+          onBlur={(e) => validatePassword2(e.target.value)}
           onChange={(e) => setPassword2(e.target.value)}
           value={password2}
           autoComplete="new-password"
         />
-        <Button className="mt-4" label="Sign Up" isLoading={isLoading} onClick={signUp} disabled={isLoading} />
+        <Button className="mt-4" label="Sign Up" type="submit" isLoading={isLoading} disabled={isLoading} />
       </form>
 
       {/*--- other options ---*/}
       <p className="mt-14 desktop:mt-12 link underline-animate textSmApp" onClick={() => router.push("/login")}>
-        Already a user? Login
+        Have an account? Sign in
       </p>
       {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
     </>

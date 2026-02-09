@@ -6,11 +6,15 @@ import SessionProvider from "./SessionProvider";
 import "@/styles/calendar.css";
 import "@/styles/globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "EZ Budget App",
-  description: "Designed for speed and customizability, EZ Budget App is the easiest way to track daily expenses and maintain a budget.",
+  description:
+    "Designed for speed and customizability, EZ Budget App is the easiest way to track daily expenses and maintain a budget.",
 };
 
 // contains font color

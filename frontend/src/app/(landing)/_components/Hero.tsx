@@ -10,7 +10,6 @@ export default async function Hero() {
   return (
     <div className="homeSectionSize min-h-[max(100vh,700px)] grid grid-cols-1 lg:grid-cols-[55%_45%] gap-[12px] lg:gap-0 relative">
       {/*--- radial gradient ---*/}
-
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-screen h-full bg-[radial-gradient(circle_at_50%_150%,#0444B7,transparent_70%)] pointer-events-none" />
       {/*--- text ---*/}
       <div className="mt-[60px] lg:mt-0 w-full flex flex-col items-start lg:justify-center gap-[20px] text-center lg:text-start">

@@ -1,6 +1,5 @@
 @import "tailwindcss";
-@config "../../tailwind.config";
-@tailwind utilities;
+@config "../../tailwind.config.ts";
 @import "./animations.css";
 
 @theme {
@@ -35,6 +34,10 @@
   --breakpoint-lg: 980px;
   --breakpoint-xl: 1250px;
   --breakpoint-2xl: 1440px;
+}
+
+html {
+  scrollbar-gutter: stable;
 }
 
 /*--- text size ---*/
@@ -104,7 +107,7 @@
 }
 
 @utility buttonBase {
-  @apply flex-none h-[3em] textBaseApp font-medium flex items-center justify-center desktop:cursor-pointer;
+  @apply flex-none h-[3em] textBaseApp font-semibold flex items-center justify-center desktop:cursor-pointer;
 }
 
 @utility button1ColorLight {
@@ -176,7 +179,7 @@
 /*--- landing ---*/
 
 .homeSectionSize {
-  @apply px-[16px] xs:px-[24px] lg:px-[80px] w-full max-w-[650px] lg:max-w-[calc(1100px+160px)];
+  @apply px-[16px] xs:px-[24px] lg:px-[100px] w-full max-w-[650px] lg:max-w-[calc(960px+200px)];
 }
 
 /*--- components ---*/
@@ -378,10 +381,12 @@ input:-webkit-autofill {
     width: 6px;
     height: 6px;
   }
+
   &::-webkit-scrollbar-track {
     border-radius: 6px;
     background-color: #f6f9fc;
   }
+
   &::-webkit-scrollbar-thumb {
     background-color: #cbd5e1;
     border-radius: 6px;
@@ -391,10 +396,12 @@ input:-webkit-autofill {
     width: 6px;
     height: 6px;
   }
+
   .dark &::-webkit-scrollbar-track {
     background-color: rgba(255, 255, 255, 0.07);
     border-radius: 6px;
   }
+
   .dark &::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 6px;

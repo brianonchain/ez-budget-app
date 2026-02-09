@@ -10,8 +10,6 @@ import EnterName from "./_components/EnterName";
 import EnterCategory from "./_components/EnterCategory";
 import Details from "./_components/Details";
 
-import LoginGlow from "../../(login)/_components/LoginGlow";
-
 export default function Items() {
   const session = useSession();
 
@@ -20,7 +18,14 @@ export default function Items() {
   // states
   const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
   const [page, setPage] = useState("list");
-  const [newItem, setNewItem] = useState({ date: "", cost: 0, description: "", category: "none", subcategory: "none", tags: "none" });
+  const [newItem, setNewItem] = useState({
+    date: "",
+    cost: 0,
+    description: "",
+    category: "none",
+    subcategory: "none",
+    tags: "none",
+  });
 
   // useEffect(() => {
   //   if (isError) setErrorModal("Unable to fetch you data. Refresh app or re-login. We apologize for the inconvenience.");
@@ -31,8 +36,24 @@ export default function Items() {
       {page === "list" && <List setPage={setPage} setErrorModal={setErrorModal} data={data} setNewItem={setNewItem} />}
       {page === "cost" && <EnterCost setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}
       {page === "name" && <EnterName setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}
-      {page === "category" && <EnterCategory setPage={setPage} setErrorModal={setErrorModal} data={data} newItem={newItem} setNewItem={setNewItem} />}
-      {page === "details" && <Details setPage={setPage} setErrorModal={setErrorModal} data={data} newItem={newItem} setNewItem={setNewItem} />}
+      {page === "category" && (
+        <EnterCategory
+          setPage={setPage}
+          setErrorModal={setErrorModal}
+          data={data}
+          newItem={newItem}
+          setNewItem={setNewItem}
+        />
+      )}
+      {page === "details" && (
+        <Details
+          setPage={setPage}
+          setErrorModal={setErrorModal}
+          data={data}
+          newItem={newItem}
+          setNewItem={setNewItem}
+        />
+      )}
       {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
       {/*--- glow ---*/}
       <div className="absolute w-full h-full left-0 top-0 overflow-hidden z-[-1]">

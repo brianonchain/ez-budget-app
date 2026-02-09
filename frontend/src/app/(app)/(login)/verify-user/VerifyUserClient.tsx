@@ -5,17 +5,19 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Button from "@/utils/components/Button";
 import ErrorModal from "@/utils/components/ErrorModal";
 import { signIn } from "next-auth/react";
+import { fetchPost, normalizeEmail } from "@/utils/functions";
 
-export default function VerifyOtpPage() {
-  const router = useRouter();
+export default function VerifyUserClient() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email"); // automatically decodes percent encoding
+  const _email = normalizeEmail(String(email || ""));
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+  const router = useRouter();
 
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [errorModal, setErrorModal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [resendStatus, setResendStatus] = useState("initial");
+  const [resendStatus, setResendStatus] = useState("initial"); // "initial" | "sending" | "sent"
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>, index: number) {
     const value = e.target.value.replace(/\D/g, ""); // only digits
@@ -59,27 +61,24 @@ export default function VerifyOtpPage() {
 
   function handlePaste(e: React.ClipboardEvent<HTMLInputElement>) {
     e.preventDefault(); // stop default paste
-
     const pasted = e.clipboardData.getData("text").replace(/\D/g, ""); // only digits
-
     if (pasted.length !== 6) {
       return; // ignore bad paste
     }
-
     setOtp(pasted.split(""));
-
-    // focus last input
-    inputsRef.current[5]?.focus();
+    inputsRef.current[5]?.focus(); // focus last input
   }
 
-  async function verifyOtp() {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (isLoading) return; // if the user presses Enter twice quickly, you can submit twice before isLoading flips
     const joinedOtp = otp.join("");
 
+    // check OTP and email validity
     if (joinedOtp.length !== 6) {
       setErrorModal("Please enter a valid 6-digit code.");
       return;
     }
-
     if (!email) {
       setErrorModal("Missing email");
       return;
@@ -88,69 +87,93 @@ export default function VerifyOtpPage() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/verifyPendingUser", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp: joinedOtp }),
-      });
-      const resJson = await res.json();
-
+      const resJson = await fetchPost("/api/verifyPendingUser", { email: _email, otp: joinedOtp }); // this API checks if OTP is invalid or expired
       if (resJson.status === "success") {
-        console.log("password", resJson.data);
+        // signIn() creates new user and consumes OTP (see authOptions.ts)
         const signInRes = await signIn("credentials", {
-          email: email,
-          password: resJson.data,
+          email: _email,
+          otp: joinedOtp,
           redirect: false,
-          callbackUrl: "/app/items",
         });
-        // if sign in error or success
-        console.log("signInRes", signInRes);
+        // if signIn success or error
         if (signInRes?.error) {
-          console.log(signInRes?.error);
-          setErrorModal("Unknown error");
-          setIsLoading(false);
-        } else if (signInRes?.url) {
-          router.push(signInRes.url);
+          triggerError("Something went wrong. Please try again.");
+        } else {
+          window.location.href = "/app/items"; // absence of signInRes.error indicates success
         }
       } else {
-        setIsLoading(false);
-        setErrorModal(resJson.message || "Verification failed");
+        triggerError(resJson.message || "Server error. Please try again.");
       }
-    } catch (err) {
+    } catch (e: any) {
+      triggerError(e?.message || "Server error. Please try again."); // optional chaining is needed
       setIsLoading(false);
-      setErrorModal("Something went wrong.");
     }
+  }
+
+  async function resendVerificationCode() {
+    if (resendStatus === "sending") return; // avoid double sending
+    setOtp(Array(6).fill(""));
+    setResendStatus("sending");
+    try {
+      const resJson = await fetchPost("/api/resendVerificationCode", { email: _email });
+      if (resJson.status === "success") {
+        setResendStatus("sent");
+      } else {
+        setErrorModal(resJson.message || "Server error. Please try again.");
+        setResendStatus("initial");
+      }
+    } catch (e: any) {
+      setErrorModal(e?.message || "Server error. Please try again."); // optional chaining is needed
+      setResendStatus("initial");
+    }
+  }
+
+  function triggerError(message: string) {
+    setErrorModal(message);
+    setIsLoading(false);
+    clearOtp();
+  }
+
+  function clearOtp() {
+    setOtp(Array(6).fill(""));
+    inputsRef.current[0]?.focus();
   }
 
   return (
     <>
-      <h1 className="w-[350px] text-[18px] desktop:text-[16px] text-center">Enter the 6-digit code sent to your email</h1>
+      <h1 className="w-[350px] text-[18px] desktop:text-[16px] text-center">Enter the 6-digit code we sent to your email</h1>
       {/*--- 6 boxes, 50*6+8*5=340px ---*/}
-      <div className="mt-[24px] flex gap-[8px]">
-        {otp.map((digit, index) => (
-          <input
-            key={index}
-            ref={(el) => {
-              inputsRef.current[index] = el;
-            }}
-            type="text"
-            inputMode="numeric"
-            pattern="\d*"
-            maxLength={1}
-            value={digit}
-            onKeyDown={(e) => handleKeyDown(e, index)}
-            onChange={(e) => handleChange(e, index)}
-            onPaste={index === 0 ? handlePaste : undefined}
-            className="w-[50px] h-[50px] text-[24px] text-center border-2 rounded-lg inputColor text-lightButton1Bg dark:text-darkButton1Bg"
-            disabled={isLoading}
-          />
-        ))}
-      </div>
-      <Button className="mt-[32px] w-[340px]!" label="Verify" isLoading={isLoading} onClick={verifyOtp} />
-      {resendStatus === "initial" && <div className="mt-[60px] link underline-animate">Resend email</div>}
+      <form className="w-full flex flex-col items-center" onSubmit={onSubmit}>
+        <div className="mt-[24px] flex gap-[6px]">
+          {otp.map((digit, index) => (
+            <input
+              className="w-[50px] h-[54px] text-[24px] text-center border-2 rounded-lg inputColor font-medium"
+              key={index}
+              ref={(el) => {
+                inputsRef.current[index] = el;
+              }}
+              type="text"
+              inputMode="numeric"
+              pattern="\d*"
+              maxLength={1}
+              value={digit}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+              onChange={(e) => handleChange(e, index)}
+              onPaste={index === 0 ? handlePaste : undefined}
+              disabled={isLoading}
+            />
+          ))}
+        </div>
+        <Button className="mt-[64px] w-[340px]" label="Submit" isLoading={isLoading} />
+      </form>
+      {resendStatus === "initial" && (
+        <div className="mt-[60px] link underline-animate" onClick={resendVerificationCode}>
+          Resend verification code
+        </div>
+      )}
       {resendStatus === "sending" && <div className="mt-[60px] ">Sending email...</div>}
       {resendStatus === "sent" && (
-        <div className="mt-[60px] ">
+        <div className="mt-[64px] ">
           Email sent! <span className="link underline-animate">Resend email</span>
         </div>
       )}

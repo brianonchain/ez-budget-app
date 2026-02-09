@@ -8,10 +8,9 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   _id: string;
   isError?: boolean;
   errorMsg?: string;
-  tooltip?: boolean;
 }
 
-export default function InputPassword({ className = "", label, _id, isError = false, errorMsg = "", tooltip, ...props }: InputProps) {
+export default function InputPassword({ className = "", label, _id, isError = false, errorMsg = "", ...props }: InputProps) {
   const ref = useRef<HTMLInputElement | null>(null);
   const [show, setShow] = useState(false);
 
@@ -44,17 +43,13 @@ export default function InputPassword({ className = "", label, _id, isError = fa
               }, 0);
             }}
           >
-            {show ? <PiEyeLight className="text-[2rem] desktop:text-[1.5rem]" /> : <PiEyeSlashLight className="text-[2rem] desktop:text-[1.5rem]" />}
+            {show ? (
+              <PiEyeLight className="text-[2rem] desktop:text-[1.5rem]" />
+            ) : (
+              <PiEyeSlashLight className="text-[2rem] desktop:text-[1.5rem]" />
+            )}
           </button>
         </div>
-        {tooltip && !isError && (
-          <div className="opacity-0 peer-focus:opacity-100 pointer-events-none absolute right-0 bottom-[calc(100%+8px)] p-3 bg-slate-800 text-white text-base desktop:text-xs space-y-[8px] rounded-lg [transition:opacity_300ms]">
-            <p>&bull;&nbsp; at least 8 characters</p>
-            <p>&bull;&nbsp; have a lowercase letter</p>
-            <p>&bull;&nbsp; have an uppercase letter</p>
-            <p>&bull;&nbsp; have a number</p>
-          </div>
-        )}
       </div>
       <Accordion isOpen={isError ? true : false}>
         <p className="errorText">{errorMsg}</p>
