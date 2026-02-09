@@ -145,7 +145,7 @@ export default function Settings({ provider, email }: { provider: string; email:
       </div>
 
       {passwordModal && <PasswordModal setPasswordModal={setPasswordModal} email={email} />}
-      {emailModal && <EmailModal setEmailModal={setEmailModal} email={email} />}
+      {emailModal && <EmailModal setEmailModal={setEmailModal} />}
       {addCategoryModal && <AddCategoryModal setAddCategoryModal={setAddCategoryModal} data={data} />}
       {addTagModal && <AddTagModal setAddTagModal={setAddTagModal} data={data} />}
     </div>
