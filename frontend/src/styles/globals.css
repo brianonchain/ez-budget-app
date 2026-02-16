@@ -176,6 +176,10 @@ html {
   @apply w-full h-[44px] desktop:h-[36px] px-[10px] desktop:px-[8px] textBaseApp inputColor;
 }
 
+.inputMaxWidth {
+  @apply max-w-[380px];
+}
+
 /*--- landing ---*/
 
 .homeSectionSize {
@@ -271,7 +275,7 @@ html {
 /*--- modal full ---*/
 
 @utility modalFullBase {
-  @apply fixed left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] z-[11] flex flex-col items-center desktop:rounded-2xl overflow-hidden;
+  @apply fixed left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] flex flex-col z-[11] desktop:rounded-2xl overflow-hidden;
 }
 
 @utility modalFullColor {
@@ -279,7 +283,11 @@ html {
 }
 
 @utility modalFullSize {
-  @apply w-full desktop:w-[480px] h-screen desktop:h-[90%];
+  @apply w-full desktop:w-[400px] h-screen desktop:h-auto desktop:max-h-[90%];
+}
+
+@utility modalFullXPadding {
+  @apply px-[16px] portrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[60px];
 }
 
 .modalFull {
@@ -287,7 +295,11 @@ html {
 }
 
 .modalFullContentContainer {
-  @apply w-full h-full pb-[40px] px-[12px] portrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[40px] overflow-y-auto flex flex-col items-center;
+  @apply w-full h-full desktop:h-auto pt-[16px] pb-[48px] flex flex-col items-center modalFullXPadding overflow-y-auto;
+}
+
+.modalFullHeader {
+  @apply px-[60px] py-[24px] text-center text-2xl desktop:text-xl font-semibold;
 }
 
 /*--- modal ---*/
@@ -318,10 +330,6 @@ html {
 
 .modalBlackout {
   @apply fixed inset-0 bg-black/70 z-[10];
-}
-
-.modalFullHeader {
-  @apply w-[240px] desktop:!w-[300px] py-6 text-center text-2xl desktop:text-xl leading-normal desktop:leading-normal font-semibold;
 }
 
 .pageHeader {

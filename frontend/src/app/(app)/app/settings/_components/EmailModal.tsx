@@ -5,6 +5,7 @@ import { ImSpinner2 } from "react-icons/im";
 // utils
 import { fetchPost, checkEmail } from "@/utils/functions";
 import InputEmail from "@/utils/components/InputEmail";
+import Modal from "@/utils/components/Modal";
 
 const defaultErrors = { email: false, submit: "" };
 const defaultStatus = { content: "changeEmail", button: "changeEmail" };
@@ -139,80 +140,62 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
   }
 
   return (
-    <div>
-      <div className="modalFull">
-        {/*--- glow ---*/}
-        <div className="absolute w-full h-full left-0 top-0 bg-gradient-to-br from-lightBg1 to-lightBg1 dark:from-blue-500/20 dark:to-blue-500/10 z-[-1]"></div>
-        {/*--- close ---*/}
-        {status.content != "changed" && (
-          <div className="xButton" onClick={() => setEmailModal(false)}>
-            &#10005;
-          </div>
+    <Modal disableCloseButton={status.button === "loading"} setIsOpen={setEmailModal} title="Change Email">
+      <form className="w-full h-[175px] inputMaxWidth" onSubmit={onButtonClick}>
+        {status.content === "changeEmail" && (
+          <InputEmail
+            _id="email"
+            className="w-full"
+            label="New Email"
+            isError={errors.email}
+            errorMsg="Invalid email"
+            onBlur={(e) => validateEmail(e.target.value)}
+            onChange={(e) => setNewEmail(e.target.value)}
+            value={newEmail}
+            autoComplete="email"
+            disabled={status.button === "loading" ? true : false}
+          />
         )}
-        {/*--- title ---*/}
-        <div className="modalFullHeader">Change Email</div>
-        {/*--- content ---*/}
-        <div className="modalFullContentContainer">
-          <form className="pt-[24px] w-full max-w-[380px] desktop:!max-w-[300px] mx-auto" onSubmit={onButtonClick}>
-            {status.content === "changeEmail" && (
-              <div className="w-full h-[100px] desktop:h-[80px] flex items-center">
-                <InputEmail
-                  _id="email"
-                  className="w-full"
-                  label="New Email"
-                  isError={errors.email}
-                  errorMsg="Invalid email"
-                  onBlur={(e) => validateEmail(e.target.value)}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                  value={newEmail}
-                  autoComplete="email"
+        {status.content === "verifyOtp" && (
+          <div className="h-[100px] desktop:h-[80px] flex flex-col items-center justify-between">
+            <div>Enter the 6-digit code sent to your email</div>
+            <div className="flex items-center justify-center gap-[8px]">
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  ref={(el) => {
+                    inputsRef.current[index] = el;
+                  }}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="\d*"
+                  maxLength={1}
+                  value={digit}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  onChange={(e) => handleChange(e, index)}
+                  onPaste={index === 0 ? handlePaste : undefined}
+                  className="w-[52px] h-[52px] desktop:w-[43px] desktop:h-[43px] text-[18px] text-center border-2 rounded-lg inputColor text-lightButton1Bg dark:text-darkText1"
                   disabled={status.button === "loading" ? true : false}
                 />
-              </div>
-            )}
-            {status.content === "verifyOtp" && (
-              <div className="h-[100px] desktop:h-[80px] flex flex-col items-center justify-between">
-                <div>Enter the 6-digit code sent to your email</div>
-                <div className="flex items-center justify-center gap-[8px]">
-                  {otp.map((digit, index) => (
-                    <input
-                      key={index}
-                      ref={(el) => {
-                        inputsRef.current[index] = el;
-                      }}
-                      type="text"
-                      inputMode="numeric"
-                      pattern="\d*"
-                      maxLength={1}
-                      value={digit}
-                      onKeyDown={(e) => handleKeyDown(e, index)}
-                      onChange={(e) => handleChange(e, index)}
-                      onPaste={index === 0 ? handlePaste : undefined}
-                      className="w-[52px] h-[52px] desktop:w-[43px] desktop:h-[43px] text-[18px] text-center border-2 rounded-lg inputColor text-lightButton1Bg dark:text-darkText1"
-                      disabled={status.button === "loading" ? true : false}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-            {status.content === "changed" && (
-              <div className="h-[100px] desktop:h-[80px] flex items-center justify-centerfont-medium">
-                Email successfully changed! Please re-login with your new email.
-              </div>
-            )}
-            {/*--- button ---*/}
-            <button className="button1 mt-[24px] w-full flex justify-center items-center" type="submit">
-              {status.button === "changeEmail" && <p>Change Email</p>}
-              {status.button === "verifyOtp" && <p>Verify</p>}
-              {status.button === "loading" && <ImSpinner2 className="animate-spin text-[32px] desktop:text-[24px]" />}
-              {status.button === "changed" && !errors.submit && <p>Re-Login</p>}
-            </button>
-            {/*--- error message ---*/}
-            {errors.submit && <div className="mt-[8px] mb-[40px] errorText font-medium">{errors.submit}</div>}
-          </form>
-        </div>
-      </div>
-      <div className="modalBlackout"></div>
-    </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {status.content === "changed" && (
+          <div className="h-[100px] desktop:h-[80px] flex items-center justify-centerfont-medium">
+            Email successfully changed! Please re-login with your new email.
+          </div>
+        )}
+        {/*--- button ---*/}
+        <button className="button1 mt-[24px] w-full flex justify-center items-center" type="submit">
+          {status.button === "changeEmail" && <p>Change Email</p>}
+          {status.button === "verifyOtp" && <p>Verify</p>}
+          {status.button === "loading" && <ImSpinner2 className="animate-spin text-[32px] desktop:text-[24px]" />}
+          {status.button === "changed" && !errors.submit && <p>Re-Login</p>}
+        </button>
+        {/*--- error message ---*/}
+        {errors.submit && <div className="mt-[8px] errorText font-medium">{errors.submit}</div>}
+      </form>
+    </Modal>
   );
 }

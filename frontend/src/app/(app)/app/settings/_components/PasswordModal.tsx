@@ -7,6 +7,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { signOut } from "next-auth/react";
 // components
 import Button from "@/utils/components/Button";
+import Modal from "@/utils/components/Modal";
 
 const defaultErrors = { newPassword1: false, newPassword2: false, submit: "" };
 
@@ -61,84 +62,70 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
   }
 
   return (
-    <div>
-      <div className="modalFull">
-        {/*--- glow ---*/}
-        <div className="absolute w-full h-full left-0 top-0 bg-gradient-to-br from-lightBg1 to-lightBg1 dark:from-blue-500/20 dark:to-blue-500/10 z-[-1]"></div>
-        {/*--- close ---*/}
-        <div className="xButton" onClick={() => setPasswordModal(false)}>
-          &#10005;
-        </div>
-        {/*--- title ---*/}
-        <div className="modalFullHeader">Change Password</div>
-        {/*--- content ---*/}
-        <div className="modalFullContentContainer">
-          <div className="mx-auto pt-[24px] w-full max-w-[380px] desktop:!max-w-[300px] h-full flex flex-col">
-            {status !== "success" ? (
-              <form className="" onSubmit={onSubmit}>
-                <div className="space-y-4">
-                  <InputPassword
-                    _id="oldPassword"
-                    className=""
-                    label="Old Password"
-                    onChange={(e) => setOldPassword(e.target.value)}
-                    value={oldPassword}
-                    autoComplete="current-password"
-                    disabled={status === "initial" ? false : true}
-                  />
-                  <div className="group relative">
-                    <InputPassword
-                      _id="newPassword1"
-                      className=""
-                      label="New Password"
-                      isError={errors.newPassword1}
-                      errorMsg="Must be at least 8 characters and contain a lowercase letter, an uppercase letter, and a number"
-                      onBlur={(e) => validatePassword1(e.target.value)}
-                      onChange={(e) => setNewPassword1(e.target.value)}
-                      value={newPassword1}
-                      autoComplete="new-password"
-                      disabled={status === "initial" ? false : true}
-                    />
-                    <div className="absolute right-0 bottom-[calc(100%-16px)] pointer-events-none p-3 bg-slate-800 text-white text-base desktop:text-xs space-y-[8px] rounded-lg opacity-0 group-focus-within:opacity-100 [transition:opacity_300ms]">
-                      <p>&bull;&nbsp; at least 8 characters</p>
-                      <p>&bull;&nbsp; have a lowercase letter</p>
-                      <p>&bull;&nbsp; have an uppercase letter</p>
-                      <p>&bull;&nbsp; have a number</p>
-                    </div>
-                  </div>
-                  <InputPassword
-                    _id="newPassword2"
-                    className=""
-                    label="Re-enter New Password"
-                    isError={errors.newPassword2}
-                    errorMsg="Password does not match"
-                    onBlur={(e) => validatePassword2(e.target.value)}
-                    onChange={(e) => setNewPassword2(e.target.value)}
-                    value={newPassword2}
-                    autoComplete="new-password"
-                    disabled={status === "initial" ? false : true}
-                  />
-                </div>
-                <Button
-                  className="mt-[40px]"
-                  label="Change Password"
-                  type="submit"
-                  isLoading={status === "pending"}
-                  disabled={status !== "initial"}
+    <Modal title="Change Password" setIsOpen={setPasswordModal} disableCloseButton={status === "pending"}>
+      <div className="w-full inputMaxWidth h-[410px]">
+        {status !== "success" ? (
+          <form className="" onSubmit={onSubmit}>
+            <div className="space-y-4">
+              <InputPassword
+                _id="oldPassword"
+                className=""
+                label="Old Password"
+                onChange={(e) => setOldPassword(e.target.value)}
+                value={oldPassword}
+                autoComplete="current-password"
+                disabled={status === "initial" ? false : true}
+              />
+              <div className="group relative">
+                <InputPassword
+                  _id="newPassword1"
+                  className=""
+                  label="New Password"
+                  isError={errors.newPassword1}
+                  errorMsg="Must be at least 8 characters and contain a lowercase letter, an uppercase letter, and a number"
+                  onBlur={(e) => validatePassword1(e.target.value)}
+                  onChange={(e) => setNewPassword1(e.target.value)}
+                  value={newPassword1}
+                  autoComplete="new-password"
+                  disabled={status === "initial" ? false : true}
                 />
-                {errors.submit && <div className="mt-[32px] text-red-500 font-medium text-center">{errors.submit}</div>}
-              </form>
-            ) : (
-              <div className="w-full h-[300px] desktop:h-[240px] flex flex-col items-center justify-center gap-[32px] font-medium text-center">
-                <FaCircleCheck className="text-[40px] desktop:text-[40px] text-green-500" />
-                <p>Password successfully changed!</p>
-                <p>You may close this window.</p>
+                <div className="absolute right-0 bottom-[calc(100%-16px)] pointer-events-none p-3 bg-slate-800 text-white text-base desktop:text-xs space-y-[8px] rounded-lg opacity-0 group-focus-within:opacity-100 [transition:opacity_300ms]">
+                  <p>&bull;&nbsp; at least 8 characters</p>
+                  <p>&bull;&nbsp; have a lowercase letter</p>
+                  <p>&bull;&nbsp; have an uppercase letter</p>
+                  <p>&bull;&nbsp; have a number</p>
+                </div>
               </div>
-            )}
+              <InputPassword
+                _id="newPassword2"
+                className=""
+                label="Re-enter New Password"
+                isError={errors.newPassword2}
+                errorMsg="Password does not match"
+                onBlur={(e) => validatePassword2(e.target.value)}
+                onChange={(e) => setNewPassword2(e.target.value)}
+                value={newPassword2}
+                autoComplete="new-password"
+                disabled={status === "initial" ? false : true}
+              />
+            </div>
+            <Button
+              className="mt-[40px]"
+              label="Change Password"
+              type="submit"
+              isLoading={status === "pending"}
+              disabled={status !== "initial"}
+            />
+            {errors.submit && <div className="mt-[32px] text-red-500 font-medium text-center">{errors.submit}</div>}
+          </form>
+        ) : (
+          <div className="w-full h-[300px] desktop:h-[240px] flex flex-col items-center justify-center gap-[32px] font-medium text-center">
+            <FaCircleCheck className="text-[40px] desktop:text-[40px] text-green-500" />
+            <p>Password successfully changed!</p>
+            <p>You may close this window.</p>
           </div>
-        </div>
+        )}
       </div>
-      <div className="modalBlackout"></div>
-    </div>
+    </Modal>
   );
 }
