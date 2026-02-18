@@ -275,11 +275,11 @@ html {
 /*--- modal full ---*/
 
 @utility modalFullBase {
-  @apply fixed left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] flex flex-col z-[11] desktop:rounded-2xl overflow-hidden;
+  @apply absolute z-[1] left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] flex flex-col desktop:rounded-2xl overflow-hidden;
 }
 
 @utility modalFullColor {
-  @apply bg-lightBg1 dark:bg-darkBg1 desktop:border-1 desktop:border-slate-300 dark:desktop:border-slate-700;
+  @apply bg-lightBg1 dark:bg-darkBg1 desktop:border-[1px] desktop:border-slate-300 dark:desktop:border-blue-500/30;
 }
 
 @utility modalFullSize {
@@ -295,14 +295,14 @@ html {
 }
 
 .modalFullContentContainer {
-  @apply w-full h-full desktop:h-auto pt-[16px] pb-[48px] flex flex-col items-center modalFullXPadding overflow-y-auto;
+  @apply flex-1 min-h-0 w-full pt-[16px] pb-[48px] flex flex-col items-center modalFullXPadding overflow-y-auto;
 }
 
 .modalFullHeader {
-  @apply px-[60px] py-[24px] text-center text-2xl desktop:text-xl font-semibold;
+  @apply mx-[60px] py-[24px] text-center text-2xl desktop:text-xl font-semibold;
 }
 
-/*--- modal ---*/
+/*--- standard modal ---*/
 
 @utility modalBase {
   @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[11] flex flex-col items-center rounded-2xl bg-lightBg1 dark:bg-darkBg1 border-2 dark:border border-slate-300 dark:border-slate-700;
