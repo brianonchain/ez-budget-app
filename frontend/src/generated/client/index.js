@@ -36,12 +36,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.0
- * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
+ * Prisma Client JS version: 6.19.2
+ * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
  */
 Prisma.prismaVersion = {
-  client: "6.19.0",
-  engine: "2ba551f319ab1df4bc874a89965d8b3641056773"
+  client: "6.19.2",
+  engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -150,7 +150,7 @@ const config = {
       },
       {
         "fromEnvVar": null,
-        "value": "darwin-arm64"
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -162,8 +162,8 @@ const config = {
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
-  "clientVersion": "6.19.0",
-  "engineVersion": "2ba551f319ab1df4bc874a89965d8b3641056773",
+  "clientVersion": "6.19.2",
+  "engineVersion": "c2990dca591cba766e3b7ef5d9e8a84796e47ab7",
   "datasourceNames": [
     "db"
   ],
@@ -177,8 +177,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/client\"\n  binaryTargets = [\"native\", \"darwin-arm64\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Rate {\n  id        Int      @id @default(autoincrement())\n  date      DateTime\n  usdToEur  Float?\n  usdcToEur Float?\n  eurToUsd  Float?\n  eurToUsdc Float?\n  usdToGbp  Float?\n  usdcToGbp Float?\n  gbpToUsd  Float?\n  gbpToUsdc Float?\n  usdToTwd  Float?\n  usdcToTwd Float?\n  twdToUsd  Float?\n  twdToUsdc Float?\n}\n",
-  "inlineSchemaHash": "f344d299c95530b9b126d2c72146731f6baf744a3d76186315807dceb09f02d1",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/client\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Rate {\n  id        Int      @id @default(autoincrement())\n  date      DateTime\n  usdToEur  Float?\n  usdcToEur Float?\n  eurToUsd  Float?\n  eurToUsdc Float?\n  usdToGbp  Float?\n  usdcToGbp Float?\n  gbpToUsd  Float?\n  gbpToUsdc Float?\n  usdToTwd  Float?\n  usdcToTwd Float?\n  twdToUsd  Float?\n  twdToUsdc Float?\n}\n",
+  "inlineSchemaHash": "09a69201e047a35a0d8a5e21f4e3ab6f31fc03d9127a47ce2f6af85395993f78",
   "copyEngine": true
 }
 
@@ -219,6 +219,10 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
 path.join(process.cwd(), "src/generated/client/libquery_engine-darwin-arm64.dylib.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
+path.join(process.cwd(), "src/generated/client/libquery_engine-rhel-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "src/generated/client/schema.prisma")

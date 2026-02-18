@@ -17,7 +17,7 @@ export default function Modal({
     <div className="fixed inset-0 z-[50]">
       <div className="fixed inset-0 bg-black/70 z-[0]"></div>
       <div
-        className="modalFullColor modalFullSize desktop:pb-[12px] absolute z-[1] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col desktop:rounded-2xl overflow-hidden"
+        className="modalFullColor modalFullSize desktop:pb-[12px] fixed z-[1] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col desktop:rounded-2xl overflow-hidden"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
