@@ -5,6 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "EZ Budget App",
     short_name: "EZ Budget",
     start_url: "/app/items",
+    scope: "/", // critical
     display: "standalone",
     background_color: "#ffffff",
     theme_color: "#ffffff",
