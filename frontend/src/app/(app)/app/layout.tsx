@@ -5,8 +5,6 @@ import { redirect } from "next/navigation";
 
 export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   console.log("/(app)/app/layout.tsx");
-  const session = await getServerSession();
-  if (!session) redirect("/login");
 
   return (
     <div className={`w-full h-screen flex portrait:flex-col-reverse landscape:flex-row bg-lightBg2 dark:bg-darkBg1`}>
