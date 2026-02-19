@@ -7,7 +7,7 @@ export default async function AppLayout({ children }: Readonly<{ children: React
   console.log("/(app)/app/layout.tsx");
 
   return (
-    <div className={`w-full h-screen flex portrait:flex-col-reverse landscape:flex-row bg-lightBg2 dark:bg-darkBg1`}>
+    <div className={`w-full min-h-dvh flex portrait:flex-col-reverse landscape:flex-row bg-lightBg2 dark:bg-darkBg1`}>
       <Menu />
       <ContextProvider>{children}</ContextProvider>
     </div>
