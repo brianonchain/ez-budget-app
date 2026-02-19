@@ -197,7 +197,7 @@ html {
 }
 
 .appPageContainer {
-  @apply flex-none px-[12px] portrait:w-full portrait:h-[calc(100%-80px)] portrait:sm:h-[calc(100%-140px)] portrait:mb-[80px] portrait:sm:mb-[140px] landscape:grow landscape:h-full landscape:ml-[120px] landscape:lg:ml-[160px] landscape:desktop:!ml-[200px] flex flex-col items-center;
+  @apply flex-none px-[12px] portrait:w-full portrait:h-[calc(100dvh-80px)] portrait:sm:h-[calc(100dvh-140px)] portrait:mb-[80px] portrait:sm:mb-[140px] landscape:grow landscape:h-full landscape:ml-[120px] landscape:lg:ml-[160px] landscape:desktop:!ml-[200px] flex flex-col items-center;
 }
 
 .loginError {

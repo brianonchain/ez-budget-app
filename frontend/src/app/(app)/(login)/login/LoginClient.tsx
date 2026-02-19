@@ -41,7 +41,6 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState<null | "google" | "credentials">(null); // null | "google" | "credentials"
   const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
   const [showEmailPassword, setShowEmailPassword] = useState(false);
-  const [isStandaloneState, setIsStandaloneState] = useState(false);
 
   // redirect to /saveToHome if mobile & not standalone
   useEffect(() => {
@@ -51,7 +50,6 @@ export default function Login() {
       router.push("/saveAppToHome");
       return;
     }
-    setIsStandaloneState(isStandalone);
   }, []);
 
   // show error modal if error param is present
@@ -186,7 +184,6 @@ export default function Login() {
             </form>
           </Accordion>
         </div>
-        <div>{isStandaloneState ? "true" : "false"}</div>
       </div>
 
       {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
