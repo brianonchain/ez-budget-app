@@ -1,40 +1,48 @@
-import React from "react";
-import { FaPlus } from "react-icons/fa6";
+import { useState } from "react";
 import { useSettingsMutation, useUserQuery } from "@/utils/hooks";
+import Modal from "@/utils/components/Modal";
 
 export default function AddTagModal({ setAddTagModal, data }: { setAddTagModal: any; data: any }) {
-  const { mutateAsync: settingsMutateAsync } = useSettingsMutation();
+  const { mutateAsync: settingsMutateAsync, error, isError, isPending } = useSettingsMutation();
+  const [validationError, setValidationError] = useState("");
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    const tagValue = document.querySelector<HTMLInputElement>('input[data-type="tags"]')?.value.trim() ?? "";
+
+    // validation
+    if (!data) return;
+    if (!tagValue) {
+      setValidationError("Please enter a tag");
+      return;
+    }
+    if (data.settings.tags.includes(tagValue)) {
+      setValidationError("Tag already exists");
+      return;
+    }
+    setValidationError("");
+
+    // mutation
+    try {
+      await settingsMutateAsync({ "settings.tags": [...data.settings.tags, tagValue] });
+      setAddTagModal(false);
+    } catch {
+      return; // don't close modal so user sees error message
+    }
+  }
 
   return (
-    <div>
-      <div className="modalFull">
-        {/*--- close ---*/}
-        <div className="xButton" onClick={() => setAddTagModal(false)}>
-          &#10005;
-        </div>
-        {/*--- title ---*/}
-        <div className="modalFullHeader">Add A Tag</div>
-        {/*--- content ---*/}
-        <div className="modalFullContentContainer">
-          {/*--- tags ---*/}
-          <p className="mt-[16px] w-full inputLabel">Tags (e.g., Euro Trip 2025, Winnie's birthday)</p>
-          <input className="mt-[4px] w-full input" data-type="tags" />
-          {/*--- button ---*/}
-          <button
-            onClick={() => {
-              const tagValue = document.querySelector<HTMLInputElement>('input[data-type="tags"]')?.value as string;
-              if (data && tagValue) {
-                settingsMutateAsync({ changes: { "settings.tags": [...data.settings.tags, tagValue] } });
-                setAddTagModal(false);
-              }
-            }}
-            className="my-[24] button1 w-full"
-          >
-            Add
-          </button>
-        </div>
-      </div>
-      <div className="modalBlackout"></div>
-    </div>
+    <Modal title="Add A Tag" setIsOpen={setAddTagModal} disableCloseButton={isPending}>
+      <form onSubmit={onSubmit}>
+        <label className="mt-[16px] pb-1.5 w-full inputLabel">Tags (e.g., Euro Trip 2025, Winnie's birthday)</label>
+        <input className="mt-[4px] w-full input" data-type="tags" />
+        {/*--- button ---*/}
+        <button className="mt-[40px] button1 w-full" type="submit" disabled={isPending}>
+          {isPending ? "Adding..." : "Add"}
+        </button>
+      </form>
+      <div className="errorText mt-5 desktop:mt-3 min-h-[1.3rem]">{validationError ? validationError : isError ? error?.message : ""}</div>
+    </Modal>
   );
 }

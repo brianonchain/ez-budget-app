@@ -2,12 +2,12 @@ import { useId } from "react";
 
 export default function Modal({
   children,
-  disableCloseButton,
+  disableCloseButton = false,
   setIsOpen,
   title,
 }: {
   children: React.ReactNode;
-  disableCloseButton: boolean;
+  disableCloseButton?: boolean;
   setIsOpen: (isOpen: boolean) => void;
   title: string;
 }) {
@@ -27,7 +27,7 @@ export default function Modal({
         <div className="absolute inset-0 bg-gradient-to-br from-lightBg1 to-lightBg1 dark:from-blue-500/20 dark:to-blue-500/10 z-[-1]"></div>
         {/*--- close ---*/}
         {!disableCloseButton && (
-          <button className="xButton" aria-label="Close" onClick={() => setIsOpen(false)}>
+          <button className="xButton" aria-label="Close" type="button" onClick={() => setIsOpen(false)}>
             &#10005;
           </button>
         )}

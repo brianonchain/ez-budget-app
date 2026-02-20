@@ -85,7 +85,7 @@ html.dark body {
 }
 
 @utility errorText {
-  @apply text-base desktop:text-sm text-red-500 dark:text-red-400;
+  @apply text-lg desktop:text-sm text-red-500 dark:text-red-400;
 }
 
 /*--- colors ---*/

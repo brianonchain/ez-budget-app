@@ -17,6 +17,6 @@ export const POST = async (request: Request) => {
     await UserModel.findOneAndUpdate({ "settings.email": email }, { $set: changes });
     return NextResponse.json({ status: "success" }, { status: 200 });
   } catch (e) {
-    return NextResponse.json({ status: "error", message: "Database error" }, { status: 500 });
+    return NextResponse.json({ status: "error", message: "User data failed to update. Please try again." }, { status: 500 });
   }
 };

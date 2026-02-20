@@ -27,10 +27,9 @@ export const useSettingsMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (changes: { [key: string]: any }) => {
-      console.log("useSettingsMutation mutationFn");
       const resJson = await fetchPost("/api/mutateSettings", { changes });
-      if (resJson === "saved") return;
-      throw new Error();
+      if (resJson.status === "success") return;
+      throw new Error(resJson?.message || "Unknown error. Please try again.");
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["user"] }),
   });
@@ -40,7 +39,6 @@ export const useItemsMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (item: Item) => {
-      console.log("useItemsMutation mutationFn ran");
       const resJson = await fetchPost("/api/mutateItems", { item }); // should throw error if !response.ok
       if (resJson === "saved") return;
       throw new Error();
