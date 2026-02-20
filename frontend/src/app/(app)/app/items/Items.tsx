@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useUserQuery } from "@/utils/hooks";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 // components
 import ErrorModal from "@/utils/components/ErrorModal";
 import List from "./_components/List";
@@ -11,7 +12,16 @@ import EnterCategory from "./_components/EnterCategory";
 import Details from "./_components/Details";
 
 export default function Items() {
+  const router = useRouter();
   const session = useSession();
+
+  // if user is not authenticated, redirect to login
+  // only needed for Items.tsx, as this is start_url for PWA and you want to redirect in the client (not the server); other pages uses redirect in server (in page.tsx)
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.replace("/login"); // use router.replace for auth redirect
+    }
+  }, [session.status]);
 
   const { data, isPending, isError } = useUserQuery(session?.data?.user?.email);
 
