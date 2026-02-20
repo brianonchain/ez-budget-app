@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { BsBoxArrowUp } from "react-icons/bs";
 
-export default function SaveToHome() {
+export default function SaveAppToHome() {
   // states
   const [browser, setBrowser] = useState("");
   const [os, setOs] = useState("");
@@ -41,12 +41,12 @@ export default function SaveToHome() {
   return (
     <div className="w-full min-h-[100dvh] pt-[30px] pb-[80px] bg-white flex flex-col items-center justify-center overflow-y-auto">
       {/*---image---*/}
-      <div className="h-[320px] w-[160px] rounded-2xl shadow-[0px_2px_20px_0px_rgb(0,0,0,0.3)] relative">
+      <div className="h-[320px] w-[160px] rounded-2xl shadow-[0px_2px_20px_0px_rgb(0,0,0,0.3)] overflow-hidden relative">
         <Image src="/PWA.png" alt="phone showing homescreen" fill />
       </div>
 
       {/*---text---*/}
-      <div className={`${browser && os ? "" : "invisible"} flex flex-col items-center bg-lightBg1`}>
+      <div className={`${browser && os ? "" : "invisible"} flex flex-col items-center`}>
         <div className="pt-[40px] pb-[30px] font-bold text2XlApp">Add To Home Screen</div>
         <div className="w-[350px] portrait:sm:w-[460px] landscape:lg:w-[460px] flex flex-col gap-[8px] portrait:sm:gap-[16px] landscape:lg:gap-[16px] textBaseApp">
           <p>To use this App, you need to add this website to your home screen.</p>

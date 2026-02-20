@@ -286,7 +286,7 @@ html.dark body {
 }
 
 @utility modalFullSize {
-  @apply w-full desktop:w-[400px] h-screen desktop:h-auto desktop:max-h-[90%];
+  @apply w-full desktop:w-[400px] h-dvh desktop:h-auto desktop:max-h-[90%];
 }
 
 @utility modalFullXPadding {
