@@ -116,7 +116,7 @@ export default function Login() {
   return (
     <>
       {/*--- Buttons ---*/}
-      <div className="w-full flex flex-col gap-[1.5em]" style={{ scrollbarGutter: "stable" }}>
+      <div className="w-full flex flex-col gap-[1.5em]">
         {/*--- Google Sign In ---*/}
         <SignInButton
           label="Sign in with Google"
@@ -131,8 +131,8 @@ export default function Login() {
         {/*--- Credentials Sign In ---*/}
         <div
           className={`${
-            showEmailPassword ? "" : "hover:bg-slate-200 dark:hover:bg-slate-300/20 [transition:background-color_200ms] cursor-pointer"
-          } w-full textBaseApp font-medium bg-transparent border-[1.5px] border-slate-300 dark:border-slate-400 rounded-[33px] relative`}
+            showEmailPassword ? "" : "dark:hover:bg-slate-300/20 [transition:background-color_200ms] cursor-pointer"
+          } w-full textBaseApp font-medium bg-white dark:bg-transparent border-[1.5px] border-slate-200 hover:border-slate-300 dark:border-slate-400 dark:hover:border-slate-400 rounded-[33px] desktop:rounded-[26px] relative`}
         >
           <button
             className="w-full h-[3.5em] flex items-center justify-center gap-[12px] cursor-pointer"
