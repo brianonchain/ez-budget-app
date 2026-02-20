@@ -206,11 +206,11 @@
 }
 
 .listAllHeight {
-  @apply portrait:h-[calc(100vh-80px-80px-50px)] portrait:sm:h-[calc(100vh-140px-110px-50px-32px-2px)] landscape:h-[calc(100vh-80px-50px)] landscape:lg:h-[calc(100vh-110px-50px-32px-2px)];
+  @apply portrait:h-[calc(100dvh-80px-80px-50px)] portrait:sm:h-[calc(100dvh-140px-110px-50px-32px-2px)] landscape:h-[calc(100dvh-80px-50px)] landscape:lg:h-[calc(100dvh-110px-50px-32px-2px)];
 }
 
 .listItemHeight {
-  @apply portrait:h-[calc((100vh-80px-80px-50px)/10)] portrait:sm:h-[calc((100vh-140px-110px-50px-32px)/11)] landscape:h-[calc((100vh-80px-50px)/10)] landscape:lg:h-[calc((100vh-110px-50px-32px)/10)] min-h-[50px] max-h-[80px];
+  @apply portrait:h-[calc((100dvh-80px-80px-50px)/10)] portrait:sm:h-[calc((100dvh-140px-110px-50px-32px)/11)] landscape:h-[calc((100dvh-80px-50px)/10)] landscape:lg:h-[calc((100dvh-110px-50px-32px)/10)] min-h-[50px] max-h-[80px];
 }
 
 .settingsCard {
