@@ -36,6 +36,18 @@
   --breakpoint-2xl: 1440px;
 }
 
+html,
+body {
+  background: #f7edf7; /* lightBg2 */
+}
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body {
+    background: #0a051f; /* darkBg1 */
+  }
+}
+
 /*--- text size ---*/
 
 @utility textXsApp {
