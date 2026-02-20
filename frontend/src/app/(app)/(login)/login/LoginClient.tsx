@@ -132,7 +132,7 @@ export default function Login() {
         <div
           className={`${
             showEmailPassword ? "" : "hover:bg-slate-200 dark:hover:bg-slate-300/20 [transition:background-color_200ms] cursor-pointer"
-          } w-full textBaseApp font-medium bg-transparent border-[1.5px] border-slate-300 dark:border-slate-400 rounded-[18px] desktop:rounded-[24px] relative`}
+          } w-full textBaseApp font-medium bg-transparent border-[1.5px] border-slate-300 dark:border-slate-400 rounded-[33px] relative`}
         >
           <button
             className="w-full h-[3.5em] flex items-center justify-center gap-[12px] cursor-pointer"

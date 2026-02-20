@@ -14,6 +14,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "EZ Budget App",
   description: "Designed for speed and customizability, EZ Budget App is the easiest way to track daily expenses and maintain a budget.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default", // or "black-translucent"
+  },
 };
 
 // contains font color

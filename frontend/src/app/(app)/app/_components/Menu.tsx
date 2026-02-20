@@ -29,7 +29,7 @@ export default function Menu() {
             onClick={() => setPath(i.path)}
           >
             {i.icon}
-            <p className="text-base">{i.text}</p>
+            <p className="text-[14px]">{i.text}</p>
           </Link>
         ))}
       </div>
