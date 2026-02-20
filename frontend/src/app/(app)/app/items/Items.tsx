@@ -32,27 +32,15 @@ export default function Items() {
   // }, [isError]);
 
   return (
-    <div className="appPageContainer overflow-x-hidden overflow-y-auto relative z-0">
+    <div className="appPageContainer relative z-0">
       {page === "list" && <List setPage={setPage} setErrorModal={setErrorModal} data={data} setNewItem={setNewItem} />}
       {page === "cost" && <EnterCost setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}
       {page === "name" && <EnterName setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}
       {page === "category" && (
-        <EnterCategory
-          setPage={setPage}
-          setErrorModal={setErrorModal}
-          data={data}
-          newItem={newItem}
-          setNewItem={setNewItem}
-        />
+        <EnterCategory setPage={setPage} setErrorModal={setErrorModal} data={data} newItem={newItem} setNewItem={setNewItem} />
       )}
       {page === "details" && (
-        <Details
-          setPage={setPage}
-          setErrorModal={setErrorModal}
-          data={data}
-          newItem={newItem}
-          setNewItem={setNewItem}
-        />
+        <Details setPage={setPage} setErrorModal={setErrorModal} data={data} newItem={newItem} setNewItem={setNewItem} />
       )}
       {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
       {/*--- glow ---*/}

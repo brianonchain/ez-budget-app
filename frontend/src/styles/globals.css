@@ -36,10 +36,6 @@
   --breakpoint-2xl: 1440px;
 }
 
-html {
-  scrollbar-gutter: stable;
-}
-
 /*--- text size ---*/
 
 @utility textXsApp {
@@ -188,16 +184,13 @@ html {
 
 /*--- components ---*/
 
-.menuSize {
-  @apply fixed flex-none landscape:w-[120px] landscape:lg:w-[160px] landscape:desktop:!w-[200px] landscape:h-screen portrait:w-full portrait:h-[80px] portrait:sm:h-[140px] flex justify-center items-center;
-}
-
 .menuIcon {
   @apply text-[24px] portrait:sm:text-[40px] landscape:lg:text-[40px];
 }
 
+/* menu has position "fixed" */
 .appPageContainer {
-  @apply flex-none px-[12px] portrait:w-full portrait:h-[calc(100dvh-80px)] portrait:sm:h-[calc(100dvh-140px)] portrait:mb-[80px] portrait:sm:mb-[140px] landscape:grow landscape:h-full landscape:ml-[120px] landscape:lg:ml-[160px] landscape:desktop:!ml-[200px] flex flex-col items-center;
+  @apply portrait:w-full portrait:h-[calc(100dvh-80px)] portrait:sm:h-[calc(100dvh-140px)] landscape:h-dvh landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:desktop:!w-[calc(100%-200px)] landscape:ml-[120px] landscape:lg:ml-[160px] landscape:desktop:!ml-[200px] flex flex-col items-center overflow-y-auto overflow-x-hidden;
 }
 
 .loginError {
@@ -221,11 +214,11 @@ html {
 }
 
 .settingsCard {
-  @apply mt-[16px] portrait:sm:mt-[32px] landscape:lg:mt-[32px] desktop:!mt-[16px] pb-[20px] px-[12px] portrait:sm:px-[20px] landscape:lg:px-[20px] desktop:px-[16px] w-full bg-lightBg1 dark:bg-blue-400/6 rounded-2xl shadow-[0px_0px_16px_0px_rgba(0,0,0,0.1)] desktop:shadow-[6px_0px_10px_0px_rgba(0,0,0,0.02),_-6px_0px_10px_rgba(0,0,0,0.02)] dark:shadow-none;
+  @apply pt-[16px] pb-[20px] px-[12px] portrait:sm:px-[20px] landscape:lg:px-[20px] desktop:px-[16px] w-full bg-lightBg1 dark:bg-blue-400/6 rounded-2xl shadow-[0px_0px_16px_0px_rgba(0,0,0,0.1)] desktop:shadow-[6px_0px_10px_0px_rgba(0,0,0,0.02),_-6px_0px_10px_rgba(0,0,0,0.02)] dark:shadow-none;
 }
 
 .settingsTitle {
-  @apply w-full py-[16px] text-2xl font-bold flex items-center justify-center text-blue-600 dark:text-darkText1;
+  @apply w-full pb-[16px] text-2xl font-bold flex items-center justify-center text-blue-600 dark:text-darkText1;
 }
 
 .settingsField {

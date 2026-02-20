@@ -33,100 +33,101 @@ export default function Settings({ provider, email }: { provider: string; email:
   const [addTagModal, setAddTagModal] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
 
-  // double container needed so scrollbar hugs right edge of screen
   return (
-    <div className="appPageContainer overflow-x-hidden overflow-y-auto relative z-0" style={{ scrollbarGutter: "stable" }}>
+    <div className="appPageContainer relative z-0" style={{ scrollbarGutter: "stable" }}>
       {/*--- glow ---*/}
       <div className="absolute w-full h-full left-0 top-0 z-[-1]">
         <div className="absolute top-1/2 right-0 translate-y-[-50%] translate-x-[50%] w-[90%] h-[50%] rounded-full bg-white dark:bg-[#0444B7] blur-[200px] portrait:sm:dark:blur-[300px] landscape:lg:blur-[300px] pointer-events-none"></div>
       </div>
 
-      <div className="pb-[50px] w-full max-w-[500px] desktop:max-w-[420px] flex flex-col items-center">
-        <div className="settingsCard">
-          <div className="settingsTitle">Settings</div>
-          {/*--- email ---*/}
-          <div className="settingsField">
-            <p className="settingsLabel">Email</p>
-            <div className="flex items-center gap-2 overflow-hidden">
-              <p className="grow font-medium truncate">{email}</p>
-              {provider === "credentials" && <AiOutlineEdit className="settingsEditIcon" onClick={() => setEmailModal(true)} />}
-            </div>
-          </div>
-          {/*--- password ---*/}
-          {provider === "credentials" ? (
+      <div className="pt-[16px] portrait:sm:pt-[32px] landscape:lg:pt-[32px] desktop:!pt-[16px] pb-[50px] portrait:px-[12px] w-full max-w-[500px] desktop:max-w-[420px] flex flex-col items-center">
+        <div className="space-y-[16px] portrait:sm:space-y-[32px] landscape:lg:space-y-[32px] desktop:!space-y-[16px] w-full">
+          <div className="settingsCard">
+            <div className="settingsTitle">Settings</div>
+            {/*--- email ---*/}
             <div className="settingsField">
-              <p className="settingsLabel">Password</p>
-              <div className="flex items-center gap-2">
-                {"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}
-                <AiOutlineEdit className="settingsEditIcon" onClick={() => setPasswordModal(true)} />
+              <p className="settingsLabel">Email</p>
+              <div className="flex items-center gap-2 overflow-hidden">
+                <p className="grow font-medium truncate">{email}</p>
+                {provider === "credentials" && <AiOutlineEdit className="settingsEditIcon" onClick={() => setEmailModal(true)} />}
               </div>
             </div>
-          ) : (
-            <div className="settingsField">
-              <p className="settingsLabel">Login Method</p>
-              <div className="font-medium">{capitalizeFirst(provider)}</div>
-            </div>
-          )}
-
-          {/*--- categories ---*/}
-          <div className="py-4 w-full flex flex-col items-center gap-4 border-b-[1.5px] borderColor">
-            <div className="w-full flex items-center gap-4">
-              <p className="settingsLabel">Categories</p>
-              <button className="buttonSettings" onClick={() => setAddCategoryModal(true)}>
-                <FaPlus /> New
-              </button>
-            </div>
-            {/*--- category options ---*/}
-            {data ? (
-              data.settings.categoryObjects.length > 1 ? (
-                <CategoryContainer categoryObjects={data.settings.categoryObjects} setAddCategoryModal={setAddCategoryModal} />
-              ) : (
-                <div className="text-center text-slate-500 italic">No categories</div>
-              )
+            {/*--- password ---*/}
+            {provider === "credentials" ? (
+              <div className="settingsField">
+                <p className="settingsLabel">Password</p>
+                <div className="flex items-center gap-2">
+                  {"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}
+                  <AiOutlineEdit className="settingsEditIcon" onClick={() => setPasswordModal(true)} />
+                </div>
+              </div>
             ) : (
-              <div className="w-[90%] bg-blue-300/10 animate-pulse rounded-lg text-transparent point-events-none">0</div>
+              <div className="settingsField">
+                <p className="settingsLabel">Login Method</p>
+                <div className="font-medium">{capitalizeFirst(provider)}</div>
+              </div>
             )}
+
+            {/*--- categories ---*/}
+            <div className="py-4 w-full flex flex-col items-center gap-4 border-b-[1.5px] borderColor">
+              <div className="w-full flex items-center gap-4">
+                <p className="settingsLabel">Categories</p>
+                <button className="buttonSettings" onClick={() => setAddCategoryModal(true)}>
+                  <FaPlus /> New
+                </button>
+              </div>
+              {/*--- category options ---*/}
+              {data ? (
+                data.settings.categoryObjects.length > 1 ? (
+                  <CategoryContainer categoryObjects={data.settings.categoryObjects} setAddCategoryModal={setAddCategoryModal} />
+                ) : (
+                  <div className="text-center text-slate-500 italic">No categories</div>
+                )
+              ) : (
+                <div className="w-[90%] bg-blue-300/10 animate-pulse rounded-lg text-transparent point-events-none">0</div>
+              )}
+            </div>
+
+            {/*--- tags ---*/}
+            <div className="py-4 w-full flex flex-col items-center gap-4">
+              <div className="w-full flex items-center gap-4">
+                <p className="settingsLabel">Tags</p>
+                <button className="buttonSettings" onClick={() => setAddTagModal(true)}>
+                  <FaPlus /> New
+                </button>
+              </div>
+              {/*--- tag options ---*/}
+              {data ? (
+                data.settings.tags.length > 1 ? (
+                  <TagsContainer tags={data?.settings.tags} key={JSON.stringify(data?.settings.tags)} />
+                ) : (
+                  <div className="text-center text-slate-500 italic">No tags</div>
+                )
+              ) : (
+                <div className="w-[90%] bg-blue-300/10 animate-pulse rounded-lg text-transparent point-events-none">0</div>
+              )}
+            </div>
           </div>
 
-          {/*--- tags ---*/}
-          <div className="py-4 w-full flex flex-col items-center gap-4">
-            <div className="w-full flex items-center gap-4">
-              <p className="settingsLabel">Tags</p>
-              <button className="buttonSettings" onClick={() => setAddTagModal(true)}>
-                <FaPlus /> New
-              </button>
+          {/*--- DISPLAY  ---*/}
+          <div className="settingsCard">
+            <div className="settingsTitle">Display</div>
+            {/*---DARK MODE ---*/}
+            <div className="settingsField border-none">
+              <label className="settingsLabel">Dark</label>
+              <Toggle
+                checked={resolvedTheme === "dark" ? true : false}
+                onClick={() => {
+                  if (resolvedTheme === "dark") {
+                    setTheme("light");
+                    window.localStorage.setItem("theme", "light");
+                  } else {
+                    setTheme("dark");
+                    window.localStorage.setItem("theme", "dark");
+                  }
+                }}
+              />
             </div>
-            {/*--- tag options ---*/}
-            {data ? (
-              data.settings.tags.length > 1 ? (
-                <TagsContainer tags={data?.settings.tags} key={JSON.stringify(data?.settings.tags)} />
-              ) : (
-                <div className="text-center text-slate-500 italic">No tags</div>
-              )
-            ) : (
-              <div className="w-[90%] bg-blue-300/10 animate-pulse rounded-lg text-transparent point-events-none">0</div>
-            )}
-          </div>
-        </div>
-
-        {/*--- DISPLAY  ---*/}
-        <div className="settingsCard">
-          <div className="settingsTitle">Display</div>
-          {/*---DARK MODE ---*/}
-          <div className="settingsField border-none">
-            <label className="settingsLabel">Dark</label>
-            <Toggle
-              checked={resolvedTheme === "dark" ? true : false}
-              onClick={() => {
-                if (resolvedTheme === "dark") {
-                  setTheme("light");
-                  window.localStorage.setItem("theme", "light");
-                } else {
-                  setTheme("dark");
-                  window.localStorage.setItem("theme", "dark");
-                }
-              }}
-            />
           </div>
         </div>
 
