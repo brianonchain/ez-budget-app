@@ -120,7 +120,7 @@ export default function Login() {
         {/*--- Google Sign In ---*/}
         <SignInButton
           label="Sign in with Google"
-          imageSrc="./google.svg"
+          imageSrc="/google.svg"
           imageAlt="google"
           isLoading={isLoading === "google" ? true : false}
           onClick={() => {
