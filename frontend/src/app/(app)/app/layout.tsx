@@ -5,7 +5,7 @@ export default async function AppLayout({ children }: Readonly<{ children: React
   console.log("/(app)/app/layout.tsx");
 
   return (
-    <div className="bg-lightBg2 dark:bg-darkBg1">
+    <div className="bg-lightBg2 dark:bg-darkBg1 relative">
       <Menu />
       <ContextProvider>{children}</ContextProvider>
     </div>

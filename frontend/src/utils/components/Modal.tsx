@@ -14,10 +14,10 @@ export default function Modal({
   const titleId = useId();
 
   return (
-    <div className="fixed inset-0 z-[50]">
-      <div className="fixed inset-0 bg-black/70 z-[0]"></div>
+    <>
+      <div className="z-[99] fixed w-full h-dvh top-0 left-0 bg-black/70"></div>
       <div
-        className="modalFullColor modalFullSize desktop:pb-[12px] fixed z-[1] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col desktop:rounded-2xl overflow-hidden"
+        className="z-[100] fixed w-full h-dvh desktop:w-[400px] desktop:h-auto desktop:max-h-[90%] desktop:pb-[12px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col desktop:rounded-2xl overflow-hidden modalFullColor"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -38,6 +38,6 @@ export default function Modal({
         {/*--- content ---*/}
         <div className="modalFullContentContainer">{children}</div>
       </div>
-    </div>
+    </>
   );
 }

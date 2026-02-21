@@ -42,7 +42,7 @@ export default function Items() {
   // }, [isError]);
 
   return (
-    <div className="appPageContainer relative z-0">
+    <div className="appPageContainer relative z-10">
       {page === "list" && <List setPage={setPage} setErrorModal={setErrorModal} data={data} setNewItem={setNewItem} />}
       {page === "cost" && <EnterCost setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}
       {page === "name" && <EnterName setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}
