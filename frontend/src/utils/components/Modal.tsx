@@ -24,7 +24,7 @@ export default function Modal({
         tabIndex={-1} // so modal is focusable with javascript
       >
         {/*--- glow ---*/}
-        <div className="absolute inset-0 bg-gradient-to-br from-lightBg1 to-lightBg1 dark:from-blue-500/20 dark:to-blue-500/10 z-[-1]"></div>
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-lightBg1 to-lightBg1 dark:from-blue-500/20 dark:to-blue-500/10 z-[-1]"></div> */}
         {/*--- close ---*/}
         {!disableCloseButton && (
           <button className="xButton" aria-label="Close" type="button" onClick={() => setIsOpen(false)}>
