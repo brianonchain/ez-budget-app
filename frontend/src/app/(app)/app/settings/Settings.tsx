@@ -34,7 +34,7 @@ export default function Settings({ provider, email }: { provider: string; email:
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   return (
-    <div className="appPageContainer relative z-10" style={{ scrollbarGutter: "stable" }}>
+    <div className="appPageContainer relative z-[20]" style={{ scrollbarGutter: "stable" }}>
       <div className="pt-[16px] portrait:sm:pt-[32px] landscape:lg:pt-[32px] desktop:!pt-[16px] pb-[50px] portrait:px-[12px] w-full max-w-[500px] desktop:max-w-[420px] flex flex-col items-center">
         <div className="space-y-[16px] portrait:sm:space-y-[32px] landscape:lg:space-y-[32px] desktop:!space-y-[16px] w-full">
           <div className="settingsCard">
