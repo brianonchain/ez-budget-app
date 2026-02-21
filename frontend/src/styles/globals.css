@@ -55,11 +55,12 @@ html.dark body {
 @utility glowDarkInner {
   background: radial-gradient(
     ellipse at center,
-    rgba(4, 68, 183, 0.55) 0%,
-    rgba(4, 68, 183, 0.35) 30%,
-    rgba(4, 68, 183, 0.15) 55%,
-    rgba(4, 68, 183, 0.05) 70%,
-    transparent 80%
+    rgba(4, 68, 183, 0.6) 0%,
+    rgba(4, 68, 183, 0.42) 20%,
+    rgba(4, 68, 183, 0.25) 40%,
+    rgba(4, 68, 183, 0.12) 55%,
+    rgba(4, 68, 183, 0.05) 65%,
+    transparent 75%
   );
 }
 
