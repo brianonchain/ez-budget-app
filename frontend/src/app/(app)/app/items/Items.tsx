@@ -43,19 +43,22 @@ export default function Items() {
 
   return (
     <div className="appPageContainer relative z-10">
-      {page === "list" && <List setPage={setPage} setErrorModal={setErrorModal} data={data} setNewItem={setNewItem} />}
-      {page === "cost" && <EnterCost setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}
-      {page === "name" && <EnterName setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}
-      {page === "category" && (
-        <EnterCategory setPage={setPage} setErrorModal={setErrorModal} data={data} newItem={newItem} setNewItem={setNewItem} />
-      )}
-      {page === "details" && (
-        <Details setPage={setPage} setErrorModal={setErrorModal} data={data} newItem={newItem} setNewItem={setNewItem} />
-      )}
-      {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
       {/*--- glow ---*/}
-      <div className="absolute w-full h-full left-0 top-0 overflow-hidden z-[-1]">
-        <div className="absolute top-1/2 right-0 translate-y-[-50%] translate-x-[50%] w-[90%] h-[50%] rounded-full bg-white dark:bg-[#0444B7] blur-[200px] portrait:sm:dark:blur-[300px] landscape:lg:blur-[300px] pointer-events-none"></div>
+      <div className="z-0 absolute w-full h-full left-0 top-0 overflow-hidden pointer-events-none" aria-hidden>
+        <div className="absolute top-1/2 right-0 translate-y-[-50%] translate-x-[50%] w-[90%] h-[50%] rounded-full bg-white dark:bg-[#0444B7] blur-[200px] portrait:sm:dark:blur-[300px] landscape:lg:blur-[300px]"></div>
+      </div>
+      {/*--- content ---*/}
+      <div className="relative z-10 w-full flex flex-col items-center">
+        {page === "list" && <List setPage={setPage} setErrorModal={setErrorModal} data={data} setNewItem={setNewItem} />}
+        {page === "cost" && <EnterCost setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}
+        {page === "name" && <EnterName setPage={setPage} setErrorModal={setErrorModal} setNewItem={setNewItem} />}
+        {page === "category" && (
+          <EnterCategory setPage={setPage} setErrorModal={setErrorModal} data={data} newItem={newItem} setNewItem={setNewItem} />
+        )}
+        {page === "details" && (
+          <Details setPage={setPage} setErrorModal={setErrorModal} data={data} newItem={newItem} setNewItem={setNewItem} />
+        )}
+        {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
       </div>
     </div>
   );
