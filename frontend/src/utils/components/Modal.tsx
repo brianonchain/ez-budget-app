@@ -17,7 +17,7 @@ export default function Modal({
     <>
       <div className="z-[99] fixed w-full h-dvh top-0 left-0 bg-black/70"></div>
       <div
-        className="z-[100] fixed w-full h-dvh desktop:w-[400px] desktop:h-auto desktop:max-h-[90%] desktop:pb-[12px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col desktop:rounded-2xl overflow-hidden modalFullColor"
+        className="z-[100] fixed w-full h-dvh desktop:w-[400px] desktop:h-auto desktop:max-h-[90%] desktop:pb-[12px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col desktop:rounded-2xl overflow-hidden bg-red-300"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
