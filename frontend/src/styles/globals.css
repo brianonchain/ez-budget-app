@@ -46,6 +46,23 @@ html.dark body {
   background: #0a051f; /* darkBg1 */
 }
 
+/*--- background glows ---*/
+
+@utility glowDark {
+  @apply dark:block hidden;
+}
+
+@utility glowDarkInner {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(4, 68, 183, 0.55) 0%,
+    rgba(4, 68, 183, 0.35) 30%,
+    rgba(4, 68, 183, 0.15) 55%,
+    rgba(4, 68, 183, 0.05) 70%,
+    transparent 80%
+  );
+}
+
 /*--- text size ---*/
 
 @utility textXsApp {

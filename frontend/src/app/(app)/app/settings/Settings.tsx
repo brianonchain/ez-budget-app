@@ -35,8 +35,8 @@ export default function Settings({ provider, email }: { provider: string; email:
   return (
     <div className="appPageContainer relative" style={{ scrollbarGutter: "stable" }}>
       {/* --- glow --- */}
-      <div className="absolute w-full h-full left-0 top-0 z-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-1/2 right-0 translate-y-[-50%] translate-x-[50%] w-[90%] h-[50%] rounded-full bg-white dark:bg-[#0444B7] blur-[200px] portrait:sm:dark:blur-[300px] landscape:lg:blur-[300px]" />
+      <div className="z-0 absolute inset-0 pointer-events-none glowDark" aria-hidden>
+        <div className="absolute top-1/2 right-0 translate-y-[-50%] translate-x-[50%] w-[90%] h-[50%] glowDarkInner" />
       </div>
       {/*--- content ---*/}
       <div className="relative z-10 pt-[16px] portrait:sm:pt-[32px] landscape:lg:pt-[32px] desktop:!pt-[16px] pb-[50px] portrait:px-[12px] w-full max-w-[500px] desktop:max-w-[420px] flex flex-col items-center">
