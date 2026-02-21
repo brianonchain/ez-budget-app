@@ -19,10 +19,10 @@ export default function List({
         <div className="portrait:sm:pb-[16px] landscape:lg:pb-[16px] w-full bg-lightBg1 dark:bg-blue-400/6 portrait:sm:rounded-2xl landscape:lg:rounded-2xl portrait:sm:border-1 landscape:lg:border-1 border-white dark:border-white/10 overflow-hidden shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none">
           {/*--- header, h=50px, use 2 divs to make scrollbar space aligned with list ---*/}
           <div
-            className="text-slate-700 dark:text-slate-400 bg-lightBg2 dark:bg-blue-400/14 thinScrollbar overflow-y-auto"
+            className="text-slate-700 dark:text-slate-400 bg-lightBg2 dark:bg-transparent thinScrollbar overflow-y-auto"
             style={{ scrollbarGutter: "stable" }}
           >
-            <div className="px-[3%] listHeaderHeight grid grid-cols-[50%_20%_30%] items-center font-bold">
+            <div className="px-[3%] listHeaderHeight grid grid-cols-[50%_20%_30%] items-center font-semibold">
               <p>Item</p>
               <p>Cost</p>
               <p className="justify-self-end">Category</p>
@@ -42,7 +42,7 @@ export default function List({
                   {data.items.map((item: Item, index: number) => (
                     <div
                       key={index}
-                      className="px-[3%] w-full listItemHeight grid grid-cols-[50%_20%_30%] items-center border-b-[1.5px] border-slate-200 dark:border-white/5 desktop:cursor-pointer desktop:hover:bg-lightBg2 dark:desktop:hover:bg-blue-500/10"
+                      className="px-[3%] w-full listItemHeight grid grid-cols-[50%_20%_30%] items-center border-t-[1.5px] border-slate-200 dark:border-white/5 desktop:cursor-pointer desktop:hover:bg-lightBg2 dark:desktop:hover:bg-blue-500/10"
                       onClick={() => {
                         setNewItem(item);
                         setPage("details");
