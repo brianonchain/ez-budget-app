@@ -10,7 +10,15 @@ function addId(_tags: string[]) {
   return _tags.slice(1).map((i, index) => ({ id: (index + 1).toString(), tag: i }));
 }
 
-export default function TagsContainer({ tags }: { tags: string[] }) {
+export default function TagsContainer({
+  tags,
+  setAddTagModal,
+  setClickedTag,
+}: {
+  tags: string[];
+  setAddTagModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setClickedTag: React.Dispatch<React.SetStateAction<string>>;
+}) {
   // hooks
   const { mutateAsync: settingsMutateAsync } = useSettingsMutation();
   // state
@@ -42,7 +50,7 @@ export default function TagsContainer({ tags }: { tags: string[] }) {
     newItems.forEach((i) => newTags.push(i.tag));
 
     try {
-      await settingsMutateAsync({ "settings.tags": newTags });
+      await settingsMutateAsync({ changes: { "settings.tags": newTags } });
     } catch (e) {
       console.error("Failed to update tag order");
       setItems(oldItems);
@@ -54,7 +62,7 @@ export default function TagsContainer({ tags }: { tags: string[] }) {
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
         <div className="w-[90%] flex flex-col text-base desktop:text-xs border-t border-b border-dashed borderColorFaint">
           {items.map((item) => (
-            <Tags key={item.id} id={item.id} tag={item.tag} />
+            <Tags key={item.id} id={item.id} tag={item.tag} setAddTagModal={setAddTagModal} setClickedTag={setClickedTag} />
           ))}
         </div>
       </SortableContext>

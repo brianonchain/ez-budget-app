@@ -40,11 +40,16 @@ export default function Modal({
           </button>
         )}
         {/*--- title ---*/}
-        <div id={titleId} className="modalFullHeader">
+        <div id={titleId} className="mx-[60px] py-[24px] text-center text-2xl desktop:text-xl font-semibold">
           {title}
         </div>
         {/*--- content ---*/}
-        <div className="modalFullContentContainer">{children}</div>
+        <div
+          className="flex-1 min-h-0 w-full pt-[16px] pb-[48px] px-[16px] portrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[60px] overflow-y-auto thinScrollbar textBaseApp"
+          style={{ scrollbarGutter: "stable" }}
+        >
+          {children}
+        </div>
       </div>
     </>
   );

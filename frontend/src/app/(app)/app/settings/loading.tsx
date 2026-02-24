@@ -1,13 +1,40 @@
-import Spinner from "@/utils/components/Spinner";
+import SettingsShell from "./SettingsShell";
+import SettingsCard from "./_components/SettingsCard";
+import SettingsField from "./_components/SettingsField";
+import SettingsSkeleton from "./_components/SettingsSkeleton";
+import SettingsCategoryContainer from "./_components/SettingsCategoryContainer";
 
-export default function loading() {
+export default function Loading() {
   return (
-    <div className="appPageContainer justify-center items-center bg-lightBg1 dark:bg-darkBg1 relative z-0">
-      <Spinner />
-      {/* --- glow --- */}
-      <div className="z-0 fixed w-full h-full left-0 top-0 pointer-events-none glowDark" aria-hidden>
-        <div className="absolute top-1/2 right-0 translate-y-[-50%] translate-x-[50%] w-[200%] h-[100%] glowDarkInner" />
-      </div>
-    </div>
+    <SettingsShell>
+      <SettingsCard title="Settings">
+        <SettingsField label="Email">
+          <SettingsSkeleton className="settingsSkeletonSmall" />
+        </SettingsField>
+        <SettingsField label="Login Method">
+          <SettingsSkeleton className="settingsSkeletonSmall" />
+        </SettingsField>
+        <SettingsField label="Default Currency" className="border-none">
+          <SettingsSkeleton className="settingsSkeletonSmall" />
+        </SettingsField>
+      </SettingsCard>
+
+      <SettingsCard title="Categories & Tags">
+        <SettingsCategoryContainer label="Categories">
+          <SettingsSkeleton className="settingsSkeletonBig" />
+        </SettingsCategoryContainer>
+        <SettingsCategoryContainer label="Tags">
+          <SettingsSkeleton className="settingsSkeletonBig" />
+        </SettingsCategoryContainer>
+      </SettingsCard>
+
+      <SettingsCard title="Display">
+        <SettingsField label="Dark" className="border-none">
+          <SettingsSkeleton className="settingsSkeletonSmall" />
+        </SettingsField>
+      </SettingsCard>
+
+      <button className="button1Round w-[7em] mx-auto my-12">Sign Out</button>
+    </SettingsShell>
   );
 }

@@ -8,23 +8,31 @@
   --color-lightBg3: #f0e7f0;
   --color-lightText1: #212427;
   --color-lightText2: #64748b;
-  --color-lightButton1Bg: oklch(62.3% 0.214 259.815);
-  --color-lightButton1BgHover: oklch(70.7% 0.165 254.624);
+  --color-lightHeaderColor: oklch(58.8% 0.158 241.966);
+  --color-lightButton1Bg: oklch(58.8% 0.158 241.966); /* sky-600 */
+  --color-lightButton1BgHover: oklch(50% 0.134 242.749); /* sky-700 */
   --color-lightButton1Text: #ffffff;
   --color-lightButton2Bg: #64748b;
   --color-lightButton2BgHover: #94a3b8;
   --color-lightButton2Text: #64748b;
+  --color-lightButtonRedBg: oklch(64.5% 0.246 16.439);
+  --color-lightButtonRedBgHover: oklch(58.6% 0.253 17.585);
+  --color-lightInput: #ffffff;
+  --color-lightInputBorder: oklch(86.9% 0.022 252.894); /* slate-300 */
+  --color-lightInputBorderFocus: oklch(62.3% 0.214 259.815); /* blue-500 */
   --color-darkBg1: #0a051f;
   --color-darkBg2: #050b36;
   --color-darkBg3: #251e51;
   --color-darkText1: #e9e8f6;
   --color-darkText2: #64748b;
   --color-darkButton1Bg: #0364ff;
-  --color-darkButton1BgHover: #2177ff;
+  --color-darkButton1BgHover: #0055dd;
   --color-darkButton1Text: #ffffff;
   --color-darkButton2Bg: #64748b;
   --color-darkButton2BgHover: #94a3b8;
   --color-darkButton2Text: #64748b;
+  --color-darkButtonRedBg: #ff2d60;
+  --color-darkButtonRedBgHover: #da2a55;
   --color-darkInput: #010c2a;
   --color-darkInputBorder: #071e59;
   --color-darkInputBorderFocus: #0444b7;
@@ -44,6 +52,12 @@ body {
 html.dark,
 html.dark body {
   background: #0a051f; /* darkBg1 */
+}
+
+/*--- scrollbar ---*/
+
+@utility scrollbar-stable {
+  scrollbar-gutter: stable;
 }
 
 /*--- background glows ---*/
@@ -67,23 +81,27 @@ html.dark body {
 /*--- text size ---*/
 
 @utility textXsApp {
-  @apply text-base desktop:text-xs;
+  @apply text-base desktop:!text-xs;
 }
 
 @utility textSmApp {
-  @apply text-base desktop:text-sm;
+  @apply text-base desktop:!text-sm;
 }
 
 @utility textBaseApp {
   @apply text-lg desktop:text-sm;
 }
 
-@utility text2XlApp {
-  @apply text-3xl desktop:text-2xl;
-}
-
 @utility textLgApp {
   @apply text-xl desktop:text-lg;
+}
+
+@utility textXlApp {
+  @apply text-2xl desktop:text-xl;
+}
+
+@utility text2XlApp {
+  @apply text-3xl desktop:text-2xl;
 }
 
 @utility inputErrorText {
@@ -131,7 +149,7 @@ html.dark body {
 }
 
 @utility buttonBase {
-  @apply flex-none h-[3em] textBaseApp font-semibold flex items-center justify-center desktop:cursor-pointer;
+  @apply flex-none h-[2.8em] textBaseApp font-semibold flex items-center justify-center desktop:cursor-pointer;
 }
 
 @utility button1ColorLight {
@@ -147,7 +165,11 @@ html.dark body {
 }
 
 @utility button2Color {
-  @apply bg-none text-slate-500 box-border border-2 border-inherit desktop:hover:border-slate-400 active:border-slate-400 desktop:cursor-pointer;
+  @apply bg-none text-slate-500 box-border border-2 border-inherit desktop:hover:border-slate-400 active:border-slate-400;
+}
+
+@utility buttonRedColor {
+  @apply bg-lightButtonRedBg dark:bg-darkButtonRedBg hover:bg-lightButtonRedBgHover dark:hover:bg-darkButtonRedBgHover text-white border-inherit;
 }
 
 .button1 {
@@ -158,8 +180,16 @@ html.dark body {
   @apply buttonBase button2Color rounded-lg;
 }
 
+.buttonRed {
+  @apply buttonBase buttonRedColor rounded-lg;
+}
+
 .button1Round {
   @apply buttonBase button1Color rounded-full px-[1.4em];
+}
+
+.itemButton {
+  @apply textXlApp;
 }
 
 .buttonSettings {
@@ -181,7 +211,7 @@ html.dark body {
 /*--- input ---*/
 
 @utility inputColor {
-  @apply rounded-lg outline-none border-[1.5px] bg-white dark:bg-darkInput text-lightText1 dark:text-darkText1 border-slate-300 focus:border-blue-500 dark:border-darkInputBorder dark:focus:border-darkInputBorderFocus placeholder:text-slate-400 dark:placeholder:text-slate-600 [transition:border-color_500ms];
+  @apply rounded-lg outline-none border-[1.5px] bg-lightInput dark:bg-darkInput text-lightText1 dark:text-darkText1 border-lightInputBorder focus:border-lightInputBorderFocus dark:border-darkInputBorder dark:focus:border-darkInputBorderFocus placeholder:text-slate-400 dark:placeholder:text-slate-600 [transition:border-color_500ms];
 }
 
 @utility placeholderColor {
@@ -193,11 +223,11 @@ html.dark body {
 }
 
 .input {
-  @apply w-full h-[3em] px-[0.8em] textBaseApp inputColor;
+  @apply w-full h-[2.8em] px-[0.8em] textBaseApp inputColor;
 }
 
-.inputCondensed {
-  @apply w-full h-[44px] desktop:h-[36px] px-[10px] desktop:px-[8px] textBaseApp inputColor;
+.inputSmall {
+  @apply w-full h-[2.3em] px-[0.5em] textBaseApp inputColor;
 }
 
 .inputMaxWidth {
@@ -218,7 +248,7 @@ html.dark body {
 
 /* menu has position "fixed" */
 .appPageContainer {
-  @apply portrait:w-full portrait:h-[calc(100dvh-80px)] portrait:sm:h-[calc(100dvh-140px)] landscape:h-dvh landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:desktop:!w-[calc(100%-200px)] landscape:ml-[120px] landscape:lg:ml-[160px] landscape:desktop:!ml-[200px] flex flex-col items-center overflow-y-auto overflow-x-hidden;
+  @apply relative portrait:w-full portrait:h-[calc(100dvh-80px)] portrait:sm:h-[calc(100dvh-140px)] landscape:h-dvh landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:desktop:!w-[calc(100%-200px)] landscape:ml-[120px] landscape:lg:ml-[160px] landscape:desktop:!ml-[200px] flex flex-col items-center overflow-y-auto overflow-x-hidden;
 }
 
 .loginError {
@@ -241,16 +271,24 @@ html.dark body {
   @apply portrait:h-[calc((100dvh-80px-80px-50px)/10)] portrait:sm:h-[calc((100dvh-140px-110px-50px-32px)/11)] landscape:h-[calc((100dvh-80px-50px)/10)] landscape:lg:h-[calc((100dvh-110px-50px-32px)/10)] min-h-[50px] max-h-[80px];
 }
 
+.settingsSkeletonSmall {
+  @apply w-[64px] desktop:w-[52px] h-[32px] desktop:h-[24px];
+}
+
+.settingsSkeletonBig {
+  @apply w-[90%] h-[60px];
+}
+
 .settingsCard {
-  @apply pt-[16px] pb-[20px] px-[12px] portrait:sm:px-[20px] landscape:lg:px-[20px] desktop:px-[16px] w-full bg-lightBg1 dark:bg-blue-400/10 rounded-2xl shadow-[0px_0px_16px_0px_rgba(0,0,0,0.1)] desktop:shadow-[6px_0px_10px_0px_rgba(0,0,0,0.02),_-6px_0px_10px_rgba(0,0,0,0.02)] dark:shadow-none;
+  @apply mt-[16px] portrait:sm:mt-[32px] landscape:lg:mt-[32px] desktop:!mt-[16px] pt-[16px] pb-[20px] px-[12px] portrait:sm:px-[20px] landscape:lg:px-[20px] desktop:px-[16px] w-full bg-lightBg1 dark:bg-blue-400/10 rounded-2xl shadow-[0px_0px_16px_0px_rgba(0,0,0,0.1)] desktop:shadow-[6px_0px_10px_0px_rgba(0,0,0,0.02),_-6px_0px_10px_rgba(0,0,0,0.02)] dark:shadow-none;
 }
 
 .settingsTitle {
-  @apply w-full pb-[16px] text-2xl font-bold flex items-center justify-center text-blue-600 dark:text-darkText1;
+  @apply w-full pb-[16px] text-2xl font-bold flex items-center justify-center text-lightHeaderColor dark:text-darkText1;
 }
 
 .settingsField {
-  @apply flex-none w-full h-[3em] flex items-center justify-between gap-2 border-b-[1.5px] borderColor;
+  @apply flex-none w-full h-[2.8em] flex items-center justify-between gap-2 border-b-[1.5px] borderColorFaint;
 }
 
 .labelsField {
@@ -285,12 +323,12 @@ html.dark body {
   @apply w-full h-[50px] desktop:h-[40px] px-[12px] flex items-center border-[1.5px] border-slate-400;
 }
 
-.labelOptionContainer {
-  @apply mt-[4px] grid grid-cols-1 rounded-lg border-[1.5px] divide-y-[1.5px] bg-white dark:bg-slate-900 divide-slate-300 dark:divide-slate-900 border-slate-300 dark:border-slate-800 overflow-y-auto;
+.detailsLabelContainer {
+  @apply mt-[4px] grid grid-cols-1 rounded-lg border-[1.5px] divide-y-[1.5px] bg-white dark:bg-darkInput divide-slate-200 dark:divide-slate-900 border-lightInputBorder dark:border-darkInputBorder overflow-y-auto;
 }
 
-.labelOption {
-  @apply flex-none h-[40px] px-[4px] desktop:px-[4px] w-full py-[8px] desktop:py-[8px] desktop:cursor-pointer desktop:hover:bg-slate-200 dark:desktop:hover:bg-darkBg3 truncate;
+.detailsLabel {
+  @apply flex-none w-full px-[4px] desktop:px-[4px] py-[8px] desktop:py-[6px] desktop:cursor-pointer desktop:hover:bg-slate-200 dark:desktop:hover:bg-darkBg3 truncate;
 }
 
 /*--- modal full ---*/
@@ -307,20 +345,8 @@ html.dark body {
   @apply w-full desktop:w-[400px] h-dvh desktop:h-auto desktop:max-h-[90%];
 }
 
-@utility modalFullXPadding {
-  @apply px-[16px] portrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[60px];
-}
-
 .modalFull {
   @apply modalFullBase modalFullColor modalFullSize desktop:pb-[12px];
-}
-
-.modalFullContentContainer {
-  @apply flex-1 min-h-0 w-full pt-[16px] pb-[48px] flex flex-col items-center modalFullXPadding overflow-y-auto;
-}
-
-.modalFullHeader {
-  @apply mx-[60px] py-[24px] text-center text-2xl desktop:text-xl font-semibold;
 }
 
 /*--- standard modal ---*/

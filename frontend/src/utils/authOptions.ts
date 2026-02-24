@@ -53,13 +53,13 @@ export const authOptions = {
                 $setOnInsert: {
                   hashedPassword: pendingUserDoc.hashedPassword,
                   "settings.email": _email,
-                  "settings.currency": "",
-                  "settings.category": { none: ["none"] },
+                  "settings.defaultCurrency": "USD",
+                  "settings.categoryObjects": [{ category: "none", subcategories: ["none"] }],
                   "settings.tags": ["none"],
                   items: [],
                 },
               },
-              { upsert: true, new: true } // this means update or insert (if doc, then update; if no doc, then insert new)
+              { upsert: true, new: true, setDefaultsOnInsert: true } // this means update or insert (if doc, then update; if no doc, then insert new)
             );
             return { id: userDoc._id.toString(), email: _email };
           }
@@ -89,20 +89,20 @@ export const authOptions = {
       if (!user.email) return false;
       try {
         await dbConnect();
-        const doc = await UserModel.findOne({ "settings.email": user.email });
-        // if no doc, create user
-        if (!doc) {
-          await UserModel.create({
-            hashedPassword: "",
-            settings: {
-              email: user.email,
-              currency: "",
-              category: { none: ["none"] },
-              tags: ["none"],
+        await UserModel.updateOne(
+          { "settings.email": user.email },
+          {
+            $setOnInsert: {
+              hashedPassword: "",
+              "settings.email": user.email,
+              "settings.defaultCurrency": "USD",
+              "settings.categoryObjects": [{ category: "none", subcategories: ["none"] }],
+              "settings.tags": ["none"],
+              items: [],
             },
-            items: [],
-          });
-        }
+          },
+          { upsert: true, setDefaultsOnInsert: true }
+        );
         return true;
       } catch (e) {
         console.log(e);

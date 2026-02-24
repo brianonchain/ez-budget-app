@@ -2,26 +2,32 @@ import { useState } from "react";
 import Header from "./Header";
 import { FaDeleteLeft } from "react-icons/fa6";
 import { Item } from "@/db/UserModel";
-import Button from "./Button";
+import Button from "@/utils/components/Button";
+import Modal from "@/utils/components/Modal";
 
-const calc = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "0"];
+const calc = ["7", "8", "9", "4", "5", "6", "1", "2", "3", ".", "0"];
 
-export default function EnterCost({ setPage, setErrorModal, setNewItem }: { setPage: any; setErrorModal: any; setNewItem: any }) {
+export default function EnterCost({
+  setCostModal,
+  setNameModal,
+  setNewItem,
+}: {
+  setCostModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setNameModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setNewItem: React.Dispatch<React.SetStateAction<Item>>;
+}) {
   const [amount, setAmount] = useState("");
   return (
-    <>
-      <Header text="Enter Cost" setPage={setPage} page="list" />
-
-      {/*--- content ---*/}
-      <div className="flex-none w-[350px] flex flex-col items-center">
+    <Modal title="Enter Cost" setIsOpen={setCostModal}>
+      <div className="mx-auto w-full flex flex-col items-center">
         {/*--- amount ---*/}
-        <div className="py-[30px] text-5xl font-bold">{amount || "0.00"}</div>
+        <div className="pb-[30px] text-5xl desktop:text-4xl font-semibold">{amount || "0.00"}</div>
         {/*--- keypad ---*/}
-        <div className="grid grid-cols-3 gap-[12px]">
+        <div className="grid grid-cols-3 gap-[8px] desktop:gap-[6px]">
           {calc.map((i, index) => (
             <div
               key={index}
-              className="w-[90px] h-[72px] flex items-center justify-center text-xl font-medium bg-slate-200 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-2xl cursor-pointer"
+              className="w-[90px] h-[90px] desktop:w-[52px] desktop:h-[52px] flex items-center justify-center text-3xl desktop:text-xl font-medium bg-slate-200 hover:bg-slate-300 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-full cursor-pointer select-none"
               onClick={() => {
                 setAmount((amount) => amount + i);
               }}
@@ -30,7 +36,7 @@ export default function EnterCost({ setPage, setErrorModal, setNewItem }: { setP
             </div>
           ))}
           <div
-            className="w-[90px] h-[72px] flex items-center justify-center text-xl font-medium bg-slate-200 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-2xl cursor-pointer"
+            className="w-[90px] h-[90px] desktop:w-[52px] desktop:h-[52px] flex items-center justify-center text-3xl desktop:text-xl font-medium bg-slate-200 hover:bg-slate-300 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-full cursor-pointer select-none"
             onClick={() => {
               if (amount.length > 1) {
                 setAmount(amount.slice(0, -1));
@@ -44,14 +50,15 @@ export default function EnterCost({ setPage, setErrorModal, setNewItem }: { setP
         </div>
         {/*--- button ---*/}
         <Button
-          className="w-[294px]"
-          text="Enter"
+          className="mt-[60px] desktop:mt-[32px]"
+          label="Enter"
           onClick={() => {
-            setNewItem((prevState: Item) => ({ ...prevState, cost: amount }));
-            setPage("name");
+            setNewItem((prev) => ({ ...prev, cost: Number(amount) }));
+            setCostModal(false);
+            setNameModal(true);
           }}
         />
       </div>
-    </>
+    </Modal>
   );
 }

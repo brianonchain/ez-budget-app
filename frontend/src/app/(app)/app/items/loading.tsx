@@ -1,13 +1,13 @@
 import Spinner from "@/utils/components/Spinner";
+import ItemsShell from "./ItemsShell";
+import AddItemButton from "./_components/AddItemButton";
 
 export default function loading() {
   return (
-    <div className="appPageContainer justify-center items-center bg-lightBg1 dark:bg-darkBg1 relative z-0">
-      <Spinner />
-      {/* --- glow --- */}
-      <div className="z-0 fixed w-full h-full left-0 top-0 pointer-events-none glowDark" aria-hidden>
-        <div className="absolute top-1/2 right-0 translate-y-[-50%] translate-x-[50%] w-[200%] h-[100%] glowDarkInner" />
+    <ItemsShell footer={<AddItemButton />}>
+      <div className="w-full h-full flex items-center justify-center">
+        <Spinner />
       </div>
-    </div>
+    </ItemsShell>
   );
 }

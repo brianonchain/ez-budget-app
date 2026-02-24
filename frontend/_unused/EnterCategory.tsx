@@ -1,10 +1,11 @@
-import Header from "./Header";
+// @ts-nocheck
+import Header from "../src/app/(app)/app/items/_components/Header";
 import { useState } from "react";
 import { Item } from "@/db/UserModel";
 import { useItemsMutation } from "@/utils/hooks";
-import Button from "./Button";
+import Button from "@/utils/components/Button";
 
-export default function EnterCat({ setPage, setErrorModal, data, newItem, setNewItem }: { setPage: any; setErrorModal: any; data: any; newItem: Item; setNewItem: any }) {
+export default function EnterCat({ setPage, data, newItem, setNewItem }: { setPage: any; data: any; newItem: Item; setNewItem: any }) {
   const { mutateAsync: mutateItemsAsync, isPending } = useItemsMutation();
 
   const [labelType, setLabelType] = useState<keyof Item>("category");
@@ -35,7 +36,11 @@ export default function EnterCat({ setPage, setErrorModal, data, newItem, setNew
           >
             <p className="text-base desktop:text-sm font-medium text-center">{i.charAt(0).toUpperCase() + i.slice(1)}</p>
             <p className="text-sm text-center tracking-tighter truncate">{newItem[i]}</p>
-            <div className={`${labelType === i ? "" : "invisible"} absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-slate-200 dark:bg-darkBg3`}></div>
+            <div
+              className={`${
+                labelType === i ? "" : "invisible"
+              } absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-slate-200 dark:bg-darkBg3`}
+            ></div>
           </div>
         ))}
       </div>
@@ -73,7 +78,7 @@ export default function EnterCat({ setPage, setErrorModal, data, newItem, setNew
       <div className="flex-none pb-[40px]">
         <Button
           className="w-[350px]"
-          text={isPending ? "Adding..." : "Done"}
+          label={isPending ? "Adding..." : "Done"}
           onClick={async () => {
             const date = new Date();
             const newItemTemp = { ...newItem, date };

@@ -11,7 +11,15 @@ function addId(categoryObjects: CategoryObject[]) {
   return categoryObjects.slice(1).map((i, index) => ({ id: (index + 1).toString(), ...i }));
 }
 
-export default function CategoryContainer({ categoryObjects, setAddCategoryModal }: { categoryObjects: CategoryObject[]; setAddCategoryModal: any }) {
+export default function CategoryContainer({
+  categoryObjects,
+  setAddCategoryModal,
+  setClickedCategoryObject,
+}: {
+  categoryObjects: CategoryObject[];
+  setAddCategoryModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setClickedCategoryObject: React.Dispatch<React.SetStateAction<CategoryObject | null>>;
+}) {
   const { mutateAsync: settingsMutateAsync } = useSettingsMutation();
 
   const [items, setItems] = useState(() => addId(categoryObjects));
@@ -43,7 +51,7 @@ export default function CategoryContainer({ categoryObjects, setAddCategoryModal
     newItems.forEach((i) => newCategoryObjects.push({ category: i.category, subcategories: i.subcategories }));
 
     try {
-      await settingsMutateAsync({ "settings.categoryObjects": newCategoryObjects });
+      await settingsMutateAsync({ changes: { "settings.categoryObjects": newCategoryObjects } });
     } catch (e) {
       console.error("Failed to update category order");
       setItems(oldItems);
@@ -53,9 +61,16 @@ export default function CategoryContainer({ categoryObjects, setAddCategoryModal
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        <div className="w-[90%] flex flex-col textXsApp border-t border-b border-dashed borderColorFaint">
+        <div className="w-[90%] flex flex-col textXsApp border-y border-dashed borderColorFaint">
           {items.map((item, index) => (
-            <Category key={item.id} id={item.id} category={item.category} subcategories={item.subcategories.slice(1).join(", ")} setAddCategoryModal={setAddCategoryModal} />
+            <Category
+              key={item.id}
+              id={item.id}
+              category={item.category}
+              subcategories={item.subcategories}
+              setAddCategoryModal={setAddCategoryModal}
+              setClickedCategoryObject={setClickedCategoryObject}
+            />
           ))}
         </div>
       </SortableContext>

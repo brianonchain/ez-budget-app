@@ -1,9 +1,17 @@
 import { useState, useEffect, useRef } from "react";
-import Header from "./Header";
 import { Item } from "@/db/UserModel";
-import Button from "./Button";
+import Button from "@/utils/components/Button";
+import Modal from "@/utils/components/Modal";
 
-export default function EnterName({ setPage, setErrorModal, setNewItem }: { setPage: any; setErrorModal: any; setNewItem: any }) {
+export default function EnterName({
+  setNameModal,
+  setDetailsModal,
+  setNewItem,
+}: {
+  setNameModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setDetailsModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setNewItem: React.Dispatch<React.SetStateAction<Item>>;
+}) {
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
@@ -11,21 +19,23 @@ export default function EnterName({ setPage, setErrorModal, setNewItem }: { setP
   }, []);
 
   return (
-    <>
-      <Header text="Enter Name" setPage={setPage} page="list" />
-
-      {/*--- content ---*/}
-      <div className="pt-[80px] flex-none w-[350px] h-[500px]">
-        <textarea ref={inputRef} className="p-[16px] w-full h-[200px] text-2xl border rounded-2xl border-slate-400" placeholder="Enter a short item description" />
+    <Modal title="Enter Name" setIsOpen={setNameModal}>
+      <div className="mx-auto flex-none pt-[40px] desktop:pt-0 w-full max-w-[400px]">
+        <textarea
+          ref={inputRef}
+          className="p-[16px] w-full h-[200px] desktop:h-[120px] text-2xl desktop:text-lg border rounded-2xl border-slate-400"
+          placeholder="Enter a short item description"
+        />
         <Button
-          className="w-full"
-          text="Enter"
+          className="mt-[32px] desktop:mt-[32px]"
+          label="Enter"
           onClick={() => {
-            setNewItem((prev: Item) => ({ ...prev, description: inputRef?.current?.value }));
-            setPage("category");
+            setNewItem((prev) => ({ ...prev, description: inputRef?.current?.value || "" }));
+            setNameModal(false);
+            setDetailsModal(true);
           }}
         />
       </div>
-    </>
+    </Modal>
   );
 }

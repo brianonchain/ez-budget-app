@@ -1,21 +1,16 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { Settings, Item } from "@/db/UserModel";
-import { User } from "@/utils/types";
+import { UserData } from "@/utils/types";
 import { fetchPost, fetchGet } from "./functions";
+import { MutateSettingsPayload, MutateItemsPayload } from "./types";
 
 export const useUserQuery = (email: string | null | undefined) => {
-  return useQuery({
+  return useQuery<UserData | null, Error>({
     queryKey: ["user"],
-    queryFn: async (): Promise<User | null> => {
-      console.log("useUserQuery queryFn ran");
+    queryFn: async (): Promise<UserData | null> => {
       const resJson = await fetchGet("/api/getUser");
-      if (resJson.status === "success") {
-        return resJson.data;
-      }
-      if (resJson === "error") {
-        console.log("useUserQuery error");
-      }
-      throw new Error();
+      if (resJson.status === "success") return resJson.data;
+      throw new Error(resJson.message || "Failed to load user.");
     },
     enabled: email ? true : false,
     staleTime: Infinity, // won't make network request unless query key invoked
@@ -26,24 +21,24 @@ export const useUserQuery = (email: string | null | undefined) => {
 export const useSettingsMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (changes: { [key: string]: any }) => {
-      const resJson = await fetchPost("/api/mutateSettings", { changes });
+    mutationFn: async (payload: MutateSettingsPayload) => {
+      const resJson = await fetchPost("/api/mutateSettings", payload);
       if (resJson.status === "success") return;
       throw new Error(resJson?.message || "Unknown error. Please try again.");
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["user"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["user"] }),
   });
 };
 
 export const useItemsMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (item: Item) => {
-      const resJson = await fetchPost("/api/mutateItems", { item }); // should throw error if !response.ok
-      if (resJson === "saved") return;
-      throw new Error();
+    mutationFn: async (payload: MutateItemsPayload) => {
+      const resJson = await fetchPost("/api/mutateItems", payload);
+      if (resJson.status === "success") return;
+      throw new Error(resJson?.message || "Failed to save item.");
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ["user"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["user"] }),
   });
 };
 
