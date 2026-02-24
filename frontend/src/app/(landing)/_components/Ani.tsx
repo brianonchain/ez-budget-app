@@ -35,46 +35,52 @@ export default function Ani() {
     {
       date: new Date("2025-03-11T11:45:19.862Z"),
       cost: 18.12,
+      currency: "USD",
       description: "pizza",
       category: "food",
       subcategory: "restaurant",
       tags: "none",
     },
     {
-      date: "2025-03-11T11:55:44.660Z",
+      date: new Date("2025-03-11T11:55:44.660Z"),
       cost: 70.85,
+      currency: "USD",
       description: "Jan phone bill",
       category: "utilities",
       subcategory: "phone",
       tags: "none",
     },
     {
-      date: "2025-03-11T11:59:29.766Z",
+      date: new Date("2025-03-11T11:59:29.766Z"),
       cost: 50.98,
+      currency: "USD",
       description: "gas",
       category: "transportation",
       subcategory: "gas",
       tags: "none",
     },
     {
-      date: "2025-03-11T11:59:58.221Z",
+      date: new Date("2025-03-11T11:59:58.221Z"),
       cost: 11.72,
+      currency: "USD",
       description: "movie",
       category: "entertainment",
       subcategory: "none",
       tags: "none",
     },
     {
-      date: "2025-03-11T12:04:30.194Z",
+      date: new Date("2025-03-11T12:04:30.194Z"),
       cost: 5.8,
+      currency: "USD",
       description: "Peet's latte",
       category: "food",
       subcategory: "coffee",
       tags: "none",
     },
     {
-      date: "2025-03-11T12:20:31.796Z",
+      date: new Date("2025-03-11T12:20:31.796Z"),
       cost: 48.05,
+      currency: "USD",
       description: "Gap sweater",
       category: "shopping",
       subcategory: "clothes",
@@ -168,7 +174,9 @@ export default function Ani() {
                 </div>
               </div>
               {/*--- button ---*/}
-              <button className="animate-button2 mt-[30px] w-full h-[52px] button1ColorDark rounded-[12px] text-xl font-medium cursor-pointer">Enter</button>
+              <button className="animate-button2 mt-[30px] w-full h-[52px] button1ColorDark rounded-[12px] text-xl font-medium cursor-pointer">
+                Enter
+              </button>
             </div>
           </div>
 
@@ -187,7 +195,9 @@ export default function Ani() {
                 <textarea className="p-[16px] w-full h-[200px] text-2xl border rounded-[16px] border-slate-400" disabled />
                 <div className={`absolute top-[16px] left-[16px] text-[30px] animate-name ${robotoMono.className}`}>Starbucks latte</div>
               </div>
-              <button className="animate-button3 mt-[30px] w-full h-[52px] button1ColorDark rounded-[12px] text-xl font-medium cursor-pointer">Enter</button>
+              <button className="animate-button3 mt-[30px] w-full h-[52px] button1ColorDark rounded-[12px] text-xl font-medium cursor-pointer">
+                Enter
+              </button>
             </div>
           </div>
 
@@ -210,7 +220,9 @@ export default function Ani() {
                   <div className="absolute text-sm text-center tracking-tighter animate-none1">none</div>
                   <div className="absolute text-sm text-center tracking-tighter animate-labelText1">Food</div>
                 </div>
-                <div className={`animate-labelTypeArrow1 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-darkBg3`}></div>
+                <div
+                  className={`animate-labelTypeArrow1 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-darkBg3`}
+                ></div>
               </div>
               {/*--- Subcategory ---*/}
               <div
@@ -221,7 +233,9 @@ export default function Ani() {
                   <div className="absolute animate-none2">none</div>
                   <div className="absolute animate-labelText2">Coffee</div>
                 </div>
-                <div className={`animate-labelTypeArrow2 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-darkBg3`}></div>
+                <div
+                  className={`animate-labelTypeArrow2 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-darkBg3`}
+                ></div>
               </div>
               {/*--- Tags ---*/}
               <div
@@ -229,7 +243,9 @@ export default function Ani() {
               >
                 <p className="text-base font-medium tracking-tighter text-center">Tags</p>
                 <div className="w-full text-sm text-center tracking-tighter flex justify-center relative">none</div>
-                <div className={`animate-labelTypeArrow3 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-darkBg3`}></div>
+                <div
+                  className={`animate-labelTypeArrow3 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-darkBg3`}
+                ></div>
               </div>
             </div>
             {/*--- label choices ---*/}
@@ -276,7 +292,9 @@ export default function Ani() {
             </div>
             {/*--- button ---*/}
             <div className="flex-none pb-[40px]">
-              <button className="animate-button4 mt-[30px] w-[360px] h-[52px] button1ColorDark rounded-[12px] text-xl font-medium cursor-pointer">Done</button>
+              <button className="animate-button4 mt-[30px] w-[360px] h-[52px] button1ColorDark rounded-[12px] text-xl font-medium cursor-pointer">
+                Done
+              </button>
             </div>
           </div>
 
@@ -300,6 +318,7 @@ export default function Ani() {
                   {
                     date: new Date("2025-03-12T11:45:19.862Z"),
                     cost: 6.8,
+                    currency: "USD",
                     description: "Starbucks latte",
                     category: "food",
                     subcategory: "coffee",
