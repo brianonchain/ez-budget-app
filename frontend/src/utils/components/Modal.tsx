@@ -23,16 +23,16 @@ export default function Modal({
 
   const content = (
     <>
-      <div className="z-[99] fixed w-full h-dvh top-0 left-0 bg-black/70" aria-hidden />
+      <div className="z-[99] fixed inset-0 bg-black/70" aria-hidden />
       <div
-        className="z-[100] fixed w-full h-dvh desktop:w-[400px] desktop:h-auto desktop:max-h-[90%] desktop:pb-[12px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col desktop:rounded-2xl overflow-hidden modalFullColor"
+        className="z-[100] fixed inset-0 desktop:inset-auto desktop:w-[400px] desktop:max-h-[90dvh] desktop:pb-[12px] desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:rounded-2xl flex flex-col overflow-hidden modalFullColor"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1} // so modal is focusable with javascript
       >
         {/*--- glow ---*/}
-        <div className="absolute inset-0 bg-gradient-to-br from-lightBg1 to-lightBg1 dark:from-blue-500/20 dark:to-blue-500/10 z-[-1]"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-lightBg1 to-lightBg1 dark:from-blue-500/20 dark:to-blue-500/10 z-[-1]" />
         {/*--- close ---*/}
         {!disableCloseButton && (
           <button className="xButton" aria-label="Close" type="button" onClick={() => setIsOpen(false)}>

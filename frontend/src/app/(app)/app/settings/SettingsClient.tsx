@@ -66,9 +66,7 @@ export default function Settings({ provider, email }: { provider: string; email:
               className="bg-transparent border-none outline-none cursor-pointer font-medium"
               value={data.settings.defaultCurrency}
               onChange={(e) => {
-                settingsMutateAsync({
-                  changes: { "settings.defaultCurrency": e.currentTarget.value },
-                });
+                settingsMutateAsync({ type: "changeCurrency", currency: e.currentTarget.value });
               }}
             >
               <option value="USD">USD</option>

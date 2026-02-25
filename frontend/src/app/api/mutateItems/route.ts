@@ -8,7 +8,7 @@ import { authOptions } from "@/utils/authOptions";
 export const POST = async (request: Request) => {
   const payload = (await request.json().catch(() => null)) as MutateItemsPayload | null;
   // payload validation
-  if (!payload || !["upsert", "delete"].includes(payload.op)) {
+  if (!payload || !["upsert", "delete"].includes(payload.type)) {
     return NextResponse.json({ status: "error", message: "Invalid payload" }, { status: 400 });
   }
 
@@ -21,7 +21,7 @@ export const POST = async (request: Request) => {
 
   try {
     await dbConnect();
-    switch (payload.op) {
+    switch (payload.type) {
       case "upsert": {
         // validation
         if (!payload.item) {

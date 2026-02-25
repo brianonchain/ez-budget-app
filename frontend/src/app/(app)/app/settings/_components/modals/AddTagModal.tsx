@@ -15,100 +15,114 @@ export default function AddTagModal({
   const { mutateAsync: settingsMutateAsync, error, isError, isPending } = useSettingsMutation();
   const [validationError, setValidationError] = useState("");
   const [tag, setTag] = useState(clickedTag);
-  const [status, setStatus] = useState<"initial" | "addingOrEditing" | "deleting">("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
+  const [status, setStatus] = useState<"initial" | "adding" | "editing" | "deleting">("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
 
-  async function onAddOrEdit(e: React.FormEvent) {
+  const isEdit = !!clickedTag;
+
+  // add a new tag
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const _tag = tag.trim();
 
     // validation
-    if (!data || status !== "initial") return;
+    if (!data || status !== "initial" || isPending || isEdit) return;
     if (!_tag) {
       setValidationError("Please enter a tag");
       return;
     }
-    if (_tag === clickedTag) {
-      setValidationError("No changes made");
-      return;
-    }
-    if (data.settings.tags.includes(_tag)) {
-      setValidationError("Tag already exists");
+    if (data.settings.tags.some((i) => i.toLowerCase() === _tag.toLowerCase())) {
+      setValidationError("Tag already exists.");
       return;
     }
     if (_tag === "none") {
       setValidationError(`Cannot use "none" as a tag`);
       return;
     }
+
     setValidationError("");
-    setStatus("addingOrEditing");
+    setStatus("adding");
 
     // mutation
-    const newTags = clickedTag
-      ? data.settings.tags.map((existingTag: string) => (existingTag === clickedTag ? _tag : existingTag))
-      : [...data.settings.tags, _tag];
     try {
-      await settingsMutateAsync({
-        changes: { "settings.tags": newTags },
-        ...(clickedTag ? { ops: [{ type: "renameTagEverywhere", from: clickedTag, to: _tag }] } : {}),
-      });
+      await settingsMutateAsync({ type: "addTag", tag: _tag });
       setAddTagModal(false);
     } catch {
       setStatus("initial"); // keep modal open
     }
   }
 
-  async function onDelete() {
+  async function onRename() {
+    const _tag = tag.trim();
     // validation
     if (!data || !clickedTag || status !== "initial" || isPending) return;
-    if (clickedTag !== tag.trim()) {
-      setValidationError("Tag has been changed. Please save changes before deleting.");
+    if (!_tag) {
+      setValidationError("Please enter a tag.");
       return;
     }
-    if (data.items.some((item) => item.tags === clickedTag)) {
-      setValidationError("This tag is being used in at least one item. You must remove this tag from all items before you can delete it.");
+    if (_tag === clickedTag) return;
+    if (_tag.toLowerCase() !== clickedTag.toLowerCase() && data.settings.tags.some((i) => i.toLowerCase() === _tag.toLowerCase())) {
+      setValidationError("Tag already exists.");
+      return;
+    } // allows food => Food
+    if (_tag === "none") {
+      setValidationError(`Cannot use "none" as a tag.`);
       return;
     }
+
     setValidationError("");
-    setStatus("deleting");
+    setStatus("editing");
 
     // mutation
     try {
-      await settingsMutateAsync({ ops: [{ type: "deleteTag", tag: clickedTag }] });
+      await settingsMutateAsync({ type: "renameTag", from: clickedTag, to: _tag });
+    } catch {
+      // error will show on UI
+    }
+    setStatus("initial");
+  }
+
+  async function onDelete() {
+    if (!data || !clickedTag || status !== "initial" || isPending) return;
+
+    setValidationError("");
+    setStatus("deleting");
+
+    try {
+      await settingsMutateAsync({ type: "deleteTag", tag: clickedTag });
       setAddTagModal(false);
     } catch {
-      setStatus("initial"); // keep modal open
+      setStatus("initial"); // error will show on UI
     }
   }
 
   return (
-    <Modal title={clickedTag ? "Edit Tag" : "Add A Tag"} setIsOpen={setAddTagModal} disableCloseButton={isPending}>
-      <div className="mx-auto w-full max-w-[400px] flex flex-col items-center">
-        <form className="w-full" onSubmit={onAddOrEdit}>
-          <label className="mt-[16px] pb-1.5 w-full inputLabel">Tags (e.g., Euro Trip 2025, Winnie's birthday)</label>
-          <input
-            className="mt-[4px] w-full input"
-            value={tag}
-            onChange={(e) => {
-              setTag(e.target.value);
-              if (validationError) setValidationError("");
-            }}
-          />
-          {/*--- button ---*/}
-          <button className="mt-[24px] button1 w-full" type="submit" disabled={status !== "initial"}>
-            {status === "addingOrEditing" ? (clickedTag ? "Saving..." : "Adding...") : clickedTag ? "Save" : "Add"}
-          </button>
-        </form>
-        <div className="errorText mt-5 desktop:mt-3 min-h-[1.3rem]">
-          {validationError ? validationError : isError ? error?.message : ""}
-        </div>
-        {clickedTag && (
-          <div className="w-full grow flex flex-col justify-end">
-            <button className="mt-[100px] buttonRed w-full" onClick={onDelete} type="button" disabled={status !== "initial"}>
+    <Modal title={isEdit ? "Edit Tag" : "Add A Tag"} setIsOpen={setAddTagModal} disableCloseButton={status !== "initial" || isPending}>
+      <form className="mx-auto w-full max-w-[400px] min-h-full flex flex-col items-center" onSubmit={onSubmit}>
+        <label className="mt-[16px] pb-1.5 w-full inputLabel">Tags (e.g., Euro Trip 2025, Winnie's birthday)</label>
+        <input
+          className="mt-[4px] w-full input"
+          value={tag}
+          onChange={(e) => {
+            setTag(e.target.value);
+            if (validationError) setValidationError("");
+          }}
+          onBlur={isEdit ? onRename : undefined}
+        />
+        {/*--- error message ---*/}
+        <div className="errorText mt-[16px] w-full min-h-[3.3em]">{validationError ? validationError : isError ? error?.message : ""}</div>
+        {/*--- button ---*/}
+        {isEdit ? (
+          <div className="mt-auto pt-[80px] w-full flex flex-col justify-end">
+            <button className="buttonRed w-full" onClick={onDelete} type="button" disabled={status !== "initial" || isPending}>
               {status === "deleting" ? "Deleting..." : "Delete Tag"}
             </button>
           </div>
+        ) : (
+          <button className="mt-[12px] desktop:mt-[12px] button1 w-full" type="submit" disabled={status !== "initial" || isPending}>
+            {status === "adding" ? "Adding..." : "Add Tag"}
+          </button>
         )}
-      </div>
+      </form>
     </Modal>
   );
 }

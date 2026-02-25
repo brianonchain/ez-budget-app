@@ -32,7 +32,7 @@ export default function Details({
     const nextItem = { ...newItem, cost: costString ? Number(costString) : 0 };
     setStatus("addingOrEditing");
     try {
-      await mutateItemsAsync({ op: "upsert", item: nextItem });
+      await mutateItemsAsync({ type: "upsert", item: nextItem });
       setDetailsModal(false);
     } catch {
       setStatus("initial");
@@ -44,7 +44,7 @@ export default function Details({
     if (!newItem._id) return;
     setStatus("deleting");
     try {
-      await mutateItemsAsync({ op: "delete", itemId: String(newItem._id) });
+      await mutateItemsAsync({ type: "delete", itemId: String(newItem._id) });
       setDetailsModal(false);
     } catch {
       setStatus("initial");
@@ -53,7 +53,7 @@ export default function Details({
 
   return (
     <Modal title="Item Info" setIsOpen={setDetailsModal}>
-      <div className="mx-auto w-full max-w-[400px] h-full min-h-0 flex flex-col">
+      <div className="mx-auto w-full max-w-[400px] h-full desktop:h-[calc(90dvh-12px-48px-100px)] flex flex-col">
         {/*--- date, name, cost ---*/}
         <div className="shrink-0 w-full grid grid-cols-[auto_1fr] gap-y-[6px] gap-x-[12px] items-center">
           <label className="inputLabel" htmlFor="details-date">
@@ -97,11 +97,11 @@ export default function Details({
         </div>
 
         {/*--- label options ---*/}
-        <div className="flex-1 min-h-[200px] mt-[20px] w-full grid grid-cols-3 gap-[6px]">
+        <div className="flex-1 min-h-[200px] max-h-full overflow-hidden mt-[20px] w-full grid grid-cols-3 gap-[6px]">
           {/*--- Category ---*/}
-          <div className="min-h-0 flex flex-col">
+          <div className="flex-1 min-h-0 flex flex-col">
             <p className="text-center inputLabel">Category</p>
-            <div className="flex-1 min-h-0 detailsLabelContainer overflow-y-auto thinScrollbar">
+            <div className="detailsLabelContainer overflow-y-auto thinScrollbar">
               {data.settings.categoryObjects.map((i: CategoryObject) => (
                 <div
                   key={i.category}
@@ -118,9 +118,9 @@ export default function Details({
             </div>
           </div>
           {/*--- Subcategory ---*/}
-          <div className="min-h-0 flex flex-col overflow-hidden">
+          <div className="flex-1 min-h-0 flex flex-col">
             <p className="text-center inputLabel">Subcategory</p>
-            <div className="detailsLabelContainer thinScrollbar">
+            <div className="detailsLabelContainer overflow-y-auto thinScrollbar">
               {selectedCategoryObject.subcategories.map((i: string) => (
                 <div
                   key={i}
@@ -137,9 +137,9 @@ export default function Details({
             </div>
           </div>
           {/*--- Tags ---*/}
-          <div className="min-h-0 flex flex-col overflow-hidden">
+          <div className="flex-1 min-h-0 flex flex-col">
             <p className="text-center inputLabel">Tags</p>
-            <div className="detailsLabelContainer thinScrollbar">
+            <div className="detailsLabelContainer overflow-y-auto thinScrollbar">
               {data.settings.tags.map((i: string) => (
                 <div
                   key={i}
@@ -167,7 +167,7 @@ export default function Details({
           {isError && <div className="errorText mt-5 desktop:mt-3 min-h-[1.3rem]">{error?.message}</div>}
           {newItem._id && (
             <Button
-              className="mt-[40px] buttonRed"
+              className="shrink-0 mt-[40px] buttonRed"
               label="Delete Item"
               onClick={onDelete}
               isLoading={status === "deleting"}

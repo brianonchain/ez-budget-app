@@ -51,7 +51,7 @@ export default function CategoryContainer({
     newItems.forEach((i) => newCategoryObjects.push({ category: i.category, subcategories: i.subcategories }));
 
     try {
-      await settingsMutateAsync({ changes: { "settings.categoryObjects": newCategoryObjects } });
+      await settingsMutateAsync({ type: "setCategoryObjects", categoryObjects: newCategoryObjects });
     } catch (e) {
       console.error("Failed to update category order");
       setItems(oldItems);

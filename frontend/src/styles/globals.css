@@ -328,7 +328,7 @@ html.dark body {
 }
 
 .detailsLabel {
-  @apply flex-none w-full px-[4px] desktop:px-[4px] py-[8px] desktop:py-[6px] desktop:cursor-pointer desktop:hover:bg-slate-200 dark:desktop:hover:bg-darkBg3 truncate;
+  @apply flex-none w-full px-[4px] desktop:px-[4px] h-[40px] desktop:h-[32px] flex items-center desktop:cursor-pointer desktop:hover:bg-slate-200 dark:desktop:hover:bg-darkBg3 truncate;
 }
 
 /*--- modal full ---*/
@@ -386,7 +386,7 @@ html.dark body {
 /*--- utilities ---*/
 
 .link {
-  @apply cursor-pointer text-blue-600 dark:text-blue-400;
+  @apply cursor-pointer text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400;
 }
 
 body {
