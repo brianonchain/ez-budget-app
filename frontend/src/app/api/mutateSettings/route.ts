@@ -305,7 +305,7 @@ export const POST = async (request: Request) => {
         const subcategories = user.settings.categoryObjects[0].subcategories;
 
         if (subcategories[0]?.toLowerCase() !== "none") {
-          return NextResponse.json({ status: "error", message: `Invalid subcategory list (missing "none").` }, { status: 500 });
+          return NextResponse.json({ status: "error", message: `Invalid subcategory list (missing "none").` }, { status: 500 }); // Must have "none" at index 0
         }
         if (from <= 0 || to <= 0 || from >= subcategories.length || to >= subcategories.length) {
           return NextResponse.json({ status: "error", message: "Index out of bounds." }, { status: 400 }); // Bounds check (disallow moving "none")
