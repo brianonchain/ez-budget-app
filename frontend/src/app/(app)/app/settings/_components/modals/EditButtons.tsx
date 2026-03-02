@@ -1,30 +1,37 @@
-import { FaArrowUp, FaArrowDown, FaX } from "react-icons/fa6";
-
-type Subcategory = { id: string; value: string };
+import { useEffect } from "react";
+import { FaArrowUp, FaArrowDown, FaX, FaCircleNotch } from "react-icons/fa6";
+import { useSettingsMutation } from "@/utils/hooks";
+import { SubcategoryWithId, AddCategoryModalStatus } from "./AddCategoryModal";
 
 export default function EditButtons({
-  setSubcategories,
+  setSubcategoriesWithId,
   validationError,
   setValidationError,
-  index,
-  subcategories,
-  isPending,
+  subcategoriesWithId,
   status,
   setStatus,
-  rowId,
+  rowIndex,
+  clickedCategory,
 }: {
-  setSubcategories: React.Dispatch<React.SetStateAction<Subcategory[]>>;
+  setSubcategoriesWithId: React.Dispatch<React.SetStateAction<SubcategoryWithId[]>>;
   validationError: string;
   setValidationError: React.Dispatch<React.SetStateAction<string>>;
-  index: number;
-  subcategories: Subcategory[];
-  isPending: boolean;
-  status: "initial" | "adding" | "editing" | "deleting";
-  setStatus: React.Dispatch<React.SetStateAction<"initial" | "adding" | "editing" | "deleting">>;
-  rowId: string;
+  subcategoriesWithId: SubcategoryWithId[];
+  status: AddCategoryModalStatus;
+  setStatus: React.Dispatch<React.SetStateAction<AddCategoryModalStatus>>;
+  rowIndex: number;
+  clickedCategory: string;
 }) {
+  const { mutateAsync: settingsMutateAsync, error, isError, isPending } = useSettingsMutation();
+
+  useEffect(() => {
+    if (error) {
+      setValidationError(error.message);
+    }
+  }, [error]);
+
   function moveRow(from: number, to: number) {
-    setSubcategories((prev) => {
+    setSubcategoriesWithId((prev) => {
       if (to < 0 || to >= prev.length) return prev;
       const next = [...prev];
       [next[from], next[to]] = [next[to], next[from]];
@@ -33,15 +40,57 @@ export default function EditButtons({
     if (validationError) setValidationError("");
   }
 
-  function moveUp() {
-    moveRow(index, index - 1);
+  async function moveUp() {
+    moveRow(rowIndex, rowIndex - 1);
+    setStatus("editing");
+    try {
+      await settingsMutateAsync({
+        type: "reorderSubcategory",
+        category: clickedCategory,
+        fromIndex: rowIndex,
+        toIndex: rowIndex - 1,
+      });
+    } catch {}
+
+    setStatus("initial");
   }
-  function moveDown() {
-    moveRow(index, index + 1);
+  async function moveDown() {
+    if (status !== "initial" || isPending || rowIndex === subcategoriesWithId.length - 1) return;
+    setValidationError("");
+
+    moveRow(rowIndex, rowIndex + 1);
+    setStatus("editing");
+
+    try {
+      await settingsMutateAsync({
+        type: "reorderSubcategory",
+        category: clickedCategory,
+        fromIndex: rowIndex,
+        toIndex: rowIndex + 1,
+      });
+    } catch {}
+
+    setStatus("initial");
   }
-  function deleteSubcategory() {
-    setSubcategories((prev) => prev.filter((r) => r.id !== rowId));
-    if (validationError) setValidationError("");
+
+  // not optimistic
+  async function deleteSubcategory(index: number) {
+    if (status !== "initial" || isPending) return;
+    const subcategory = subcategoriesWithId[index].value.trim();
+    // delete empty category without mutation (for new fields)
+    if (!subcategory) {
+      setSubcategoriesWithId((prev) => prev.filter((_, index2) => index2 !== index));
+      return;
+    }
+    // is-being-used validation done on backend
+    setValidationError("");
+    setStatus(`deletingSubcategory${index}`);
+    try {
+      await settingsMutateAsync({ type: "deleteSubcategory", category: clickedCategory, subcategory });
+    } catch {
+      // error will show on UI
+    }
+    setStatus("initial");
   }
 
   return (
@@ -50,7 +99,7 @@ export default function EditButtons({
         className="ml-[4px] flex-none w-[36px] h-[36px] text-[20px] desktop:w-[32px] desktop:h-[32px] desktop:text-[18px] flex justify-center items-center hover:bg-blue-400/10 desktop:cursor-pointer rounded-md text-slate-400"
         type="button"
         onClick={moveUp}
-        disabled={index === 0 || isPending || status !== "initial"}
+        disabled={rowIndex === 0 || isPending || status !== "initial"}
         aria-label="Move up"
       >
         <FaArrowUp />
@@ -59,7 +108,7 @@ export default function EditButtons({
         className="ml-[4px] flex-none w-[36px] h-[36px] text-[20px] desktop:w-[32px] desktop:h-[32px] desktop:text-[18px] flex justify-center items-center hover:bg-blue-400/10 desktop:cursor-pointer rounded-md text-slate-400"
         type="button"
         onClick={moveDown}
-        disabled={index === subcategories.length - 1 || isPending || status !== "initial"}
+        disabled={rowIndex === subcategoriesWithId.length - 1 || isPending || status !== "initial"}
         aria-label="Move down"
       >
         <FaArrowDown />
@@ -67,11 +116,11 @@ export default function EditButtons({
       <button
         className="ml-[12px] flex-none w-[36px] h-[36px] text-[20px] desktop:w-[32px] desktop:h-[32px] desktop:text-[18px] flex justify-center items-center hover:bg-blue-400/10 desktop:cursor-pointer rounded-md errorText"
         type="button"
-        onClick={deleteSubcategory}
+        onClick={() => deleteSubcategory(rowIndex)}
         disabled={isPending || status !== "initial"}
         aria-label="Delete subcategory"
       >
-        <FaX />
+        {status === `deletingSubcategory${rowIndex}` ? <FaCircleNotch className="animate-spin" /> : <FaX />}
       </button>
     </>
   );

@@ -1,51 +1,60 @@
-import { useState, useRef, useMemo, useEffect } from "react";
-import { FaPlus, FaTrash, FaArrowUp, FaArrowDown, FaX } from "react-icons/fa6";
-import { useSettingsMutation } from "@/utils/hooks";
+import { useState, useEffect } from "react";
+import { FaPlus } from "react-icons/fa6";
 import Modal from "@/utils/components/Modal";
-import { UserData } from "@/utils/types";
-import { CategoryObject } from "@/db/UserModel";
 import EditButtons from "./EditButtons";
+import { useSettingsMutation } from "@/utils/hooks";
+import { UserData } from "@/utils/types";
 
-type Subcategory = { id: string; value: string };
+export type SubcategoryWithId = { value: string; isNew: boolean };
+export type AddCategoryModalStatus = "initial" | "adding" | "editing" | "deleting" | `deletingSubcategory${number}`;
 
 export default function AddCategoryModal({
   setAddCategoryModal,
   data,
-  clickedCategoryObject,
+  clickedCategory,
+  setClickedCategory,
 }: {
   setAddCategoryModal: React.Dispatch<React.SetStateAction<boolean>>;
   data: UserData | null | undefined;
-  clickedCategoryObject: CategoryObject | null;
+  clickedCategory: string | null;
+  setClickedCategory: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
-  const isEdit = !!clickedCategoryObject;
-  const initialSubcategories = useMemo(() => {
-    const subs = clickedCategoryObject?.subcategories ?? [];
-    return subs.filter((i) => i && i !== "none");
-  }, [clickedCategoryObject]);
+  const isEdit = !!clickedCategory;
 
   // Form state
-  const [category, setCategory] = useState(clickedCategoryObject?.category ?? "");
-  const [subcategories, setSubcategories] = useState<Subcategory[]>(() => {
-    const initial = initialSubcategories.length ? initialSubcategories : ["", ""];
-    return initial.map((i) => addId(i));
+  const [category, setCategory] = useState(clickedCategory ?? "");
+  const [subcategoriesWithId, setSubcategoriesWithId] = useState<SubcategoryWithId[]>(() => {
+    if (isEdit) {
+      const subs = data?.settings.categoryObjects.find((i) => i.category === clickedCategory)?.subcategories ?? [];
+      return subs.filter((i) => i && i !== "none").map((i) => ({ value: i, isNew: false }));
+    } else {
+      return [
+        { value: "", isNew: true },
+        { value: "", isNew: true },
+      ];
+    }
   });
   const [validationError, setValidationError] = useState("");
-  const [status, setStatus] = useState<"initial" | "adding" | "editing" | "deleting">("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
+  const [status, setStatus] = useState<AddCategoryModalStatus>("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
 
   const { mutateAsync: settingsMutateAsync, error, isError, isPending } = useSettingsMutation();
 
-  // helper functions
-  function addId(value = ""): Subcategory {
-    return { id: crypto.randomUUID(), value };
-  }
+  // sync UI states with server state
+  useEffect(() => {
+    if (!isEdit || !data || status !== "initial" || isPending) return;
+    // sync category
+    const obj = data.settings.categoryObjects.find((c) => c.category === clickedCategory);
+    if (!obj) return;
+    setCategory(obj.category);
+    // sync subcategories
+    setSubcategoriesWithId(obj.subcategories.filter((s) => s && s !== "none").map((s) => ({ value: s, isNew: false })));
+  }, [data?.settings.categoryObjects, clickedCategory]);
 
-  // mutation functions
+  // add category (not optimistic)
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const _category = category.trim();
-
-    // validation
     if (!data || status !== "initial" || isPending || isEdit) return;
+    const _category = category.trim();
     if (!_category) {
       setValidationError("Please enter a category");
       return;
@@ -54,11 +63,11 @@ export default function AddCategoryModal({
       setValidationError("Category already exists.");
       return;
     }
-    if (_category.toLowerCase() === "none" || subcategories.some((i) => i.value.trim().toLowerCase() === "none")) {
-      setValidationError("Cannot use 'none' as a category or subcategory.");
+    if (_category.toLowerCase() === "none" || subcategoriesWithId.some((i) => i.value.trim().toLowerCase() === "none")) {
+      setValidationError(`Cannot use "none" as a category or subcategory.`);
       return;
     }
-    const normalizedSubs = subcategories.map((i) => i.value.trim().toLowerCase()).filter((i) => i !== "");
+    const normalizedSubs = subcategoriesWithId.map((i) => i.value.trim().toLowerCase()).filter((i) => i !== "");
     if (new Set(normalizedSubs).size !== normalizedSubs.length) {
       setValidationError("Subcategories cannot contain duplicates.");
       return;
@@ -70,7 +79,7 @@ export default function AddCategoryModal({
     // dedupe subcategories and remove "none"
     const cleaned = Array.from(
       new Set(
-        subcategories
+        subcategoriesWithId
           .map((i) => i.value.trim())
           .filter((i) => i !== "")
           .filter((i) => i.toLowerCase() !== "none")
@@ -86,32 +95,123 @@ export default function AddCategoryModal({
     }
   }
 
-  async function onDeleteCategory() {
-    if (!data || !clickedCategoryObject || status !== "initial" || isPending) return;
+  // partly optimistic (value is immediately updated and reverts if error; but data.settings is not updated immediately)
+  async function renameCategory() {
+    if (!data || status !== "initial" || isPending || !isEdit) return;
+    const from = clickedCategory;
+    const to = category.trim();
+    if (!to) {
+      setCategory(from);
+      if (validationError) setValidationError("");
+      return;
+    }
+    if (to.toLowerCase() === "none") {
+      setValidationError(`Cannot use "none" as a category.`);
+      return;
+    }
+    if (from === to) return;
+    if (
+      from.toLowerCase() !== to.toLowerCase() &&
+      data.settings.categoryObjects.some((i) => i.category.toLowerCase() === to.toLowerCase())
+    ) {
+      setValidationError("Category already exists."); // allows food => Food
+      return;
+    }
+
     setValidationError("");
-    setStatus("deleting");
+    setStatus("editing");
+
     try {
-      await settingsMutateAsync({ type: "deleteCategory", category: clickedCategoryObject.category });
+      await settingsMutateAsync({ type: "renameCategory", from, to });
+      setClickedCategory(to); // update clickedCategory
+    } catch {} // error will show on UI
+    setStatus("initial");
+  }
+
+  // not optimistic
+  async function deleteCategoryObject() {
+    if (!data || status !== "initial" || isPending || !isEdit) return;
+    setValidationError(""); // is-being-used validation done on backend
+    setStatus("deleting");
+
+    try {
+      await settingsMutateAsync({ type: "deleteCategoryObject", category: clickedCategory });
       setAddCategoryModal(false);
     } catch {
       setStatus("initial"); // error will show on UI
     }
   }
 
-  async function onRenameCategory() {
-    // TODO
+  async function addSubcategory(index: number) {
+    if (!data || !isEdit || status !== "initial" || isPending || !subcategoriesWithId[index].isNew) return;
+    const subcategory = subcategoriesWithId[index].value.trim();
+    if (!subcategory) return;
+    if (subcategory.toLowerCase() === "none") {
+      setValidationError(`Cannot use "none" as a subcategory.`);
+      return;
+    }
+    if (subcategoriesWithId.some((j, index2) => index !== index2 && j.value.toLowerCase() === subcategory.toLowerCase())) {
+      setValidationError("Subcategory already exists.");
+      return;
+    }
+
+    setValidationError("");
+    setStatus("adding");
+
+    try {
+      await settingsMutateAsync({ type: "addSubcategory", category: clickedCategory, subcategory });
+      setSubcategoriesWithId((prev) => prev.map((r, i) => (i === index ? { ...r, isNew: false, value: subcategory } : r))); // optimistic update
+    } catch {} // error will show on UI
+    setStatus("initial");
   }
 
-  async function onAddSubcategory() {
-    // TODO
+  async function renameSubcategory(index: number) {
+    if (!data || !isEdit || status !== "initial" || isPending) return;
+    const from = data.settings.categoryObjects.find((i) => i.category === clickedCategory)?.subcategories[index + 1];
+    const to = subcategoriesWithId[index].value.trim();
+    if (!from) {
+      setValidationError("Unknown error.");
+      return;
+    }
+    if (!to) {
+      setSubcategoriesWithId((prev) => prev.map((j, index2) => (index2 === index ? { ...j, value: from } : j)));
+      if (validationError) setValidationError("");
+      return;
+    }
+    if (to.toLowerCase() === "none") {
+      setSubcategoriesWithId((prev) => prev.map((j, index2) => (index2 === index ? { ...j, value: from } : j)));
+      setValidationError(`Cannot use "none" as a subcategory.`);
+      return;
+    }
+    if (from === to) return;
+    if (
+      from.toLowerCase() !== to.toLowerCase() &&
+      subcategoriesWithId.some((j, index2) => index2 !== index && j.value.trim().toLowerCase() === to.toLowerCase())
+    ) {
+      setValidationError("Subcategories contain duplicates.");
+      return;
+    } // allows groceries => Groceries
+
+    setValidationError("");
+    setStatus("editing");
+
+    try {
+      await settingsMutateAsync({ type: "renameSubcategory", category: clickedCategory, from, to });
+    } catch {} // error will show on UI
+    setStatus("initial");
   }
 
-  async function onDeleteSubcategory() {
-    // TODO
-  }
-
-  async function onRenameSubcategory() {
-    // TODO
+  async function addSubcategoryField() {
+    if (status !== "initial" || isPending) return;
+    setSubcategoriesWithId((prev) => {
+      if (prev.some((r) => r.isNew && r.value.trim() === "")) {
+        setValidationError("Please first add a subcategory above.");
+        return prev;
+      } else {
+        setValidationError("");
+        return [...prev, { value: "", isNew: true }];
+      }
+    });
   }
 
   return (
@@ -131,37 +231,37 @@ export default function AddCategoryModal({
               setCategory(e.target.value);
               if (validationError) setValidationError("");
             }}
+            onBlur={isEdit ? renameCategory : undefined}
           />
         </div>
 
         {/*--- subcategory ---*/}
         <label className="block mt-6 pb-1.5 inputLabel w-full">Subcategories{isEdit ? "" : " (e.g., restaurants, groceries)"}</label>
         <div className="space-y-2">
-          {subcategories.map((row, index) => (
-            <div key={row.id} className="w-full flex items-center">
+          {subcategoriesWithId.map((i, index) => (
+            <div key={index} className="w-full flex items-center">
               <input
                 className="input w-full"
-                value={row.value}
+                value={i.value}
                 onChange={(e) => {
-                  setSubcategories((prev) => {
-                    const next = [...prev];
-                    next[index] = { ...next[index], value: e.target.value };
-                    return next;
-                  });
+                  setSubcategoriesWithId((prev) => prev.map((j, index2) => (index2 === index ? { ...j, value: e.target.value } : j))); // or use id
                   if (validationError) setValidationError("");
                 }}
+                onBlur={isEdit ? (i.isNew ? () => addSubcategory(index) : () => renameSubcategory(index)) : undefined}
+                disabled={status !== "initial" || isPending}
               />
-              <EditButtons
-                setSubcategories={setSubcategories}
-                validationError={validationError}
-                setValidationError={setValidationError}
-                status={status}
-                setStatus={setStatus}
-                index={index}
-                subcategories={subcategories}
-                isPending={isPending}
-                rowId={row.id}
-              />
+              {isEdit && (
+                <EditButtons
+                  setSubcategoriesWithId={setSubcategoriesWithId}
+                  validationError={validationError}
+                  setValidationError={setValidationError}
+                  status={status}
+                  setStatus={setStatus}
+                  subcategoriesWithId={subcategoriesWithId}
+                  rowIndex={index}
+                  clickedCategory={clickedCategory}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -170,26 +270,30 @@ export default function AddCategoryModal({
         <button
           className="mt-4 link flex items-center justify-center gap-1 font-medium"
           type="button"
-          onClick={() => setSubcategories((prev) => [...prev, addId("")])}
+          onClick={addSubcategoryField}
           disabled={isPending || status !== "initial"}
         >
           <FaPlus />
           Add Subcategory Field
         </button>
 
-        {/*--- button ---*/}
-        <div className="mt-auto pt-[50px] w-full flex flex-col items-center">
-          <div className="mb-[20px] errorText min-h-[1.3rem]">{validationError ? validationError : isError ? error?.message : ""}</div>
-          {isEdit ? (
-            <button className="buttonRed w-full" type="button" onClick={onDeleteCategory} disabled={isPending || status !== "initial"}>
-              {status === "deleting" ? "Deleting..." : "Delete Category"}
-            </button>
-          ) : (
-            <button className="button1 w-full" type="submit" disabled={isPending || status !== "initial"}>
-              {isPending ? (isEdit ? "Saving..." : "Adding...") : isEdit ? "Save" : "Add"}
-            </button>
-          )}
+        {/*--- validation error ---*/}
+        <div className="flex-1 w-full flex items-center justify-center">
+          <div className="errorText min-h-[100px] flex items-center justify-center">
+            {validationError ? validationError : isError ? error?.message : ""}
+          </div>
         </div>
+
+        {/*--- button ---*/}
+        {isEdit ? (
+          <button className="buttonRed w-full" type="button" onClick={deleteCategoryObject} disabled={isPending || status !== "initial"}>
+            {status === "deleting" ? "Deleting..." : "Delete Category"}
+          </button>
+        ) : (
+          <button className="button1 w-full" type="submit" disabled={isPending || status !== "initial"}>
+            {isPending ? (isEdit ? "Saving..." : "Adding...") : isEdit ? "Save" : "Add"}
+          </button>
+        )}
       </form>
     </Modal>
   );

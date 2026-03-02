@@ -14,11 +14,11 @@ function addId(categoryObjects: CategoryObject[]) {
 export default function CategoryContainer({
   categoryObjects,
   setAddCategoryModal,
-  setClickedCategoryObject,
+  setClickedCategory,
 }: {
   categoryObjects: CategoryObject[];
   setAddCategoryModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setClickedCategoryObject: React.Dispatch<React.SetStateAction<CategoryObject | null>>;
+  setClickedCategory: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
   const { mutateAsync: settingsMutateAsync } = useSettingsMutation();
 
@@ -51,7 +51,7 @@ export default function CategoryContainer({
     newItems.forEach((i) => newCategoryObjects.push({ category: i.category, subcategories: i.subcategories }));
 
     try {
-      await settingsMutateAsync({ type: "setCategoryObjects", categoryObjects: newCategoryObjects });
+      await settingsMutateAsync({ type: "reorderCategoryObjects", categoryObjects: newCategoryObjects });
     } catch (e) {
       console.error("Failed to update category order");
       setItems(oldItems);
@@ -69,7 +69,7 @@ export default function CategoryContainer({
               category={item.category}
               subcategories={item.subcategories}
               setAddCategoryModal={setAddCategoryModal}
-              setClickedCategoryObject={setClickedCategoryObject}
+              setClickedCategory={setClickedCategory}
             />
           ))}
         </div>

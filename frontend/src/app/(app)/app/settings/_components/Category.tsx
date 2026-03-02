@@ -11,13 +11,13 @@ export default function Category({
   category,
   subcategories,
   setAddCategoryModal,
-  setClickedCategoryObject,
+  setClickedCategory,
 }: {
   id: string;
   category: string;
   subcategories: string[];
   setAddCategoryModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setClickedCategoryObject: React.Dispatch<React.SetStateAction<CategoryObject | null>>;
+  setClickedCategory: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
 
@@ -34,7 +34,7 @@ export default function Category({
       style={style}
       className={`px-[4px] h-[52px] desktop:h-[40px] flex items-center justify-between border-t border-b border-dashed borderColorFaint desktop:cursor-pointer desktop:hover:text-slate-400`}
       onClick={() => {
-        setClickedCategoryObject({ category, subcategories });
+        setClickedCategory(category);
         setAddCategoryModal(true);
       }}
     >

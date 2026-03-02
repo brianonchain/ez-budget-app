@@ -47,7 +47,7 @@ export default function AddTagModal({
       await settingsMutateAsync({ type: "addTag", tag: _tag });
       setAddTagModal(false);
     } catch {
-      setStatus("initial"); // keep modal open
+      setStatus("initial"); // error will be shown on UI
     }
   }
 
@@ -84,6 +84,7 @@ export default function AddTagModal({
   async function onDelete() {
     if (!data || !clickedTag || status !== "initial" || isPending) return;
 
+    // is-being-used validation done on backend
     setValidationError("");
     setStatus("deleting");
 

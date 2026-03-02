@@ -36,7 +36,7 @@ export default function Settings({ provider, email }: { provider: string; email:
   const [addCategoryModal, setAddCategoryModal] = useState(false);
   const [addTagModal, setAddTagModal] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
-  const [clickedCategoryObject, setClickedCategoryObject] = useState<CategoryObject | null>(null);
+  const [clickedCategory, setClickedCategory] = useState<string | null>(null);
   const [clickedTag, setClickedTag] = useState("");
 
   return (
@@ -84,7 +84,7 @@ export default function Settings({ provider, email }: { provider: string; email:
         <SettingsCategoryContainer
           label="Categories"
           onClickAdd={() => {
-            setClickedCategoryObject(null);
+            setClickedCategory(null);
             setAddCategoryModal(true);
           }}
         >
@@ -93,7 +93,7 @@ export default function Settings({ provider, email }: { provider: string; email:
               <CategoryContainer
                 categoryObjects={data.settings.categoryObjects}
                 setAddCategoryModal={setAddCategoryModal}
-                setClickedCategoryObject={setClickedCategoryObject}
+                setClickedCategory={setClickedCategory}
               />
             ) : (
               <div className="text-center text-slate-500 italic">No categories</div>
@@ -160,7 +160,12 @@ export default function Settings({ provider, email }: { provider: string; email:
       {passwordModal && <PasswordModal setPasswordModal={setPasswordModal} email={email} />}
       {emailModal && <EmailModal setEmailModal={setEmailModal} />}
       {addCategoryModal && (
-        <AddCategoryModal data={data} setAddCategoryModal={setAddCategoryModal} clickedCategoryObject={clickedCategoryObject} />
+        <AddCategoryModal
+          data={data}
+          setAddCategoryModal={setAddCategoryModal}
+          clickedCategory={clickedCategory}
+          setClickedCategory={setClickedCategory}
+        />
       )}
       {addTagModal && <AddTagModal data={data} setAddTagModal={setAddTagModal} clickedTag={clickedTag} />}
     </>

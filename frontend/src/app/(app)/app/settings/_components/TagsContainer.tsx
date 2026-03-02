@@ -49,7 +49,7 @@ export default function TagsContainer({
     const newTags = ["none", ...newItems.map((i) => i.tag)];
 
     try {
-      await settingsMutateAsync({ type: "setTags", tags: newTags });
+      await settingsMutateAsync({ type: "reorderTags", tags: newTags });
     } catch (e) {
       console.error("Failed to update tag order");
       setItems(oldItems);
