@@ -1,4 +1,7 @@
 import { Settings, Item, CategoryObject } from "@/db/UserModel";
+import { CURRENCIES } from "./constants";
+
+export type Currency = (typeof CURRENCIES)[number];
 
 export type UserData = {
   settings: Settings;

@@ -23,6 +23,8 @@ import { capitalizeFirst } from "@/utils/functions";
 import { useUserQuery, useSettingsMutation } from "@/utils/hooks";
 import Toggle from "@/utils/components/Toggle";
 import { CategoryObject } from "@/db/UserModel";
+import { CURRENCIES } from "@/utils/constants";
+import { Currency } from "@/utils/types";
 
 export default function Settings({ provider, email }: { provider: string; email: string }) {
   // hooks
@@ -64,15 +66,16 @@ export default function Settings({ provider, email }: { provider: string; email:
           {data ? (
             <select
               className="bg-transparent border-none outline-none cursor-pointer font-medium"
-              value={data.settings.defaultCurrency}
+              value={data?.settings.defaultCurrency as Currency}
               onChange={(e) => {
                 settingsMutateAsync({ type: "changeCurrency", currency: e.currentTarget.value });
               }}
             >
-              <option value="USD">USD</option>
-              <option value="TWD">TWD</option>
-              <option value="EUR">EUR</option>
-              <option value="JPY">JPY</option>
+              {CURRENCIES.map((i) => (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              ))}
             </select>
           ) : (
             <SettingsSkeleton className="settingsSkeletonSmall" />

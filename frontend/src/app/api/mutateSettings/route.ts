@@ -5,6 +5,8 @@ import { getServerSession } from "next-auth/next";
 import { MutateSettingsPayload } from "@/utils/types";
 import { CategoryObject } from "@/db/UserModel";
 import { authOptions } from "@/utils/authOptions";
+import { CURRENCIES } from "@/utils/constants";
+import { Currency } from "@/utils/types";
 
 export const POST = async (request: Request) => {
   const payload = (await request.json().catch(() => null)) as MutateSettingsPayload | null;
@@ -332,10 +334,7 @@ export const POST = async (request: Request) => {
         if (!currency) {
           return NextResponse.json({ status: "error", message: `Invalid payload. Missing "currency".` }, { status: 400 });
         }
-        if (!/^[A-Z]{3}$/.test(currency)) {
-          return NextResponse.json({ status: "error", message: "Currency must be 3 uppercase letters." }, { status: 400 });
-        }
-        if (!["USD", "TWD", "EUR", "JPY"].includes(currency)) {
+        if (!CURRENCIES.includes(currency as Currency)) {
           return NextResponse.json({ status: "error", message: "Currency not supported." }, { status: 400 });
         }
         await UserModel.updateOne({ "settings.email": email }, { $set: { "settings.defaultCurrency": currency } });

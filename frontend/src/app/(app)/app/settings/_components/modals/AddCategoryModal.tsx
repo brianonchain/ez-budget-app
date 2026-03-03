@@ -220,7 +220,7 @@ export default function AddCategoryModal({
       setIsOpen={setAddCategoryModal}
       disableCloseButton={isPending}
     >
-      <form className="mx-auto w-full max-w-[400px] min-h-full flex flex-col" onSubmit={onSubmit}>
+      <form className="mx-auto pt-[16px] w-full max-w-[400px] min-h-full flex flex-col" onSubmit={onSubmit}>
         {/*--- category ---*/}
         <label className="block pb-1.5 w-full inputLabel">Category{isEdit ? "" : " (e.g., Food)"}</label>
         <div className="w-full flex gap-4">

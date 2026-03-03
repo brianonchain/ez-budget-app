@@ -3,10 +3,12 @@ import LoginGlow from "./_components/LoginGlow";
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-full min-h-dvh relative">
+    <div className="relative w-full min-h-dvh">
+      {/*--- glow: must be outside scrollbar ---*/}
       <LoginGlow />
-      <div className="z-[1] pt-[100px] w-full h-dvh flex flex-col items-center overflow-y-auto" style={{ scrollbarGutter: "stable" }}>
-        <div className="pb-[50px] px-[0px] w-full max-w-[360px] desktop:max-w-[320px] flex flex-col items-center">
+      {/*--- content ---*/}
+      <div className="relative z-[1] h-dvh overflow-y-auto scrollbar-stable">
+        <div className="mx-auto pt-[100px] pb-[50px] px-3 desktop:px-0 w-full max-w-96 desktop:w-75 flex flex-col items-center">
           <LoginLogo />
           {children}
         </div>

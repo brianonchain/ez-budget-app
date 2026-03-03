@@ -138,6 +138,20 @@ html.dark body {
   @apply !border-red-500 focus:!border-red-500 dark:!border-red-400 dark:focus:!border-red-400;
 }
 
+/*--- login button ---*/
+
+@utility loginButtonBase {
+  @apply w-full h-16 desktop:h-13 flex items-center justify-center cursor-pointer gap-[12px] textBaseApp font-medium;
+}
+
+@utility loginButtonColor {
+  @apply bg-white dark:bg-transparent border-[1.5px] border-slate-200 hover:border-slate-300 dark:border-slate-400 dark:hover:border-slate-400 dark:hover:bg-slate-300/20 [transition:background-color_200ms];
+}
+
+@utility loginButtonRoundness {
+  @apply rounded-[33px] desktop:rounded-[1.65rem];
+}
+
 /*--- buttons ---*/
 
 .homeButton {
@@ -149,7 +163,7 @@ html.dark body {
 }
 
 @utility buttonBase {
-  @apply flex-none h-[2.8em] textBaseApp font-semibold flex items-center justify-center desktop:cursor-pointer;
+  @apply flex-none h-14 desktop:h-11 textBaseApp font-semibold flex items-center justify-center desktop:cursor-pointer;
 }
 
 @utility button1ColorLight {
@@ -193,7 +207,7 @@ html.dark body {
 }
 
 .buttonSettings {
-  @apply h-9 desktop:h-7 px-[1em] text-sm desktop:text-xs font-medium flex items-center justify-center gap-1 rounded-full button1Color cursor-pointer;
+  @apply h-9 desktop:h-7 px-4 desktop:px-3 text-sm desktop:text-xs font-medium flex items-center justify-center gap-1 rounded-full button1Color cursor-pointer;
 }
 
 .xButton {
@@ -211,7 +225,7 @@ html.dark body {
 /*--- input ---*/
 
 @utility inputColor {
-  @apply rounded-lg outline-none border-[1.5px] bg-lightInput dark:bg-darkInput text-lightText1 dark:text-darkText1 border-lightInputBorder focus:border-lightInputBorderFocus dark:border-darkInputBorder dark:focus:border-darkInputBorderFocus placeholder:text-slate-400 dark:placeholder:text-slate-600 [transition:border-color_500ms];
+  @apply rounded-lg outline-none ring-[1.5px] bg-lightInput dark:bg-darkInput text-lightText1 dark:text-darkText1 ring-lightInputBorder focus:ring-lightInputBorderFocus dark:ring-darkInputBorder dark:focus:ring-darkInputBorderFocus placeholder:text-slate-400 dark:placeholder:text-slate-600 [transition:box-shadow_500ms];
 }
 
 @utility placeholderColor {
@@ -223,11 +237,11 @@ html.dark body {
 }
 
 .input {
-  @apply w-full h-[2.8em] px-[0.8em] textBaseApp inputColor;
+  @apply w-full h-13 desktop:h-10 px-3.5 desktop:px-3 textBaseApp inputColor;
 }
 
 .inputSmall {
-  @apply w-full h-[2.3em] px-[0.5em] textBaseApp inputColor;
+  @apply w-full h-11 desktop:h-9 px-3 desktop:px-2.5 textBaseApp inputColor;
 }
 
 .inputMaxWidth {
@@ -279,18 +293,6 @@ html.dark body {
   @apply w-[90%] h-[60px];
 }
 
-.settingsCard {
-  @apply mt-[16px] portrait:sm:mt-[32px] landscape:lg:mt-[32px] desktop:!mt-[16px] pt-[16px] pb-[20px] px-[12px] portrait:sm:px-[20px] landscape:lg:px-[20px] desktop:px-[16px] w-full bg-lightBg1 dark:bg-blue-400/10 rounded-2xl shadow-[0px_0px_16px_0px_rgba(0,0,0,0.1)] desktop:shadow-[6px_0px_10px_0px_rgba(0,0,0,0.02),_-6px_0px_10px_rgba(0,0,0,0.02)] dark:shadow-none;
-}
-
-.settingsTitle {
-  @apply w-full pb-[16px] text-2xl font-bold flex items-center justify-center text-lightHeaderColor dark:text-darkText1;
-}
-
-.settingsField {
-  @apply flex-none w-full h-[2.8em] flex items-center justify-between gap-2 border-b-[1.5px] borderColorFaint;
-}
-
 .labelsField {
   @apply py-[16px] w-full flex items-center border-t-[1.5px] border-slate-300;
 }
@@ -328,7 +330,7 @@ html.dark body {
 }
 
 .detailsLabel {
-  @apply flex-none w-full px-[4px] desktop:px-[4px] h-[40px] desktop:h-[32px] flex items-center desktop:cursor-pointer desktop:hover:bg-slate-200 dark:desktop:hover:bg-darkBg3 truncate;
+  @apply flex-none w-full px-[4px] desktop:px-[4px] h-[2.3em] desktop:h-[2.2em] text-base desktop:text-[0.8125rem] flex items-center desktop:hover:bg-slate-200 dark:desktop:hover:bg-darkBg3 truncate desktop:cursor-pointer;
 }
 
 /*--- modal full ---*/

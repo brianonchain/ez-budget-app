@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams, usePathname } from "next/navigation";
 // components
-import SignInButton from "../_components/SignInButton";
+import LoginButton from "../_components/LoginButton";
 import Button from "@/utils/components/Button";
 // utils
 import { checkEmail, checkPassword } from "@/utils/functions";
@@ -26,8 +26,6 @@ const errorMap: Record<string, string> = {
 };
 
 export default function Login() {
-  console.log("(app)/login/LoginClient.tsx");
-
   // hooks
   const router = useRouter();
   const pathname = usePathname();
@@ -38,7 +36,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: false, password: false });
-  const [isLoading, setIsLoading] = useState<null | "google" | "credentials">(null); // null | "google" | "credentials"
+  const [isLoading, setIsLoading] = useState<null | "google" | "credentials">(null);
   const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
   const [showEmailPassword, setShowEmailPassword] = useState(false);
 
@@ -115,10 +113,9 @@ export default function Login() {
 
   return (
     <>
-      {/*--- Buttons ---*/}
-      <div className="w-full flex flex-col gap-[1.5em]">
-        {/*--- Google Sign In ---*/}
-        <SignInButton
+      <div className="w-full flex flex-col items-center gap-6">
+        {/*--- Google ---*/}
+        <LoginButton
           label="Sign in with Google"
           imageSrc="/google.svg"
           imageAlt="google"
@@ -128,23 +125,17 @@ export default function Login() {
             signIn("google", { callbackUrl: "/app/items" });
           }}
         />
-        {/*--- Credentials Sign In ---*/}
+        {/*--- Credentials ---*/}
         <div
-          className={`${
-            showEmailPassword ? "" : "dark:hover:bg-slate-300/20 [transition:background-color_200ms] cursor-pointer"
-          } w-full textBaseApp font-medium bg-white dark:bg-transparent border-[1.5px] border-slate-200 hover:border-slate-300 dark:border-slate-400 dark:hover:border-slate-400 rounded-[33px] desktop:rounded-[26px] relative`}
+          className={`w-full loginButtonRoundness ${
+            showEmailPassword
+              ? "bg-white dark:bg-transparent border-[1.5px] border-slate-200 hover:border-slate-300 dark:border-slate-400 dark:hover:border-slate-400"
+              : "loginButtonColor cursor-pointer"
+          }`}
         >
-          <button
-            className="w-full h-[3.5em] flex items-center justify-center gap-[12px] cursor-pointer"
-            onClick={() => setShowEmailPassword(!showEmailPassword)}
-            type="button"
-          >
+          <button className="relative loginButtonBase" onClick={() => setShowEmailPassword(!showEmailPassword)} type="button">
             <p>Sign in with Email/Password</p>
-            {showEmailPassword ? (
-              <FaAngleUp className="absolute right-[20px] w-[16px] h-[16px]" />
-            ) : (
-              <FaAngleDown className="absolute right-[20px] w-[16px] h-[16px]" />
-            )}
+            {showEmailPassword ? <FaAngleUp className="absolute right-6 w-4 h-4" /> : <FaAngleDown className="absolute right-6 w-4 h-4" />}
           </button>
           <Accordion isOpen={showEmailPassword}>
             <form className="px-3 pb-7 w-full flex flex-col" onSubmit={onSubmitCredentials}>

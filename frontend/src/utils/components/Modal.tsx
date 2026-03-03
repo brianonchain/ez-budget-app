@@ -25,7 +25,7 @@ export default function Modal({
     <>
       <div className="z-[99] fixed inset-0 bg-black/70" aria-hidden />
       <div
-        className="z-[100] fixed inset-0 desktop:inset-auto desktop:w-[400px] desktop:max-h-[90dvh] desktop:pb-[12px] desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:rounded-2xl flex flex-col overflow-hidden modalFullColor"
+        className="z-[100] fixed inset-0 desktop:inset-auto desktop:w-100 desktop:max-h-[90dvh] desktop:pb-3 desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:rounded-2xl flex flex-col overflow-hidden modalFullColor"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
@@ -45,7 +45,7 @@ export default function Modal({
         </div>
         {/*--- content ---*/}
         <div
-          className="flex-1 min-h-0 w-full pt-[16px] pb-[48px] px-[16px] portrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[60px] overflow-y-auto thinScrollbar textBaseApp"
+          className="flex-1 min-h-0 w-full pb-12 px-[16px] portrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[48px] overflow-y-auto thinScrollbar textBaseApp"
           style={{ scrollbarGutter: "stable" }}
         >
           {children}

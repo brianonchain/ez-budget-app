@@ -99,7 +99,14 @@ export default function Items() {
           </>
         )}
       </ItemsShell>
-      {costModal && <EnterCost setCostModal={setCostModal} setNameModal={setNameModal} setNewItem={setNewItem} />}
+      {costModal && (
+        <EnterCost
+          setCostModal={setCostModal}
+          setNameModal={setNameModal}
+          setNewItem={setNewItem}
+          defaultCurrency={data.settings.defaultCurrency}
+        />
+      )}
       {nameModal && <EnterName setNameModal={setNameModal} setDetailsModal={setDetailsModal} setNewItem={setNewItem} />}
       {detailsModal && <Details setDetailsModal={setDetailsModal} data={data} newItem={newItem} setNewItem={setNewItem} />}
       {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
