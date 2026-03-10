@@ -19,7 +19,7 @@ export default function EnterName({
   }, []);
 
   return (
-    <Modal title="Enter Name" setIsOpen={setNameModal}>
+    <Modal title="Enter Name" setModal={setNameModal}>
       <div className="mx-auto flex-none pt-10 desktop:pt-0 w-full max-w-100">
         <textarea
           ref={inputRef}

@@ -140,7 +140,7 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
   }
 
   return (
-    <Modal disableCloseButton={status.button === "loading"} setIsOpen={setEmailModal} title="Change Email">
+    <Modal disableCloseButton={status.button === "loading"} setModal={setEmailModal} title="Change Email">
       <form className="w-full h-[175px] inputMaxWidth" onSubmit={onButtonClick}>
         {status.content === "changeEmail" && (
           <InputEmail

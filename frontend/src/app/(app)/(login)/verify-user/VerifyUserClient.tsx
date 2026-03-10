@@ -15,7 +15,8 @@ export default function VerifyUserClient() {
   const router = useRouter();
 
   const [otp, setOtp] = useState(Array(6).fill(""));
-  const [errorModal, setErrorModal] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorModal, setErrorModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [resendStatus, setResendStatus] = useState("initial"); // "initial" | "sending" | "sent"
 
@@ -76,11 +77,13 @@ export default function VerifyUserClient() {
 
     // check OTP and email validity
     if (joinedOtp.length !== 6) {
-      setErrorModal("Please enter a valid 6-digit code.");
+      setErrorMessage("Please enter a valid 6-digit code.");
+      setErrorModal(true);
       return;
     }
     if (!email) {
-      setErrorModal("Missing email");
+      setErrorMessage("Missing email");
+      setErrorModal(true);
       return;
     }
 
@@ -129,7 +132,8 @@ export default function VerifyUserClient() {
   }
 
   function triggerError(message: string) {
-    setErrorModal(message);
+    setErrorMessage(message);
+    setErrorModal(true);
     setIsLoading(false);
     clearOtp();
   }
@@ -178,7 +182,7 @@ export default function VerifyUserClient() {
         </div>
       )}
 
-      {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
+      {errorModal && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} setErrorModal={setErrorModal} />}
     </>
   );
 }

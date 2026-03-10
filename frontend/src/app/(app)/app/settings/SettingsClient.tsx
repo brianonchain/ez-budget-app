@@ -26,7 +26,7 @@ import ConfirmActionModal from "./_components/modals/ConfirmActionModal";
 import AddWorkspaceModal from "./_components/modals/AddWorkspaceModal";
 import Select from "@/utils/components/Select";
 import ButtonSettings from "@/utils/components/ButtonSettings";
-import ErrorModal from "./_components/modals/ErrorModal";
+import ErrorModal from "@/utils/components/ErrorModal";
 // utils
 import { capitalizeFirst } from "@/utils/functions";
 import { useSettingsMutation, useSettingsQuery, useUserMutation } from "@/utils/hooks";
@@ -297,7 +297,7 @@ export default function Settings({ provider, email, userId }: { provider: string
           onSuccess={() => signOut({ callbackUrl: "/accountDeleted" })}
         />
       )}
-      {errorModal && <ErrorModal errorMessage={errorMessage} setErrorModal={setErrorModal} />}
+      {errorModal && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} setErrorModal={setErrorModal} />}
     </>
   );
 }

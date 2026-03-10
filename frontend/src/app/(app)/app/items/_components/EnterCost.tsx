@@ -91,7 +91,7 @@ export default function EnterCost({
   };
 
   return (
-    <Modal title="Enter Cost" setIsOpen={setCostModal} disableCloseButton={isPending}>
+    <Modal title="Enter Cost" setModal={setCostModal} disableCloseButton={isPending}>
       <div className="flex flex-col items-center">
         <div className="relative mb-8 mx-auto grid grid-cols-[auto_1fr] min-w-[calc(4.75rem*3+0.5rem*2)] desktop:min-w-[calc(3.25rem*3+0.375rem*2)] max-w-full overflow-hidden border-2 rounded-xl border-blue-500/20">
           {/*--- amount + currency ---*/}

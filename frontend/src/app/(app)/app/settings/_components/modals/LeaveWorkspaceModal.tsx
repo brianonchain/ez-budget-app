@@ -10,7 +10,7 @@ export default function LeaveWorkspaceModal({
   const { mutateAsync: settingsMutateAsync, error, isError, isPending } = useSettingsMutation();
 
   return (
-    <Modal title="Confirm Leaving Workspace" setIsOpen={setLeaveWorkspaceModal} disableCloseButton={isPending}>
+    <Modal title="Confirm Leaving Workspace" setModal={setLeaveWorkspaceModal} disableCloseButton={isPending}>
       ShareWorkspaceModal
     </Modal>
   );

@@ -19,7 +19,8 @@ export default function SignUpClient() {
   const [password2, setPassword2] = useState("");
   const [errors, setErrors] = useState({ email: false, password1: false, password2: false });
   const [isLoading, setIsLoading] = useState(false);
-  const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorModal, setErrorModal] = useState(false);
 
   function validateEmail(email: string) {
     setErrors((prev) => ({ ...prev, email: !!email && !checkEmail(email) }));
@@ -58,11 +59,13 @@ export default function SignUpClient() {
       if (resJson.status === "success") {
         router.push(`/verify-user?email=${encodeURIComponent(_email)}`);
       } else {
-        setErrorModal(resJson.message || "Server error. Please try again.");
+        setErrorMessage(resJson.message || "Server error. Please try again.");
+        setErrorModal(true);
         setIsLoading(false);
       }
     } catch (e: any) {
-      setErrorModal(e?.message || "Server error. Please try again."); // optional chaining is needed
+      setErrorMessage(e?.message || "Server error. Please try again."); // optional chaining is needed
+      setErrorModal(true);
       setIsLoading(false);
     }
   }
@@ -116,7 +119,7 @@ export default function SignUpClient() {
       <p className="mt-14 desktop:mt-12 link underline-animate textSmApp" onClick={() => router.push("/login")}>
         Have an account? Sign in
       </p>
-      {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
+      {errorModal && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} setErrorModal={setErrorModal} />}
     </>
   );
 }

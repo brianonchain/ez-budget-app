@@ -69,7 +69,7 @@ export default function Details({
   }
 
   return (
-    <Modal title="Item Info" setIsOpen={setDetailsModal}>
+    <Modal title="Item Info" setModal={setDetailsModal}>
       <div className="flex-1 mx-auto w-full h-full max-w-100 flex flex-col items-center">
         {/*--- date, name, cost ---*/}
         <div className="w-full grid grid-cols-[auto_1fr] gap-y-1 gap-x-2 items-center">

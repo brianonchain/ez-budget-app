@@ -32,7 +32,8 @@ export default function Items() {
   const { data: itemsData } = useItemsQuery(session?.data?.user?.email);
   const { data: settingsData } = useSettingsQuery(session?.data?.user?.email);
   // states
-  const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorModal, setErrorModal] = useState(false);
   const [costModal, setCostModal] = useState(false);
   const [nameModal, setNameModal] = useState(false);
   const [detailsModal, setDetailsModal] = useState(false);
@@ -99,7 +100,7 @@ export default function Items() {
       {detailsModal && settingsData && (
         <Details setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} draftItem={draftItem} settingsData={settingsData} />
       )}
-      {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
+      {errorModal && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} setErrorModal={setErrorModal} />}
     </>
   );
 }

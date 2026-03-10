@@ -6,12 +6,12 @@ import { createPortal } from "react-dom";
 export default function Modal({
   children,
   disableCloseButton = false,
-  setIsOpen,
+  setModal,
   title,
 }: {
   children: React.ReactNode;
   disableCloseButton?: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  setModal: React.Dispatch<React.SetStateAction<boolean>>;
   title: string;
 }) {
   const titleId = useId();
@@ -35,7 +35,7 @@ export default function Modal({
         <div className="absolute w-[300%] h-[200%] left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-[-1] modalGlow dark:block hidden" />
         {/*--- close ---*/}
         {!disableCloseButton && (
-          <button className="xButton" aria-label="Close" type="button" onClick={() => setIsOpen(false)}>
+          <button className="xButton" aria-label="Close" type="button" onClick={() => setModal(false)}>
             &#10005;
           </button>
         )}

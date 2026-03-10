@@ -218,7 +218,7 @@ export default function AddCategoryModal({
   return (
     <Modal
       title={isEdit ? "Edit Category" : "Add A Category With Subcategories"}
-      setIsOpen={setAddCategoryModal}
+      setModal={setAddCategoryModal}
       disableCloseButton={isPending}
     >
       <form className="mx-auto pt-4 w-full max-w-100 flex flex-col" onSubmit={onSubmit}>

@@ -97,7 +97,7 @@ export default function AddTagModal({
   }
 
   return (
-    <Modal title={isEdit ? "Edit Tag" : "Add A Tag"} setIsOpen={setAddTagModal} disableCloseButton={status !== "initial" || isPending}>
+    <Modal title={isEdit ? "Edit Tag" : "Add A Tag"} setModal={setAddTagModal} disableCloseButton={status !== "initial" || isPending}>
       <form className="mx-auto w-full max-w-[400px] flex flex-col items-center" onSubmit={onSubmit}>
         <label className="mt-[16px] pb-1.5 w-full inputLabel">Tags (e.g., Euro Trip 2025, Winnie's birthday)</label>
         <input

@@ -99,7 +99,7 @@ export default function ShareWorkspaceModal({
   }
 
   return (
-    <Modal title="Share Workspace" setIsOpen={setShareWorkspaceModal} disableCloseButton={isPending}>
+    <Modal title="Share Workspace" setModal={setShareWorkspaceModal} disableCloseButton={isPending}>
       <div className="mx-auto w-full max-w-[400px] flex flex-col">
         {/*--- invite form ---*/}
         <form className="flex flex-col gap-4" onSubmit={onSubmit} noValidate>

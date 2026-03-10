@@ -62,7 +62,7 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
   }
 
   return (
-    <Modal title="Change Password" setIsOpen={setPasswordModal} disableCloseButton={status === "pending"}>
+    <Modal title="Change Password" setModal={setPasswordModal} disableCloseButton={status === "pending"}>
       <div className="w-full inputMaxWidth h-[410px]">
         {status !== "success" ? (
           <form className="" onSubmit={onSubmit}>

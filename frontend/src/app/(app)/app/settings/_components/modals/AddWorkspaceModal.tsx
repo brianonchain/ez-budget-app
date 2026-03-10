@@ -34,7 +34,7 @@ export default function AddTagModal({
   }
 
   return (
-    <Modal title="Add New Workspace" setIsOpen={setAddWorkspaceModal} disableCloseButton={isPending}>
+    <Modal title="Add New Workspace" setModal={setAddWorkspaceModal} disableCloseButton={isPending}>
       <form className="mx-auto w-full max-w-[400px] flex flex-col items-center" onSubmit={onSubmit}>
         <label className="mt-[16px] pb-1.5 w-full inputLabel">Workspace Name</label>
         <input

@@ -50,7 +50,7 @@ export default function DeleteAccountModal({
     setInputValue("");
   }
   return (
-    <Modal title={title} setIsOpen={setModal} disableCloseButton={isPending}>
+    <Modal title={title} setModal={setModal} disableCloseButton={isPending}>
       <form className="mx-auto w-full max-w-100 flex flex-col" onSubmit={onSubmit}>
         <p className="text-center">
           Type <span className="font-semibold">{textToMatch}</span> to confirm deletion.

@@ -37,7 +37,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: false, password: false });
   const [isLoading, setIsLoading] = useState<null | "google" | "credentials">(null);
-  const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
+  const [errorModal, setErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [showEmailPassword, setShowEmailPassword] = useState(false);
 
   // show error modal if error param is present
@@ -47,7 +48,8 @@ export default function Login() {
     if (errorRef.current === error) return; // prevent re-firing logic twice
 
     errorRef.current = error;
-    setErrorModal(errorMap[error] ?? "Login failed. Please try again.");
+    setErrorMessage(errorMap[error] ?? "Login failed. Please try again.");
+    setErrorModal(true);
     router.replace(pathname); // URL will just show /login
   }, [searchParams, pathname]);
 
@@ -65,7 +67,8 @@ export default function Login() {
 
     // if email/password fields blank, then show error modal
     if (!email || !password) {
-      setErrorModal("Invalid email or password");
+      setErrorMessage("Invalid email or password");
+      setErrorModal(true);
       return;
     }
 
@@ -75,7 +78,8 @@ export default function Login() {
     const isPasswordValid = !!password; // shouldn't check password complexity on login
     setErrors({ email: !isEmailValid, password: !isPasswordValid });
     if (!isEmailValid || !isPasswordValid) {
-      setErrorModal("Invalid email or password");
+      setErrorMessage("Invalid email or password");
+      setErrorModal(true);
       return;
     }
 
@@ -89,7 +93,8 @@ export default function Login() {
       });
       // if sign in error or success
       if (res?.error) {
-        setErrorModal("Invalid email or password");
+        setErrorMessage("Invalid email or password");
+        setErrorModal(true);
         setPassword("");
         setIsLoading(null);
       } else {
@@ -97,7 +102,8 @@ export default function Login() {
         window.location.href = token ? `/invite?token=${encodeURIComponent(token)}` : "/app/items";
       }
     } catch {
-      setErrorModal("Something went wrong. Please try again.");
+      setErrorMessage("Something went wrong. Please try again.");
+      setErrorModal(true);
       setIsLoading(null);
     }
   }
@@ -171,7 +177,7 @@ export default function Login() {
         </div>
       </div>
 
-      {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
+      {errorModal && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} setErrorModal={setErrorModal} />}
     </>
   );
 }
