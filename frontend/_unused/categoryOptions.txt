@@ -12,16 +12,16 @@
         onClick={() => {
           setLabelType(i);
           if (i === "category") {
-            setLabelOptions(Object.keys(data.settings.category));
+            setLabelOptions(Object.keys(data.workspace.category));
           } else if (i === "subcategory") {
-            setLabelOptions(data.settings.category[newItem.category]);
+            setLabelOptions(data.workspace.category[draftItem.category]);
           } else if (i === "tags") {
-            setLabelOptions(data.settings.tags);
+            setLabelOptions(data.workspace.tags);
           }
         }}
       >
         <p className="text-base desktop:text-sm font-medium text-center">{i.charAt(0).toUpperCase() + i.slice(1)}</p>
-        <p className="text-sm text-center tracking-tighter truncate">{newItem[i]}</p>
+        <p className="text-sm text-center tracking-tighter truncate">{draftItem[i]}</p>
         <div className={`${labelType === i ? "" : "invisible"} absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-slate-200`}></div>
       </div>
     ))}
@@ -34,19 +34,19 @@
         <div
           key={index}
           className={`${
-            newItem[labelType] === i ? "border-light-button1" : "border-slate-300"
+            draftItem[labelType] === i ? "border-light-button1" : "border-slate-300"
           } flex-none px-[12px] w-full h-[56px] desktop:h-[40px] flex items-center justify-between text-lg desktop:text-sm font-medium border-2 rounded-[8px] desktop:cursor-pointer bg-white desktop:hover:bg-slate-100`}
           onClick={() => {
             if (labelType === "category") {
               setLabelType("subcategory");
-              setLabelOptions(data.settings.category[i]);
-              setNewItem({ ...newItem, category: i, subcategory: "none" });
+              setLabelOptions(data.workspace.category[i]);
+              setDraftItem({ ...draftItem, category: i, subcategory: "none" });
             } else if (labelType === "subcategory") {
               setLabelType("tags");
-              setLabelOptions(data.settings.tags);
-              setNewItem({ ...newItem, [labelType]: i });
+              setLabelOptions(data.workspace.tags);
+              setDraftItem({ ...draftItem, [labelType]: i });
             } else if (labelType === "tags") {
-              setNewItem({ ...newItem, [labelType]: i });
+              setDraftItem({ ...draftItem, [labelType]: i });
             }
           }}
         >

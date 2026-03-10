@@ -1,26 +1,100 @@
-import { Settings, Item, CategoryObject } from "@/db/UserModel";
+import { CategoryObject } from "@/db/WorkspaceModel";
 import { CURRENCIES } from "./constants";
 
-export type Currency = (typeof CURRENCIES)[number];
-
-export type UserData = {
-  settings: Settings;
-  items: Item[];
+export type Workspace = {
+  _id: string;
+  name: string;
+  defaultCurrency: string;
+  categoryObjects: CategoryObject[];
+  tags: string[];
+  ownerId: string;
+};
+// 1) id, createdBy doesn't exist for new items, 2) compared to IItem, DraftItem doesn't have workspaceId, createdAt, updatedAt, 3) date is string
+export type DraftItem = {
+  _id?: string;
+  date: string;
+  cost: number;
+  currency: string;
+  description: string;
+  category: string;
+  subcategory: string;
+  tag: string;
+  createdBy?: {
+    _id: string;
+    email: string;
+  };
+};
+export type Role = "owner" | "editor" | "viewer";
+export type WorkspaceOption = {
+  _id: string;
+  name: string;
+  ownerId: string;
+  ownerEmail: string;
+  role: Role;
+};
+export type SharedUser = {
+  _id: string;
+  email: string;
+  role: "editor" | "viewer";
+};
+export type PendingSharedUser = {
+  _id: string;
+  invitedEmail: string;
+  invitedRole: "editor" | "viewer";
+  expiresAt: Date;
+};
+export type SettingsData = {
+  workspace: {
+    _id: string;
+    name: string;
+    defaultCurrency: string;
+    categoryObjects: CategoryObject[];
+    tags: string[];
+    ownerId: string;
+  };
+  role: "owner" | "editor" | "viewer";
+  workspaceOptions: WorkspaceOption[];
+  sharedUsers: SharedUser[];
+  pendingSharedUsers: PendingSharedUser[];
 };
 
-export type MutateItemsPayload = { type: "upsert"; item: Item } | { type: "delete"; itemId: string };
+export type ItemsData = {
+  items: DraftItem[];
+  defaultCurrency: string;
+};
 
+export type MutateItemsPayload =
+  | { type: "upsert"; workspaceId: string; item: DraftItem }
+  | { type: "delete"; workspaceId: string; itemId: string };
+
+// 1) owners and editors can mutate, 2) payload must have workspaceId, 3) invalidates "settings"
 export type MutateSettingsPayload =
-  | { type: "addTag"; tag: string }
-  | { type: "reorderTags"; tags: string[] }
-  | { type: "renameTag"; from: string; to: string }
-  | { type: "deleteTag"; tag: string }
-  | { type: "addCategoryObject"; categoryObject: CategoryObject }
-  | { type: "reorderCategoryObjects"; categoryObjects: CategoryObject[] }
-  | { type: "deleteCategoryObject"; category: string }
-  | { type: "renameCategory"; from: string; to: string }
-  | { type: "addSubcategory"; category: string; subcategory: string }
-  | { type: "renameSubcategory"; category: string; from: string; to: string }
-  | { type: "deleteSubcategory"; category: string; subcategory: string }
-  | { type: "reorderSubcategory"; category: string; fromIndex: number; toIndex: number }
-  | { type: "changeCurrency"; currency: string };
+  // tags
+  | { type: "addTag"; workspaceId: string; tag: string } // tag
+  | { type: "renameTag"; workspaceId: string; from: string; to: string } // from, to
+  | { type: "reorderTags"; workspaceId: string; tags: string[] } // tags
+  | { type: "deleteTag"; workspaceId: string; tag: string } // tag
+  // categoryObjects
+  | { type: "addCategoryObject"; workspaceId: string; categoryObject: CategoryObject } // categoryObject
+  | { type: "renameCategory"; workspaceId: string; from: string; to: string } // from, to
+  | { type: "reorderCategoryObjects"; workspaceId: string; categoryObjects: CategoryObject[] } // categoryObjects
+  | { type: "deleteCategoryObject"; workspaceId: string; category: string } // category
+  // subcategories
+  | { type: "addSubcategory"; workspaceId: string; category: string; subcategory: string } // category, subcategory
+  | { type: "renameSubcategory"; workspaceId: string; category: string; from: string; to: string } // category, from, to
+  | { type: "reorderSubcategory"; workspaceId: string; category: string; fromIndex: number; toIndex: number } // category, fromIndex, toIndex
+  | { type: "deleteSubcategory"; workspaceId: string; category: string; subcategory: string } // category, subcategory
+  // others
+  | { type: "changeCurrency"; workspaceId: string; currency: string }; // currency
+
+// 1) various authorization gates, 2) invalidates "settings" and "items"
+export type MutateUserPayload =
+  | { type: "addWorkspace"; name: string; defaultCurrency: string }
+  | { type: "setActiveWorkspace"; workspaceId: string }
+  | { type: "leaveWorkspace"; workspaceId: string }
+  | { type: "deleteWorkspace"; workspaceId: string }
+  | { type: "shareWorkspace"; workspaceId: string; workspaceName: string; email: string; role: "editor" | "viewer" } // workspaceName, email, role
+  | { type: "updateSharedUser"; workspaceId: string; sharedUserId: string; role: "editor" | "viewer" } // sharedUserId, role
+  | { type: "deleteSharedUser"; workspaceId: string; sharedUserId: string } // sharedUserId
+  | { type: "deletePendingSharedUser"; workspaceId: string; invitedEmail: string } // pendingSharedUserId
+  | { type: "deleteAccount"; userId: string }; // userId

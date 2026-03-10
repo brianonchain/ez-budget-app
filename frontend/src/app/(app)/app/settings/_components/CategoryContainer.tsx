@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import Category from "./Category";
-import { CategoryObject } from "@/db/UserModel";
+import { CategoryObject } from "@/db/WorkspaceModel";
 import { useSettingsMutation } from "@/utils/hooks";
 
 function addId(categoryObjects: CategoryObject[]) {
@@ -15,10 +15,12 @@ export default function CategoryContainer({
   categoryObjects,
   setAddCategoryModal,
   setClickedCategory,
+  workspaceId,
 }: {
   categoryObjects: CategoryObject[];
   setAddCategoryModal: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  workspaceId: string;
 }) {
   const { mutateAsync: settingsMutateAsync } = useSettingsMutation();
 
@@ -51,7 +53,7 @@ export default function CategoryContainer({
     newItems.forEach((i) => newCategoryObjects.push({ category: i.category, subcategories: i.subcategories }));
 
     try {
-      await settingsMutateAsync({ type: "reorderCategoryObjects", categoryObjects: newCategoryObjects });
+      await settingsMutateAsync({ type: "reorderCategoryObjects", workspaceId, categoryObjects: newCategoryObjects });
     } catch (e) {
       console.error("Failed to update category order");
       setItems(oldItems);
@@ -61,7 +63,7 @@ export default function CategoryContainer({
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        <div className="w-[90%] flex flex-col textXsApp border-y border-dashed borderColorFaint">
+        <div className="w-[90%] flex flex-col textSmApp border-y border-dashed border-borderFaint">
           {items.map((item, index) => (
             <Category
               key={item.id}

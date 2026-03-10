@@ -3,39 +3,45 @@
 @import "./animations.css";
 
 @theme {
-  --color-lightBg1: #f6f9fc;
+  /* backgrounds */
   --color-lightBg2: #f7edf7;
   --color-lightBg3: #f0e7f0;
-  --color-lightText1: #212427;
-  --color-lightText2: #64748b;
-  --color-lightHeaderColor: oklch(58.8% 0.158 241.966);
-  --color-lightButton1Bg: oklch(58.8% 0.158 241.966); /* sky-600 */
-  --color-lightButton1BgHover: oklch(50% 0.134 242.749); /* sky-700 */
-  --color-lightButton1Text: #ffffff;
-  --color-lightButton2Bg: #64748b;
-  --color-lightButton2BgHover: #94a3b8;
-  --color-lightButton2Text: #64748b;
-  --color-lightButtonRedBg: oklch(64.5% 0.246 16.439);
-  --color-lightButtonRedBgHover: oklch(58.6% 0.253 17.585);
-  --color-lightInput: #ffffff;
-  --color-lightInputBorder: oklch(86.9% 0.022 252.894); /* slate-300 */
-  --color-lightInputBorderFocus: oklch(62.3% 0.214 259.815); /* blue-500 */
-  --color-darkBg1: #0a051f;
-  --color-darkBg2: #050b36;
-  --color-darkBg3: #251e51;
-  --color-darkText1: #e9e8f6;
-  --color-darkText2: #64748b;
-  --color-darkButton1Bg: #0364ff;
-  --color-darkButton1BgHover: #0055dd;
-  --color-darkButton1Text: #ffffff;
-  --color-darkButton2Bg: #64748b;
-  --color-darkButton2BgHover: #94a3b8;
-  --color-darkButton2Text: #64748b;
-  --color-darkButtonRedBg: #ff2d60;
-  --color-darkButtonRedBgHover: #da2a55;
-  --color-darkInput: #010c2a;
-  --color-darkInputBorder: #071e59;
-  --color-darkInputBorderFocus: #0444b7;
+  /* bg & text */
+  --color-bg1: #f7edf7;
+  --color-text1: #212427;
+  --color-text2: #64748b;
+  --color-link: #0364ff;
+  --color-linkHover: #1c73ff;
+  --color-textRed: #ff295d;
+  --color-textRedHover: #d91f4f;
+  /* buttons */
+  --color-button1Bg: oklch(58.8% 0.158 241.966); /* sky-600 */
+  --color-button1BgHover: oklch(50% 0.134 242.749); /* sky-700 */
+  --color-button1Text: #ffffff;
+  --color-button2Bg: transparent;
+  --color-button2BgHover: #f0e7f0;
+  --color-button2Text: #ffffff;
+  --color-buttonRedBg: #ff295d;
+  --color-buttonRedBgHover: #d91f4f;
+  --color-buttonTransparentHover: #f0e7f0;
+  /* input 1 */
+  --color-inputBg: #ffffff;
+  --color-inputBorder: #b1daee;
+  --color-inputBorderHover: #77c7f0;
+  --color-inputBorderFocus: oklch(58.8% 0.158 241.966);
+  --color-inputRing: #77c7f0;
+  --color-inputPlaceholder: oklch(70.4% 0.04 256.788); /* slate-400 */
+  /* input 2 */
+  --color-input2Bg: transparent;
+  --color-input2Border: #77c7f0;
+  --color-input2BorderHover: oklch(58.8% 0.158 241.966);
+  --color-input2BorderFocus: oklch(58.8% 0.158 241.966);
+  --color-input2Ring: #77c7f0;
+  --color-input2Placeholder: oklch(70.4% 0.04 256.788); /* slate-400 */
+  /* card & others */
+  --color-card: #f6f9fc;
+  --color-borderFaint: oklch(92.9% 0.013 255.508); /* slate-200 */
+  /* breakpoints */
   --breakpoint-xs: 480px;
   --breakpoint-sm: 600px;
   --breakpoint-md: 750px;
@@ -44,14 +50,51 @@
   --breakpoint-2xl: 1440px;
 }
 
+.dark {
+  --color-bg1: #0a051f; /* was 0b0f37*/
+  --color-text1: #e9e8f6;
+  --color-text2: oklch(78.9% 0.022 252.894); /* slate-400 */
+  --color-link: #2374f6;
+  --color-linkHover: #4286f3;
+  --color-textRed: #ff3a6a;
+  --color-textRedHover: #ff507a;
+  /* buttons */
+  --color-button1Bg: #0364ff;
+  --color-button1BgHover: #1c73ff;
+  --color-button1Text: #ffffff;
+  /* button 2 */
+  --color-button2Bg: transparent;
+  --color-button2BgHover: rgba(255, 255, 255, 0.08);
+  --color-buttonRedBg: #ff3a6a;
+  --color-buttonRedBgHover: #ff507a;
+  --color-buttonTransparentHover: oklch(70.7% 0.165 254.624 / 15%); /* blue-400/15 */
+  /* input */
+  --color-inputBg: #06102f;
+  --color-inputBorder: #04154c;
+  --color-inputBorderHover: #203478;
+  --color-inputBorderFocus: #203478;
+  --color-inputRing: #26407f;
+  --color-inputPlaceholder: oklch(44.6% 0.043 257.281); /* slate-600 */
+  /* input 2 */
+  --color-input2Bg: transparent;
+  --color-input2Border: #22346a;
+  --color-input2BorderHover: #2f4d97;
+  --color-input2BorderFocus: #2f4d97;
+  --color-input2Ring: #26407f;
+  --color-input2Placeholder: oklch(44.6% 0.043 257.281); /* slate-600 */
+  /* card & others */
+  --color-card: oklch(70.7% 0.165 254.624 / 8%); /* blue-400/10 */
+  --color-borderFaint: rgb(255 255 255 / 0.08);
+}
+
 html,
 body {
-  background: #f7edf7; /* lightBg2 */
+  background: #f7edf7; /* light bg1 */
 }
 
 html.dark,
 html.dark body {
-  background: #0a051f; /* darkBg1 */
+  background: #0a051f; /* darkBg1 0b0f37*/
 }
 
 /*--- scrollbar ---*/
@@ -62,30 +105,76 @@ html.dark body {
 
 /*--- background glows ---*/
 
-@utility glowDark {
-  @apply dark:block hidden;
-}
-
-@utility glowDarkInner {
+.dark .pageGlow {
   background: radial-gradient(
     ellipse at center,
-    rgba(4, 68, 183, 0.6) 0%,
-    rgba(4, 68, 183, 0.42) 20%,
-    rgba(4, 68, 183, 0.25) 40%,
-    rgba(4, 68, 183, 0.12) 55%,
-    rgba(4, 68, 183, 0.05) 65%,
-    transparent 75%
+    rgba(65, 47, 201, 0.5) 0%,
+    rgba(65, 47, 201, 0.4) 8%,
+    rgba(65, 47, 201, 0.3) 16%,
+    rgba(65, 47, 201, 0.2) 26%,
+    rgba(65, 47, 201, 0.05) 50%,
+    transparent 100%
+  );
+}
+
+/* ≥480px override */
+@media (min-width: 480px) {
+  .dark .pageGlow {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(42, 84, 222, 0.6) 0%,
+      rgba(42, 84, 222, 0.45) 6%,
+      rgba(42, 84, 222, 0.35) 12%,
+      rgba(42, 84, 222, 0.17) 24%,
+      rgba(42, 84, 222, 0.07) 36%,
+      transparent 50%
+    );
+  }
+}
+
+.dark .modalGlow {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(42, 84, 222, 0.35) 0%,
+    rgba(42, 84, 222, 0.25) 13%,
+    rgba(42, 84, 222, 0.18) 26%,
+    rgba(42, 84, 222, 0.1) 39%,
+    rgba(42, 84, 222, 0.02) 80%,
+    transparent 50%
+  );
+}
+
+.dark .pageGlowBright {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(65, 47, 201, 1) 0%,
+    rgba(65, 47, 201, 0.7) 13%,
+    rgba(65, 47, 201, 0.3) 33%,
+    rgba(65, 47, 201, 0.12) 50%,
+    transparent 100%
+  );
+}
+
+.dark .pageGlowDim {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(65, 47, 201, 0.8) 0%,
+    rgba(65, 47, 201, 0.5) 8%,
+    rgba(65, 47, 201, 0.3) 15%,
+    rgba(65, 47, 201, 0.15) 25%,
+    rgba(65, 47, 201, 0.1) 50%,
+    transparent 80%
   );
 }
 
 /*--- text size ---*/
 
 @utility textXsApp {
-  @apply text-base desktop:!text-xs;
+  @apply text-base desktop:text-xs;
 }
 
 @utility textSmApp {
-  @apply text-base desktop:!text-sm;
+  @apply text-base desktop:text-[0.8125rem];
 }
 
 @utility textBaseApp {
@@ -104,86 +193,34 @@ html.dark body {
   @apply text-3xl desktop:text-2xl;
 }
 
-@utility inputErrorText {
-  @apply text-sm desktop:text-xs;
-}
-
-@utility itemText {
-  @apply text-base desktop:text-sm;
-}
-
-@utility labelChipText {
-  @apply text-base desktop:text-sm;
-}
-
-@utility headerText {
-  @apply text-center text-2xl leading-normal font-semibold;
-}
-
 @utility errorText {
-  @apply text-lg desktop:text-sm text-red-500 dark:text-red-400;
-}
-
-/*--- colors ---*/
-
-@utility borderColor {
-  @apply border-slate-300 dark:border-slate-600;
-}
-
-@utility borderColorFaint {
-  @apply border-slate-200 dark:border-slate-700;
-}
-
-@utility borderColorError {
-  @apply !border-red-500 focus:!border-red-500 dark:!border-red-400 dark:focus:!border-red-400;
-}
-
-/*--- login button ---*/
-
-@utility loginButtonBase {
-  @apply w-full h-16 desktop:h-13 flex items-center justify-center cursor-pointer gap-[12px] textBaseApp font-medium;
-}
-
-@utility loginButtonColor {
-  @apply bg-white dark:bg-transparent border-[1.5px] border-slate-200 hover:border-slate-300 dark:border-slate-400 dark:hover:border-slate-400 dark:hover:bg-slate-300/20 [transition:background-color_200ms];
-}
-
-@utility loginButtonRoundness {
-  @apply rounded-[33px] desktop:rounded-[1.65rem];
+  @apply text-textRedHover textBaseApp font-medium;
 }
 
 /*--- buttons ---*/
 
-.homeButton {
-  @apply button1ColorDark px-[1.2em] py-[0.6em] textLgApp font-medium rounded-full cursor-pointer;
-}
-
-.homeButtonSm {
-  @apply px-[20px] desktop:px-[18px] h-[44px] desktop:h-[38px] text-base desktop:text-sm;
+@utility buttonHeight {
+  @apply h-14 desktop:h-10;
 }
 
 @utility buttonBase {
-  @apply flex-none h-14 desktop:h-11 textBaseApp font-semibold flex items-center justify-center desktop:cursor-pointer;
-}
-
-@utility button1ColorLight {
-  @apply text-lightButton1Text bg-lightButton1Bg desktop:hover:bg-lightButton1BgHover active:bg-lightButton1BgHover transition-colors duration-300;
-}
-
-@utility button1ColorDark {
-  @apply text-darkButton1Text bg-darkButton1Bg desktop:hover:bg-darkButton1BgHover active:bg-darkButton1BgHover;
+  @apply flex-none buttonHeight textBaseApp font-semibold flex items-center justify-center desktop:cursor-pointer disabled:cursor-default;
 }
 
 @utility button1Color {
-  @apply button1ColorLight dark:text-darkButton1Text dark:bg-darkButton1Bg dark:desktop:hover:bg-darkButton1BgHover dark:active:bg-darkButton1BgHover;
+  @apply text-button1Text bg-button1Bg desktop:hover:bg-button1BgHover active:bg-button1BgHover disabled:opacity-80 [transition:background-color_200ms];
 }
 
 @utility button2Color {
-  @apply bg-none text-slate-500 box-border border-2 border-inherit desktop:hover:border-slate-400 active:border-slate-400;
+  @apply text-button2Text bg-button2Bg desktop:hover:bg-button2BgHover active:bg-button2BgHover disabled:opacity-80 border border-input2Border [transition:background-color_200ms];
 }
 
 @utility buttonRedColor {
-  @apply bg-lightButtonRedBg dark:bg-darkButtonRedBg hover:bg-lightButtonRedBgHover dark:hover:bg-darkButtonRedBgHover text-white border-inherit;
+  @apply text-white bg-buttonRedBg desktop:hover:bg-buttonRedBgHover active:bg-buttonRedBgHover disabled:opacity-80 [transition:background-color_200ms];
+}
+
+@utility buttonRed2Color {
+  @apply text-textRed hover:text-textRedHover bg-transparent desktop:hover:bg-button2BgHover active:bg-button2BgHover disabled:opacity-80 border border-input2Border [transition:background-color_200ms];
 }
 
 .button1 {
@@ -198,54 +235,76 @@ html.dark body {
   @apply buttonBase buttonRedColor rounded-lg;
 }
 
-.button1Round {
-  @apply buttonBase button1Color rounded-full px-[1.4em];
+.homeButton {
+  @apply button1Color px-7 desktop:px-6 py-4 desktop:py-3 textLgApp font-medium rounded-full cursor-pointer;
 }
 
-.itemButton {
-  @apply textXlApp;
-}
-
-.buttonSettings {
-  @apply h-9 desktop:h-7 px-4 desktop:px-3 text-sm desktop:text-xs font-medium flex items-center justify-center gap-1 rounded-full button1Color cursor-pointer;
+.buttonSignOut {
+  @apply buttonBase button1Color rounded-full w-32 desktop:w-25 mx-auto my-12;
 }
 
 .xButton {
-  @apply absolute right-0 top-0 w-[64px] h-[64px] desktop:w-[52px] desktop:h-[52px] text-[32px] desktop:text-[24px] font-bold flex items-center justify-center desktop:rounded-bl-[14px] desktop:rounded-tr-[14px] cursor-pointer hover:bg-lightBg3 active:bg-lightBg3 dark:hover:bg-blue-400/15 dark:active:bg-blue-400/15 [transition:background-color_300ms];
+  @apply absolute right-0 top-0 w-16 h-16 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl cursor-pointer hover:bg-buttonTransparentHover active:bg-buttonTransparentHover [transition:background-color_300ms];
 }
 
-.pageXButton {
-  @apply absolute right-[-8px] top-[4px] w-[60px] h-[60px] desktop:w-[50px] desktop:h-[50px] text-[32px] desktop:text-[28px] font-bold flex items-center justify-center rounded-lg cursor-pointer hover:bg-lightBg3 active:bg-lightBg3 dark:hover:bg-darkBg3 dark:active:bg-darkBg3;
+/*--- login button ---*/
+
+@utility loginButtonBase {
+  @apply w-full h-16 desktop:h-13 flex items-center justify-center cursor-pointer gap-[12px] textBaseApp font-medium;
 }
 
-.mobileBack {
-  @apply absolute left-[12px] top-[18px] leading-none text-[42px] font-medium p-[8px] portrait:sm:hidden landscape:lg:hidden desktop:!hidden;
+@utility loginButtonColor {
+  @apply bg-white dark:bg-transparent border border-slate-200 hover:border-slate-300 dark:border-slate-400 dark:hover:border-slate-400 dark:hover:bg-slate-300/20 [transition:background-color_200ms];
+}
+
+@utility loginButtonRoundness {
+  @apply rounded-[33px] desktop:rounded-[1.65rem];
 }
 
 /*--- input ---*/
 
+@utility inputBgAndTextColor {
+  @apply bg-inputBg text-text1 placeholder:text-inputPlaceholder;
+}
+
+@utility inputBorder {
+  @apply border border-inputBorder desktop:hover:border-inputBorderHover focus:border-inputBorderFocus focus:hover:border-inputBorderFocus;
+}
+
+@utility inputRing {
+  @apply ring-2 ring-transparent focus:ring-inputRing;
+}
+
 @utility inputColor {
-  @apply rounded-lg outline-none ring-[1.5px] bg-lightInput dark:bg-darkInput text-lightText1 dark:text-darkText1 ring-lightInputBorder focus:ring-lightInputBorderFocus dark:ring-darkInputBorder dark:focus:ring-darkInputBorderFocus placeholder:text-slate-400 dark:placeholder:text-slate-600 [transition:box-shadow_500ms];
-}
-
-@utility placeholderColor {
-  @apply placeholder:italic placeholder:text-slate-400 dark:placeholder:text-slate-500;
-}
-
-.inputLabel {
-  @apply font-semibold textBaseApp;
+  @apply inputBgAndTextColor inputBorder inputRing transition-all duration-300;
 }
 
 .input {
-  @apply w-full h-13 desktop:h-10 px-3.5 desktop:px-3 textBaseApp inputColor;
+  @apply w-full h-13 desktop:h-10 px-3.5 desktop:px-3 rounded-lg textBaseApp inputColor outline-none;
 }
 
-.inputSmall {
-  @apply w-full h-11 desktop:h-9 px-3 desktop:px-2.5 textBaseApp inputColor;
+@utility input2BgAndTextColor {
+  @apply bg-input2Bg text-text1 placeholder:text-input2Placeholder;
+}
+
+@utility input2Border {
+  @apply border border-input2Border desktop:hover:border-input2BorderHover focus:border-input2BorderFocus focus:hover:border-input2BorderFocus;
+}
+
+@utility input2Ring {
+  @apply ring-2 ring-transparent focus:ring-input2Ring;
+}
+
+@utility input2Color {
+  @apply input2BgAndTextColor input2Border input2Ring transition-all duration-300;
 }
 
 .inputMaxWidth {
   @apply max-w-[380px];
+}
+
+.inputLabel {
+  @apply font-medium textBaseApp;
 }
 
 /*--- landing ---*/
@@ -254,36 +313,87 @@ html.dark body {
   @apply px-[16px] xs:px-[24px] lg:px-[100px] w-full max-w-[650px] lg:max-w-[calc(960px+200px)];
 }
 
-/*--- components ---*/
+/*--- app ---*/
+
+@media (orientation: portrait) {
+  :root {
+    --listPaddingTop: 0px;
+    --listHeaderHeight: 3rem;
+    --listButtonContainerHeight: 90px;
+    --menuHeight: 80px;
+    --numRows: 10;
+  }
+}
+
+@media (orientation: portrait) and (min-width: 600px) {
+  :root {
+    --listPaddingTop: 24px;
+    --listHeaderHeight: 3rem;
+    --listButtonContainerHeight: 100px;
+    --menuHeight: 120px;
+    --numRows: 11;
+  }
+}
+
+@media (orientation: landscape) {
+  :root {
+    --listPaddingTop: 0px;
+    --listHeaderHeight: 3rem;
+    --listButtonContainerHeight: 90px;
+    --menuHeight: 0px;
+    --numRows: 10;
+  }
+}
+
+@media (orientation: landscape) and (min-width: 980px) {
+  :root {
+    --listPaddingTop: 24px;
+    --listHeaderHeight: 3rem;
+    --listButtonContainerHeight: 100px;
+    --menuHeight: 0px;
+    --numRows: 10;
+  }
+}
 
 .menuIcon {
-  @apply text-[22px] portrait:sm:text-[40px] landscape:lg:text-[40px];
+  @apply text-[22px] portrait:sm:text-[2rem] landscape:lg:text-[2rem];
 }
 
-/* menu has position "fixed" */
 .appPageContainer {
-  @apply relative portrait:w-full portrait:h-[calc(100dvh-80px)] portrait:sm:h-[calc(100dvh-140px)] landscape:h-dvh landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:desktop:!w-[calc(100%-200px)] landscape:ml-[120px] landscape:lg:ml-[160px] landscape:desktop:!ml-[200px] flex flex-col items-center overflow-y-auto overflow-x-hidden;
+  @apply relative h-[calc(100dvh-var(--menuHeight))] portrait:w-full landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:desktop:!w-[calc(100%-200px)] landscape:ml-[120px] landscape:lg:ml-[160px] landscape:desktop:!ml-[200px] flex flex-col items-center overflow-y-auto overflow-x-hidden;
 }
 
-.loginError {
-  @apply absolute top-[calc(100%+3px)] text-red-500 leading-none inputErrorText;
+/*--- app: items page ---*/
+
+.listHeaderColor {
+  @apply text-slate-700 dark:text-slate-400 bg-bg1 dark:portrait:sm:bg-blue-400/10 dark:landscape:lg:bg-blue-500/10;
 }
 
-.listHeaderHeight {
-  @apply h-[50px];
-}
-
-.listButtonContainerHeight {
-  @apply flex-none h-[80px] portrait:sm:h-[110px] landscape:lg:h-[110px];
-}
-
-.listAllHeight {
-  @apply portrait:h-[calc(100dvh-80px-80px-50px)] portrait:sm:h-[calc(100dvh-140px-110px-50px-32px-2px)] landscape:h-[calc(100dvh-80px-50px)] landscape:lg:h-[calc(100dvh-110px-50px-32px-2px)];
+.listTotalHeight {
+  @apply h-[calc(100dvh-var(--listPaddingTop)-var(--listHeaderHeight)-var(--listButtonContainerHeight)-var(--menuHeight))];
 }
 
 .listItemHeight {
-  @apply portrait:h-[calc((100dvh-80px-80px-50px)/10)] portrait:sm:h-[calc((100dvh-140px-110px-50px-32px)/11)] landscape:h-[calc((100dvh-80px-50px)/10)] landscape:lg:h-[calc((100dvh-110px-50px-32px)/10)] min-h-[50px] max-h-[80px];
+  @apply h-[calc((100dvh-var(--listPaddingTop)-var(--listHeaderHeight)-var(--listButtonContainerHeight)-var(--menuHeight))/var(--numRows))] min-h-[3.25rem] max-h-[4.05rem];
 }
+
+.detailsInput {
+  @apply h-11 desktop:h-8 px-3 desktop:px-2 text-base desktop:text-[0.8125rem] rounded-lg inputColor outline-none;
+}
+
+.detailsLabel {
+  @apply font-medium text-base desktop:text-xs opacity-70;
+}
+
+.detailsOptionContainer {
+  @apply mt-1 grid grid-cols-1 rounded-lg border-[1.5px] bg-inputBg border-inputBorder divide-y-[1.5px] divide-borderFaint overflow-y-auto;
+}
+
+.detailsOption {
+  @apply flex-none w-full px-1 h-10 desktop:h-7 text-base desktop:text-[0.8125rem] flex items-center desktop:hover:bg-buttonTransparentHover truncate desktop:cursor-pointer;
+}
+
+/*--- app: settings page ---*/
 
 .settingsSkeletonSmall {
   @apply w-[64px] desktop:w-[52px] h-[32px] desktop:h-[24px];
@@ -293,44 +403,20 @@ html.dark body {
   @apply w-[90%] h-[60px];
 }
 
-.labelsField {
-  @apply py-[16px] w-full flex items-center border-t-[1.5px] border-slate-300;
-}
-
 .settingsInputContainer {
   @apply h-full flex items-center cursor-pointer;
 }
 
 .settingsLabel {
-  @apply font-medium text-lightText1 dark:text-darkText1;
-}
-
-.settingsInputLabel {
-  @apply pb-[2px] font-medium text-slate-500 dark:text-darkText1;
-}
-
-.settingsInput {
-  @apply w-full h-full px-[12px] py-[4px] text-end cursor-pointer focus:cursor-text outline-none focus:ring-0 bg-transparent focus:bg-white border-[1.5px] border-transparent focus:border-blue-500 desktop:group-hover:text-slate-500 focus:desktop:group-hover:text-lightText1 transition-all duration-[300ms] placeholderColor placeholder:font-normal placeholder:pr-[2px] focus:placeholder:text-transparent rounded-lg;
-}
-
-.settingsFontFixed {
-  @apply text-[16px] portrait:sm:text-[20px] landscape:lg:text-[20px] desktop:!text-[16px];
+  @apply font-medium;
 }
 
 .settingsEditIcon {
-  @apply flex-none text-2xl desktop:text-lg text-lightButton1Bg desktop:cursor-pointer desktop:hover:brightness-[1.2];
+  @apply flex-none text-2xl desktop:text-lg text-button1Bg desktop:cursor-pointer desktop:hover:brightness-[1.2];
 }
 
-.settingsOptions {
-  @apply w-full h-[50px] desktop:h-[40px] px-[12px] flex items-center border-[1.5px] border-slate-400;
-}
-
-.detailsLabelContainer {
-  @apply mt-[4px] grid grid-cols-1 rounded-lg border-[1.5px] divide-y-[1.5px] bg-white dark:bg-darkInput divide-slate-200 dark:divide-slate-900 border-lightInputBorder dark:border-darkInputBorder overflow-y-auto;
-}
-
-.detailsLabel {
-  @apply flex-none w-full px-[4px] desktop:px-[4px] h-[2.3em] desktop:h-[2.2em] text-base desktop:text-[0.8125rem] flex items-center desktop:hover:bg-slate-200 dark:desktop:hover:bg-darkBg3 truncate desktop:cursor-pointer;
+.settingsDraggableElement {
+  @apply px-[4px] h-13 desktop:h-10 flex items-center justify-between border-t border-b border-dashed border-borderFaint desktop:cursor-pointer desktop:hover:text-slate-400;
 }
 
 /*--- modal full ---*/
@@ -340,7 +426,7 @@ html.dark body {
 }
 
 @utility modalFullColor {
-  @apply bg-lightBg1 dark:bg-darkBg1 desktop:border-[1px] desktop:border-slate-300 dark:desktop:border-blue-500/30;
+  @apply bg-card dark:bg-[#0B0F37] desktop:border-[1px] desktop:border-slate-300 dark:desktop:border-blue-500/30;
 }
 
 @utility modalFullSize {
@@ -354,7 +440,7 @@ html.dark body {
 /*--- standard modal ---*/
 
 @utility modalBase {
-  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[11] flex flex-col items-center rounded-2xl bg-lightBg1 dark:bg-darkBg1 border-2 dark:border border-slate-300 dark:border-slate-700;
+  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[11] flex flex-col items-center rounded-2xl bg-bg1 border-2 dark:border border-slate-300 dark:border-slate-700;
 }
 
 @utility modalXPadding {
@@ -381,14 +467,22 @@ html.dark body {
   @apply fixed inset-0 bg-black/70 z-[10];
 }
 
-.pageHeader {
-  @apply w-[94%] max-w-[400px] py-[24px] text-center text-2xl font-bold relative;
-}
-
 /*--- utilities ---*/
 
+@utility linkRedColor {
+  @apply text-textRed hover:text-textRedHover;
+}
+
+@utility linkGrayColor {
+  @apply text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400;
+}
+
+@utility linkColor {
+  @apply text-link desktop:hover:text-linkHover;
+}
+
 .link {
-  @apply cursor-pointer text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400;
+  @apply linkColor desktop:cursor-pointer;
 }
 
 body {
@@ -409,29 +503,6 @@ input:-webkit-autofill {
 &:-webkit-autofill::first-line {
   font-family: Inter;
 }
-
-/* ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-::-webkit-scrollbar-track {
-  background-color: #f6f9fc;
-}
-::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 4px;
-  background-clip: content-box;
-  border: 2px solid transparent;
-}
-
-.dark ::-webkit-scrollbar-track {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-.dark ::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.14);
-  opacity: 0;
-  border-radius: 8px;
-} */
 
 @utility thinScrollbar {
   &::-webkit-scrollbar {

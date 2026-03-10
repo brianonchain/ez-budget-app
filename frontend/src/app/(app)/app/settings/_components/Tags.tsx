@@ -28,16 +28,16 @@ export default function Tags({
       {...attributes}
       {...listeners}
       style={style}
-      className={`px-[4px] h-[52px] desktop:h-[40px] flex items-center justify-between border-t border-b border-dashed borderColorFaint desktop:cursor-pointer desktop:hover:text-slate-400`}
+      className="settingsDraggableElement"
       onClick={() => {
         setClickedTag(tag);
         setAddTagModal(true);
       }}
     >
-      <div className="">
+      <div>
         <p className="font-medium leading-tight line-clamp-1">{tag}</p>
       </div>
-      <SlMenu className="text-[18px] desktop:text-[14px]" />
+      <SlMenu className="text-lg desktop:text-sm" />
     </div>
   );
 }

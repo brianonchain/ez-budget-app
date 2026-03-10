@@ -1,5 +1,5 @@
 "use client";
-import ThemeToggle from "@/utils/components/ThemeToggle";
+import ThemeToggle from "./ThemeToggle";
 
 export default function LoginThemeToggle() {
   return (

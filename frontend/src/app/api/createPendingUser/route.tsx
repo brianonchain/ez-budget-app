@@ -1,20 +1,19 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+// db
 import PendingUserModel from "@/db/PendingUserModel";
 import UserModel from "@/db/UserModel";
 import dbConnect from "@/db/dbConnect";
 // rate limiter
 import { Redis } from "@upstash/redis";
-// email
-const nodemailer = require("nodemailer"); // nodemailer does not suppot es6
-import { google } from "googleapis";
 // utils
 import { generateOtp, normalizeEmail } from "@/utils/functions";
-import { hashOtp } from "@/utils/serverFunctions";
+import { hashOtp, getGmailTransporter } from "@/utils/serverFunctions";
+import { serverEnv } from "@/utils/serverEnv";
 
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+  url: serverEnv.UPSTASH_REDIS_REST_URL,
+  token: serverEnv.UPSTASH_REDIS_REST_TOKEN,
 });
 
 export async function POST(req: Request) {
@@ -66,35 +65,7 @@ export async function POST(req: Request) {
 
   // SEND EMAIL
   try {
-    // get access token
-    const oauth2Client = new google.auth.OAuth2(
-      process.env.GMAIL_CLIENT_ID,
-      process.env.GMAIL_CLIENT_SECRET,
-      "https://developers.google.com/oauthplayground" // this is required if using refresh tokens generated from oauthplayground
-    );
-    oauth2Client.setCredentials({ refresh_token: process.env.GMAIL_REFRESH_TOKEN });
-    // wrap in promise because article says "await" does not work, but other code examples use await
-    const accessToken = await new Promise((resolve, reject) => {
-      oauth2Client.getAccessToken((err: any, token: any) => {
-        if (err) reject(err);
-        else resolve(token);
-      });
-    });
-
-    // create transporter
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        type: "OAuth2",
-        user: "support@nullapay.com",
-        accessToken,
-        clientId: process.env.GMAIL_CLIENT_ID,
-        clientSecret: process.env.GMAIL_CLIENT_SECRET,
-        refreshToken: process.env.GMAIL_REFRESH_TOKEN,
-      },
-    });
-
-    // send
+    const transporter = await getGmailTransporter();
     await transporter.sendMail({
       from: { name: "EZ Budget App", address: "support@nullapay.com" },
       to: _email,

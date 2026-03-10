@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import { Item } from "@/db/UserModel";
+import { DraftItem } from "@/utils/types";
 import Button from "@/utils/components/Button";
 import Modal from "@/utils/components/Modal";
 
 export default function EnterName({
   setNameModal,
   setDetailsModal,
-  setNewItem,
+  setDraftItem,
 }: {
   setNameModal: React.Dispatch<React.SetStateAction<boolean>>;
   setDetailsModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setNewItem: React.Dispatch<React.SetStateAction<Item>>;
+  setDraftItem: React.Dispatch<React.SetStateAction<DraftItem>>;
 }) {
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -20,17 +20,18 @@ export default function EnterName({
 
   return (
     <Modal title="Enter Name" setIsOpen={setNameModal}>
-      <div className="mx-auto flex-none pt-[40px] desktop:pt-0 w-full max-w-[400px]">
+      <div className="mx-auto flex-none pt-10 desktop:pt-0 w-full max-w-100">
         <textarea
           ref={inputRef}
-          className="p-[16px] w-full h-[200px] desktop:h-[120px] text-2xl desktop:text-lg border rounded-2xl border-slate-400"
+          className="p-4 w-full h-50 desktop:h-30 text-2xl desktop:text-lg rounded-2xl inputColor outline-none"
           placeholder="Enter a short item description"
+          autoFocus
         />
         <Button
-          className="mt-[32px] desktop:mt-[32px]"
+          className="mt-8"
           label="Enter"
           onClick={() => {
-            setNewItem((prev) => ({ ...prev, description: inputRef?.current?.value || "" }));
+            setDraftItem((prev) => ({ ...prev, description: inputRef?.current?.value || "" }));
             setNameModal(false);
             setDetailsModal(true);
           }}

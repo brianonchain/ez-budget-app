@@ -7,23 +7,26 @@ import SettingsCategoryContainer from "./_components/SettingsCategoryContainer";
 export default function Loading() {
   return (
     <SettingsShell>
-      <SettingsCard title="Settings">
+      <SettingsCard title="Account">
         <SettingsField label="Email">
           <SettingsSkeleton className="settingsSkeletonSmall" />
         </SettingsField>
         <SettingsField label="Login Method">
           <SettingsSkeleton className="settingsSkeletonSmall" />
         </SettingsField>
-        <SettingsField label="Default Currency" className="border-none">
-          <SettingsSkeleton className="settingsSkeletonSmall" />
-        </SettingsField>
       </SettingsCard>
 
-      <SettingsCard title="Categories & Tags">
-        <SettingsCategoryContainer label="Categories">
+      <SettingsCard title="Workspace">
+        <SettingsField label="Active Workspace">
+          <SettingsSkeleton className="settingsSkeletonSmall" />
+        </SettingsField>
+        <SettingsField label="Default Currency">
+          <SettingsSkeleton className="settingsSkeletonSmall" />
+        </SettingsField>
+        <SettingsCategoryContainer label="Categories" addButtonLabel="Category">
           <SettingsSkeleton className="settingsSkeletonBig" />
         </SettingsCategoryContainer>
-        <SettingsCategoryContainer label="Tags">
+        <SettingsCategoryContainer label="Tags" addButtonLabel="Tag">
           <SettingsSkeleton className="settingsSkeletonBig" />
         </SettingsCategoryContainer>
       </SettingsCard>
@@ -34,7 +37,7 @@ export default function Loading() {
         </SettingsField>
       </SettingsCard>
 
-      <button className="button1Round w-[7em] mx-auto my-12">Sign Out</button>
+      <button className="buttonSignOut">Sign Out</button>
     </SettingsShell>
   );
 }

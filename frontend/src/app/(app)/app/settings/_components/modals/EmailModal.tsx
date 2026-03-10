@@ -174,7 +174,7 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   onChange={(e) => handleChange(e, index)}
                   onPaste={index === 0 ? handlePaste : undefined}
-                  className="w-[52px] h-[52px] desktop:w-[43px] desktop:h-[43px] text-[18px] text-center border-2 rounded-lg inputColor text-lightButton1Bg dark:text-darkText1"
+                  className="w-[52px] h-[52px] desktop:w-[43px] desktop:h-[43px] text-[18px] text-center border-2 rounded-lg inputColor"
                   disabled={status.button === "loading" ? true : false}
                 />
               ))}

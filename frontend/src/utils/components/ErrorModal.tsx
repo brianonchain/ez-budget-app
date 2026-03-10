@@ -11,7 +11,7 @@ const ErrorModal = ({ errorModal, setErrorModal }: { errorModal: React.ReactNode
           </button>
         </div>
         {/*--- glow ---*/}
-        <div className="absolute w-full h-full left-0 top-0 bg-gradient-to-br from-lightBg1 to-lightBg1 dark:from-blue-500/30 dark:to-blue-500/10 z-[-1]"></div>
+        <div className="absolute w-full h-full left-0 top-0 bg-gradient-to-br dark:from-blue-500/30 dark:to-blue-500/10 z-[-1] dark:block hidden" />
       </div>
       <div className="modalBlackout"></div>
     </div>

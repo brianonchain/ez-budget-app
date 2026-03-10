@@ -40,16 +40,6 @@ export default function Login() {
   const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
   const [showEmailPassword, setShowEmailPassword] = useState(false);
 
-  // redirect to /saveToHome if mobile & not standalone
-  useEffect(() => {
-    const isDesktop = window.matchMedia("(hover: hover) and (pointer:fine)").matches;
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
-    if (!isDesktop && !isStandalone && process.env.NODE_ENV != "development") {
-      router.push("/saveAppToHome");
-      return;
-    }
-  }, []);
-
   // show error modal if error param is present
   useEffect(() => {
     const error = searchParams.get("error");
@@ -103,7 +93,8 @@ export default function Login() {
         setPassword("");
         setIsLoading(null);
       } else {
-        window.location.href = "/app/items"; // absence of signInRes.error indicates success
+        const token = searchParams.get("token");
+        window.location.href = token ? `/invite?token=${encodeURIComponent(token)}` : "/app/items";
       }
     } catch {
       setErrorModal("Something went wrong. Please try again.");
@@ -122,14 +113,17 @@ export default function Login() {
           isLoading={isLoading === "google" ? true : false}
           onClick={() => {
             setIsLoading("google");
-            signIn("google", { callbackUrl: "/app/items" });
+            const token = searchParams.get("token");
+            signIn("google", {
+              callbackUrl: token ? `/invite?token=${encodeURIComponent(token)}` : "/app/items",
+            });
           }}
         />
         {/*--- Credentials ---*/}
         <div
           className={`w-full loginButtonRoundness ${
             showEmailPassword
-              ? "bg-white dark:bg-transparent border-[1.5px] border-slate-200 hover:border-slate-300 dark:border-slate-400 dark:hover:border-slate-400"
+              ? "bg-white dark:bg-transparent border border-slate-200 dark:border-slate-400 dark:hover:border-slate-400"
               : "loginButtonColor cursor-pointer"
           }`}
         >

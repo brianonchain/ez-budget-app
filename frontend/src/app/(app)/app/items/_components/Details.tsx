@@ -1,56 +1,56 @@
 import { useState, useMemo } from "react";
 import { FaChevronDown } from "react-icons/fa6";
-import { Item } from "@/db/UserModel";
 import { useItemsMutation } from "@/utils/hooks";
 import Modal from "@/utils/components/Modal";
 import Button from "@/utils/components/Button";
-import { CategoryObject } from "@/db/UserModel";
+import { CategoryObject } from "@/db/WorkspaceModel";
 import DetailsCalendar from "./DetailsCalendar";
 import { CURRENCIES, DECIMALS } from "@/utils/constants";
-import { Currency } from "@/utils/types";
+import { DraftItem, SettingsData } from "@/utils/types";
 
 export default function Details({
-  data,
-  newItem,
-  setNewItem,
+  settingsData,
+  draftItem,
+  setDraftItem,
   setDetailsModal,
 }: {
-  data: any;
-  newItem: Item;
-  setNewItem: React.Dispatch<React.SetStateAction<Item>>;
+  settingsData: SettingsData;
+  draftItem: DraftItem;
+  setDraftItem: React.Dispatch<React.SetStateAction<DraftItem>>;
   setDetailsModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const isEdit = Boolean(newItem._id);
+  const isEdit = Boolean(draftItem._id);
   // store selected category object in memo
   const selectedCategoryObject = useMemo(() => {
-    return data.settings.categoryObjects.find((i: CategoryObject) => i.category === newItem.category) ?? data.settings.categoryObjects[0];
-  }, [data.settings.categoryObjects, newItem.category]);
+    return (
+      settingsData.workspace.categoryObjects.find((i: CategoryObject) => i.category === draftItem.category) ??
+      settingsData.workspace.categoryObjects[0]
+    );
+  }, [settingsData.workspace.categoryObjects, draftItem.category]);
 
   // states
   const { mutateAsync: mutateItemsAsync, isPending, isError, error } = useItemsMutation();
   const [showCalendar, setShowCalendar] = useState(false);
-  const [costString, setCostString] = useState(newItem.cost ? newItem.cost.toString() : "");
-  const [currency, setCurrency] = useState<Currency>((newItem.currency as Currency) ?? "USD");
+  const [costString, setCostString] = useState(draftItem.cost ? draftItem.cost.toString() : "");
+  const [currency, setCurrency] = useState(draftItem.currency ?? "USD");
   const [status, setStatus] = useState<"initial" | "addingOrEditing" | "deleting">("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
   const [validationError, setValidationError] = useState("");
 
   const decimals = DECIMALS[currency];
 
-  console.log(newItem);
-
   async function onUpsert() {
-    if (!Number.isFinite(newItem.cost) || newItem.cost <= 0) {
+    if (!Number.isFinite(draftItem.cost) || draftItem.cost <= 0) {
       setValidationError("Please enter a cost");
       return;
     }
-    if (!newItem.description.trim()) {
+    if (!draftItem.description.trim()) {
       setValidationError("Please enter an item description");
       return;
     }
 
     setStatus("addingOrEditing");
     try {
-      await mutateItemsAsync({ type: "upsert", item: newItem });
+      await mutateItemsAsync({ type: "upsert", workspaceId: settingsData.workspace._id, item: draftItem });
       setDetailsModal(false);
     } catch {
       setStatus("initial");
@@ -58,10 +58,10 @@ export default function Details({
   }
 
   async function onDelete() {
-    if (!newItem._id) return;
+    if (!draftItem._id) return;
     setStatus("deleting");
     try {
-      await mutateItemsAsync({ type: "delete", itemId: String(newItem._id) });
+      await mutateItemsAsync({ type: "delete", workspaceId: settingsData.workspace._id, itemId: String(draftItem._id) });
       setDetailsModal(false);
     } catch {
       setStatus("initial");
@@ -70,46 +70,43 @@ export default function Details({
 
   return (
     <Modal title="Item Info" setIsOpen={setDetailsModal}>
-      <div className="mx-auto w-full max-w-100 h-full desktop:h-[calc(90dvh-12px-48px-100px)] flex flex-col">
+      <div className="flex-1 mx-auto w-full h-full max-w-100 flex flex-col items-center">
         {/*--- date, name, cost ---*/}
-        <div className="shrink-0 w-full grid grid-cols-[auto_1fr] gap-y-[4px] gap-x-[12px] items-center">
-          <label className="inputLabel" htmlFor="details-date">
+        <div className="w-full grid grid-cols-[auto_1fr] gap-y-1 gap-x-2 items-center">
+          <label className="detailsLabel" htmlFor="details-date">
             Date
           </label>
           <div className="relative z-[200]">
             <button
               id="details-date"
-              className="relative z-[1] inputSmall flex items-center cursor-pointer"
+              className="relative z-[1] w-full detailsInput flex items-center cursor-pointer"
               onClick={() => setShowCalendar(true)}
             >
-              {new Date(newItem.date).toLocaleString("en-US")}
+              {new Date(draftItem.date).toLocaleString("en-US")}
             </button>
-            {showCalendar && <DetailsCalendar setShowCalendar={setShowCalendar} newItem={newItem} setNewItem={setNewItem} />}
+            {showCalendar && <DetailsCalendar setShowCalendar={setShowCalendar} draftItem={draftItem} setDraftItem={setDraftItem} />}
           </div>
-
-          <label className="inputLabel" htmlFor="details-desc">
+          <label className="detailsLabel" htmlFor="details-desc">
             Item
           </label>
           <input
             id="details-desc"
-            className="inputSmall"
-            value={newItem.description}
-            onChange={(e) => setNewItem((prev) => ({ ...prev, description: e.currentTarget.value }))}
+            className="w-full detailsInput"
+            value={draftItem.description}
+            onChange={(e) => setDraftItem((prev) => ({ ...prev, description: e.currentTarget.value }))}
           />
-          <label className="inputLabel" htmlFor="details-cost">
+          <label className="detailsLabel" htmlFor="details-cost">
             Cost
           </label>
-          <div className="flex items-center gap-x-[4px]">
+          <div className="flex items-center gap-x-1">
             <input
               id="details-cost"
-              className="inputSmall !w-[100px]"
+              className="detailsInput w-25 desktop:w-22"
               value={costString}
               onChange={(e) => {
                 const val = e.currentTarget.value;
-                // Only digits and optional dot
-                if (!/^\d*\.?\d*$/.test(val)) return;
-                // Block decimals if currency has 0
-                if (decimals === 0 && val.includes(".")) return;
+                if (!/^\d*\.?\d*$/.test(val)) return; // Only digits and optional dot
+                if (decimals === 0 && val.includes(".")) return; // Block decimals if currency has 0
                 // Enforce max fraction digits
                 if (val.includes(".")) {
                   const [, frac = ""] = val.split(".");
@@ -125,7 +122,7 @@ export default function Details({
                 const n = Number(normalized);
                 if (!Number.isFinite(n)) {
                   setCostString("");
-                  setNewItem((prev) => ({ ...prev, cost: 0 }));
+                  setDraftItem((prev) => ({ ...prev, cost: 0 }));
                   return;
                 }
                 // Pad decimals visually
@@ -135,20 +132,20 @@ export default function Details({
                   normalized = Math.trunc(n).toString();
                 }
                 setCostString(normalized);
-                setNewItem((prev) => ({ ...prev, cost: n }));
+                setDraftItem((prev) => ({ ...prev, cost: n }));
               }}
               inputMode="decimal"
             />
             <div className="relative">
               <select
-                className="inputSmall !w-auto appearance-none !pr-[1.3rem]"
+                className="detailsInput appearance-none w-20 desktop:w-16"
                 value={currency}
                 onChange={(e) => {
-                  const next = e.currentTarget.value as Currency;
+                  const next = e.currentTarget.value;
                   setCurrency(next);
                   // Optional: normalize immediately when switching
                   setCostString("");
-                  setNewItem((prev) => ({ ...prev, currency: next }));
+                  setDraftItem((prev) => ({ ...prev, currency: next }));
                 }}
               >
                 {CURRENCIES.map((i) => (
@@ -157,26 +154,22 @@ export default function Details({
                   </option>
                 ))}
               </select>
-              <FaChevronDown className="absolute right-[4px] desktop:right-[0.6rem] top-1/2 -translate-y-1/2 pointer-events-none text-[14px] desktop:text-[10px] opacity-80" />
+              <FaChevronDown className="absolute right-[0.6rem] top-1/2 -translate-y-1/2 pointer-events-none text-sm desktop:text-[0.625rem] opacity-80" />
             </div>
           </div>
         </div>
 
         {/*--- label options ---*/}
-        <div className="flex-1 min-h-40 max-h-full overflow-hidden mt-[20px] w-full grid grid-cols-3 gap-[6px]">
+        <div className="mt-6 w-full min-h-50 max-h-100 desktop:min-h-40 desktop:max-h-90 flex gap-1.5">
           {/*--- Category ---*/}
-          <div className="flex-1 min-h-0 flex flex-col">
-            <p className="text-center inputLabel">Category</p>
-            <div className="detailsLabelContainer overflow-y-auto thinScrollbar">
-              {data.settings.categoryObjects.map((i: CategoryObject) => (
+          <div className="flex-1 flex flex-col">
+            <p className="text-center detailsLabel">Category</p>
+            <div className="detailsOptionContainer overflow-y-auto thinScrollbar">
+              {settingsData.workspace.categoryObjects.map((i: CategoryObject) => (
                 <div
                   key={i.category}
-                  className={`detailsLabel ${
-                    newItem.category === i.category
-                      ? "!bg-lightButton1Bg dark:!bg-darkButton1Bg text-lightButton1Text dark:text-darkButton1Text"
-                      : ""
-                  } `}
-                  onClick={() => setNewItem((prev) => ({ ...prev, category: i.category, subcategory: "none" }))}
+                  className={`detailsOption ${draftItem.category === i.category ? "!bg-button1Bg text-button1Text" : ""} `}
+                  onClick={() => setDraftItem((prev) => ({ ...prev, category: i.category, subcategory: "none" }))}
                 >
                   {i.category}
                 </div>
@@ -184,18 +177,14 @@ export default function Details({
             </div>
           </div>
           {/*--- Subcategory ---*/}
-          <div className="flex-1 min-h-0 flex flex-col">
-            <p className="text-center inputLabel">Subcategory</p>
-            <div className="detailsLabelContainer overflow-y-auto thinScrollbar">
+          <div className="flex-1 flex flex-col">
+            <p className="text-center detailsLabel">Subcategory</p>
+            <div className="detailsOptionContainer overflow-y-auto thinScrollbar">
               {selectedCategoryObject.subcategories.map((i: string) => (
                 <div
                   key={i}
-                  className={`detailsLabel ${
-                    i === newItem.subcategory
-                      ? "!bg-lightButton1Bg dark:!bg-darkButton1Bg text-lightButton1Text dark:text-darkButton1Text"
-                      : ""
-                  } `}
-                  onClick={() => setNewItem((prev) => ({ ...prev, subcategory: i }))}
+                  className={`detailsOption ${i === draftItem.subcategory ? "!bg-button1Bg text-button1Text" : ""} `}
+                  onClick={() => setDraftItem((prev) => ({ ...prev, subcategory: i }))}
                 >
                   {i}
                 </div>
@@ -203,16 +192,17 @@ export default function Details({
             </div>
           </div>
           {/*--- Tags ---*/}
-          <div className="flex-1 min-h-0 flex flex-col">
-            <p className="text-center inputLabel">Tags</p>
-            <div className="detailsLabelContainer overflow-y-auto thinScrollbar">
-              {data.settings.tags.map((i: string) => (
+          <div className="flex-1 flex flex-col">
+            <p className="text-center detailsLabel">Tags</p>
+            <div className="detailsOptionContainer overflow-y-auto thinScrollbar">
+              {settingsData.workspace.tags.map((i: string) => (
                 <div
                   key={i}
-                  className={`detailsLabel ${
-                    newItem.tags === i ? "!bg-lightButton1Bg dark:!bg-darkButton1Bg text-lightButton1Text dark:text-darkButton1Text" : ""
-                  } `}
-                  onClick={() => setNewItem((prev) => ({ ...prev, tags: i }))}
+                  className={`detailsOption ${draftItem.tag === i ? "!bg-button1Bg text-button1Text" : ""} `}
+                  onClick={() => {
+                    console.log("click");
+                    setDraftItem((prev) => ({ ...prev, tag: i }));
+                  }}
                 >
                   {i}
                 </div>
@@ -221,33 +211,32 @@ export default function Details({
           </div>
         </div>
 
-        <div className="shrink-0 pt-6">
-          {/*--- save changes button ---*/}
+        {/*--- save changes button ---*/}
+        <Button
+          className="mt-6"
+          label={draftItem._id ? "Save Changes" : "Add Item"}
+          onClick={onUpsert}
+          isLoading={status === "addingOrEditing"}
+          disabled={status !== "initial" || isPending}
+          type="button"
+        />
+        {/*--- validation error message ---*/}
+        <div className="shrink-0 errorText h-24 desktop:h-16 flex items-center justify-center">
+          {validationError ? validationError : isError ? error?.message : ""}
+        </div>
+        {/*--- (optiona) delete button ---*/}
+        {draftItem._id && (
           <Button
-            label={newItem._id ? "Save Changes" : "Add Item"}
-            onClick={onUpsert}
-            isLoading={status === "addingOrEditing"}
+            className="mt-auto mx-auto buttonRed"
+            label="Delete Item"
+            onClick={onDelete}
+            isLoading={status === "deleting"}
             disabled={status !== "initial" || isPending}
             type="button"
-          />
-          {/*--- validation error message ---*/}
-          <div className="errorText h-20 flex items-center justify-center">
-            {validationError ? validationError : isError ? error?.message : ""}
-          </div>
-          {/*--- (optiona) delete button ---*/}
-          {newItem._id && (
-            <Button
-              className="shrink-0 buttonRed"
-              label="Delete Item"
-              onClick={onDelete}
-              isLoading={status === "deleting"}
-              disabled={status !== "initial" || isPending}
-              type="button"
-            >
-              {status === "deleting" ? "Deleting..." : "Delete Item"}
-            </Button>
-          )}
-        </div>
+          >
+            {status === "deleting" ? "Deleting..." : "Delete Item"}
+          </Button>
+        )}
       </div>
     </Modal>
   );

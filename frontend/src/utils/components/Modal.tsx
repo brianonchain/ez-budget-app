@@ -32,7 +32,7 @@ export default function Modal({
         tabIndex={-1} // so modal is focusable with javascript
       >
         {/*--- glow ---*/}
-        <div className="absolute inset-0 bg-gradient-to-br from-lightBg1 to-lightBg1 dark:from-blue-500/20 dark:to-blue-500/10 z-[-1]" />
+        <div className="absolute w-[300%] h-[200%] left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-[-1] modalGlow dark:block hidden" />
         {/*--- close ---*/}
         {!disableCloseButton && (
           <button className="xButton" aria-label="Close" type="button" onClick={() => setIsOpen(false)}>
@@ -40,12 +40,12 @@ export default function Modal({
           </button>
         )}
         {/*--- title ---*/}
-        <div id={titleId} className="mx-[60px] py-[24px] text-center text-2xl desktop:text-xl font-semibold">
+        <div id={titleId} className="mx-[60px] py-6 text-center text-2xl desktop:text-xl font-semibold">
           {title}
         </div>
         {/*--- content ---*/}
         <div
-          className="flex-1 min-h-0 w-full pb-12 px-[16px] portrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[48px] overflow-y-auto thinScrollbar textBaseApp"
+          className="flex-1 min-h-0 w-full flex flex-col pb-6 px-[16px] portrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[48px] overflow-y-auto thinScrollbar textBaseApp"
           style={{ scrollbarGutter: "stable" }}
         >
           {children}

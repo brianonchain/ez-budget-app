@@ -2,7 +2,7 @@ import Spinner from "@/utils/components/Spinner";
 
 export default function loading() {
   return (
-    <div className="appPageContainer justify-center items-center bg-lightBg1 dark:bg-darkBg1 relative z-0">
+    <div className="appPageContainer justify-center items-center bg-bg1 relative z-0">
       <Spinner />
 
       <div className="absolute w-full h-full left-0 top-0 overflow-hidden z-[-1]">

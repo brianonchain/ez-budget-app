@@ -1,9 +1,11 @@
 import Menu from "./_components/Menu";
 import ContextProvider from "./_components/ContextProvider";
+import PageGlow from "./_components/PageGlow";
 
 export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="bg-lightBg2 dark:bg-darkBg1 relative">
+    <div className="bg-bg1 relative">
+      <PageGlow />
       <Menu />
       <ContextProvider>{children}</ContextProvider>
     </div>

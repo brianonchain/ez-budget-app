@@ -6,11 +6,11 @@ import SettingsClient from "./SettingsClient";
 
 export default async function page() {
   const session = await getServerSession(authOptions);
-  if (!session || !session.provider || !session.user?.email) redirect("/login");
+  if (!session || !session.provider || !session.user?.email || !session.userId) redirect("/login");
 
   return (
     <SettingsShell>
-      <SettingsClient provider={session.provider} email={session.user.email} />
+      <SettingsClient provider={session.provider} email={session.user.email} userId={session.userId} />
     </SettingsShell>
   );
 }

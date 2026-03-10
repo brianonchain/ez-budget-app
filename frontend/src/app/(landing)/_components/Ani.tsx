@@ -1,12 +1,10 @@
 import { FaGear, FaChartSimple, FaList } from "react-icons/fa6";
-import { Item } from "@/db/UserModel";
 import { FaPlus } from "react-icons/fa";
 import Image from "next/image";
 import { FaDeleteLeft } from "react-icons/fa6";
-import { TbPointer } from "react-icons/tb";
-import { FaRegHandPointer } from "react-icons/fa6";
 import { LuMousePointer2 } from "react-icons/lu";
 import { Roboto_Mono } from "next/font/google";
+import { DraftItem } from "@/utils/types";
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
@@ -33,58 +31,58 @@ export default function Ani() {
 
   const data = [
     {
-      date: new Date("2025-03-11T11:45:19.862Z"),
+      date: new Date("2025-03-11T11:45:19.862Z").toISOString(),
       cost: 18.12,
       currency: "USD",
       description: "pizza",
       category: "food",
       subcategory: "restaurant",
-      tags: "none",
+      tag: "none",
     },
     {
-      date: new Date("2025-03-11T11:55:44.660Z"),
+      date: new Date("2025-03-11T11:55:44.660Z").toISOString(),
       cost: 70.85,
       currency: "USD",
       description: "Jan phone bill",
       category: "utilities",
       subcategory: "phone",
-      tags: "none",
+      tag: "none",
     },
     {
-      date: new Date("2025-03-11T11:59:29.766Z"),
+      date: new Date("2025-03-11T11:59:29.766Z").toISOString(),
       cost: 50.98,
       currency: "USD",
       description: "gas",
       category: "transportation",
       subcategory: "gas",
-      tags: "none",
+      tag: "none",
     },
     {
-      date: new Date("2025-03-11T11:59:58.221Z"),
+      date: new Date("2025-03-11T11:59:58.221Z").toISOString(),
       cost: 11.72,
       currency: "USD",
       description: "movie",
       category: "entertainment",
       subcategory: "none",
-      tags: "none",
+      tag: "none",
     },
     {
-      date: new Date("2025-03-11T12:04:30.194Z"),
+      date: new Date("2025-03-11T12:04:30.194Z").toISOString(),
       cost: 5.8,
       currency: "USD",
       description: "Peet's latte",
       category: "food",
       subcategory: "coffee",
-      tags: "none",
+      tag: "none",
     },
     {
-      date: new Date("2025-03-11T12:20:31.796Z"),
+      date: new Date("2025-03-11T12:20:31.796Z").toISOString(),
       cost: 48.05,
       currency: "USD",
       description: "Gap sweater",
       category: "shopping",
       subcategory: "clothes",
-      tags: "none",
+      tag: "none",
     },
   ];
 
@@ -100,7 +98,7 @@ export default function Ani() {
           <LuMousePointer2 className="text-[40px]" style={{ filter: "drop-shadow(0 0 10px #facc15)" }} />
         </div>
         {/*--- Pages Container ---*/}
-        <div className="flex-none w-full h-[calc(100%-80px)] mb-[80px] flex flex-col items-center overflow-hidden overflow-y-auto text-base bg-darkBg1 relative z-0">
+        <div className="flex-none w-full h-[calc(100%-80px)] mb-[80px] flex flex-col items-center overflow-hidden overflow-y-auto text-base bg-bg1 relative z-0">
           {/*--- glow ---*/}
           <div className="absolute w-full h-full left-0 top-0 overflow-hidden z-[-1]">
             <div className="absolute top-1/2 right-0 translate-y-[-50%] translate-x-[50%] w-[90%] h-[50%] rounded-full bg-[#0444B7] blur-[200px] pointer-events-none"></div>
@@ -121,17 +119,17 @@ export default function Ani() {
                 className="w-full h-[calc(844px-80px-80px-50px)] text-base overscroll-none overflow-y-auto overflow-x-hidden select-none relative"
                 style={{ scrollbarGutter: "stable" }}
               >
-                {data.map((item: Item, index: number) => (
+                {data.map((item: DraftItem, index: number) => (
                   <div
                     key={index}
-                    className="px-[3%] w-full h-[calc((844px-80px-80px-50px)/10)] grid grid-cols-[50%_20%_30%] items-center border-b-[1.5px] border-white/5 cursor-pointer desktop:hover:bg-blue-500/10"
+                    className="px-[3%] w-full h-[calc((844px-80px-80px-50px)/10)] grid grid-cols-[50%_20%_30%] items-center border-b-[1.5px] border-borderFaint cursor-pointer desktop:hover:bg-blue-500/10"
                   >
                     <div className="">{item.description}</div>
-                    <div className="">{item.cost}</div>
+                    <div className="">{item.cost.toFixed(2)}</div>
                     <div className="flex flex-col justify-self-end text-end">
                       {item.category !== "none" && <p className="font-medium leading-tight">{item.category}</p>}
                       {item.subcategory !== "none" && <p className="italic text-sm leading-tight text-slate-400">{item.subcategory}</p>}
-                      {item.tags !== "none" && <div className="text-sm leading-tight text-darkButton1Bg truncate">{item.tags}</div>}
+                      {item.tag !== "none" && <div className="text-sm leading-tight text-darkButton1Bg truncate">{item.tag}</div>}
                     </div>
                   </div>
                 ))}
@@ -139,7 +137,7 @@ export default function Ani() {
             </div>
             {/*--- add item h-80px/110px ---*/}
             <div className="flex-none w-full h-[80px] flex items-center justify-center">
-              <div className="animate-button1 button1ColorDark w-[200px] h-[60px] rounded-full flex items-center gap-[8px] justify-center desktop:cursor-pointer">
+              <div className="animate-button1 button1Color w-[200px] h-[60px] rounded-full flex items-center gap-[8px] justify-center desktop:cursor-pointer">
                 <FaPlus className="text-[20px]" />
                 <p className="text-lg font-semibold">Item</p>
               </div>
@@ -149,9 +147,9 @@ export default function Ani() {
           {/*--- Page 2 ---*/}
           <div className="absolute left-0 top-0 w-full h-full flex flex-col items-center animate-page2">
             {/*--- header ---*/}
-            <div className="pageHeader">
+            <div className="w-[94%] max-w-[400px] py-[24px] text-center text-2xl font-bold relative">
               Enter Cost
-              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-lg cursor-pointer hover:bg-darkBg3 active:bg-darkBg3">
+              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-lg cursor-pointer">
                 &#10005;
               </div>
             </div>
@@ -174,7 +172,7 @@ export default function Ani() {
                 </div>
               </div>
               {/*--- button ---*/}
-              <button className="animate-button2 mt-[30px] w-full h-[52px] button1ColorDark rounded-[12px] text-xl font-medium cursor-pointer">
+              <button className="animate-button2 mt-[30px] w-full h-[52px] button1Color rounded-[12px] text-xl font-medium cursor-pointer">
                 Enter
               </button>
             </div>
@@ -183,9 +181,9 @@ export default function Ani() {
           {/*--- Page 3 ---*/}
           <div className="absolute left-0 top-0 w-full h-full flex flex-col items-center animate-page3">
             {/*--- header ---*/}
-            <div className="pageHeader">
+            <div className="w-[94%] max-w-[400px] py-[24px] text-center text-2xl font-bold relative">
               Enter Name
-              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-lg cursor-pointer hover:bg-darkBg3 active:bg-darkBg3">
+              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-lg cursor-pointer">
                 &#10005;
               </div>
             </div>
@@ -195,7 +193,7 @@ export default function Ani() {
                 <textarea className="p-[16px] w-full h-[200px] text-2xl border rounded-[16px] border-slate-400" disabled />
                 <div className={`absolute top-[16px] left-[16px] text-[30px] animate-name ${robotoMono.className}`}>Starbucks latte</div>
               </div>
-              <button className="animate-button3 mt-[30px] w-full h-[52px] button1ColorDark rounded-[12px] text-xl font-medium cursor-pointer">
+              <button className="animate-button3 mt-[30px] w-full h-[52px] button1Color rounded-[12px] text-xl font-medium cursor-pointer">
                 Enter
               </button>
             </div>
@@ -203,9 +201,9 @@ export default function Ani() {
 
           {/*--- Page 4 ---*/}
           <div className="absolute left-0 top-0 w-full h-full flex flex-col items-center animate-page4">
-            <div className="pageHeader">
+            <div className="w-[94%] max-w-[400px] py-[24px] text-center text-2xl font-bold relative">
               Enter Category <br />& Subcategory
-              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-lg cursor-pointer hover:bg-darkBg3 active:bg-darkBg3">
+              <div className="absolute right-[-8px] top-[4px] w-[60px] h-[60px] text-[32px] font-bold flex items-center justify-center rounded-lg cursor-pointer">
                 &#10005;
               </div>
             </div>
@@ -221,7 +219,7 @@ export default function Ani() {
                   <div className="absolute text-sm text-center tracking-tighter animate-labelText1">Food</div>
                 </div>
                 <div
-                  className={`animate-labelTypeArrow1 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-darkBg3`}
+                  className={`animate-labelTypeArrow1 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-[#251e51]`}
                 ></div>
               </div>
               {/*--- Subcategory ---*/}
@@ -234,7 +232,7 @@ export default function Ani() {
                   <div className="absolute animate-labelText2">Coffee</div>
                 </div>
                 <div
-                  className={`animate-labelTypeArrow2 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-darkBg3`}
+                  className={`animate-labelTypeArrow2 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-[#251e51]`}
                 ></div>
               </div>
               {/*--- Tags ---*/}
@@ -244,12 +242,12 @@ export default function Ani() {
                 <p className="text-base font-medium tracking-tighter text-center">Tags</p>
                 <div className="w-full text-sm text-center tracking-tighter flex justify-center relative">none</div>
                 <div
-                  className={`animate-labelTypeArrow3 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-darkBg3`}
+                  className={`animate-labelTypeArrow3 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-[#251e51]`}
                 ></div>
               </div>
             </div>
             {/*--- label choices ---*/}
-            <div className="grow mt-[20px] py-[20px] w-[360px] flex justify-center overflow-hidden bg-darkBg3 rounded-[12px] relative">
+            <div className="grow mt-[20px] py-[20px] w-[360px] flex justify-center overflow-hidden bg-[#251e51] rounded-[12px] relative">
               {/*--- category choices ---*/}
               <div className="absolute w-full px-[20px] h-full flex flex-col gap-[4px] animate-choices1">
                 {labelOptions["category"].map((i, index) => (
@@ -292,7 +290,7 @@ export default function Ani() {
             </div>
             {/*--- button ---*/}
             <div className="flex-none pb-[40px]">
-              <button className="animate-button4 mt-[30px] w-[360px] h-[52px] button1ColorDark rounded-[12px] text-xl font-medium cursor-pointer">
+              <button className="animate-button4 mt-[30px] w-[360px] h-[52px] button1Color rounded-[12px] text-xl font-medium cursor-pointer">
                 Done
               </button>
             </div>
@@ -316,26 +314,26 @@ export default function Ani() {
               >
                 {[
                   {
-                    date: new Date("2025-03-12T11:45:19.862Z"),
+                    date: new Date("2025-03-12T11:45:19.862Z").toISOString(),
                     cost: 6.8,
                     currency: "USD",
                     description: "Starbucks latte",
                     category: "food",
                     subcategory: "coffee",
-                    tags: "none",
+                    tag: "none",
                   },
                   ...data,
-                ].map((item: Item, index: number) => (
+                ].map((item: DraftItem, index: number) => (
                   <div
                     key={index}
-                    className="px-[3%] w-full h-[calc((844px-80px-80px-50px)/10)] grid grid-cols-[50%_20%_30%] items-center border-b-[1.5px] border-white/5 cursor-pointer desktop:hover:bg-blue-500/10"
+                    className="px-[3%] w-full h-[calc((844px-80px-80px-50px)/10)] grid grid-cols-[50%_20%_30%] items-center border-b-[1.5px] border-borderFaint cursor-pointer desktop:hover:bg-blue-500/10"
                   >
                     <div className="">{item.description}</div>
-                    <div className="">{item.cost}</div>
+                    <div className="">{item.cost.toFixed(2)}</div>
                     <div className="flex flex-col justify-self-end text-end">
                       {item.category !== "none" && <p className="font-medium leading-tight">{item.category}</p>}
                       {item.subcategory !== "none" && <p className="italic text-sm leading-tight text-slate-400">{item.subcategory}</p>}
-                      {item.tags !== "none" && <div className="text-sm leading-tight text-darkButton1Bg truncate">{item.tags}</div>}
+                      {item.tag !== "none" && <div className="text-sm leading-tight text-darkButton1Bg truncate">{item.tag}</div>}
                     </div>
                   </div>
                 ))}
@@ -343,7 +341,7 @@ export default function Ani() {
             </div>
             {/*--- add item h-80px/110px ---*/}
             <div className="flex-none w-full h-[80px] flex items-center justify-center">
-              <div className="button1ColorDark w-[200px] h-[60px] rounded-full flex items-center gap-[8px] justify-center desktop:cursor-pointer">
+              <div className="button1Color w-[200px] h-[60px] rounded-full flex items-center gap-[8px] justify-center desktop:cursor-pointer">
                 <FaPlus className="text-[20px]" />
                 <p className="text-lg font-semibold">Item</p>
               </div>

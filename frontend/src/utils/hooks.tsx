@@ -1,32 +1,32 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
-import { Settings, Item } from "@/db/UserModel";
-import { UserData } from "@/utils/types";
+import { ItemsData, SettingsData, MutateUserPayload, MutateSettingsPayload, MutateItemsPayload } from "@/utils/types";
 import { fetchPost, fetchGet } from "./functions";
-import { MutateSettingsPayload, MutateItemsPayload } from "./types";
 
-export const useUserQuery = (email: string | null | undefined) => {
-  return useQuery<UserData | null, Error>({
-    queryKey: ["user"],
-    queryFn: async (): Promise<UserData | null> => {
-      const resJson = await fetchGet("/api/getUser");
+export const useItemsQuery = (email: string | null | undefined) => {
+  return useQuery<ItemsData, Error>({
+    queryKey: ["items"],
+    queryFn: async (): Promise<ItemsData> => {
+      const resJson = await fetchGet("/api/getItems");
       if (resJson.status === "success") return resJson.data;
-      throw new Error(resJson.message || "Failed to load user.");
+      throw new Error(resJson.message || "Failed to load items.");
     },
-    enabled: email ? true : false,
-    staleTime: Infinity, // won't make network request unless query key invoked
-    gcTime: Infinity, // query will always be cached
+    enabled: !!email,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };
 
-export const useSettingsMutation = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (payload: MutateSettingsPayload) => {
-      const resJson = await fetchPost("/api/mutateSettings", payload);
-      if (resJson.status === "success") return;
-      throw new Error(resJson?.message || "Unknown error. Please try again.");
+export const useSettingsQuery = (email: string | null | undefined) => {
+  return useQuery<SettingsData, Error>({
+    queryKey: ["settings"],
+    queryFn: async (): Promise<SettingsData> => {
+      const resJson = await fetchGet("/api/getSettings");
+      if (resJson.status === "success") return resJson.data;
+      throw new Error(resJson.message || "Failed to load settings.");
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["user"] }),
+    enabled: !!email,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };
 
@@ -38,7 +38,39 @@ export const useItemsMutation = () => {
       if (resJson.status === "success") return;
       throw new Error(resJson?.message || "Failed to save item.");
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["user"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["items"] }),
+  });
+};
+
+export const useSettingsMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: MutateSettingsPayload) => {
+      const resJson = await fetchPost("/api/mutateSettings", payload);
+      if (resJson.status === "success") return;
+      throw new Error(resJson?.message || "Unknown error. Please try again.");
+    },
+    onSuccess: (_data, payload) => {
+      queryClient.invalidateQueries({ queryKey: ["settings"] });
+      if (payload.type === "changeCurrency") {
+        queryClient.invalidateQueries({ queryKey: ["items"] });
+      }
+    },
+  });
+};
+
+export const useUserMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (payload: MutateUserPayload) => {
+      const resJson = await fetchPost("/api/mutateUser", payload);
+      if (resJson.status === "success") return;
+      throw new Error(resJson?.message || "Unknown error. Please try again.");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["settings"] });
+      queryClient.invalidateQueries({ queryKey: ["items"] });
+    },
   });
 };
 

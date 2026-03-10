@@ -1,9 +1,7 @@
 "use client";
 
-import { CategoryObject } from "@/db/UserModel";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { FiMenu } from "react-icons/fi";
 import { SlMenu } from "react-icons/sl";
 
 export default function Category({
@@ -32,17 +30,17 @@ export default function Category({
       {...attributes}
       {...listeners}
       style={style}
-      className={`px-[4px] h-[52px] desktop:h-[40px] flex items-center justify-between border-t border-b border-dashed borderColorFaint desktop:cursor-pointer desktop:hover:text-slate-400`}
+      className="settingsDraggableElement"
       onClick={() => {
         setClickedCategory(category);
         setAddCategoryModal(true);
       }}
     >
-      <div className="">
+      <div>
         <p className="font-medium leading-tight line-clamp-1">{category}</p>
         <p className="italic leading-tight line-clamp-1">{subcategories.slice(1).join(", ")}</p>
       </div>
-      <SlMenu className="text-[18px] desktop:text-[14px]" />
+      <SlMenu className="flex-none text-lg desktop:text-sm" />
     </div>
   );
 }

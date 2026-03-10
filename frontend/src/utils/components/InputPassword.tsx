@@ -2,13 +2,13 @@ import { useState, useRef } from "react";
 import { PiEyeLight, PiEyeSlashLight } from "react-icons/pi";
 import Accordion from "./Accordion";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+type InputProps = {
   className?: string;
   label: string;
   _id: string;
   isError?: boolean;
   errorMsg?: string;
-}
+} & React.InputHTMLAttributes<HTMLInputElement>;
 
 export default function InputPassword({ className = "", label, _id, isError = false, errorMsg = "", ...props }: InputProps) {
   const ref = useRef<HTMLInputElement | null>(null);
@@ -22,7 +22,9 @@ export default function InputPassword({ className = "", label, _id, isError = fa
       <div className="w-full relative">
         <input
           id={_id}
-          className={`input !pr-[calc(1.2em+2rem)] desktop:!pr-[calc(1.2em+1.5rem)] ${isError ? "borderColorError" : ""} peer`}
+          className={`input !pr-[calc(1.2em+2rem)] desktop:!pr-[calc(1.2em+1.5rem)] ${
+            isError ? "!border-buttonRedBg focus:!border-buttonRedBg" : ""
+          } peer`}
           ref={ref}
           type={show ? "text" : "password"}
           autoCapitalize="none"

@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/utils/authOptions";
-import dbConnect from "@/db/dbConnect"; // Your mongoose connection helper
+// db
+import dbConnect from "@/db/dbConnect";
 import PendingEmailChangeModel from "@/db/PendingEmailChange";
 import UserModel from "@/db/UserModel";
-// email
-const nodemailer = require("nodemailer"); // nodemailer does not suppot es6
-import { google } from "googleapis";
+// utils
+import { authOptions } from "@/utils/authOptions";
 import { generateOtp, normalizeEmail } from "@/utils/functions";
-import { hashOtp } from "@/utils/serverFunctions";
+import { hashOtp, getGmailTransporter } from "@/utils/serverFunctions";
 
 export async function POST(req: NextRequest) {
   const { newEmail } = await req.json();
@@ -59,35 +58,7 @@ export async function POST(req: NextRequest) {
     </div>
   `;
   try {
-    // get access token
-    const oauth2Client = new google.auth.OAuth2(
-      process.env.GMAIL_CLIENT_ID,
-      process.env.GMAIL_CLIENT_SECRET,
-      "https://developers.google.com/oauthplayground" // this is required if using refresh tokens generated from oauthplayground
-    );
-    oauth2Client.setCredentials({ refresh_token: process.env.GMAIL_REFRESH_TOKEN });
-    // wrap in promise because article says "await" does not work, but other code examples use await
-    const accessToken = await new Promise((resolve, reject) => {
-      oauth2Client.getAccessToken((err: any, token: any) => {
-        if (err) reject();
-        resolve(token);
-      });
-    });
-
-    // create transporter
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        type: "OAuth2",
-        user: "support@nullapay.com",
-        accessToken,
-        clientId: process.env.GMAIL_CLIENT_ID,
-        clientSecret: process.env.GMAIL_CLIENT_SECRET,
-        refreshToken: process.env.GMAIL_REFRESH_TOKEN,
-      },
-    });
-
-    // send
+    const transporter = await getGmailTransporter();
     await transporter.sendMail({
       from: { name: "EZ Budget App", address: "support@nullapay.com" },
       to: _newEmail,

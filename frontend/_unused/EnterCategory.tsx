@@ -1,15 +1,25 @@
 // @ts-nocheck
-import Header from "../src/app/(app)/app/items/_components/Header";
+import Header from "./Header";
 import { useState } from "react";
-import { Item } from "@/db/UserModel";
 import { useItemsMutation } from "@/utils/hooks";
 import Button from "@/utils/components/Button";
+import { DraftItem } from "@/utils/types";
 
-export default function EnterCat({ setPage, data, newItem, setNewItem }: { setPage: any; data: any; newItem: Item; setNewItem: any }) {
+export default function EnterCategory({
+  setPage,
+  data,
+  draftItem,
+  setDraftItem,
+}: {
+  setPage: any;
+  data: any;
+  draftItem: DraftItem;
+  setDraftItem: any;
+}) {
   const { mutateAsync: mutateItemsAsync, isPending } = useItemsMutation();
 
-  const [labelType, setLabelType] = useState<keyof Item>("category");
-  const [labelOptions, setLabelOptions] = useState(Object.keys(data.settings.category));
+  const [labelType, setLabelType] = useState<keyof DraftItem>("category");
+  const [labelOptions, setLabelOptions] = useState(Object.keys(data.workspace.category));
 
   return (
     <>
@@ -21,50 +31,50 @@ export default function EnterCat({ setPage, data, newItem, setNewItem }: { setPa
           <div
             key={index}
             className={`${
-              labelType === i ? "bg-lightButton1Bg dark:bg-darkButton1Bg text-white" : ""
-            } p-[8px] desktop:p-[4px] h-[64px] desktop:h-[52px] flex flex-col justify-between border-2 border-lightButton1Bg dark:border-darkButton1Bg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-lightButton1Bg dark:desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
+              labelType === i ? "bg-buttong1Bg text-white" : ""
+            } p-[8px] desktop:p-[4px] h-[64px] desktop:h-[52px] flex flex-col justify-between border-2 border-button1Bg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-button1Bg desktop:hover:text-white`}
             onClick={() => {
               setLabelType(i);
               if (i === "category") {
-                setLabelOptions(Object.keys(data.settings.category));
+                setLabelOptions(Object.keys(data.workspace.category));
               } else if (i === "subcategory") {
-                setLabelOptions(data.settings.category[newItem.category]);
+                setLabelOptions(data.workspace.category[draftItem.category]);
               } else if (i === "tags") {
-                setLabelOptions(data.settings.tags);
+                setLabelOptions(data.workspace.tags);
               }
             }}
           >
             <p className="text-base desktop:text-sm font-medium text-center">{i.charAt(0).toUpperCase() + i.slice(1)}</p>
-            <p className="text-sm text-center tracking-tighter truncate">{newItem[i]}</p>
+            <p className="text-sm text-center tracking-tighter truncate">{draftItem[i]}</p>
             <div
               className={`${
                 labelType === i ? "" : "invisible"
-              } absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-slate-200 dark:bg-darkBg3`}
+              } absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-slate-200 dark:bg-[#251e51]`}
             ></div>
           </div>
         ))}
       </div>
 
       {/*--- label choices ---*/}
-      <div className="grow mt-[20px] py-[20px] w-[350px] flex justify-center overflow-hidden bg-slate-200 dark:bg-darkBg3 rounded-lg relative">
+      <div className="grow mt-[20px] py-[20px] w-[350px] flex justify-center overflow-hidden bg-slate-200 dark:bg-[#251e51] rounded-lg relative">
         <div className="w-full px-[20px] h-full flex flex-col gap-[4px] overflow-y-auto thinScrollbar">
           {labelOptions.map((i, index) => (
             <div
               key={index}
               className={`${
-                newItem[labelType] === i ? "border-lightButton1Bg dark:border-darkButton1Bg" : "border-slate-300 dark:border-transparent"
-              } flex-none px-[12px] w-full h-[56px] desktop:h-[40px] flex items-center justify-between  font-medium border-2 rounded-lg desktop:cursor-pointer bg-white dark:bg-blue-100/10 desktop:hover:border-lightButton1Bg dark:desktop:hover:border-darkButton1Bg`}
+                draftItem[labelType] === i ? "border-button1Bg" : "border-slate-300 dark:border-transparent"
+              } flex-none px-[12px] w-full h-[56px] desktop:h-[40px] flex items-center justify-between  font-medium border-2 rounded-lg desktop:cursor-pointer bg-white dark:bg-blue-100/10 desktop:hover:border-button1Bg`}
               onClick={() => {
                 if (labelType === "category") {
                   setLabelType("subcategory");
-                  setLabelOptions(data.settings.category[i]);
-                  setNewItem({ ...newItem, category: i, subcategory: "none" });
+                  setLabelOptions(data.workspace.category[i]);
+                  setDraftItem({ ...draftItem, category: i, subcategory: "none" });
                 } else if (labelType === "subcategory") {
                   setLabelType("tags");
-                  setLabelOptions(data.settings.tags);
-                  setNewItem({ ...newItem, [labelType]: i });
+                  setLabelOptions(data.workspace.tags);
+                  setDraftItem({ ...draftItem, [labelType]: i });
                 } else if (labelType === "tags") {
-                  setNewItem({ ...newItem, [labelType]: i });
+                  setDraftItem({ ...draftItem, [labelType]: i });
                 }
               }}
             >
@@ -81,7 +91,7 @@ export default function EnterCat({ setPage, data, newItem, setNewItem }: { setPa
           label={isPending ? "Adding..." : "Done"}
           onClick={async () => {
             const date = new Date();
-            const newItemTemp = { ...newItem, date };
+            const newItemTemp = { ...draftItem, date };
             await mutateItemsAsync(newItemTemp);
             setPage("list");
           }}

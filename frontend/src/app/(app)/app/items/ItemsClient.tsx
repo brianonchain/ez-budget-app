@@ -1,18 +1,21 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useUserQuery } from "@/utils/hooks";
+import { useItemsQuery, useSettingsQuery } from "@/utils/hooks";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 // components
+import ItemsShell from "./ItemsShell";
 import AddItemButton from "./_components/AddItemButton";
 import ErrorModal from "@/utils/components/ErrorModal";
 import EnterCost from "./_components/EnterCost";
 import EnterName from "./_components/EnterName";
 import Details from "./_components/Details";
 import Loading from "./loading";
+// constants
+import { SYMBOLS, DECIMALS } from "@/utils/constants";
 // types
-import { Item } from "@/db/UserModel";
-import ItemsShell from "./ItemsShell";
+import { DraftItem } from "@/utils/types";
+import { emptyItem } from "@/utils/constants";
 
 export default function Items() {
   const router = useRouter();
@@ -26,89 +29,76 @@ export default function Items() {
     }
   }, [session.status]);
 
-  const { data, isPending, isError } = useUserQuery(session?.data?.user?.email);
-
+  const { data: itemsData } = useItemsQuery(session?.data?.user?.email);
+  const { data: settingsData } = useSettingsQuery(session?.data?.user?.email);
   // states
   const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
   const [costModal, setCostModal] = useState(false);
   const [nameModal, setNameModal] = useState(false);
   const [detailsModal, setDetailsModal] = useState(false);
-  const [newItem, setNewItem] = useState<Item>({
-    date: new Date(),
-    cost: 0,
-    currency: "USD",
-    description: "",
-    category: "none",
-    subcategory: "none",
-    tags: "none",
-  });
+  const [draftItem, setDraftItem] = useState<DraftItem>(emptyItem);
 
   // useEffect(() => {
   //   if (isError) setErrorModal("Unable to fetch you data. Refresh app or re-login. We apologize for the inconvenience.");
   // }, [isError]);
 
-  if (!data) {
+  if (!itemsData) {
     return <Loading />;
   }
 
   const addItemOnClick = () => {
-    setNewItem({
-      date: new Date(),
-      cost: 0,
-      currency: data.settings.defaultCurrency,
-      description: "",
-      category: "none",
-      subcategory: "none",
-      tags: "none",
+    if (!settingsData) return;
+    setDraftItem({
+      ...emptyItem,
+      date: new Date().toISOString(),
+      currency: settingsData.workspace.defaultCurrency,
     });
-    console.log("addItemOnClick,newItem", newItem);
     setCostModal(true);
   };
 
   return (
     <>
-      <ItemsShell footer={<AddItemButton onClick={addItemOnClick} />}>
-        {data.items.length === 0 ? (
+      <ItemsShell footer={<AddItemButton onClick={addItemOnClick} disabled={settingsData?.role === "viewer"} />}>
+        {itemsData.items.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center">No items yet</div>
         ) : (
           <>
-            {data.items.map((item: Item, index: number) => (
+            {itemsData.items.map((item, index) => (
               <div
                 key={index}
-                className="px-[3%] w-full listItemHeight grid grid-cols-[50%_20%_30%] items-center border-t-[1.5px] border-slate-200 dark:border-white/5 desktop:cursor-pointer desktop:hover:bg-lightBg2 dark:desktop:hover:bg-blue-500/10"
+                className="px-[3%] w-full listItemHeight grid grid-cols-[50%_20%_30%] items-center border-t-[1.5px] border-borderFaint desktop:cursor-pointer desktop:hover:bg-bg1 dark:desktop:hover:bg-blue-500/10"
                 onClick={() => {
-                  setNewItem(item);
+                  setDraftItem(item);
                   setDetailsModal(true);
                 }}
               >
                 <div className="">{item.description}</div>
-                <div className="">{item.cost}</div>
+                <div className="">{SYMBOLS[item.currency] + item.cost.toFixed(DECIMALS[item.currency])}</div>
                 <div className="flex flex-col justify-self-end text-end">
                   {item.category !== "none" && <p className="font-medium leading-tight">{item.category}</p>}
                   {item.subcategory !== "none" && (
-                    <p className="italic text-sm desktop:text-xs leading-tight text-slate-500 dark:text-slate-400">{item.subcategory}</p>
+                    <p className="italic text-sm desktop:text-xs leading-none text-slate-500 dark:text-slate-400">{item.subcategory}</p>
                   )}
-                  {item.tags !== "none" && (
-                    <div className="text-sm desktop:text-xs leading-tight text-lightButton1Bg dark:text-darkButton1Bg truncate">
-                      {item.tags}
-                    </div>
-                  )}
+                  {item.tag !== "none" && <div className="text-sm desktop:text-xs leading-tight text-button1Bg truncate">{item.tag}</div>}
                 </div>
               </div>
             ))}
           </>
         )}
       </ItemsShell>
-      {costModal && (
+      {costModal && settingsData && (
         <EnterCost
           setCostModal={setCostModal}
           setNameModal={setNameModal}
-          setNewItem={setNewItem}
-          defaultCurrency={data.settings.defaultCurrency}
+          setDraftItem={setDraftItem}
+          workspaceId={settingsData.workspace._id}
+          defaultCurrency={settingsData.workspace.defaultCurrency}
         />
       )}
-      {nameModal && <EnterName setNameModal={setNameModal} setDetailsModal={setDetailsModal} setNewItem={setNewItem} />}
-      {detailsModal && <Details setDetailsModal={setDetailsModal} data={data} newItem={newItem} setNewItem={setNewItem} />}
+      {nameModal && <EnterName setNameModal={setNameModal} setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} />}
+      {detailsModal && settingsData && (
+        <Details setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} draftItem={draftItem} settingsData={settingsData} />
+      )}
       {errorModal && <ErrorModal errorModal={errorModal} setErrorModal={setErrorModal} />}
     </>
   );

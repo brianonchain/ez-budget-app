@@ -10,8 +10,6 @@ import ErrorModal from "@/utils/components/ErrorModal";
 import Button from "@/utils/components/Button";
 
 export default function SignUpClient() {
-  console.log("(app)/login/_components/SignUpClient.tsx");
-
   // hooks
   const router = useRouter();
 
@@ -22,16 +20,6 @@ export default function SignUpClient() {
   const [errors, setErrors] = useState({ email: false, password1: false, password2: false });
   const [isLoading, setIsLoading] = useState(false);
   const [errorModal, setErrorModal] = useState<React.ReactNode | null>(null);
-
-  // redirect to /saveToHome if mobile & not standalone
-  useEffect(() => {
-    const isDesktop = window.matchMedia("(hover: hover) and (pointer:fine)").matches;
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
-    if (!isDesktop && !isStandalone && process.env.NODE_ENV != "development") {
-      router.push("/saveAppToHome");
-      return;
-    }
-  }, []);
 
   function validateEmail(email: string) {
     setErrors((prev) => ({ ...prev, email: !!email && !checkEmail(email) }));

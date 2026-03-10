@@ -23,7 +23,7 @@ export default function themeToggle() {
     >
       {/* Slider circle */}
       <div
-        className={`w-[35px] h-[35px] bg-white dark:bg-darkBg2 rounded-full flex items-center justify-center transition-transform duration-300 transform ${
+        className={`w-[35px] h-[35px] bg-white dark:bg-[#050b36] rounded-full flex items-center justify-center transition-transform duration-300 transform ${
           isDark ? "translate-x-[32px]" : "translate-x-0"
         }`}
       >

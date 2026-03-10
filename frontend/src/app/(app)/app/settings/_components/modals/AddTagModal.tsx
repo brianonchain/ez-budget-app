@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useSettingsMutation } from "@/utils/hooks";
 import Modal from "@/utils/components/Modal";
-import { UserData } from "@/utils/types";
+import { Workspace } from "@/utils/types";
 
 export default function AddTagModal({
-  data,
+  workspace,
   setAddTagModal,
   clickedTag,
 }: {
-  data: UserData | null | undefined;
+  workspace: Workspace;
   setAddTagModal: React.Dispatch<React.SetStateAction<boolean>>;
   clickedTag: string;
 }) {
@@ -25,12 +25,12 @@ export default function AddTagModal({
     const _tag = tag.trim();
 
     // validation
-    if (!data || status !== "initial" || isPending || isEdit) return;
+    if (!workspace || status !== "initial" || isPending || isEdit) return;
     if (!_tag) {
       setValidationError("Please enter a tag");
       return;
     }
-    if (data.settings.tags.some((i) => i.toLowerCase() === _tag.toLowerCase())) {
+    if (workspace.tags.some((i) => i.toLowerCase() === _tag.toLowerCase())) {
       setValidationError("Tag already exists.");
       return;
     }
@@ -44,7 +44,7 @@ export default function AddTagModal({
 
     // mutation
     try {
-      await settingsMutateAsync({ type: "addTag", tag: _tag });
+      await settingsMutateAsync({ type: "addTag", workspaceId: workspace._id, tag: _tag });
       setAddTagModal(false);
     } catch {
       setStatus("initial"); // error will be shown on UI
@@ -54,13 +54,13 @@ export default function AddTagModal({
   async function onRename() {
     const _tag = tag.trim();
     // validation
-    if (!data || !clickedTag || status !== "initial" || isPending) return;
+    if (!workspace || !clickedTag || status !== "initial" || isPending) return;
     if (!_tag) {
       setValidationError("Please enter a tag.");
       return;
     }
     if (_tag === clickedTag) return;
-    if (_tag.toLowerCase() !== clickedTag.toLowerCase() && data.settings.tags.some((i) => i.toLowerCase() === _tag.toLowerCase())) {
+    if (_tag.toLowerCase() !== clickedTag.toLowerCase() && workspace.tags.some((i) => i.toLowerCase() === _tag.toLowerCase())) {
       setValidationError("Tag already exists.");
       return;
     } // allows food => Food
@@ -74,7 +74,7 @@ export default function AddTagModal({
 
     // mutation
     try {
-      await settingsMutateAsync({ type: "renameTag", from: clickedTag, to: _tag });
+      await settingsMutateAsync({ type: "renameTag", workspaceId: workspace._id, from: clickedTag, to: _tag });
     } catch {
       // error will show on UI
     }
@@ -82,14 +82,14 @@ export default function AddTagModal({
   }
 
   async function onDelete() {
-    if (!data || !clickedTag || status !== "initial" || isPending) return;
+    if (!workspace || !clickedTag || status !== "initial" || isPending) return;
 
     // is-being-used validation done on backend
     setValidationError("");
     setStatus("deleting");
 
     try {
-      await settingsMutateAsync({ type: "deleteTag", tag: clickedTag });
+      await settingsMutateAsync({ type: "deleteTag", workspaceId: workspace._id, tag: clickedTag });
       setAddTagModal(false);
     } catch {
       setStatus("initial"); // error will show on UI
@@ -98,7 +98,7 @@ export default function AddTagModal({
 
   return (
     <Modal title={isEdit ? "Edit Tag" : "Add A Tag"} setIsOpen={setAddTagModal} disableCloseButton={status !== "initial" || isPending}>
-      <form className="mx-auto w-full max-w-[400px] min-h-full flex flex-col items-center" onSubmit={onSubmit}>
+      <form className="mx-auto w-full max-w-[400px] flex flex-col items-center" onSubmit={onSubmit}>
         <label className="mt-[16px] pb-1.5 w-full inputLabel">Tags (e.g., Euro Trip 2025, Winnie's birthday)</label>
         <input
           className="mt-[4px] w-full input"

@@ -3,29 +3,29 @@ import { FaPlus } from "react-icons/fa6";
 import Modal from "@/utils/components/Modal";
 import EditButtons from "./EditButtons";
 import { useSettingsMutation } from "@/utils/hooks";
-import { UserData } from "@/utils/types";
+import { Workspace } from "@/utils/types";
 
 export type SubcategoryWithId = { value: string; isNew: boolean };
 export type AddCategoryModalStatus = "initial" | "adding" | "editing" | "deleting" | `deletingSubcategory${number}`;
 
 export default function AddCategoryModal({
+  workspace,
   setAddCategoryModal,
-  data,
   clickedCategory,
   setClickedCategory,
 }: {
+  workspace: Workspace;
   setAddCategoryModal: React.Dispatch<React.SetStateAction<boolean>>;
-  data: UserData | null | undefined;
   clickedCategory: string | null;
   setClickedCategory: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
   const isEdit = !!clickedCategory;
 
   // Form state
-  const [category, setCategory] = useState(clickedCategory ?? "");
+  const [draftCategory, setDraftCategory] = useState(clickedCategory ?? "");
   const [subcategoriesWithId, setSubcategoriesWithId] = useState<SubcategoryWithId[]>(() => {
     if (isEdit) {
-      const subs = data?.settings.categoryObjects.find((i) => i.category === clickedCategory)?.subcategories ?? [];
+      const subs = workspace.categoryObjects.find((i) => i.category === clickedCategory)?.subcategories ?? [];
       return subs.filter((i) => i && i !== "none").map((i) => ({ value: i, isNew: false }));
     } else {
       return [
@@ -41,25 +41,25 @@ export default function AddCategoryModal({
 
   // sync UI states with server state
   useEffect(() => {
-    if (!isEdit || !data || status !== "initial" || isPending) return;
+    if (!isEdit || !workspace || status !== "initial" || isPending) return;
     // sync category
-    const obj = data.settings.categoryObjects.find((c) => c.category === clickedCategory);
+    const obj = workspace.categoryObjects.find((c) => c.category === clickedCategory);
     if (!obj) return;
-    setCategory(obj.category);
+    setDraftCategory(obj.category);
     // sync subcategories
     setSubcategoriesWithId(obj.subcategories.filter((s) => s && s !== "none").map((s) => ({ value: s, isNew: false })));
-  }, [data?.settings.categoryObjects, clickedCategory]);
+  }, [workspace.categoryObjects, clickedCategory]);
 
   // add category (not optimistic)
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!data || status !== "initial" || isPending || isEdit) return;
-    const _category = category.trim();
+    if (!workspace || status !== "initial" || isPending || isEdit) return;
+    const _category = draftCategory.trim();
     if (!_category) {
       setValidationError("Please enter a category");
       return;
     }
-    if (data.settings.categoryObjects.some((i) => i.category.toLowerCase() === _category.toLowerCase())) {
+    if (workspace.categoryObjects.some((i) => i.category.toLowerCase() === _category.toLowerCase())) {
       setValidationError("Category already exists.");
       return;
     }
@@ -88,20 +88,24 @@ export default function AddCategoryModal({
     const _subcategories = ["none", ...cleaned];
 
     try {
-      await settingsMutateAsync({ type: "addCategoryObject", categoryObject: { category: _category, subcategories: _subcategories } });
+      await settingsMutateAsync({
+        type: "addCategoryObject",
+        workspaceId: workspace._id,
+        categoryObject: { category: _category, subcategories: _subcategories },
+      });
       setAddCategoryModal(false);
     } catch {
       setStatus("initial");
     }
   }
 
-  // partly optimistic (value is immediately updated and reverts if error; but data.settings is not updated immediately)
+  // partly optimistic (value is immediately updated and reverts if error; but workspace is not updated immediately)
   async function renameCategory() {
-    if (!data || status !== "initial" || isPending || !isEdit) return;
+    if (!workspace || status !== "initial" || isPending || !isEdit) return;
     const from = clickedCategory;
-    const to = category.trim();
+    const to = draftCategory.trim();
     if (!to) {
-      setCategory(from);
+      setDraftCategory(from);
       if (validationError) setValidationError("");
       return;
     }
@@ -110,10 +114,7 @@ export default function AddCategoryModal({
       return;
     }
     if (from === to) return;
-    if (
-      from.toLowerCase() !== to.toLowerCase() &&
-      data.settings.categoryObjects.some((i) => i.category.toLowerCase() === to.toLowerCase())
-    ) {
+    if (from.toLowerCase() !== to.toLowerCase() && workspace.categoryObjects.some((i) => i.category.toLowerCase() === to.toLowerCase())) {
       setValidationError("Category already exists."); // allows food => Food
       return;
     }
@@ -122,7 +123,7 @@ export default function AddCategoryModal({
     setStatus("editing");
 
     try {
-      await settingsMutateAsync({ type: "renameCategory", from, to });
+      await settingsMutateAsync({ type: "renameCategory", workspaceId: workspace._id, from, to });
       setClickedCategory(to); // update clickedCategory
     } catch {} // error will show on UI
     setStatus("initial");
@@ -130,12 +131,12 @@ export default function AddCategoryModal({
 
   // not optimistic
   async function deleteCategoryObject() {
-    if (!data || status !== "initial" || isPending || !isEdit) return;
+    if (!workspace || status !== "initial" || isPending || !isEdit) return;
     setValidationError(""); // is-being-used validation done on backend
     setStatus("deleting");
 
     try {
-      await settingsMutateAsync({ type: "deleteCategoryObject", category: clickedCategory });
+      await settingsMutateAsync({ type: "deleteCategoryObject", workspaceId: workspace._id, category: clickedCategory });
       setAddCategoryModal(false);
     } catch {
       setStatus("initial"); // error will show on UI
@@ -143,7 +144,7 @@ export default function AddCategoryModal({
   }
 
   async function addSubcategory(index: number) {
-    if (!data || !isEdit || status !== "initial" || isPending || !subcategoriesWithId[index].isNew) return;
+    if (!workspace || !isEdit || status !== "initial" || isPending || !subcategoriesWithId[index].isNew) return;
     const subcategory = subcategoriesWithId[index].value.trim();
     if (!subcategory) return;
     if (subcategory.toLowerCase() === "none") {
@@ -159,15 +160,15 @@ export default function AddCategoryModal({
     setStatus("adding");
 
     try {
-      await settingsMutateAsync({ type: "addSubcategory", category: clickedCategory, subcategory });
+      await settingsMutateAsync({ type: "addSubcategory", workspaceId: workspace._id, category: clickedCategory, subcategory });
       setSubcategoriesWithId((prev) => prev.map((r, i) => (i === index ? { ...r, isNew: false, value: subcategory } : r))); // optimistic update
     } catch {} // error will show on UI
     setStatus("initial");
   }
 
   async function renameSubcategory(index: number) {
-    if (!data || !isEdit || status !== "initial" || isPending) return;
-    const from = data.settings.categoryObjects.find((i) => i.category === clickedCategory)?.subcategories[index + 1];
+    if (!workspace || !isEdit || status !== "initial" || isPending) return;
+    const from = workspace.categoryObjects.find((i) => i.category === clickedCategory)?.subcategories[index + 1];
     const to = subcategoriesWithId[index].value.trim();
     if (!from) {
       setValidationError("Unknown error.");
@@ -196,7 +197,7 @@ export default function AddCategoryModal({
     setStatus("editing");
 
     try {
-      await settingsMutateAsync({ type: "renameSubcategory", category: clickedCategory, from, to });
+      await settingsMutateAsync({ type: "renameSubcategory", workspaceId: workspace._id, category: clickedCategory, from, to });
     } catch {} // error will show on UI
     setStatus("initial");
   }
@@ -220,15 +221,15 @@ export default function AddCategoryModal({
       setIsOpen={setAddCategoryModal}
       disableCloseButton={isPending}
     >
-      <form className="mx-auto pt-[16px] w-full max-w-[400px] min-h-full flex flex-col" onSubmit={onSubmit}>
+      <form className="mx-auto pt-4 w-full max-w-100 flex flex-col" onSubmit={onSubmit}>
         {/*--- category ---*/}
         <label className="block pb-1.5 w-full inputLabel">Category{isEdit ? "" : " (e.g., Food)"}</label>
         <div className="w-full flex gap-4">
           <input
             className="input"
-            value={category}
+            value={draftCategory}
             onChange={(e) => {
-              setCategory(e.target.value);
+              setDraftCategory(e.target.value);
               if (validationError) setValidationError("");
             }}
             onBlur={isEdit ? renameCategory : undefined}
@@ -252,6 +253,7 @@ export default function AddCategoryModal({
               />
               {isEdit && (
                 <EditButtons
+                  workspaceId={workspace._id}
                   setSubcategoriesWithId={setSubcategoriesWithId}
                   validationError={validationError}
                   setValidationError={setValidationError}
@@ -268,7 +270,7 @@ export default function AddCategoryModal({
 
         {/*--- add subcategory field ---*/}
         <button
-          className="mt-4 link flex items-center justify-center gap-1 font-medium"
+          className="self-center mt-4 link flex items-center justify-center gap-1 font-medium"
           type="button"
           onClick={addSubcategoryField}
           disabled={isPending || status !== "initial"}

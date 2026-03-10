@@ -1,12 +1,13 @@
 // TODO: consider adding "server-only"; directive?
 
 import mongoose from "mongoose";
+import { serverEnv } from "@/utils/serverEnv";
 
 declare global {
   var mongoose: any;
 }
 
-const MONGO_URI = process.env.MONGO_URI!;
+const MONGO_URI = serverEnv.MONGO_URI;
 
 if (!MONGO_URI) {
   throw new Error("Please define the MONGODB_URI environment variabl");

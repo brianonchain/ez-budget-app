@@ -14,10 +14,12 @@ export default function TagsContainer({
   tags,
   setAddTagModal,
   setClickedTag,
+  workspaceId,
 }: {
   tags: string[];
   setAddTagModal: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedTag: React.Dispatch<React.SetStateAction<string>>;
+  workspaceId: string;
 }) {
   // hooks
   const { mutateAsync: settingsMutateAsync } = useSettingsMutation();
@@ -49,7 +51,7 @@ export default function TagsContainer({
     const newTags = ["none", ...newItems.map((i) => i.tag)];
 
     try {
-      await settingsMutateAsync({ type: "reorderTags", tags: newTags });
+      await settingsMutateAsync({ type: "reorderTags", workspaceId, tags: newTags });
     } catch (e) {
       console.error("Failed to update tag order");
       setItems(oldItems);
@@ -59,7 +61,7 @@ export default function TagsContainer({
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        <div className="w-[90%] flex flex-col text-base desktop:text-xs border-t border-b border-dashed borderColorFaint">
+        <div className="w-[90%] flex flex-col textSmApp border-t border-b border-dashed border-borderFaint">
           {items.map((item) => (
             <Tags key={item.id} id={item.id} tag={item.tag} setAddTagModal={setAddTagModal} setClickedTag={setClickedTag} />
           ))}

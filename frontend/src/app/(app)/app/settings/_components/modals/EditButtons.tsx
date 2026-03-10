@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { FaArrowUp, FaArrowDown, FaX, FaCircleNotch } from "react-icons/fa6";
 import { useSettingsMutation } from "@/utils/hooks";
 import { SubcategoryWithId, AddCategoryModalStatus } from "./AddCategoryModal";
+import DeleteRowButton from "@/utils/components/DeleteRowButton";
 
 export default function EditButtons({
   setSubcategoriesWithId,
@@ -12,6 +13,7 @@ export default function EditButtons({
   setStatus,
   rowIndex,
   clickedCategory,
+  workspaceId,
 }: {
   setSubcategoriesWithId: React.Dispatch<React.SetStateAction<SubcategoryWithId[]>>;
   validationError: string;
@@ -21,6 +23,7 @@ export default function EditButtons({
   setStatus: React.Dispatch<React.SetStateAction<AddCategoryModalStatus>>;
   rowIndex: number;
   clickedCategory: string;
+  workspaceId: string;
 }) {
   const { mutateAsync: settingsMutateAsync, error, isError, isPending } = useSettingsMutation();
 
@@ -46,6 +49,7 @@ export default function EditButtons({
     try {
       await settingsMutateAsync({
         type: "reorderSubcategory",
+        workspaceId,
         category: clickedCategory,
         fromIndex: rowIndex,
         toIndex: rowIndex - 1,
@@ -64,6 +68,7 @@ export default function EditButtons({
     try {
       await settingsMutateAsync({
         type: "reorderSubcategory",
+        workspaceId,
         category: clickedCategory,
         fromIndex: rowIndex,
         toIndex: rowIndex + 1,
@@ -76,6 +81,7 @@ export default function EditButtons({
   // not optimistic
   async function deleteSubcategory(index: number) {
     if (status !== "initial" || isPending) return;
+    setValidationError("");
     const subcategory = subcategoriesWithId[index].value.trim();
     // delete empty category without mutation (for new fields)
     if (!subcategory) {
@@ -83,10 +89,9 @@ export default function EditButtons({
       return;
     }
     // is-being-used validation done on backend
-    setValidationError("");
     setStatus(`deletingSubcategory${index}`);
     try {
-      await settingsMutateAsync({ type: "deleteSubcategory", category: clickedCategory, subcategory });
+      await settingsMutateAsync({ type: "deleteSubcategory", workspaceId, category: clickedCategory, subcategory });
     } catch {
       // error will show on UI
     }
@@ -96,7 +101,7 @@ export default function EditButtons({
   return (
     <>
       <button
-        className="ml-[4px] flex-none w-[36px] h-[36px] text-[20px] desktop:w-[32px] desktop:h-[32px] desktop:text-[18px] flex justify-center items-center hover:bg-blue-400/10 desktop:cursor-pointer rounded-md text-slate-400"
+        className="ml-1 desktop:ml-2 flex-none w-10 h-10 text-2xl desktop:w-auto desktop:h-8 desktop:text-lg flex justify-center items-center desktop:cursor-pointer linkGrayColor"
         type="button"
         onClick={moveUp}
         disabled={rowIndex === 0 || isPending || status !== "initial"}
@@ -105,7 +110,7 @@ export default function EditButtons({
         <FaArrowUp />
       </button>
       <button
-        className="ml-[4px] flex-none w-[36px] h-[36px] text-[20px] desktop:w-[32px] desktop:h-[32px] desktop:text-[18px] flex justify-center items-center hover:bg-blue-400/10 desktop:cursor-pointer rounded-md text-slate-400"
+        className="ml-0 desktop:ml-2 flex-none w-10 h-10 text-2xl desktop:w-auto desktop:h-8 desktop:text-lg flex justify-center items-center desktop:cursor-pointer linkGrayColor"
         type="button"
         onClick={moveDown}
         disabled={rowIndex === subcategoriesWithId.length - 1 || isPending || status !== "initial"}
@@ -113,15 +118,13 @@ export default function EditButtons({
       >
         <FaArrowDown />
       </button>
-      <button
-        className="ml-[12px] flex-none w-[36px] h-[36px] text-[20px] desktop:w-[32px] desktop:h-[32px] desktop:text-[18px] flex justify-center items-center hover:bg-blue-400/10 desktop:cursor-pointer rounded-md errorText"
-        type="button"
+      <DeleteRowButton
+        className=""
         onClick={() => deleteSubcategory(rowIndex)}
+        isLoading={status === `deletingSubcategory${rowIndex}`}
         disabled={isPending || status !== "initial"}
         aria-label="Delete subcategory"
-      >
-        {status === `deletingSubcategory${rowIndex}` ? <FaCircleNotch className="animate-spin" /> : <FaX />}
-      </button>
+      />
     </>
   );
 }

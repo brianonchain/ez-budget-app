@@ -1,5 +1,4 @@
-import { CategoryObject } from "@/db/UserModel";
-import { jobs } from "googleapis/build/src/apis/jobs";
+import { CategoryObject } from "@/db/WorkspaceModel";
 
 export function addId(arr: CategoryObject[]) {
   return arr.slice(1).map((i, index) => ({ id: (index + 1).toString(), ...i }));
@@ -7,10 +6,7 @@ export function addId(arr: CategoryObject[]) {
 
 export function checkEmail(rawEmail: string): boolean {
   const email = rawEmail.trim();
-  if (email.includes(" ")) return false;
-  const parts = email.split("@");
-  if (parts.length !== 2) return false;
-  return parts[1].includes(".");
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 export function checkPassword(password: string): boolean {
@@ -77,4 +73,8 @@ export function isSixDigitOtp(otp: string) {
 import { randomInt } from "crypto";
 export function generateOtp() {
   return String(randomInt(0, 1_000_000)).padStart(6, "0");
+}
+
+export function createIsUsedMsg(item: string) {
+  return `This ${item} is being used in at least one item. Remove it from all items before deleting.`;
 }
