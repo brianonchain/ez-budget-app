@@ -13,7 +13,7 @@ import MembershipModel from "@/db/MembershipModel";
 import WorkspaceModel from "@/db/WorkspaceModel";
 import { serverEnv } from "@/utils/serverEnv";
 
-async function ensurePersonalWorkspace(userId: Types.ObjectId) {
+async function ensurePersonalWorkspace(userId: Types.ObjectId, email: string) {
   // Find any membership
   const existing = await MembershipModel.findOne({ userId }).lean<{ workspaceId: Types.ObjectId }>();
   if (existing) return existing.workspaceId;
@@ -21,6 +21,7 @@ async function ensurePersonalWorkspace(userId: Types.ObjectId) {
   const ws = await WorkspaceModel.create({
     name: "Personal",
     ownerId: userId,
+    ownerEmail: email,
     defaultCurrency: "USD",
     categoryObjects: [{ category: "none", subcategories: ["none"] }],
     tags: ["none"],
@@ -62,7 +63,7 @@ export const authOptions = {
             { $setOnInsert: { email, hashedPassword: pending.hashedPassword, activeWorkspaceId: null } }, // $setOnInsert -- updates fields only if new doc is inserted. If doc exists, then no updates made
             { upsert: true, new: true, setDefaultsOnInsert: true } // this means if doc, then update; if no doc, then insert new
           );
-          await ensurePersonalWorkspace(user._id as Types.ObjectId);
+          await ensurePersonalWorkspace(user._id as Types.ObjectId, email);
           return { id: user._id.toString(), email: user.email };
         }
 
@@ -92,7 +93,7 @@ export const authOptions = {
         { $setOnInsert: { email, hashedPassword: "", activeWorkspaceId: null } },
         { upsert: true, new: true, setDefaultsOnInsert: true }
       );
-      await ensurePersonalWorkspace(userDoc._id as Types.ObjectId);
+      await ensurePersonalWorkspace(userDoc._id as Types.ObjectId, email);
       return true;
     },
     async jwt({ token, account, user }: { token: JWT; account: Account | null; user?: any }) {

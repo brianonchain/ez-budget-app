@@ -1,46 +1,50 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
 // db
 import dbConnect from "@/db/dbConnect";
 import PendingEmailChangeModel from "@/db/PendingEmailChange";
 import UserModel from "@/db/UserModel";
 // utils
-import { authOptions } from "@/utils/authOptions";
-import { generateOtp, normalizeEmail } from "@/utils/functions";
-import { hashOtp, getGmailTransporter } from "@/utils/serverFunctions";
+import { generateOtp, normalizeEmail, checkEmail } from "@/utils/functions";
+import { hashOtp, getGmailTransporter, getUserInfo } from "@/utils/serverFunctions";
 
 export async function POST(req: NextRequest) {
-  const { newEmail } = await req.json();
-  const _newEmail = normalizeEmail(String(newEmail || ""));
-  if (!_newEmail) return NextResponse.json({ status: "error", message: "Missing fields." }, { status: 400 });
-
-  // checks
-  const session = await getServerSession(authOptions);
-  const oldEmail = session?.user?.email;
-  if (!oldEmail) return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
-  if (_newEmail === oldEmail) {
-    return NextResponse.json({ status: "error", message: "New email is the same as your current email." }, { status: 400 });
+  const body = await req.json().catch(() => null);
+  // security gate
+  const userInfo = await getUserInfo();
+  if (!userInfo) {
+    return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
   }
+  const { userId, userEmail } = userInfo;
+
+  // check type
+  if (!body || typeof body.newEmail !== "string") {
+    return NextResponse.json({ status: "error", message: "Invalid email." }, { status: 400 });
+  }
+  // normalize
+  const newEmail = normalizeEmail(body.newEmail);
+  // exists
+  if (!newEmail || !checkEmail(newEmail)) return NextResponse.json({ status: "error", message: "Invalid email." }, { status: 400 });
+  // cannot be same email
+  if (newEmail === userEmail)
+    return NextResponse.json({ status: "error", message: "New email is the same as your current email." }, { status: 400 });
 
   const otp = generateOtp();
   try {
     await dbConnect();
     // check if new email already taken
-    const userExists = await UserModel.exists({ "settings.email": _newEmail });
-    if (userExists) {
-      return NextResponse.json({ status: "error", message: "Email already in use." }, { status: 409 });
-    }
+    const userExists = await UserModel.exists({ email: newEmail });
+    if (userExists) return NextResponse.json({ status: "error", message: "Email already in use." }, { status: 409 });
+
     // create pendingEmailChange doc
     await PendingEmailChangeModel.updateOne(
-      { oldEmail: oldEmail },
+      { oldEmail: userEmail },
       {
         $set: {
-          newEmail: _newEmail,
+          newEmail,
           hashedOtp: hashOtp(otp),
-          otpExpiresAt: new Date(Date.now() + 2 * 60 * 1000),
-          docExpiresAt: new Date(Date.now() + 3 * 60 * 1000),
+          otpExpiresAt: new Date(Date.now() + 2 * 60 * 1000), // 2 minutes
+          docExpiresAt: new Date(Date.now() + 3 * 60 * 1000), // 3 minutes
         },
-        $setOnInsert: { oldEmail: oldEmail },
       },
       { upsert: true }
     );
@@ -61,7 +65,7 @@ export async function POST(req: NextRequest) {
     const transporter = await getGmailTransporter();
     await transporter.sendMail({
       from: { name: "EZ Budget App", address: "support@nullapay.com" },
-      to: _newEmail,
+      to: newEmail,
       subject: "Your 6-digit code",
       html: html,
     });

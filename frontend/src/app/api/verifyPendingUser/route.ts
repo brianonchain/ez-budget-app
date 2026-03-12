@@ -6,7 +6,7 @@ import dbConnect from "@/db/dbConnect";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 // utils
-import { normalizeEmail } from "@/utils/functions";
+import { normalizeEmail, checkEmail } from "@/utils/functions";
 import { hashOtp } from "@/utils/serverFunctions";
 import { serverEnv } from "@/utils/serverEnv";
 
@@ -16,49 +16,39 @@ const redis = new Redis({
   token: serverEnv.UPSTASH_REDIS_REST_TOKEN,
 });
 
-// setup rate limiter: 5 requests per minute per email
+// setup rate limiter
 const rateLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.fixedWindow(8, "120s"), // 5 attempts per 60 seconds
+  limiter: Ratelimit.fixedWindow(8, "120s"),
   analytics: true,
 });
 
 export async function POST(req: Request) {
-  // catch-all try/catch
+  const body = await req.json().catch(() => null);
+  // check type
+  if (!body || typeof body.email !== "string" || typeof body.otp !== "string")
+    return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
+  // normalize
+  const email = normalizeEmail(body.email);
+  const otp = body.otp;
+  // exists
+  if (!email || !checkEmail(email) || !otp) return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
+
   try {
-    const { email, otp } = await req.json();
-
-    // check input types
-    const _email = normalizeEmail(String(email || ""));
-    const _otp = String(otp || "");
-    if (!_email || !_otp) {
-      return NextResponse.json({ status: "error", message: "Missing fields." }, { status: 400 });
-    }
-
-    // connect database and get PendingUser doc
     await dbConnect();
-    const pending = await PendingUserModel.findOne({ email: _email }).select("hashedOtp otpExpiresAt");
+    // check if doc expired
+    const pending = await PendingUserModel.findOne({ email, docExpiresAt: { $gt: new Date() } });
+    if (!pending)
+      return NextResponse.json({ status: "error", message: "Verification session has expired. Please sign up again." }, { status: 410 });
+    // check if OTP expired
+    if (pending.otpExpiresAt < new Date())
+      return NextResponse.json({ status: "error", message: "Code expired. Please resend verification code." }, { status: 410 });
 
-    // if no doc (doc expires in 10 minutes)
-    if (!pending) {
-      return NextResponse.json(
-        { status: "error", message: "Your verification session has expired. Please sign up again." },
-        { status: 410 }
-      );
-    }
-
-    // if OTP expired (OTP expires in 2 minutes)
-    if (pending.otpExpiresAt < new Date()) {
-      return NextResponse.json({ status: "error", message: "Code has expired. Please resend verification code." }, { status: 410 });
-    }
-
-    // if OTP is invalid
-    if (pending.hashedOtp !== hashOtp(_otp)) {
-      return NextResponse.json({ status: "error", message: "Invalid code." }, { status: 401 });
-    }
+    // verify OTP
+    if (hashOtp(otp) !== pending.hashedOtp) return NextResponse.json({ status: "error", message: "Invalid code." }, { status: 401 });
 
     return NextResponse.json({ status: "success" }, { status: 200 });
-  } catch (e) {
+  } catch {
     return NextResponse.json({ status: "error", message: "Server error" }, { status: 500 });
   }
 }

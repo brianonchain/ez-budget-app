@@ -29,7 +29,8 @@ export default function EnterCost({
   // constants
   const decimals = DECIMALS[currency];
   const multiplier = MULTIPLIER[currency];
-  const maxFractionDigits = decimals + Math.log10(multiplier);
+  const maxFractionDigits = decimals + Math.log10(multiplier); // max digits after decimal when including the multiplier (100.123 VND = 100,123 VND)
+  console.log(multiplier);
 
   function onClickNumber(key: string) {
     setAmount((prev) => {
@@ -92,12 +93,13 @@ export default function EnterCost({
 
   return (
     <Modal title="Enter Cost" setModal={setCostModal} disableCloseButton={isPending}>
-      <div className="flex flex-col items-center">
-        <div className="relative mb-8 mx-auto grid grid-cols-[auto_1fr] min-w-[calc(4.75rem*3+0.5rem*2)] desktop:min-w-[calc(3.25rem*3+0.375rem*2)] max-w-full overflow-hidden border-2 rounded-xl border-blue-500/20">
-          {/*--- amount + currency ---*/}
-          <div className="relative flex items-center">
+      <div className="mx-auto w-full max-w-100 flex flex-col items-center">
+        {/*--- AMOUNT CONTAINER ---*/}
+        <div className="relative w-full h-17 desktop:h-13 flex items-center">
+          {/*--- currency ---*/}
+          <div className="relative flex-1 h-full flex items-center">
             <select
-              className="bg-transparent pl-2 pr-5 desktop:pl-1 desktop:pr-4 text-2xl desktop:text-base font-semibold appearance-none cursor-pointer"
+              className="pl-3 w-full h-full font-medium appearance-none"
               value={currency}
               onChange={(e) => onChangeCurrency(e.currentTarget.value)}
               disabled={isPending}
@@ -109,22 +111,24 @@ export default function EnterCost({
                 </option>
               ))}
             </select>
-            <FaChevronDown className="absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none text-sm desktop:text-xs opacity-80" />
+            <FaChevronDown className="absolute right-3 pointer-events-none text-sm desktop:text-[0.625rem] opacity-80" />
           </div>
-          <div className="px-[10px] py-3 desktop:pr-2 desktop:py-2 text-4xl desktop:text-2xl font-semibold tabular-nums text-right border-l-2 border-blue-500/20">
+          {/*--- amount ---*/}
+          <div className="flex-none px-2.5 desktop:px-2 w-[calc(12rem)] desktop:w-[calc(3rem*3+0.375rem*2)] h-full flex items-center justify-center border-2 border-blue-500/20 rounded-2xl desktop:rounded-xl text-3xl desktop:text-2xl font-semibold tabular-nums text-center">
             {amount || (decimals === 0 ? "0" : `0.${"0".repeat(decimals)}`)}
           </div>
-          {multiplier > 1 && (
-            <div className="absolute left-[calc(100%+8px)] text-base top-1/2 -translate-y-1/2 font-medium">x{multiplier}</div>
-          )}
+          {/*--- multiplier ---*/}
+          <div className="flex-1">
+            <div className="pl-2 font-medium">{multiplier > 1 ? `x${multiplier}` : ""}</div>
+          </div>
         </div>
         {/*--- keypad ---*/}
-        <div className="grid grid-cols-3 gap-2 desktop:gap-1.5">
+        <div className="mt-8 desktop:mt-4 grid grid-cols-3 gap-2 desktop:gap-1">
           {calc.map((i, index) => (
             <button
               key={index}
               type="button"
-              className={`w-19 h-19 desktop:w-13 desktop:h-13 flex items-center justify-center text-2xl desktop:text-xl font-semibold bg-slate-200 dark:bg-blue-500/30 rounded-full select-none
+              className={`w-20 h-20 desktop:w-12 desktop:h-12 flex items-center justify-center text-2xl desktop:text-xl font-semibold bg-slate-200 dark:bg-blue-500/30 rounded-full select-none
                   ${
                     maxFractionDigits === 0 && i === "."
                       ? "opacity-40 cursor-not-allowed"
@@ -140,7 +144,7 @@ export default function EnterCost({
 
           <button
             type="button"
-            className="w-19 h-19 desktop:w-13 desktop:h-13 flex items-center justify-center text-2xl desktop:text-xl font-semibold bg-slate-200 hover:bg-slate-300 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-full cursor-pointer select-none active:scale-95 active:opacity-90"
+            className="w-20 h-20 desktop:w-12 desktop:h-12 flex items-center justify-center text-2xl desktop:text-xl font-semibold bg-slate-200 hover:bg-slate-300 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-full cursor-pointer select-none active:scale-95 active:opacity-90"
             onClick={onBackspace}
             aria-label="Backspace"
           >
@@ -149,7 +153,15 @@ export default function EnterCost({
         </div>
 
         {/* --- enter button --- */}
-        <Button className="mt-12 desktop:mt-8" label="Enter" type="button" onClick={onEnter} disabled={isPending} />
+        <Button
+          className="w-full mt-12 desktop:mt-6"
+          label="Enter"
+          variant="primary"
+          size="base"
+          type="button"
+          onClick={onEnter}
+          disabled={isPending}
+        />
       </div>
     </Modal>
   );

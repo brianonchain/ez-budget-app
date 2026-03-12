@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useSettingsMutation } from "@/utils/hooks";
 import Modal from "@/utils/components/Modal";
 import { Workspace } from "@/utils/types";
+import Button from "@/utils/components/Button";
+import Input from "@/utils/components/Input";
 
 export default function AddTagModal({
   workspace,
@@ -98,10 +100,12 @@ export default function AddTagModal({
 
   return (
     <Modal title={isEdit ? "Edit Tag" : "Add A Tag"} setModal={setAddTagModal} disableCloseButton={status !== "initial" || isPending}>
-      <form className="mx-auto w-full max-w-[400px] flex flex-col items-center" onSubmit={onSubmit}>
-        <label className="mt-[16px] pb-1.5 w-full inputLabel">Tags (e.g., Euro Trip 2025, Winnie's birthday)</label>
-        <input
-          className="mt-[4px] w-full input"
+      <form className="mt-4 mx-auto w-full max-w-100 flex flex-col" onSubmit={onSubmit}>
+        <label className="pb-1.5 inputLabel">Tags (e.g., Euro Trip 2025, Winnie's birthday)</label>
+        <Input
+          className="w-full"
+          inputSize="base"
+          variant="primary"
           value={tag}
           onChange={(e) => {
             setTag(e.target.value);
@@ -109,19 +113,32 @@ export default function AddTagModal({
           }}
           onBlur={isEdit ? onRename : undefined}
         />
-        {/*--- error message ---*/}
-        <div className="errorText mt-[16px] w-full min-h-[3.3em]">{validationError ? validationError : isError ? error?.message : ""}</div>
+        {/*--- validation error ---*/}
+        <div className="min-h-26 desktop:min-h-20 modalErrorMessage">
+          {validationError ? validationError : isError ? error?.message : ""}
+        </div>
         {/*--- button ---*/}
         {isEdit ? (
-          <div className="mt-auto pt-[80px] w-full flex flex-col justify-end">
-            <button className="buttonRed w-full" onClick={onDelete} type="button" disabled={status !== "initial" || isPending}>
-              {status === "deleting" ? "Deleting..." : "Delete Tag"}
-            </button>
-          </div>
+          <Button
+            className="w-full"
+            label="Delete Tag"
+            variant="danger"
+            size="base"
+            isLoading={status === "deleting"}
+            type="button"
+            onClick={onDelete}
+            disabled={status !== "initial" || isPending}
+          ></Button>
         ) : (
-          <button className="mt-[12px] desktop:mt-[12px] button1 w-full" type="submit" disabled={status !== "initial" || isPending}>
-            {status === "adding" ? "Adding..." : "Add Tag"}
-          </button>
+          <Button
+            className="w-full"
+            label="Add Tag"
+            variant="primary"
+            size="base"
+            isLoading={status === "adding"}
+            type="submit"
+            disabled={status !== "initial" || isPending}
+          />
         )}
       </form>
     </Modal>

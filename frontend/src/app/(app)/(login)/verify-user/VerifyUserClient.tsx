@@ -16,7 +16,6 @@ export default function VerifyUserClient() {
 
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [errorMessage, setErrorMessage] = useState("");
-  const [errorModal, setErrorModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [resendStatus, setResendStatus] = useState("initial"); // "initial" | "sending" | "sent"
 
@@ -72,18 +71,16 @@ export default function VerifyUserClient() {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (isLoading) return; // if the user presses Enter twice quickly, you can submit twice before isLoading flips
+    if (isLoading) return; // "Enter" key bypasses disabled buttons
     const joinedOtp = otp.join("");
 
     // check OTP and email validity
     if (joinedOtp.length !== 6) {
       setErrorMessage("Please enter a valid 6-digit code.");
-      setErrorModal(true);
       return;
     }
     if (!email) {
       setErrorMessage("Missing email");
-      setErrorModal(true);
       return;
     }
 
@@ -118,22 +115,21 @@ export default function VerifyUserClient() {
     setOtp(Array(6).fill(""));
     setResendStatus("sending");
     try {
-      const resJson = await fetchPost("/api/resendVerificationCode", { email: _email });
+      const resJson = await fetchPost("/api/resendVerificationCode", { type: "resendCodeForNewUser", email: _email });
       if (resJson.status === "success") {
         setResendStatus("sent");
       } else {
-        setErrorModal(resJson.message || "Server error. Please try again.");
+        setErrorMessage(resJson.message || "Server error. Please try again.");
         setResendStatus("initial");
       }
     } catch (e: any) {
-      setErrorModal(e?.message || "Server error. Please try again."); // optional chaining is needed
+      setErrorMessage(e?.message || "Server error. Please try again."); // optional chaining is needed
       setResendStatus("initial");
     }
   }
 
   function triggerError(message: string) {
     setErrorMessage(message);
-    setErrorModal(true);
     setIsLoading(false);
     clearOtp();
   }
@@ -145,13 +141,13 @@ export default function VerifyUserClient() {
 
   return (
     <>
-      <h1 className="w-[350px] text-[18px] desktop:text-[16px] text-center">Enter the 6-digit code we sent to your email</h1>
+      <h1 className="w-full text-center">Enter the 6-digit code we sent to your email</h1>
       {/*--- 6 boxes, 50*6+8*5=340px ---*/}
       <form className="w-full flex flex-col items-center" onSubmit={onSubmit}>
         <div className="mt-[24px] flex gap-[6px]">
           {otp.map((digit, index) => (
             <input
-              className="w-[50px] h-[54px] text-[24px] text-center border-2 rounded-lg inputColor font-medium"
+              className="w-13 h-14 desktop:w-[2.8125rem] desktop:h-[2.8125rem] text-[24px] text-center rounded-xl input1Color"
               key={index}
               ref={(el) => {
                 inputsRef.current[index] = el;
@@ -168,21 +164,24 @@ export default function VerifyUserClient() {
             />
           ))}
         </div>
-        <Button className="mt-[64px] w-[340px]" label="Submit" isLoading={isLoading} />
+        <Button className="mt-[64px] w-full" label="Submit" variant="primary" size="base" isLoading={isLoading} type="submit" />
       </form>
       {resendStatus === "initial" && (
         <div className="mt-[60px] link underline-animate" onClick={resendVerificationCode}>
           Resend verification code
         </div>
       )}
-      {resendStatus === "sending" && <div className="mt-[60px] ">Sending email...</div>}
+      {resendStatus === "sending" && <div className="mt-[60px]">Sending email...</div>}
       {resendStatus === "sent" && (
         <div className="mt-[64px] ">
-          Email sent! <span className="link underline-animate">Resend email</span>
+          Email sent!{" "}
+          <button className="inline-flex underline-animate" type="button" onClick={resendVerificationCode}>
+            Resend email
+          </button>
         </div>
       )}
 
-      {errorModal && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} setErrorModal={setErrorModal} />}
+      {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
   );
 }

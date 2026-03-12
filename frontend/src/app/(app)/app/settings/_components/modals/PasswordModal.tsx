@@ -110,13 +110,15 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
               />
             </div>
             <Button
-              className="mt-[40px]"
+              className="mt-[40px] w-full"
               label="Change Password"
+              variant="primary"
+              size="base"
               type="submit"
               isLoading={status === "pending"}
               disabled={status !== "initial"}
             />
-            {errors.submit && <div className="mt-[32px] text-red-500 font-medium text-center">{errors.submit}</div>}
+            {errors.submit && <div className="mt-[32px] text-textRed font-medium text-center">{errors.submit}</div>}
           </form>
         ) : (
           <div className="w-full h-[300px] desktop:h-[240px] flex flex-col items-center justify-center gap-[32px] font-medium text-center">

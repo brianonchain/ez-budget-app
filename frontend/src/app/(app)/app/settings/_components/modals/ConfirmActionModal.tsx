@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSettingsMutation, useUserMutation } from "@/utils/hooks";
 import Modal from "@/utils/components/Modal";
+import Button from "@/utils/components/Button";
+import Input from "@/utils/components/Input";
 
-export default function DeleteAccountModal({
+export default function ConfirmActionModal({
   setModal,
   title,
   textToMatch,
@@ -52,12 +54,14 @@ export default function DeleteAccountModal({
   return (
     <Modal title={title} setModal={setModal} disableCloseButton={isPending}>
       <form className="mx-auto w-full max-w-100 flex flex-col" onSubmit={onSubmit}>
-        <p className="text-center">
+        <p>
           Type <span className="font-semibold">{textToMatch}</span> to confirm deletion.
         </p>
         {/*--- input ---*/}
-        <input
-          className="mt-4 w-full input"
+        <Input
+          className="mt-4 w-full"
+          inputSize="base"
+          variant="primary"
           value={inputValue}
           onChange={(e) => {
             setInputValue(e.currentTarget.value);
@@ -73,13 +77,17 @@ export default function DeleteAccountModal({
           autoFocus
         />
         {/*--- error message ---*/}
-        <div className="errorText min-h-[80px] flex items-center justify-center text-center">
-          {errorMessage || (isError ? error?.message : "")}
-        </div>
+        <div className="min-h-26 desktop:min-h-20 modalErrorMessage">{errorMessage ? errorMessage : isError ? error?.message : ""}</div>
         {/*--- button ---*/}
-        <button className="buttonRed w-full" type="submit" disabled={!isMatch || isPending}>
-          {isPending ? "Deleting..." : "Delete"}
-        </button>
+        <Button
+          className="w-full"
+          label="Delete"
+          variant="danger"
+          size="base"
+          type="submit"
+          isLoading={isPending}
+          disabled={!isMatch || isPending}
+        />
       </form>
     </Modal>
   );

@@ -38,7 +38,7 @@ export async function GET() {
     const [items, workspace] = await Promise.all([
       ItemModel.find({ workspaceId: activeWorkspaceId })
         .select("date cost currency description category subcategory tag createdBy")
-        .sort({ date: -1 })
+        .sort({ date: -1, createdAt: -1 })
         .populate({ path: "createdBy", select: "_id email" })
         .lean(),
       WorkspaceModel.findById(activeWorkspaceId).select("defaultCurrency").lean<{ defaultCurrency: string } | null>(),

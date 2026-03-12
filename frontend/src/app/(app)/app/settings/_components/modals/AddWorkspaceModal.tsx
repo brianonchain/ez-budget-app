@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useUserMutation } from "@/utils/hooks";
 import Modal from "@/utils/components/Modal";
 import { CURRENCIES } from "@/utils/constants";
+import Button from "@/utils/components/Button";
+import Input from "@/utils/components/Input";
+import Select from "@/utils/components/Select";
 
 export default function AddTagModal({
   workspaceId,
@@ -34,11 +37,13 @@ export default function AddTagModal({
   }
 
   return (
-    <Modal title="Add New Workspace" setModal={setAddWorkspaceModal} disableCloseButton={isPending}>
-      <form className="mx-auto w-full max-w-[400px] flex flex-col items-center" onSubmit={onSubmit}>
-        <label className="mt-[16px] pb-1.5 w-full inputLabel">Workspace Name</label>
-        <input
-          className="mt-[4px] w-full input"
+    <Modal title="Add New Sheet" setModal={setAddWorkspaceModal} disableCloseButton={isPending}>
+      <form className="mt-4 mx-auto w-full max-w-100 flex flex-col" onSubmit={onSubmit}>
+        <label className="pb-1.5 w-full inputLabel">Sheet Name</label>
+        <Input
+          className="w-full"
+          inputSize="base"
+          variant="primary"
           value={name}
           onChange={(e) => {
             setName(e.target.value);
@@ -46,11 +51,14 @@ export default function AddTagModal({
           }}
         />
         <label className="mt-[16px] pb-1.5 w-full inputLabel">Default Currency</label>
-        <select
-          className="mt-[4px] w-full input"
+        <Select
+          className="w-full"
+          selectSize="base"
+          variant="primary"
           value={defaultCurrency}
           onChange={(e) => {
             setDefaultCurrency(e.target.value);
+            if (validationError) setValidationError("");
           }}
         >
           {CURRENCIES.map((i) => (
@@ -58,13 +66,21 @@ export default function AddTagModal({
               {i}
             </option>
           ))}
-        </select>
+        </Select>
         {/*--- error message ---*/}
-        <div className="errorText mt-[16px] w-full min-h-[3.3em]">{validationError ? validationError : isError ? error?.message : ""}</div>
+        <div className="min-h-26 desktop:min-h-20 modalErrorMessage">
+          {validationError ? validationError : isError ? error?.message : ""}
+        </div>
         {/*--- button ---*/}
-        <button className="mt-[12px] desktop:mt-[12px] button1 w-full" type="submit" disabled={isPending}>
-          {isPending ? "Creating..." : "Create New Workspace"}
-        </button>
+        <Button
+          className="w-full"
+          label="Create New Sheet"
+          variant="primary"
+          size="base"
+          type="submit"
+          isLoading={isPending}
+          disabled={isPending}
+        />
       </form>
     </Modal>
   );

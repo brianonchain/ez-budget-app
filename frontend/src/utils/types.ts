@@ -1,13 +1,10 @@
 import { CategoryObject } from "@/db/WorkspaceModel";
 import { CURRENCIES } from "./constants";
 
-export type Workspace = {
-  _id: string;
-  name: string;
+// useItemsQuery data
+export type ItemsData = {
+  items: DraftItem[];
   defaultCurrency: string;
-  categoryObjects: CategoryObject[];
-  tags: string[];
-  ownerId: string;
 };
 // 1) id, createdBy doesn't exist for new items, 2) compared to IItem, DraftItem doesn't have workspaceId, createdAt, updatedAt, 3) date is string
 export type DraftItem = {
@@ -20,11 +17,27 @@ export type DraftItem = {
   subcategory: string;
   tag: string;
   createdBy?: {
-    _id: string;
-    email: string;
+    _id: string; // populated
+    email: string; // populated
   };
 };
-export type Role = "owner" | "editor" | "viewer";
+
+// useSettingsQuery data
+export type SettingsData = {
+  workspace: Workspace;
+  role: "owner" | "editor" | "viewer";
+  workspaceOptions: WorkspaceOption[];
+  sharedUsers: SharedUser[];
+  pendingSharedUsers: PendingSharedUser[];
+};
+export type Workspace = {
+  _id: string;
+  name: string;
+  defaultCurrency: string;
+  categoryObjects: CategoryObject[];
+  tags: string[];
+  ownerId: string;
+};
 export type WorkspaceOption = {
   _id: string;
   name: string;
@@ -43,25 +56,7 @@ export type PendingSharedUser = {
   invitedRole: "editor" | "viewer";
   expiresAt: Date;
 };
-export type SettingsData = {
-  workspace: {
-    _id: string;
-    name: string;
-    defaultCurrency: string;
-    categoryObjects: CategoryObject[];
-    tags: string[];
-    ownerId: string;
-  };
-  role: "owner" | "editor" | "viewer";
-  workspaceOptions: WorkspaceOption[];
-  sharedUsers: SharedUser[];
-  pendingSharedUsers: PendingSharedUser[];
-};
-
-export type ItemsData = {
-  items: DraftItem[];
-  defaultCurrency: string;
-};
+export type Role = "owner" | "editor" | "viewer";
 
 export type MutateItemsPayload =
   | { type: "upsert"; workspaceId: string; item: DraftItem }
@@ -98,3 +93,5 @@ export type MutateUserPayload =
   | { type: "deleteSharedUser"; workspaceId: string; sharedUserId: string } // sharedUserId
   | { type: "deletePendingSharedUser"; workspaceId: string; invitedEmail: string } // pendingSharedUserId
   | { type: "deleteAccount"; userId: string }; // userId
+
+export type ResendCodePayload = { type: "resendCodeForNewUser"; email: string } | { type: "resendCodeForEmailChange" };

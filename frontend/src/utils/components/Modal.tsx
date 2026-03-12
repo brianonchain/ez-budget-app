@@ -32,13 +32,18 @@ export default function Modal({
         tabIndex={-1} // so modal is focusable with javascript
       >
         {/*--- glow ---*/}
-        <div className="absolute w-[300%] h-[200%] left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-[-1] modalGlow dark:block hidden" />
+        <div className="absolute w-[200%] h-[150%] left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-[-1] modalGlow dark:block hidden" />
         {/*--- close ---*/}
-        {!disableCloseButton && (
-          <button className="xButton" aria-label="Close" type="button" onClick={() => setModal(false)}>
-            &#10005;
-          </button>
-        )}
+        <button
+          className="xButton disabled:opacity-80"
+          type="button"
+          disabled={disableCloseButton}
+          aria-label="Close"
+          onClick={() => setModal(false)}
+        >
+          &#10005;
+        </button>
+
         {/*--- title ---*/}
         <div id={titleId} className="mx-[60px] py-6 text-center text-2xl desktop:text-xl font-semibold">
           {title}

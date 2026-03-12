@@ -43,8 +43,8 @@ export async function POST(req: Request) {
           email: _email,
           hashedPassword,
           hashedOtp,
-          otpExpiresAt: new Date(Date.now() + 2 * 60 * 1000),
-          docExpiresAt: new Date(Date.now() + 10 * 60 * 1000),
+          otpExpiresAt: new Date(Date.now() + 2 * 60 * 1000), // 2 minutes
+          docExpiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
         },
       },
       { upsert: true } // this means update or insert (if doc, then update; if no doc, then insert new)

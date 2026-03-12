@@ -89,6 +89,7 @@ export const POST = async (request: Request) => {
         const workspace = await WorkspaceModel.create({
           name,
           ownerId: userId,
+          ownerEmail: userEmail,
           defaultCurrency,
           tags: ["none"],
           categoryObjects: [
@@ -272,6 +273,26 @@ export const POST = async (request: Request) => {
         if (result.matchedCount === 0) {
           return NextResponse.json({ status: "error", message: "Shared user not found." }, { status: 404 });
         }
+        break;
+      }
+
+      case "leaveWorkspace": {
+        // type check
+        if (!isObjectIdString(payload.workspaceId))
+          return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
+        // normalize
+        const workspaceId = new Types.ObjectId(payload.workspaceId);
+        // verify membership
+        const membership = await MembershipModel.findOne({ userId, workspaceId }).lean<{ role: Role } | null>();
+        if (!membership) return NextResponse.json({ status: "error", message: "Forbidden" }, { status: 403 });
+        // owner cannot leave (not possible on frontend, just a backend check)
+        if (membership.role === "owner")
+          return NextResponse.json({ status: "error", message: "Owner cannot leave workspace." }, { status: 400 });
+        // remove membership
+        const result = await MembershipModel.deleteOne({ userId, workspaceId });
+        if (result.deletedCount === 0) return NextResponse.json({ status: "error", message: "Membership not found." }, { status: 404 });
+        // unset activeWorkspaceId if needed
+        await UserModel.updateOne({ _id: userId, activeWorkspaceId: workspaceId }, { $unset: { activeWorkspaceId: "" } });
         break;
       }
 

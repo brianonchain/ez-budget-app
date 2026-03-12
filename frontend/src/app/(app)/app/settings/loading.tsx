@@ -7,37 +7,49 @@ import SettingsCategoryContainer from "./_components/SettingsCategoryContainer";
 export default function Loading() {
   return (
     <SettingsShell>
-      <SettingsCard title="Account">
-        <SettingsField label="Email">
-          <SettingsSkeleton className="settingsSkeletonSmall" />
+      <SettingsCard title="Active Sheet Settings">
+        <SettingsField label="Active Sheet">
+          <SettingsSkeleton size="lg" className="sm:flex-1" />
         </SettingsField>
-        <SettingsField label="Login Method">
-          <SettingsSkeleton className="settingsSkeletonSmall" />
+        <div className="my-3 cardInner">
+          <SettingsCategoryContainer label="Categories" addButtonLabel="Category">
+            <SettingsSkeleton size="lg" />
+          </SettingsCategoryContainer>
+          <SettingsCategoryContainer label="Tags" addButtonLabel="Tag">
+            <SettingsSkeleton size="lg" />
+          </SettingsCategoryContainer>
+        </div>
+        <SettingsField label="Default Currency">
+          <SettingsSkeleton size="sm" />
+        </SettingsField>
+        <SettingsField label="Share This Sheet">
+          <SettingsSkeleton size="sm" />
+        </SettingsField>
+        <SettingsField label="Delete Sheet">
+          <SettingsSkeleton size="sm" />
         </SettingsField>
       </SettingsCard>
 
-      <SettingsCard title="Workspace">
-        <SettingsField label="Active Workspace">
-          <SettingsSkeleton className="settingsSkeletonSmall" />
+      <SettingsCard title="Account">
+        <SettingsField label="Sign Out">
+          <SettingsSkeleton size="sm" />
         </SettingsField>
-        <SettingsField label="Default Currency">
-          <SettingsSkeleton className="settingsSkeletonSmall" />
+        <SettingsField label="Email">
+          <SettingsSkeleton size="sm" />
         </SettingsField>
-        <SettingsCategoryContainer label="Categories" addButtonLabel="Category">
-          <SettingsSkeleton className="settingsSkeletonBig" />
-        </SettingsCategoryContainer>
-        <SettingsCategoryContainer label="Tags" addButtonLabel="Tag">
-          <SettingsSkeleton className="settingsSkeletonBig" />
-        </SettingsCategoryContainer>
+        <SettingsField label="Login Method">
+          <SettingsSkeleton size="sm" />
+        </SettingsField>
+        <SettingsField label="Delete Account">
+          <SettingsSkeleton size="sm" />
+        </SettingsField>
       </SettingsCard>
 
       <SettingsCard title="Display">
         <SettingsField label="Dark" className="border-none">
-          <SettingsSkeleton className="settingsSkeletonSmall" />
+          <SettingsSkeleton size="sm" />
         </SettingsField>
       </SettingsCard>
-
-      <button className="buttonSignOut">Sign Out</button>
     </SettingsShell>
   );
 }

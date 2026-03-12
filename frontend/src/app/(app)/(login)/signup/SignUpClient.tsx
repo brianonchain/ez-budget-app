@@ -112,14 +112,14 @@ export default function SignUpClient() {
           value={password2}
           autoComplete="new-password"
         />
-        <Button className="mt-4" label="Sign Up" type="submit" isLoading={isLoading} disabled={isLoading} />
+        <Button className="mt-4" label="Sign Up" variant="primary" size="base" type="submit" isLoading={isLoading} disabled={isLoading} />
       </form>
 
       {/*--- other options ---*/}
       <p className="mt-14 desktop:mt-12 link underline-animate textSmApp" onClick={() => router.push("/login")}>
         Have an account? Sign in
       </p>
-      {errorModal && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} setErrorModal={setErrorModal} />}
+      {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
   );
 }

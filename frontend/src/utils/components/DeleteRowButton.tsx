@@ -13,7 +13,7 @@ export default function DeleteRowButton({ isLoading = false, className = "", ...
       type="button"
       {...props}
     >
-      {isLoading ? <FaCircleNotch className="animate-spin" /> : <FaX />}
+      {isLoading ? <FaCircleNotch className="animate-spin" /> : <FaX className="text-lg desktop:text-sm" />}
     </button>
   );
 }

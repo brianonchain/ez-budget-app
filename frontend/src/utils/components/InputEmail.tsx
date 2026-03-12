@@ -1,22 +1,31 @@
 import Accordion from "./Accordion";
+import Input from "./Input";
 
 type InputProps = {
-  label: string;
   _id: string;
-  isError: boolean;
+  label?: string;
+  isError?: boolean;
   errorMsg?: string;
   className?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-export default function InputEmail({ className = "", label, _id, isError = false, errorMsg = "", ...props }: InputProps) {
+export default function InputEmail({
+  _id,
+  label = "Email",
+  isError = false,
+  errorMsg = "Invalid email",
+  className = "",
+  ...props
+}: InputProps) {
   return (
     <div className={`flex flex-col items-start gap-1 ${className}`}>
       <label className="inputLabel" htmlFor={_id}>
         {label}
       </label>
-      <input
-        id={_id}
-        className={`input ${isError ? "!border-buttonRedBg focus:!border-buttonRedBg" : ""}`}
+      <Input
+        className={isError ? "!border-buttonRedBg focus:!border-buttonRedBg" : ""}
+        id={_id} // reusable components shouldn't hardcode id
+        autoComplete="email" // for sign-in form, must override with "username"
         type="email"
         autoCapitalize="off"
         autoCorrect="off"

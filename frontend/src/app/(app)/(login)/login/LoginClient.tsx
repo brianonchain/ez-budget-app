@@ -141,8 +141,8 @@ export default function Login() {
             <form className="px-3 pb-7 w-full flex flex-col" onSubmit={onSubmitCredentials}>
               <InputEmail
                 className="mt-2"
-                label="Email"
                 _id="email"
+                label="Email"
                 isError={errors.email}
                 errorMsg="Invalid email"
                 onBlur={(e) => validateEmail(e.target.value)}
@@ -163,7 +163,14 @@ export default function Login() {
                 autoComplete="current-password"
                 name="password"
               />
-              <Button className="mt-2" label="Sign In" type="submit" isLoading={isLoading === "credentials" ? true : false} />
+              <Button
+                className="mt-2"
+                label="Sign In"
+                variant="primary"
+                size="base"
+                type="submit"
+                isLoading={isLoading === "credentials" ? true : false}
+              />
               <div className="mt-7 gap-7 w-full flex flex-col items-center">
                 <Link className="link underline-animate" href="/new-password">
                   Forgot password?
@@ -177,7 +184,7 @@ export default function Login() {
         </div>
       </div>
 
-      {errorModal && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} setErrorModal={setErrorModal} />}
+      {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
   );
 }

@@ -4,6 +4,9 @@ import Modal from "@/utils/components/Modal";
 import EditButtons from "./EditButtons";
 import { useSettingsMutation } from "@/utils/hooks";
 import { Workspace } from "@/utils/types";
+import Button from "@/utils/components/Button";
+import Input from "@/utils/components/Input";
+import SettingsAddButton from "../SettingsAddButton";
 
 export type SubcategoryWithId = { value: string; isNew: boolean };
 export type AddCategoryModalStatus = "initial" | "adding" | "editing" | "deleting" | `deletingSubcategory${number}`;
@@ -21,8 +24,9 @@ export default function AddCategoryModal({
 }) {
   const isEdit = !!clickedCategory;
 
-  // Form state
   const [draftCategory, setDraftCategory] = useState(clickedCategory ?? "");
+  const [validationError, setValidationError] = useState("");
+  const [status, setStatus] = useState<AddCategoryModalStatus>("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
   const [subcategoriesWithId, setSubcategoriesWithId] = useState<SubcategoryWithId[]>(() => {
     if (isEdit) {
       const subs = workspace.categoryObjects.find((i) => i.category === clickedCategory)?.subcategories ?? [];
@@ -34,8 +38,6 @@ export default function AddCategoryModal({
       ];
     }
   });
-  const [validationError, setValidationError] = useState("");
-  const [status, setStatus] = useState<AddCategoryModalStatus>("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
 
   const { mutateAsync: settingsMutateAsync, error, isError, isPending } = useSettingsMutation();
 
@@ -204,15 +206,13 @@ export default function AddCategoryModal({
 
   async function addSubcategoryField() {
     if (status !== "initial" || isPending) return;
-    setSubcategoriesWithId((prev) => {
-      if (prev.some((r) => r.isNew && r.value.trim() === "")) {
-        setValidationError("Please first add a subcategory above.");
-        return prev;
-      } else {
-        setValidationError("");
-        return [...prev, { value: "", isNew: true }];
-      }
-    });
+    // in editing mode, can only add 1 subcategory at a time
+    if (isEdit && subcategoriesWithId.some((r) => r.isNew && r.value.trim() === "")) {
+      setValidationError("Please first add a subcategory above.");
+      return;
+    }
+    setValidationError("");
+    setSubcategoriesWithId((prev) => [...prev, { value: "", isNew: true }]);
   }
 
   return (
@@ -221,28 +221,29 @@ export default function AddCategoryModal({
       setModal={setAddCategoryModal}
       disableCloseButton={isPending}
     >
-      <form className="mx-auto pt-4 w-full max-w-100 flex flex-col" onSubmit={onSubmit}>
+      <form className="mt-4 mx-auto w-full max-w-100 flex flex-col" onSubmit={onSubmit}>
         {/*--- category ---*/}
-        <label className="block pb-1.5 w-full inputLabel">Category{isEdit ? "" : " (e.g., Food)"}</label>
-        <div className="w-full flex gap-4">
-          <input
-            className="input"
-            value={draftCategory}
-            onChange={(e) => {
-              setDraftCategory(e.target.value);
-              if (validationError) setValidationError("");
-            }}
-            onBlur={isEdit ? renameCategory : undefined}
-          />
-        </div>
-
+        <label className="pb-1.5 inputLabel">Category{isEdit ? "" : " (e.g., Food)"}</label>
+        <Input
+          className="w-full"
+          inputSize="base"
+          variant="primary"
+          value={draftCategory}
+          onChange={(e) => {
+            setDraftCategory(e.target.value);
+            if (validationError) setValidationError("");
+          }}
+          onBlur={isEdit ? renameCategory : undefined}
+        />
         {/*--- subcategory ---*/}
-        <label className="block mt-6 pb-1.5 inputLabel w-full">Subcategories{isEdit ? "" : " (e.g., restaurants, groceries)"}</label>
+        <label className="mt-6 pb-1.5 inputLabel">Subcategories{isEdit ? "" : " (e.g., restaurants, groceries)"}</label>
         <div className="space-y-2">
           {subcategoriesWithId.map((i, index) => (
             <div key={index} className="w-full flex items-center">
-              <input
-                className="input w-full"
+              <Input
+                className="w-full"
+                inputSize="base"
+                variant="primary"
                 value={i.value}
                 onChange={(e) => {
                   setSubcategoriesWithId((prev) => prev.map((j, index2) => (index2 === index ? { ...j, value: e.target.value } : j))); // or use id
@@ -267,34 +268,40 @@ export default function AddCategoryModal({
             </div>
           ))}
         </div>
-
         {/*--- add subcategory field ---*/}
-        <button
-          className="self-center mt-4 link flex items-center justify-center gap-1 font-medium"
-          type="button"
+        <SettingsAddButton
+          className="self-center mt-4"
           onClick={addSubcategoryField}
           disabled={isPending || status !== "initial"}
-        >
-          <FaPlus />
-          Add Subcategory Field
-        </button>
-
+          label="Subcategory Field"
+          type="button"
+        />
         {/*--- validation error ---*/}
-        <div className="flex-1 w-full flex items-center justify-center">
-          <div className="errorText min-h-[100px] flex items-center justify-center">
-            {validationError ? validationError : isError ? error?.message : ""}
-          </div>
+        <div className="min-h-26 desktop:min-h-20 modalErrorMessage">
+          {validationError ? validationError : isError ? error?.message : ""}
         </div>
-
         {/*--- button ---*/}
         {isEdit ? (
-          <button className="buttonRed w-full" type="button" onClick={deleteCategoryObject} disabled={isPending || status !== "initial"}>
-            {status === "deleting" ? "Deleting..." : "Delete Category"}
-          </button>
+          <Button
+            className="w-full"
+            label="Delete"
+            variant="danger"
+            size="base"
+            type="button"
+            isLoading={status === "deleting"}
+            onClick={deleteCategoryObject}
+            disabled={isPending || status !== "initial"}
+          />
         ) : (
-          <button className="button1 w-full" type="submit" disabled={isPending || status !== "initial"}>
-            {isPending ? (isEdit ? "Saving..." : "Adding...") : isEdit ? "Save" : "Add"}
-          </button>
+          <Button
+            className="w-full"
+            label={isEdit ? "Save" : "Add"}
+            isLoading={isPending}
+            variant="primary"
+            size="base"
+            type="submit"
+            disabled={isPending || status !== "initial"}
+          />
         )}
       </form>
     </Modal>

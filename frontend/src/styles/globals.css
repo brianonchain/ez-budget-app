@@ -3,9 +3,6 @@
 @import "./animations.css";
 
 @theme {
-  /* backgrounds */
-  --color-lightBg2: #f7edf7;
-  --color-lightBg3: #f0e7f0;
   /* bg & text */
   --color-bg1: #f7edf7;
   --color-text1: #212427;
@@ -14,30 +11,30 @@
   --color-linkHover: #1c73ff;
   --color-textRed: #ff295d;
   --color-textRedHover: #d91f4f;
-  /* buttons */
+  /* button primary */
   --color-button1Bg: oklch(58.8% 0.158 241.966); /* sky-600 */
   --color-button1BgHover: oklch(50% 0.134 242.749); /* sky-700 */
   --color-button1Text: #ffffff;
-  --color-button2Bg: transparent;
-  --color-button2BgHover: #f0e7f0;
-  --color-button2Text: #ffffff;
+  --color-buttonTransBg: transparent;
+  --color-buttonTransBgHover: #f0e7f0;
+  --color-buttonTransText: #ffffff;
   --color-buttonRedBg: #ff295d;
   --color-buttonRedBgHover: #d91f4f;
-  --color-buttonTransparentHover: #f0e7f0;
+  --color-buttonRedText: #ffffff;
   /* input 1 */
-  --color-inputBg: #ffffff;
-  --color-inputBorder: #b1daee;
-  --color-inputBorderHover: #77c7f0;
-  --color-inputBorderFocus: oklch(58.8% 0.158 241.966);
-  --color-inputRing: #77c7f0;
-  --color-inputPlaceholder: oklch(70.4% 0.04 256.788); /* slate-400 */
+  --color-input1Bg: #ffffff;
+  --color-input1Border: #b1daee;
+  --color-input1BorderHover: #77c7f0;
+  --color-input1BorderFocus: oklch(58.8% 0.158 241.966);
+  --color-input1Ring: #77c7f0;
+  --color-input1Placeholder: oklch(70.4% 0.04 256.788); /* slate-400 */
   /* input 2 */
-  --color-input2Bg: transparent;
-  --color-input2Border: #77c7f0;
-  --color-input2BorderHover: oklch(58.8% 0.158 241.966);
-  --color-input2BorderFocus: oklch(58.8% 0.158 241.966);
-  --color-input2Ring: #77c7f0;
-  --color-input2Placeholder: oklch(70.4% 0.04 256.788); /* slate-400 */
+  --color-inputTransBg: transparent;
+  --color-inputTransBorder: #e2e8f1; /* slate-200 */
+  --color-inputTransBorderHover: #77c7f0;
+  --color-inputTransBorderFocus: oklch(58.8% 0.158 241.966);
+  --color-inputTransRing: #77c7f0;
+  --color-inputTransPlaceholder: oklch(70.4% 0.04 256.788); /* slate-400 */
   /* card & others */
   --color-card: #f6f9fc;
   --color-borderFaint: oklch(92.9% 0.013 255.508); /* slate-200 */
@@ -62,26 +59,26 @@
   --color-button1Bg: #0364ff;
   --color-button1BgHover: #1c73ff;
   --color-button1Text: #ffffff;
-  /* button 2 */
-  --color-button2Bg: transparent;
-  --color-button2BgHover: rgba(255, 255, 255, 0.08);
+  --color-buttonTransBg: transparent;
+  --color-buttonTransBgHover: rgba(255, 255, 255, 0.08); /* oklch(70.7% 0.165 254.624 / 15%) blue-400/15 */
+  --color-buttonTransText: #ffffff;
   --color-buttonRedBg: #ff3a6a;
   --color-buttonRedBgHover: #ff507a;
-  --color-buttonTransparentHover: oklch(70.7% 0.165 254.624 / 15%); /* blue-400/15 */
+  --color-buttonRedText: #ffffff;
   /* input */
-  --color-inputBg: #06102f;
-  --color-inputBorder: #04154c;
-  --color-inputBorderHover: #203478;
-  --color-inputBorderFocus: #203478;
-  --color-inputRing: #26407f;
-  --color-inputPlaceholder: oklch(44.6% 0.043 257.281); /* slate-600 */
+  --color-input1Bg: #07112e;
+  --color-input1Border: #1f2c54;
+  --color-input1BorderHover: #2e417a;
+  --color-input1BorderFocus: #374d8f;
+  --color-input1Ring: #243568;
+  --color-input1Placeholder: #45556c; /* slate-600 */
   /* input 2 */
-  --color-input2Bg: transparent;
-  --color-input2Border: #22346a;
-  --color-input2BorderHover: #2f4d97;
-  --color-input2BorderFocus: #2f4d97;
-  --color-input2Ring: #26407f;
-  --color-input2Placeholder: oklch(44.6% 0.043 257.281); /* slate-600 */
+  --color-inputTransBg: transparent;
+  --color-inputTransBorder: #22346a;
+  --color-inputTransBorderHover: #2f4d97;
+  --color-inputTransBorderFocus: #2f4d97;
+  --color-inputTransRing: #26407f;
+  --color-inputTransPlaceholder: oklch(44.6% 0.043 257.281); /* slate-600 */
   /* card & others */
   --color-card: oklch(70.7% 0.165 254.624 / 8%); /* blue-400/10 */
   --color-borderFaint: rgb(255 255 255 / 0.08);
@@ -103,75 +100,7 @@ html.dark body {
   scrollbar-gutter: stable;
 }
 
-/*--- background glows ---*/
-
-.dark .pageGlow {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(65, 47, 201, 0.5) 0%,
-    rgba(65, 47, 201, 0.4) 8%,
-    rgba(65, 47, 201, 0.3) 16%,
-    rgba(65, 47, 201, 0.2) 26%,
-    rgba(65, 47, 201, 0.05) 50%,
-    transparent 100%
-  );
-}
-
-/* ≥480px override */
-@media (min-width: 480px) {
-  .dark .pageGlow {
-    background: radial-gradient(
-      ellipse at center,
-      rgba(42, 84, 222, 0.6) 0%,
-      rgba(42, 84, 222, 0.45) 6%,
-      rgba(42, 84, 222, 0.35) 12%,
-      rgba(42, 84, 222, 0.17) 24%,
-      rgba(42, 84, 222, 0.07) 36%,
-      transparent 50%
-    );
-  }
-}
-
-.dark .modalGlow {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(42, 84, 222, 0.35) 0%,
-    rgba(42, 84, 222, 0.25) 13%,
-    rgba(42, 84, 222, 0.18) 26%,
-    rgba(42, 84, 222, 0.1) 39%,
-    rgba(42, 84, 222, 0.02) 80%,
-    transparent 50%
-  );
-}
-
-.dark .pageGlowBright {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(65, 47, 201, 1) 0%,
-    rgba(65, 47, 201, 0.7) 13%,
-    rgba(65, 47, 201, 0.3) 33%,
-    rgba(65, 47, 201, 0.12) 50%,
-    transparent 100%
-  );
-}
-
-.dark .pageGlowDim {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(65, 47, 201, 0.8) 0%,
-    rgba(65, 47, 201, 0.5) 8%,
-    rgba(65, 47, 201, 0.3) 15%,
-    rgba(65, 47, 201, 0.15) 25%,
-    rgba(65, 47, 201, 0.1) 50%,
-    transparent 80%
-  );
-}
-
 /*--- text size ---*/
-
-@utility textXsApp {
-  @apply text-base desktop:text-xs;
-}
 
 @utility textSmApp {
   @apply text-base desktop:text-[0.8125rem];
@@ -185,10 +114,6 @@ html.dark body {
   @apply text-xl desktop:text-lg;
 }
 
-@utility textXlApp {
-  @apply text-2xl desktop:text-xl;
-}
-
 @utility text2XlApp {
   @apply text-3xl desktop:text-2xl;
 }
@@ -199,40 +124,8 @@ html.dark body {
 
 /*--- buttons ---*/
 
-@utility buttonHeight {
-  @apply h-14 desktop:h-10;
-}
-
-@utility buttonBase {
-  @apply flex-none buttonHeight textBaseApp font-semibold flex items-center justify-center desktop:cursor-pointer disabled:cursor-default;
-}
-
 @utility button1Color {
   @apply text-button1Text bg-button1Bg desktop:hover:bg-button1BgHover active:bg-button1BgHover disabled:opacity-80 [transition:background-color_200ms];
-}
-
-@utility button2Color {
-  @apply text-button2Text bg-button2Bg desktop:hover:bg-button2BgHover active:bg-button2BgHover disabled:opacity-80 border border-input2Border [transition:background-color_200ms];
-}
-
-@utility buttonRedColor {
-  @apply text-white bg-buttonRedBg desktop:hover:bg-buttonRedBgHover active:bg-buttonRedBgHover disabled:opacity-80 [transition:background-color_200ms];
-}
-
-@utility buttonRed2Color {
-  @apply text-textRed hover:text-textRedHover bg-transparent desktop:hover:bg-button2BgHover active:bg-button2BgHover disabled:opacity-80 border border-input2Border [transition:background-color_200ms];
-}
-
-.button1 {
-  @apply buttonBase button1Color rounded-lg;
-}
-
-.button2 {
-  @apply buttonBase button2Color rounded-lg;
-}
-
-.buttonRed {
-  @apply buttonBase buttonRedColor rounded-lg;
 }
 
 .homeButton {
@@ -240,11 +133,11 @@ html.dark body {
 }
 
 .buttonSignOut {
-  @apply buttonBase button1Color rounded-full w-32 desktop:w-25 mx-auto my-12;
+  @apply flex-none h-14 desktop:h-10 textBaseApp button1Color rounded-full w-32 desktop:w-25 mx-auto my-12;
 }
 
 .xButton {
-  @apply absolute right-0 top-0 w-16 h-16 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl cursor-pointer hover:bg-buttonTransparentHover active:bg-buttonTransparentHover [transition:background-color_300ms];
+  @apply absolute right-0 top-0 w-16 h-16 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl cursor-pointer desktop:hover:bg-buttonTransBgHover active:bg-buttonTransBgHover disabled:opacity-80 [transition:background-color_300ms];
 }
 
 /*--- login button ---*/
@@ -263,40 +156,36 @@ html.dark body {
 
 /*--- input ---*/
 
-@utility inputBgAndTextColor {
-  @apply bg-inputBg text-text1 placeholder:text-inputPlaceholder;
+@utility input1BgAndTextColor {
+  @apply bg-input1Bg text-text1 placeholder:text-input1Placeholder;
 }
 
-@utility inputBorder {
-  @apply border border-inputBorder desktop:hover:border-inputBorderHover focus:border-inputBorderFocus focus:hover:border-inputBorderFocus;
+@utility input1Border {
+  @apply border border-input1Border desktop:hover:border-input1BorderHover focus:border-input1BorderFocus focus:hover:border-input1BorderFocus;
 }
 
-@utility inputRing {
-  @apply ring-2 ring-transparent focus:ring-inputRing;
+@utility input1Ring {
+  @apply ring-2 ring-transparent focus:ring-input1Ring;
 }
 
-@utility inputColor {
-  @apply inputBgAndTextColor inputBorder inputRing transition-all duration-300;
+@utility input1Color {
+  @apply input1BgAndTextColor input1Border input1Ring outline-none transition-all duration-300;
 }
 
-.input {
-  @apply w-full h-13 desktop:h-10 px-3.5 desktop:px-3 rounded-lg textBaseApp inputColor outline-none;
+@utility inputTransBgAndTextColor {
+  @apply bg-inputTransBg text-text1 placeholder:text-inputTransPlaceholder;
 }
 
-@utility input2BgAndTextColor {
-  @apply bg-input2Bg text-text1 placeholder:text-input2Placeholder;
+@utility inputTransBorder {
+  @apply border border-inputTransBorder desktop:hover:border-inputTransBorderHover focus:border-inputTransBorderFocus focus:hover:border-inputTransBorderFocus;
 }
 
-@utility input2Border {
-  @apply border border-input2Border desktop:hover:border-input2BorderHover focus:border-input2BorderFocus focus:hover:border-input2BorderFocus;
+@utility inputTransRing {
+  @apply ring-2 ring-transparent focus:ring-inputTransRing;
 }
 
-@utility input2Ring {
-  @apply ring-2 ring-transparent focus:ring-input2Ring;
-}
-
-@utility input2Color {
-  @apply input2BgAndTextColor input2Border input2Ring transition-all duration-300;
+@utility inputTransColor {
+  @apply inputTransBgAndTextColor inputTransBorder inputTransRing outline-none transition-all duration-300;
 }
 
 .inputMaxWidth {
@@ -366,7 +255,7 @@ html.dark body {
 /*--- app: items page ---*/
 
 .listHeaderColor {
-  @apply text-slate-700 dark:text-slate-400 bg-bg1 dark:portrait:sm:bg-blue-400/10 dark:landscape:lg:bg-blue-500/10;
+  @apply text-slate-700 dark:text-slate-400 bg-bg1 dark:portrait:sm:bg-blue-400/5 dark:landscape:lg:bg-blue-400/5;
 }
 
 .listTotalHeight {
@@ -378,7 +267,7 @@ html.dark body {
 }
 
 .detailsInput {
-  @apply h-11 desktop:h-8 px-3 desktop:px-2 text-base desktop:text-[0.8125rem] rounded-lg inputColor outline-none;
+  @apply h-11 desktop:h-8 px-3 desktop:px-2 text-base desktop:text-[0.8125rem] rounded-lg input1Color;
 }
 
 .detailsLabel {
@@ -386,26 +275,14 @@ html.dark body {
 }
 
 .detailsOptionContainer {
-  @apply mt-1 grid grid-cols-1 rounded-lg border-[1.5px] bg-inputBg border-inputBorder divide-y-[1.5px] divide-borderFaint overflow-y-auto;
+  @apply mt-1 grid grid-cols-1 rounded-lg border-[1.5px] bg-input1Bg border-input1Border divide-y-[1.5px] divide-borderFaint overflow-y-auto;
 }
 
 .detailsOption {
-  @apply flex-none w-full px-1 h-10 desktop:h-7 text-base desktop:text-[0.8125rem] flex items-center desktop:hover:bg-buttonTransparentHover truncate desktop:cursor-pointer;
+  @apply flex-none w-full px-1 h-10 desktop:h-7 text-base desktop:text-[0.8125rem] flex items-center desktop:hover:bg-buttonTransBgHover truncate desktop:cursor-pointer;
 }
 
 /*--- app: settings page ---*/
-
-.settingsSkeletonSmall {
-  @apply w-[64px] desktop:w-[52px] h-[32px] desktop:h-[24px];
-}
-
-.settingsSkeletonBig {
-  @apply w-[90%] h-[60px];
-}
-
-.settingsInputContainer {
-  @apply h-full flex items-center cursor-pointer;
-}
 
 .settingsLabel {
   @apply font-medium;
@@ -419,52 +296,18 @@ html.dark body {
   @apply px-[4px] h-13 desktop:h-10 flex items-center justify-between border-t border-b border-dashed border-borderFaint desktop:cursor-pointer desktop:hover:text-slate-400;
 }
 
-/*--- modal full ---*/
-
-@utility modalFullBase {
-  @apply absolute z-[1] left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] flex flex-col desktop:rounded-2xl overflow-hidden;
+.cardInner {
+  @apply px-4 py-3 flex flex-col gap-4 rounded-2xl border border-borderFaint dark:border-blue-400/6 bg-transparent dark:bg-blue-400/5;
 }
+
+/*--- modal ---*/
 
 @utility modalFullColor {
-  @apply bg-card dark:bg-[#0B0F37] desktop:border-[1px] desktop:border-slate-300 dark:desktop:border-blue-500/30;
+  @apply bg-card dark:bg-[#0B0F37] desktop:border border-slate-300 dark:border-blue-500/30;
 }
 
-@utility modalFullSize {
-  @apply w-full desktop:w-[400px] h-dvh desktop:h-auto desktop:max-h-[90%];
-}
-
-.modalFull {
-  @apply modalFullBase modalFullColor modalFullSize desktop:pb-[12px];
-}
-
-/*--- standard modal ---*/
-
-@utility modalBase {
-  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[11] flex flex-col items-center rounded-2xl bg-bg1 border-2 dark:border border-slate-300 dark:border-slate-700;
-}
-
-@utility modalXPadding {
-  @apply px-[16px] portrait:sm:px-[40px] landscape:lg:px-[40px] desktop:!px-[32px];
-}
-
-.modalSmall {
-  @apply modalBase w-[94%] max-w-[350px] desktop:max-w-[320px] h-[min(90%,380px)] desktop:h-[min(90%,350px)] py-[24px];
-}
-
-.modalSmallContentContainer {
-  @apply modalXPadding w-full flex flex-col items-center overflow-y-auto;
-}
-
-.modalButtonContainer {
-  @apply modalXPadding w-full flex flex-col items-center pt-[36px] pb-[20px] gap-[24px];
-}
-
-.modalButtonWidth {
-  @apply w-full;
-}
-
-.modalBlackout {
-  @apply fixed inset-0 bg-black/70 z-[10];
+.modalErrorMessage {
+  @apply py-2 errorText flex items-center justify-center;
 }
 
 /*--- utilities ---*/
@@ -485,26 +328,65 @@ html.dark body {
   @apply linkColor desktop:cursor-pointer;
 }
 
-body {
-  --input-bg: #ffffff;
-  --input-text: #212427;
+/*--- background glows ---*/
+
+.dark .pageGlow {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(65, 47, 201, 0.5) 0%,
+    rgba(65, 47, 201, 0.4) 8%,
+    rgba(65, 47, 201, 0.3) 16%,
+    rgba(65, 47, 201, 0.2) 26%,
+    rgba(65, 47, 201, 0.05) 50%,
+    transparent 100%
+  );
 }
 
-.dark body {
-  --input-bg: #010c2a;
-  --input-text: #e1dff1;
+/* ≥480px override */
+@media (min-width: 480px) {
+  .dark .pageGlow {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(42, 84, 222, 0.6) 0%,
+      rgba(42, 84, 222, 0.45) 6%,
+      rgba(42, 84, 222, 0.35) 12%,
+      rgba(42, 84, 222, 0.17) 24%,
+      rgba(42, 84, 222, 0.07) 36%,
+      transparent 50%
+    );
+  }
 }
+
+.dark .modalGlow {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(42, 84, 222, 0.3) 0%,
+    rgba(42, 84, 222, 0.25) 12%,
+    rgba(42, 84, 222, 0.18) 28%,
+    rgba(42, 84, 222, 0.1) 40%,
+    rgba(42, 84, 222, 0.05) 50%,
+    transparent 100%
+  );
+}
+
+/*--- autofill ---*/
 
 input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px var(--input-bg) inset !important;
-  -webkit-text-fill-color: var(--input-text) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--input1Bg) inset !important;
+  -webkit-text-fill-color: var(--input1Text) !important;
 }
 
-&:-webkit-autofill::first-line {
-  font-family: Inter;
-}
+/*--- scrollbar ---*/
 
 @utility thinScrollbar {
+  --scrollbar-track: #f6f9fc;
+  --scrollbar-thumb: #cbd5e1;
+
+  .dark & {
+    --scrollbar-track: rgba(255, 255, 255, 0.07);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+  }
+
   &::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -512,29 +394,16 @@ input:-webkit-autofill {
 
   &::-webkit-scrollbar-track {
     border-radius: 6px;
-    background-color: #f6f9fc;
+    background-color: var(--scrollbar-track);
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #cbd5e1;
     border-radius: 6px;
-  }
-
-  .dark &::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  .dark &::-webkit-scrollbar-track {
-    background-color: rgba(255, 255, 255, 0.07);
-    border-radius: 6px;
-  }
-
-  .dark &::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
+    background-color: var(--scrollbar-thumb);
   }
 }
+
+/*--- underline animate ---*/
 
 .underline-animate {
   position: relative;

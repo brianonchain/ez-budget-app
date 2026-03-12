@@ -1,91 +1,138 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 // db
-import PendingUserModel from "@/db/PendingUserModel";
-import UserModel from "@/db/UserModel";
 import dbConnect from "@/db/dbConnect";
+import PendingUserModel from "@/db/PendingUserModel";
+import PendingEmailChangeModel from "@/db/PendingEmailChange";
+import UserModel from "@/db/UserModel";
 // utils
-import { generateOtp, normalizeEmail } from "@/utils/functions";
-import { hashOtp, getGmailTransporter } from "@/utils/serverFunctions";
+import { generateOtp, normalizeEmail, checkEmail } from "@/utils/functions";
+import { hashOtp, getGmailTransporter, getUserInfo } from "@/utils/serverFunctions";
+import { ResendCodePayload } from "@/utils/types";
 
-export async function POST(req: Request) {
-  // parse body safely
-  const { email } = (await req.json().catch(() => ({}))) as { email?: unknown };
-  const _email = normalizeEmail(String(email || ""));
+export async function POST(req: NextRequest) {
+  const body = (await req.json().catch(() => null)) as ResendCodePayload | null;
+  if (!body || typeof body.type !== "string") return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
 
-  if (!_email) {
-    return NextResponse.json({ status: "error", message: "Missing email." }, { status: 400 });
-  }
-  if (_email.includes(" ")) {
-    return NextResponse.json({ status: "error", message: "Invalid email." }, { status: 400 });
-  }
+  let toEmail = "";
+  let otp = "";
 
-  // DB: validate resend is allowed + update OTP
-  let otp: string;
   try {
     await dbConnect();
-    // If user already exists, don't resend code
-    const user = await UserModel.findOne({ "settings.email": _email }).lean();
-    if (user) {
-      return NextResponse.json({ status: "error", message: "Account already exists." }, { status: 409 });
-    }
-    // If PendingUser is missing or docExpiredAt is in the past, then return error
-    const pendingUser = await PendingUserModel.findOne({ email: _email, docExpiresAt: { $gt: new Date() } });
-    if (!pendingUser) {
-      return NextResponse.json({ status: "error", message: "Verification session expired. Please sign up again." }, { status: 404 });
-    }
 
-    // Generate new OTP + update expiry windows
-    otp = generateOtp();
-    const hashedOtp = hashOtp(otp);
+    switch (body.type) {
+      case "resendCodeForNewUser": {
+        // check type
+        if (typeof body.email !== "string") {
+          return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
+        }
+        // normalize
+        const email = normalizeEmail(body.email);
+        // if exists and valid
+        if (!email || !checkEmail(email)) return NextResponse.json({ status: "error", message: "Missing email." }, { status: 400 });
+        // email in use
+        const userExists = await UserModel.exists({ email });
+        if (userExists) return NextResponse.json({ status: "error", message: "Account already exists." }, { status: 409 });
+        // if pendingUserDoc expired (expires in 10 minutes)
+        const pendingUser = await PendingUserModel.findOne({ email, docExpiresAt: { $gt: new Date() } });
+        if (!pendingUser)
+          return NextResponse.json({ status: "error", message: "Verification session expired. Please sign up again." }, { status: 404 });
 
-    await PendingUserModel.updateOne(
-      { email: _email },
-      {
-        $set: {
-          hashedOtp,
-          otpExpiresAt: new Date(Date.now() + 2 * 60 * 1000),
-          docExpiresAt: new Date(Date.now() + 10 * 60 * 1000),
-        },
+        // create otp & update doc
+        otp = generateOtp();
+        await PendingUserModel.updateOne(
+          { email },
+          {
+            $set: {
+              hashedOtp: hashOtp(otp),
+              otpExpiresAt: new Date(Date.now() + 2 * 60 * 1000), // 2 minutes
+              docExpiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
+            },
+          }
+        );
+
+        toEmail = email;
+        break;
       }
-    );
-  } catch (e) {
-    return NextResponse.json({ status: "error", message: "Database error" }, { status: 500 });
+
+      case "resendCodeForEmailChange": {
+        // get user from next-auth
+        const userInfo = await getUserInfo();
+        if (!userInfo) return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
+        const { userId, userEmail } = userInfo;
+        // check if doc expired (expires in 3 minutes)
+        const pendingEmailChange = await PendingEmailChangeModel.findOne({ oldEmail: userEmail, docExpiresAt: { $gt: new Date() } });
+        if (!pendingEmailChange)
+          return NextResponse.json(
+            { status: "error", message: "Verification session expired. Please exit and try again." },
+            { status: 404 }
+          );
+        // check if new email in use
+        const userExists = await UserModel.exists({ email: pendingEmailChange.newEmail });
+        if (userExists) return NextResponse.json({ status: "error", message: "Email already used." }, { status: 409 });
+        // create otp & update doc
+        otp = generateOtp();
+        await PendingEmailChangeModel.updateOne(
+          { oldEmail: userEmail },
+          {
+            $set: {
+              hashedOtp: hashOtp(otp),
+              otpExpiresAt: new Date(Date.now() + 2 * 60 * 1000),
+              docExpiresAt: new Date(Date.now() + 10 * 60 * 1000),
+            },
+          }
+        );
+
+        toEmail = pendingEmailChange.newEmail;
+        break;
+      }
+
+      default:
+        return NextResponse.json({ status: "error", message: "Invalid operation type." }, { status: 400 });
+    }
+  } catch {
+    return NextResponse.json({ status: "error", message: "Database error." }, { status: 500 });
   }
 
-  // email HTML
   const html = `
   <div>
-    <p>Thank you for using EZ Budget!</p>
     <p>Your verification code is:</p>
     <p style="font-size:20px;font-weight:bold;">${otp}</p>
     <p>This code will expire in 2 minutes.</p>
     <p>Sincerely,<br/>The EZ Budget & Nulla Pay Team</p>
   </div>
-`;
+  `;
 
-  // SEND EMAIL
   try {
     const transporter = await getGmailTransporter();
     await transporter.sendMail({
       from: { name: "EZ Budget App", address: "support@nullapay.com" },
-      to: _email,
+      to: toEmail,
       subject: "EZ Budget verification code",
-      html: html,
+      html,
     });
-
-    // reset rate limit
-    // await redis.del(`ratelimit:${_email}`);
-
     return NextResponse.json({ status: "success" }, { status: 200 });
   } catch (e) {
-    console.log("error", e);
+    console.log("email send error", e);
+
     try {
-      await PendingUserModel.deleteOne({ email: _email });
-    } catch (e) {} // not critical if error, as doc self-deletes in 10 minutes
+      if (body.type === "resendCodeForNewUser" && typeof body.email === "string") {
+        const email = normalizeEmail(body.email);
+        if (email) {
+          await PendingUserModel.deleteOne({ email });
+        }
+      }
+
+      if (body.type === "resendCodeForEmailChange") {
+        const userInfo = await getUserInfo();
+        if (userInfo) {
+          await PendingEmailChangeModel.deleteOne({ oldEmail: userInfo.userEmail });
+        }
+      }
+    } catch {}
     return NextResponse.json(
       {
         status: "error",
-        message: "There was an error sending the code to your email. Please try registering again or notify support@nullapay.com.",
+        message: "There was an error sending the code. Please try again or contact support@nullapay.com.",
       },
       { status: 500 }
     );

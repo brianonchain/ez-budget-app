@@ -19,10 +19,7 @@ export async function GET() {
     await dbConnect();
     // 1) get user activeWorkspaceId
     const user = await UserModel.findById(userId).select("activeWorkspaceId").lean<{ activeWorkspaceId: Types.ObjectId | null } | null>();
-
-    if (!user) {
-      return NextResponse.json({ status: "error", message: "User not found" }, { status: 404 });
-    }
+    if (!user) return NextResponse.json({ status: "error", message: "User not found" }, { status: 404 });
 
     // 2) get memberships for workspace selector
     const memberships = await MembershipModel.find({ userId })
@@ -38,35 +35,23 @@ export async function GET() {
       ownerEmail: i.workspaceId.ownerEmail,
       role: i.role,
     }));
-    console.log(workspaceOptions);
 
-    // 3) choose active workspace
+    // 3) check activeWorkspace exists; if not, choose the first membership
+    // can happen if another user deletes a shared workspace
     let activeWorkspaceId = user.activeWorkspaceId;
     if (!activeWorkspaceId) {
-      if (memberships.length === 0) {
-        return NextResponse.json({ status: "error", message: "No workspace membership" }, { status: 404 });
-      }
-
+      if (memberships.length === 0) return NextResponse.json({ status: "error", message: "No workspace membership" }, { status: 404 });
       activeWorkspaceId = memberships[0].workspaceId._id;
-
       await UserModel.updateOne({ _id: userId }, { $set: { activeWorkspaceId } });
     }
 
     // 4) verify user belongs to active workspace
-    const activeMembership = await MembershipModel.findOne({ userId, workspaceId: activeWorkspaceId })
-      .select("role")
-      .lean<{ role: Role } | null>();
-
-    if (!activeMembership) {
-      return NextResponse.json({ status: "error", message: "Forbidden" }, { status: 403 });
-    }
+    const activeMembership = memberships.find((i) => i.workspaceId._id.equals(activeWorkspaceId));
+    if (!activeMembership) return NextResponse.json({ status: "error", message: "Forbidden" }, { status: 403 });
 
     // 5) load workspace settings
     const workspace = await WorkspaceModel.findById(activeWorkspaceId).select("name defaultCurrency categoryObjects tags ownerId").lean();
-
-    if (!workspace) {
-      return NextResponse.json({ status: "error", message: "Workspace not found" }, { status: 404 });
-    }
+    if (!workspace) return NextResponse.json({ status: "error", message: "Workspace not found" }, { status: 404 });
 
     // 6) load shared users for active workspace
     const [sharedUsersRaw, pendingSharedUsersRaw] = await Promise.all([

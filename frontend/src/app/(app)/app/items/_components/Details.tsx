@@ -7,6 +7,8 @@ import { CategoryObject } from "@/db/WorkspaceModel";
 import DetailsCalendar from "./DetailsCalendar";
 import { CURRENCIES, DECIMALS } from "@/utils/constants";
 import { DraftItem, SettingsData } from "@/utils/types";
+import Input from "@/utils/components/Input";
+import Select from "@/utils/components/Select";
 
 export default function Details({
   settingsData,
@@ -32,11 +34,53 @@ export default function Details({
   const { mutateAsync: mutateItemsAsync, isPending, isError, error } = useItemsMutation();
   const [showCalendar, setShowCalendar] = useState(false);
   const [costString, setCostString] = useState(draftItem.cost ? draftItem.cost.toString() : "");
+  const [description, setDescription] = useState(draftItem.description);
   const [currency, setCurrency] = useState(draftItem.currency ?? "USD");
   const [status, setStatus] = useState<"initial" | "addingOrEditing" | "deleting">("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
   const [validationError, setValidationError] = useState("");
 
   const decimals = DECIMALS[currency];
+
+  function onChangeCostString(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.currentTarget.value;
+    if (!/^\d*\.?\d*$/.test(val)) return; // Only digits and optional dot
+    if (decimals === 0 && val.includes(".")) return; // Block decimals if currency has 0
+    // Enforce max fraction digits
+    if (val.includes(".")) {
+      const [, frac = ""] = val.split(".");
+      if (frac.length > decimals) return;
+    }
+    setCostString(val);
+  }
+
+  function onBlurCostString() {
+    let normalized = costString;
+    if (normalized.endsWith(".")) {
+      normalized = normalized.slice(0, -1);
+    }
+    const n = Number(normalized);
+    if (!Number.isFinite(n)) {
+      setCostString("");
+      setDraftItem((prev) => ({ ...prev, cost: 0 }));
+      return;
+    }
+    // Pad decimals visually
+    if (decimals > 0) {
+      normalized = n.toFixed(decimals);
+    } else {
+      normalized = Math.trunc(n).toString();
+    }
+    setCostString(normalized);
+    setDraftItem((prev) => ({ ...prev, cost: n }));
+  }
+
+  function onChangeCurrency(e: React.ChangeEvent<HTMLSelectElement>) {
+    const next = e.currentTarget.value;
+    setCurrency(next);
+    // Optional: normalize immediately when switching
+    setCostString("");
+    setDraftItem((prev) => ({ ...prev, currency: next }));
+  }
 
   async function onUpsert() {
     if (!Number.isFinite(draftItem.cost) || draftItem.cost <= 0) {
@@ -89,73 +133,36 @@ export default function Details({
           <label className="detailsLabel" htmlFor="details-desc">
             Item
           </label>
-          <input
+          <Input
+            className="w-full"
+            inputSize="xs"
+            variant="primary"
             id="details-desc"
-            className="w-full detailsInput"
-            value={draftItem.description}
-            onChange={(e) => setDraftItem((prev) => ({ ...prev, description: e.currentTarget.value }))}
+            value={description}
+            onChange={(e) => setDescription(e.currentTarget.value)}
+            onBlur={(e) => setDraftItem((prev) => ({ ...prev, description }))}
           />
           <label className="detailsLabel" htmlFor="details-cost">
             Cost
           </label>
-          <div className="flex items-center gap-x-1">
-            <input
+          <div className="flex items-center gap-1">
+            <Input
               id="details-cost"
-              className="detailsInput w-25 desktop:w-22"
+              className="w-25 desktop:w-22"
+              inputSize="xs"
+              variant="primary"
               value={costString}
-              onChange={(e) => {
-                const val = e.currentTarget.value;
-                if (!/^\d*\.?\d*$/.test(val)) return; // Only digits and optional dot
-                if (decimals === 0 && val.includes(".")) return; // Block decimals if currency has 0
-                // Enforce max fraction digits
-                if (val.includes(".")) {
-                  const [, frac = ""] = val.split(".");
-                  if (frac.length > decimals) return;
-                }
-                setCostString(val);
-              }}
-              onBlur={() => {
-                let normalized = costString;
-                if (normalized.endsWith(".")) {
-                  normalized = normalized.slice(0, -1);
-                }
-                const n = Number(normalized);
-                if (!Number.isFinite(n)) {
-                  setCostString("");
-                  setDraftItem((prev) => ({ ...prev, cost: 0 }));
-                  return;
-                }
-                // Pad decimals visually
-                if (decimals > 0) {
-                  normalized = n.toFixed(decimals);
-                } else {
-                  normalized = Math.trunc(n).toString();
-                }
-                setCostString(normalized);
-                setDraftItem((prev) => ({ ...prev, cost: n }));
-              }}
+              onChange={onChangeCostString}
+              onBlur={onBlurCostString}
               inputMode="decimal"
             />
-            <div className="relative">
-              <select
-                className="detailsInput appearance-none w-20 desktop:w-16"
-                value={currency}
-                onChange={(e) => {
-                  const next = e.currentTarget.value;
-                  setCurrency(next);
-                  // Optional: normalize immediately when switching
-                  setCostString("");
-                  setDraftItem((prev) => ({ ...prev, currency: next }));
-                }}
-              >
-                {CURRENCIES.map((i) => (
-                  <option key={i} value={i}>
-                    {i}
-                  </option>
-                ))}
-              </select>
-              <FaChevronDown className="absolute right-[0.6rem] top-1/2 -translate-y-1/2 pointer-events-none text-sm desktop:text-[0.625rem] opacity-80" />
-            </div>
+            <Select variant="primary" selectSize="xs" value={currency} onChange={onChangeCurrency}>
+              {CURRENCIES.map((i) => (
+                <option key={i} value={i}>
+                  {i}
+                </option>
+              ))}
+            </Select>
           </div>
         </div>
 
@@ -200,8 +207,8 @@ export default function Details({
                   key={i}
                   className={`detailsOption ${draftItem.tag === i ? "!bg-button1Bg text-button1Text" : ""} `}
                   onClick={() => {
-                    console.log("click");
                     setDraftItem((prev) => ({ ...prev, tag: i }));
+                    localStorage.setItem(`lastTag:${settingsData.workspace._id}`, i);
                   }}
                 >
                   {i}
@@ -212,30 +219,34 @@ export default function Details({
         </div>
 
         {/*--- save changes button ---*/}
-        <Button
-          className="mt-6"
-          label={draftItem._id ? "Save Changes" : "Add Item"}
-          onClick={onUpsert}
-          isLoading={status === "addingOrEditing"}
-          disabled={status !== "initial" || isPending}
-          type="button"
-        />
+        {["owner", "editor"].includes(settingsData.role) && (
+          <Button
+            className="mt-6 w-full"
+            label={draftItem._id ? "Save Changes" : "Add Item"}
+            variant="primary"
+            size="base"
+            onClick={onUpsert}
+            isLoading={status === "addingOrEditing"}
+            disabled={status !== "initial" || isPending}
+            type="button"
+          />
+        )}
         {/*--- validation error message ---*/}
         <div className="shrink-0 errorText h-24 desktop:h-16 flex items-center justify-center">
           {validationError ? validationError : isError ? error?.message : ""}
         </div>
         {/*--- (optiona) delete button ---*/}
-        {draftItem._id && (
+        {draftItem._id && ["owner", "editor"].includes(settingsData.role) && (
           <Button
-            className="mt-auto mx-auto buttonRed"
+            className="w-full"
             label="Delete Item"
+            variant="danger"
+            size="base"
             onClick={onDelete}
             isLoading={status === "deleting"}
             disabled={status !== "initial" || isPending}
             type="button"
-          >
-            {status === "deleting" ? "Deleting..." : "Delete Item"}
-          </Button>
+          />
         )}
       </div>
     </Modal>

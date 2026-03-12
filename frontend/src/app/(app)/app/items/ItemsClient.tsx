@@ -33,7 +33,6 @@ export default function Items() {
   const { data: settingsData } = useSettingsQuery(session?.data?.user?.email);
   // states
   const [errorMessage, setErrorMessage] = useState("");
-  const [errorModal, setErrorModal] = useState(false);
   const [costModal, setCostModal] = useState(false);
   const [nameModal, setNameModal] = useState(false);
   const [detailsModal, setDetailsModal] = useState(false);
@@ -53,13 +52,14 @@ export default function Items() {
       ...emptyItem,
       date: new Date().toISOString(),
       currency: settingsData.workspace.defaultCurrency,
+      tag: localStorage.getItem(`lastTag:${settingsData.workspace._id}`) ?? "none",
     });
     setCostModal(true);
   };
 
   return (
     <>
-      <ItemsShell footer={<AddItemButton onClick={addItemOnClick} disabled={settingsData?.role === "viewer"} />}>
+      <ItemsShell footer={["owner", "editor"].includes(settingsData?.role ?? "") ? <AddItemButton onClick={addItemOnClick} /> : null}>
         {itemsData.items.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center">No items yet</div>
         ) : (
@@ -75,12 +75,10 @@ export default function Items() {
               >
                 <div className="">{item.description}</div>
                 <div className="">{SYMBOLS[item.currency] + item.cost.toFixed(DECIMALS[item.currency])}</div>
-                <div className="flex flex-col justify-self-end text-end">
-                  {item.category !== "none" && <p className="font-medium leading-tight">{item.category}</p>}
-                  {item.subcategory !== "none" && (
-                    <p className="italic text-sm desktop:text-xs leading-none text-slate-500 dark:text-slate-400">{item.subcategory}</p>
-                  )}
-                  {item.tag !== "none" && <div className="text-sm desktop:text-xs leading-tight text-button1Bg truncate">{item.tag}</div>}
+                <div className="flex flex-col justify-self-end text-end text-sm desktop:text-xs leading-tight desktop:leading-tight">
+                  {item.category !== "none" && <p className="">{item.category}</p>}
+                  {item.subcategory !== "none" && <p className="italic text-slate-500 dark:text-slate-400">{item.subcategory}</p>}
+                  {item.tag !== "none" && <div className="text-button1Bg truncate">{item.tag}</div>}
                 </div>
               </div>
             ))}
@@ -100,7 +98,7 @@ export default function Items() {
       {detailsModal && settingsData && (
         <Details setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} draftItem={draftItem} settingsData={settingsData} />
       )}
-      {errorModal && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} setErrorModal={setErrorModal} />}
+      {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
   );
 }

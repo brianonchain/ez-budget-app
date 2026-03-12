@@ -14,7 +14,7 @@ export default function DetailsCalendar({
   return (
     <>
       <button className="z-[0] fixed w-screen bg-black/30 h-screen left-0 top-0" onClick={() => setShowCalendar(false)} />
-      <div className="z-[1] absolute right-0 top-[calc(100%+0.25rem)] px-2 py-2 desktop:py-1 rounded-lg bg-inputBg border-[1.5px] border-inputBorderFocus">
+      <div className="z-[1] absolute right-0 top-[calc(100%+0.25rem)] px-2 py-2 desktop:py-1 rounded-lg bg-input1Bg border-[1.5px] border-input1BorderFocus">
         <DayPicker
           className="textSmApp"
           classNames={{

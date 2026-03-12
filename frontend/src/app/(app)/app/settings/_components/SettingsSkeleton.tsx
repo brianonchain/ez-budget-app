@@ -1,3 +1,7 @@
-export default function SettingsSkeleton({ className }: { className?: string }) {
-  return <div className={`w-[64px] desktop:w-[52px] h-[32px] desktop:h-[24px] bg-blue-300/10 animate-pulse rounded-md ${className}`} />;
+export default function SettingsSkeleton({ size = "sm", className = "" }: { size?: "sm" | "lg"; className?: string }) {
+  const sizes = {
+    sm: "w-22 desktop:w-18",
+    lg: "w-full",
+  };
+  return <div className={`h-12 desktop:h-9 bg-blue-300/10 animate-pulse rounded-lg ${sizes[size]} ${className}`} />;
 }

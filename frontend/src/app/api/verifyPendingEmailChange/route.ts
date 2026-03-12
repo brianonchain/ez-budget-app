@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/utils/authOptions"; // Adjust to your actual path
+import { authOptions } from "@/utils/authOptions";
 // db
 import UserModel from "@/db/UserModel";
 import PendingEmailChangeModel from "@/db/PendingEmailChange";
 import dbConnect from "@/db/dbConnect";
-import { normalizeEmail } from "@/utils/functions";
-import { hashOtp } from "@/utils/serverFunctions";
+// utils
+import { normalizeEmail, checkEmail } from "@/utils/functions";
+import { getUserInfo, hashOtp } from "@/utils/serverFunctions";
 // rate limit
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
@@ -25,16 +26,22 @@ import { Redis } from "@upstash/redis";
 // });
 
 export async function POST(req: Request) {
-  const { newEmail, otp } = await req.json();
-  // check input types
-  const _newEmail = normalizeEmail(String(newEmail || ""));
-  const _otp = String(otp || "");
-  if (!_newEmail || !_otp) return NextResponse.json({ status: "error", message: "Missing fields." }, { status: 400 });
+  const body = await req.json().catch(() => null);
+  // check type
+  if (!body || typeof body.newEmail !== "string" || typeof body.otp !== "string")
+    return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
+  // normalize
+  const newEmail = normalizeEmail(body.newEmail);
+  const otp = body.otp.trim();
+  // exists
+  if (!newEmail || !otp || !checkEmail(newEmail))
+    return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
 
   // check authentication
-  const session = await getServerSession(authOptions);
-  const oldEmail = session?.user?.email;
-  if (!oldEmail) return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
+  const userInfo = await getUserInfo();
+  if (!userInfo) return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
+  const { userId, userEmail } = userInfo;
+  if (!userEmail) return NextResponse.json({ status: "error", message: "Unauthorized" }, { status: 401 });
 
   // rate limit
   // const { success } = await rateLimiter.limit(newEmail);
@@ -50,27 +57,24 @@ export async function POST(req: Request) {
 
   try {
     await dbConnect();
-
-    // 1. verify otp
-    const pending = await PendingEmailChangeModel.findOne({ oldEmail: oldEmail, newEmail: _newEmail });
-    if (!pending || pending.otpExpiresAt < new Date()) {
+    // check if doc expired
+    const pending = await PendingEmailChangeModel.findOne({ oldEmail: userEmail, newEmail, docExpiresAt: { $gt: new Date() } });
+    if (!pending)
       return NextResponse.json({ status: "error", message: "Your verification session has expired. Please try again." }, { status: 410 });
-    }
-
-    // 2. verify otp is correct
-    if (hashOtp(_otp) !== pending.hashedOtp) {
-      return NextResponse.json({ status: "error", message: "Invalid code" }, { status: 401 });
-    }
-
-    await UserModel.updateOne({ "settings.email": oldEmail }, { $set: { "settings.email": _newEmail } }); // make mutation
-  } catch (e) {
+    // check if otp expired
+    if (pending.otpExpiresAt < new Date())
+      return NextResponse.json({ status: "error", message: "Code expired. Please resend verification code." }, { status: 410 });
+    // verify otp
+    if (hashOtp(otp) !== pending.hashedOtp) return NextResponse.json({ status: "error", message: "Invalid code" }, { status: 401 });
+    // update user email
+    await UserModel.updateOne({ email: userEmail }, { $set: { email: newEmail } });
+  } catch {
     return NextResponse.json({ status: "error", message: "Database error. Please try again." }, { status: 500 });
   }
 
-  // delete PendingUser doc, return status:success even if deletion fails
+  // delete pending doc (non-critical)
   try {
-    await PendingEmailChangeModel.deleteOne({ oldEmail: oldEmail, newEmail: _newEmail });
-  } catch (e) {}
-
+    await PendingEmailChangeModel.deleteOne({ oldEmail: userEmail, newEmail });
+  } catch {}
   return NextResponse.json({ status: "success" }, { status: 200 });
 }

@@ -1,6 +1,5 @@
 import crypto from "crypto";
 const nodemailer = require("nodemailer"); // nodemailer does not suppot es6
-import { google } from "googleapis";
 import { serverEnv } from "@/utils/serverEnv";
 
 export function hashOtp(otp: string) {
@@ -32,11 +31,8 @@ export async function getUserInfo() {
   const session = await getServerSession(authOptions);
   const userId = session?.userId;
   const userEmail = session?.user?.email;
-  if (!userId || !Types.ObjectId.isValid(userId) || !userEmail) {
-    return null;
-  }
-  return {
-    userId: new Types.ObjectId(userId),
-    userEmail,
-  };
+
+  if (!userId || !Types.ObjectId.isValid(userId) || !userEmail) return null;
+
+  return { userId: new Types.ObjectId(userId), userEmail };
 }
