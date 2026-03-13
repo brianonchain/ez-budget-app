@@ -243,10 +243,13 @@ html.dark body {
   }
 }
 /* --- desktop --- */
-@media (hover: hover) and (pointer: fine) {
-  :root {
-    --numRows: 14;
-  }
+/* @media (hover: hover) and (pointer: fine) {
+can potentially add desktop-only variables here
+} */
+
+/* dark:landscape:bg-gradient-to-r dark:portrait:bg-gradient-to-t dark:from-[#03082E] dark:to-blue-500/18 */
+.menuBg {
+  @apply bg-bg1 portrait:sm:bg-card landscape:lg:bg-card;
 }
 
 .menuIcon {

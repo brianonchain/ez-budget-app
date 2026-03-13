@@ -18,7 +18,7 @@ export default function Menu() {
   return (
     <div className="fixed z-10 portrait:bottom-0 landscape:left-0 landscape:w-[120px] landscape:lg:w-[160px] landscape:h-screen portrait:w-full portrait:h-[80px] portrait:sm:h-[120px] bg-bg1">
       {/*--- partially transparent background ---*/}
-      <div className="w-full h-full flex justify-center items-center landscape:bg-gradient-to-r portrait:bg-gradient-to-t from-card to-card dark:from-[#03082E] dark:to-blue-500/18 shadow-[6px_0px_10px_0px_rgba(0,0,0,0.02)]">
+      <div className="w-full h-full flex justify-center items-center menuBg shadow-[6px_0px_10px_0px_rgba(0,0,0,0.02)]">
         {/*--- menu container ---*/}
         <div className="landscape:w-full landscape:h-[80%] landscape:min-h-[360px] landscape:max-h-[600px] portrait:w-full portrait:min-w-[360px] portrait:max-w-[700px] portrait:pb-[10px] flex landscape:flex-col items-center justify-around">
           {menuItems.map((i) => (
