@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
-import { ItemsData, SettingsData, MutateUserPayload, MutateSettingsPayload, MutateItemsPayload } from "@/utils/types";
+import { ItemsData, SettingsData, StatsData, StatsPeriod, MutateUserPayload, MutateSettingsPayload, MutateItemsPayload } from "@/utils/types";
 import { fetchPost, fetchGet } from "./functions";
 
 export const useItemsQuery = (email: string | null | undefined) => {
@@ -27,6 +27,20 @@ export const useSettingsQuery = (email: string | null | undefined) => {
     enabled: !!email,
     staleTime: Infinity,
     gcTime: Infinity,
+  });
+};
+
+export const useStatsQuery = (email: string | null | undefined, period: StatsPeriod, date: string) => {
+  return useQuery<StatsData, Error>({
+    queryKey: ["stats", period, date],
+    queryFn: async (): Promise<StatsData> => {
+      const resJson = await fetchGet(`/api/getStats?period=${period}&date=${encodeURIComponent(date)}`);
+      if (resJson.status === "success") return resJson.data;
+      throw new Error(resJson.message || "Failed to load stats.");
+    },
+    enabled: !!email,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 };
 

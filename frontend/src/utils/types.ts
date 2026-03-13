@@ -95,3 +95,19 @@ export type MutateUserPayload =
   | { type: "deleteAccount"; userId: string }; // userId
 
 export type ResendCodePayload = { type: "resendCodeForNewUser"; email: string } | { type: "resendCodeForEmailChange" };
+
+// useStatsQuery data
+export type StatsPeriod = "week" | "month" | "year";
+export type StatsRawItem = {
+  date: string;
+  cost: number;
+  currency: string;
+  category: string;
+};
+export type StatsData = {
+  items: StatsRawItem[];
+  defaultCurrency: string;
+  period: StatsPeriod;
+  startDate: string;
+  endDate: string;
+};

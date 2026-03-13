@@ -204,6 +204,7 @@ html.dark body {
 
 /*--- app ---*/
 
+/* --- mobile --- */
 @media (orientation: portrait) {
   :root {
     --listPaddingTop: 0px;
@@ -213,17 +214,6 @@ html.dark body {
     --numRows: 10;
   }
 }
-
-@media (orientation: portrait) and (min-width: 600px) {
-  :root {
-    --listPaddingTop: 24px;
-    --listHeaderHeight: 3rem;
-    --listButtonContainerHeight: 100px;
-    --menuHeight: 120px;
-    --numRows: 11;
-  }
-}
-
 @media (orientation: landscape) {
   :root {
     --listPaddingTop: 0px;
@@ -233,7 +223,16 @@ html.dark body {
     --numRows: 10;
   }
 }
-
+/* --- tablet --- */
+@media (orientation: portrait) and (min-width: 600px) {
+  :root {
+    --listPaddingTop: 24px;
+    --listHeaderHeight: 3rem;
+    --listButtonContainerHeight: 100px;
+    --menuHeight: 120px;
+    --numRows: 11;
+  }
+}
 @media (orientation: landscape) and (min-width: 980px) {
   :root {
     --listPaddingTop: 24px;
@@ -241,6 +240,12 @@ html.dark body {
     --listButtonContainerHeight: 100px;
     --menuHeight: 0px;
     --numRows: 10;
+  }
+}
+/* --- desktop --- */
+@media (hover: hover) and (pointer: fine) {
+  :root {
+    --numRows: 14;
   }
 }
 
