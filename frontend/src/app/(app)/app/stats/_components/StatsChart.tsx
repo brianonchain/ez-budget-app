@@ -125,7 +125,7 @@ export default function StatsChart({ data, currency }: StatsChartProps) {
               return v.toFixed(decimals);
             }}
           >
-            <Label value={currencyLabel} angle={-90} position="insideLeft" offset={-4} style={{ textAnchor: "middle", fontSize: 12, fill: "var(--color-text2)" }} />
+            <Label value={currencyLabel} angle={-90} position="insideLeft" offset={-4} style={{ textAnchor: "middle", fontSize: 13, fill: "var(--color-text2)" }} />
           </YAxis>
           {!isEmpty && <Tooltip content={<CustomTooltip currency={currency} />} cursor={{ fill: "var(--color-borderFaint)", opacity: 0.5 }} />}
           {!isEmpty &&
@@ -136,7 +136,7 @@ export default function StatsChart({ data, currency }: StatsChartProps) {
       </ResponsiveContainer>
       {isEmpty && (
         <div className="absolute inset-0 flex items-center justify-center text-text2 textBaseApp pointer-events-none">
-          No expenses for this period
+          No expenses
         </div>
       )}
     </div>
