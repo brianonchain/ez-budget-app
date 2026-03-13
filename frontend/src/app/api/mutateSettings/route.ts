@@ -365,6 +365,15 @@ export const POST = async (request: Request) => {
         break;
       }
 
+      case "setMonthlyBudget": {
+        const { month, amount, currency } = payload;
+        if (!month || typeof amount !== "number" || amount < 0 || !currency) return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
+        if (!/^\d{4}-\d{2}$/.test(month)) return NextResponse.json({ status: "error", message: "Invalid month format." }, { status: 400 });
+        if (!CURRENCIES.includes(currency)) return NextResponse.json({ status: "error", message: "Currency not supported." }, { status: 400 });
+        await WorkspaceModel.updateOne({ _id: workspaceId }, { $set: { [`monthlyBudgets.${month}`]: { amount, currency } } });
+        break;
+      }
+
       default: {
         // const _exhaustiveCheck: never = payload.type; // check if every case is handled
         return NextResponse.json({ status: "error", message: "Invalid operation type." }, { status: 400 });
