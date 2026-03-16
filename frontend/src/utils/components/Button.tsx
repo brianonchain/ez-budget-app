@@ -41,7 +41,7 @@ export default function Button({
   return (
     <button
       {...props}
-      className={`font-medium flex items-center justify-center gap-1 desktop:cursor-pointer disabled:cursor-default ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`flex-none font-medium flex items-center justify-center gap-1 desktop:cursor-pointer disabled:cursor-default ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={isLoading || props.disabled}
     >
       {isLoading ? (

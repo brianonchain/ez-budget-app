@@ -93,7 +93,7 @@
 
 html,
 body {
-  background: #ffffff; /* --color-card */
+  background: #f7edf7; /* --color-card */
 }
 
 html.dark,
@@ -255,8 +255,16 @@ can potentially add desktop-only variables here
 } */
 
 /* dark:landscape:bg-gradient-to-r dark:portrait:bg-gradient-to-t dark:from-[#03082E] dark:to-blue-500/18 */
+.menuSize {
+  @apply landscape:w-[120px] landscape:lg:w-[160px] landscape:h-screen portrait:w-full portrait:h-[80px] portrait:sm:h-[120px];
+}
+
 .menuBg {
-  @apply bg-card dark:bg-bg1;
+  @apply bg-card dark:bg-bg1 dark:portrait:bg-gradient-to-b dark:landscape:bg-gradient-to-l dark:from-blue-400/8 dark:to-transparent dark:to-60%;
+}
+
+.menuShadow {
+  @apply portrait:shadow-[0px_0px_16px_0px_rgba(0,0,0,0.08)] landscape:shadow-[2px_0px_8px_0px_rgba(0,0,0,0.06)] dark:shadow-none;
 }
 
 .menuIcon {
@@ -282,7 +290,7 @@ can potentially add desktop-only variables here
 }
 
 .listButtonContainerColor {
-  @apply bg-card portrait:sm:bg-transparent landscape:lg:bg-transparent;
+  @apply bg-bg1 portrait:sm:bg-transparent landscape:lg:bg-transparent;
 }
 
 .listTotalHeight {
