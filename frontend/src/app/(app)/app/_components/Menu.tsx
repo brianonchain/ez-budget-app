@@ -16,22 +16,22 @@ export default function Menu() {
   ];
 
   return (
-    <div className="fixed z-10 portrait:bottom-0 landscape:left-0 landscape:w-[120px] landscape:lg:w-[160px] landscape:h-screen portrait:w-full portrait:h-[80px] portrait:sm:h-[120px] bg-bg1">
+    <div className="fixed z-50 portrait:bottom-0 landscape:left-0 landscape:w-[120px] landscape:lg:w-[160px] landscape:h-screen portrait:w-full portrait:h-[80px] portrait:sm:h-[120px] bg-bg1">
       {/*--- partially transparent background ---*/}
-      <div className="w-full h-full flex justify-center items-center menuBg shadow-[6px_0px_10px_0px_rgba(0,0,0,0.02)]">
+      <div className="w-full h-full flex justify-center landscape:items-center portrait:items-end menuBg portrait:shadow-[0px_-2px_8px_0px_rgba(0,0,0,0.06)] landscape:shadow-[2px_0px_8px_0px_rgba(0,0,0,0.06)] dark:shadow-none">
         {/*--- menu container ---*/}
-        <div className="landscape:w-full landscape:h-[80%] landscape:min-h-[360px] landscape:max-h-[600px] portrait:w-full portrait:min-w-[360px] portrait:max-w-[700px] portrait:pb-[10px] flex landscape:flex-col items-center justify-around">
+        <div className="landscape:w-full landscape:h-[80%] landscape:max-h-100 portrait:w-[80%] portrait:max-w-140 menuPbSafeArea flex landscape:flex-col items-center justify-between">
           {menuItems.map((i) => (
             <Link
               href={i.path}
               className={`${
-                i.path === path ? "text-slate-800 dark:text-slate-300" : "text-slate-400 dark:text-slate-600"
-              } desktop:hover:text-slate-800 dark:desktop:hover:text-slate-300 w-[90px] portrait:sm:w-[100px] landscape:lg:w-[100px] flex flex-col items-center justify-center gap-[0px] portrait:sm:gap-[4px] landscape:lg:gap-[4px] cursor-pointer`}
+                i.path === path ? "text-textPrimary" : "text-textTertiary"
+              } desktop:hover:text-textPrimary w-20 portrait:sm:w-25 landscape:lg:w-25 flex flex-col items-center justify-center gap-0 portrait:sm:gap-1 landscape:lg:gap-1 cursor-pointer`}
               key={i.text}
               onClick={() => setPath(i.path)}
             >
               {i.icon}
-              <p className="text-[14px]">{i.text}</p>
+              <p className="text-[0.8125rem] desktop:text-sm">{i.text}</p>
             </Link>
           ))}
         </div>

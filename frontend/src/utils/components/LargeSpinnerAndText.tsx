@@ -22,7 +22,7 @@ export default function LargeSpinnerAndText() {
           className="fill-slate-400 dark:fill-slate-400"
         />
       </svg>
-      <div className="mt-4 font-medium textBaseApp text-text2">Loading...</div>
+      <div className="mt-4 font-medium textBaseApp text-textSecondary">Loading...</div>
     </>
   );
 }

@@ -118,7 +118,7 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
               isLoading={status === "pending"}
               disabled={status !== "initial"}
             />
-            {errors.submit && <div className="mt-[32px] text-textRed font-medium text-center">{errors.submit}</div>}
+            {errors.submit && <div className="mt-[32px] text-textError font-medium text-center">{errors.submit}</div>}
           </form>
         ) : (
           <div className="w-full h-[300px] desktop:h-[240px] flex flex-col items-center justify-center gap-[32px] font-medium text-center">

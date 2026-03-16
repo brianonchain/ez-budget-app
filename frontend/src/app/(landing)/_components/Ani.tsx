@@ -129,7 +129,7 @@ export default function Ani() {
                     <div className="flex flex-col justify-self-end text-end">
                       {item.category !== "none" && <p className="font-medium leading-tight">{item.category}</p>}
                       {item.subcategory !== "none" && <p className="italic text-sm leading-tight text-slate-400">{item.subcategory}</p>}
-                      {item.tag !== "none" && <div className="text-sm leading-tight text-darkButton1Bg truncate">{item.tag}</div>}
+                      {item.tag !== "none" && <div className="text-sm leading-tight text-darkbuttonPrimaryBg truncate">{item.tag}</div>}
                     </div>
                   </div>
                 ))}
@@ -137,7 +137,7 @@ export default function Ani() {
             </div>
             {/*--- add item h-80px/110px ---*/}
             <div className="flex-none w-full h-[80px] flex items-center justify-center">
-              <div className="animate-button1 button1Color w-[200px] h-[60px] rounded-full flex items-center gap-[8px] justify-center desktop:cursor-pointer">
+              <div className="animate-buttonPrimary buttonPrimaryColor w-[200px] h-[60px] rounded-full flex items-center gap-[8px] justify-center desktop:cursor-pointer">
                 <FaPlus className="text-[20px]" />
                 <p className="text-lg font-semibold">Item</p>
               </div>
@@ -172,7 +172,7 @@ export default function Ani() {
                 </div>
               </div>
               {/*--- button ---*/}
-              <button className="animate-button2 mt-[30px] w-full h-[52px] button1Color rounded-[12px] text-xl font-medium cursor-pointer">
+              <button className="animate-button2 mt-[30px] w-full h-[52px] buttonPrimaryColor rounded-[12px] text-xl font-medium cursor-pointer">
                 Enter
               </button>
             </div>
@@ -193,7 +193,7 @@ export default function Ani() {
                 <textarea className="p-[16px] w-full h-[200px] text-2xl border rounded-[16px] border-slate-400" disabled />
                 <div className={`absolute top-[16px] left-[16px] text-[30px] animate-name ${robotoMono.className}`}>Starbucks latte</div>
               </div>
-              <button className="animate-button3 mt-[30px] w-full h-[52px] button1Color rounded-[12px] text-xl font-medium cursor-pointer">
+              <button className="animate-button3 mt-[30px] w-full h-[52px] buttonPrimaryColor rounded-[12px] text-xl font-medium cursor-pointer">
                 Enter
               </button>
             </div>
@@ -211,12 +211,12 @@ export default function Ani() {
             <div className="w-[360px] grid grid-cols-3 gap-[4px]">
               {/*--- Category ---*/}
               <div
-                className={`animate-labelTypeBg1 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkButton1Bg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
+                className={`animate-labelTypeBg1 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkbuttonPrimaryBg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkbuttonPrimaryBg desktop:hover:text-white`}
               >
                 <p className="text-base font-medium tracking-tighter text-center">Category</p>
                 <div className="w-full  flex justify-center relative">
                   <div className="absolute text-sm text-center tracking-tighter animate-none1">none</div>
-                  <div className="absolute text-sm text-center tracking-tighter animate-labelText1">Food</div>
+                  <div className="absolute text-sm text-center tracking-tighter animate-labeltextPrimary">Food</div>
                 </div>
                 <div
                   className={`animate-labelTypeArrow1 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-[#251e51]`}
@@ -224,12 +224,12 @@ export default function Ani() {
               </div>
               {/*--- Subcategory ---*/}
               <div
-                className={`animate-labelTypeBg2 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkButton1Bg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
+                className={`animate-labelTypeBg2 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkbuttonPrimaryBg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkbuttonPrimaryBg desktop:hover:text-white`}
               >
                 <p className="text-base font-medium tracking-tighter text-center">Subcategory</p>
                 <div className="w-full text-sm text-center tracking-tighter flex justify-center relative">
                   <div className="absolute animate-none2">none</div>
-                  <div className="absolute animate-labelText2">Coffee</div>
+                  <div className="absolute animate-labeltextSecondary">Coffee</div>
                 </div>
                 <div
                   className={`animate-labelTypeArrow2 absolute top-[calc(100%+12px)] left-[36px] w-[40px] h-[40px] rotate-45 bg-[#251e51]`}
@@ -237,7 +237,7 @@ export default function Ani() {
               </div>
               {/*--- Tags ---*/}
               <div
-                className={`animate-labelTypeBg3 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkButton1Bg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkButton1Bg desktop:hover:text-white`}
+                className={`animate-labelTypeBg3 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkbuttonPrimaryBg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkbuttonPrimaryBg desktop:hover:text-white`}
               >
                 <p className="text-base font-medium tracking-tighter text-center">Tags</p>
                 <div className="w-full text-sm text-center tracking-tighter flex justify-center relative">none</div>
@@ -254,8 +254,8 @@ export default function Ani() {
                   <div
                     key={index}
                     className={`${
-                      i === "None" ? "border-darkButton1Bg" : "border-transparent"
-                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-lg cursor-pointer bg-blue-100/10 hover:border-darkButton1Bg`}
+                      i === "None" ? "border-darkbuttonPrimaryBg" : "border-transparent"
+                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-lg cursor-pointer bg-blue-100/10 hover:border-darkbuttonPrimaryBg`}
                   >
                     <p>{i.charAt(0).toUpperCase() + i.slice(1)}</p>
                   </div>
@@ -267,8 +267,8 @@ export default function Ani() {
                   <div
                     key={index}
                     className={`${
-                      i === "None" ? "border-darkButton1Bg" : "border-transparent"
-                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-lg cursor-pointer bg-blue-100/10 hover:border-darkButton1Bg`}
+                      i === "None" ? "border-darkbuttonPrimaryBg" : "border-transparent"
+                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-lg cursor-pointer bg-blue-100/10 hover:border-darkbuttonPrimaryBg`}
                   >
                     <p>{i.charAt(0).toUpperCase() + i.slice(1)}</p>
                   </div>
@@ -280,8 +280,8 @@ export default function Ani() {
                   <div
                     key={index}
                     className={`${
-                      i === "None" ? "border-darkButton1Bg" : "border-transparent"
-                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-lg cursor-pointer bg-blue-100/10 hover:border-darkButton1Bg`}
+                      i === "None" ? "border-darkbuttonPrimaryBg" : "border-transparent"
+                    } flex-none px-[12px] w-full h-[56px] flex items-center justify-between font-medium border-2 rounded-lg cursor-pointer bg-blue-100/10 hover:border-darkbuttonPrimaryBg`}
                   >
                     <p>{i.charAt(0).toUpperCase() + i.slice(1)}</p>
                   </div>
@@ -290,7 +290,7 @@ export default function Ani() {
             </div>
             {/*--- button ---*/}
             <div className="flex-none pb-[40px]">
-              <button className="animate-button4 mt-[30px] w-[360px] h-[52px] button1Color rounded-[12px] text-xl font-medium cursor-pointer">
+              <button className="animate-button4 mt-[30px] w-[360px] h-[52px] buttonPrimaryColor rounded-[12px] text-xl font-medium cursor-pointer">
                 Done
               </button>
             </div>
@@ -333,7 +333,7 @@ export default function Ani() {
                     <div className="flex flex-col justify-self-end text-end">
                       {item.category !== "none" && <p className="font-medium leading-tight">{item.category}</p>}
                       {item.subcategory !== "none" && <p className="italic text-sm leading-tight text-slate-400">{item.subcategory}</p>}
-                      {item.tag !== "none" && <div className="text-sm leading-tight text-darkButton1Bg truncate">{item.tag}</div>}
+                      {item.tag !== "none" && <div className="text-sm leading-tight text-darkbuttonPrimaryBg truncate">{item.tag}</div>}
                     </div>
                   </div>
                 ))}
@@ -341,7 +341,7 @@ export default function Ani() {
             </div>
             {/*--- add item h-80px/110px ---*/}
             <div className="flex-none w-full h-[80px] flex items-center justify-center">
-              <div className="button1Color w-[200px] h-[60px] rounded-full flex items-center gap-[8px] justify-center desktop:cursor-pointer">
+              <div className="buttonPrimaryColor w-[200px] h-[60px] rounded-full flex items-center gap-[8px] justify-center desktop:cursor-pointer">
                 <FaPlus className="text-[20px]" />
                 <p className="text-lg font-semibold">Item</p>
               </div>

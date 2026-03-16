@@ -49,7 +49,17 @@ export default function CategoryLegend({ items, currency }: CategoryLegendProps)
       <div className="w-full h-[200px] portrait:sm:h-[240px] landscape:lg:h-[240px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
-            <Pie data={slices} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius="40%" outerRadius="75%" paddingAngle={1} strokeWidth={0}>
+            <Pie
+              data={slices}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              innerRadius="40%"
+              outerRadius="75%"
+              paddingAngle={1}
+              strokeWidth={0}
+            >
               {slices.map((s) => (
                 <Cell key={s.name} fill={getCategoryColor(categories.indexOf(s.name))} />
               ))}
@@ -71,8 +81,8 @@ export default function CategoryLegend({ items, currency }: CategoryLegendProps)
             return (
               <div key={cat.name} className="flex items-center gap-2 text-sm desktop:text-xs">
                 <span className="w-2.5 h-2.5 rounded-full flex-none" style={{ backgroundColor: getCategoryColor(colorIndex) }} />
-                <span className="flex-1 text-text2 truncate">{cat.name}</span>
-                <span className="text-text2 tabular-nums mr-1">({(cat.percent * 100).toFixed(1)}%)</span>
+                <span className="flex-1 text-textSecondary truncate">{cat.name}</span>
+                <span className="text-textSecondary tabular-nums mr-1">({(cat.percent * 100).toFixed(1)}%)</span>
                 <span className="font-medium tabular-nums">{symbol + cat.value.toFixed(decimals)}</span>
               </div>
             );

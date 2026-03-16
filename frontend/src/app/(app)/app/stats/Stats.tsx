@@ -89,7 +89,7 @@ export default function Stats() {
                 <Spinner />
               </div>
             ) : isError ? (
-              <div className="w-full h-full flex items-center justify-center text-textRed textBaseApp">Failed to load stats</div>
+              <div className="w-full h-full flex items-center justify-center text-textError textBaseApp">Failed to load stats</div>
             ) : filteredData ? (
               <StatsChart data={filteredData} currency={activeCurrency} />
             ) : null}

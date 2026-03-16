@@ -48,7 +48,7 @@ export default function BudgetCard({ workspaceId, budget, monthlySpent }: Budget
           <select
             value={draftCurrency}
             onChange={(e) => setDraftCurrency(e.target.value)}
-            className="h-9 desktop:h-7 rounded-lg border border-borderFaint bg-transparent text-text1 textBaseApp px-2 cursor-pointer"
+            className="h-9 desktop:h-7 rounded-lg border border-borderFaint bg-transparent text-textPrimary textBaseApp px-2 cursor-pointer"
           >
             {CURRENCIES.map((c) => (
               <option key={c} value={c}>
@@ -63,19 +63,19 @@ export default function BudgetCard({ workspaceId, budget, monthlySpent }: Budget
             value={draftAmount}
             onChange={(e) => setDraftAmount(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && save()}
-            className="h-9 desktop:h-7 w-28 rounded-lg border border-borderFaint bg-transparent text-text1 textBaseApp px-2 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            className="h-9 desktop:h-7 w-28 rounded-lg border border-borderFaint bg-transparent text-textPrimary textBaseApp px-2 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             autoFocus
           />
           <button
             onClick={save}
             disabled={mutation.isPending}
-            className="h-9 w-9 desktop:h-7 desktop:w-7 flex items-center justify-center rounded-lg desktop:hover:bg-buttonTransBgHover active:bg-buttonTransBgHover cursor-pointer transition-colors text-textGreen"
+            className="h-9 w-9 desktop:h-7 desktop:w-7 flex items-center justify-center rounded-lg desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover cursor-pointer transition-colors text-textGreen"
           >
             <FiCheck className="text-base" />
           </button>
           <button
             onClick={() => setEditing(false)}
-            className="h-9 w-9 desktop:h-7 desktop:w-7 flex items-center justify-center rounded-lg desktop:hover:bg-buttonTransBgHover active:bg-buttonTransBgHover cursor-pointer transition-colors text-text2"
+            className="h-9 w-9 desktop:h-7 desktop:w-7 flex items-center justify-center rounded-lg desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover cursor-pointer transition-colors text-textSecondary"
           >
             <FiX className="text-base" />
           </button>
@@ -83,18 +83,22 @@ export default function BudgetCard({ workspaceId, budget, monthlySpent }: Budget
       ) : (
         <div className="flex items-center justify-between gap-3">
           <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-text2">Monthly Budget</span>
-            <span className="textBaseApp font-semibold">{budget.amount === 0 ? "Not set" : formatAmount(budget.amount, budget.currency)}</span>
+            <span className="text-xs text-textSecondary">Monthly Budget</span>
+            <span className="textBaseApp font-semibold">
+              {budget.amount === 0 ? "Not set" : formatAmount(budget.amount, budget.currency)}
+            </span>
           </div>
           {budget.amount > 0 && (
             <div className="flex flex-col items-end gap-0.5">
-              <span className="text-xs text-text2">Remaining</span>
-              <span className={`textBaseApp font-semibold ${remaining >= 0 ? "text-textGreen" : "text-textRed"}`}>{formatAmount(remaining, budget.currency)}</span>
+              <span className="text-xs text-textSecondary">Remaining</span>
+              <span className={`textBaseApp font-semibold ${remaining >= 0 ? "text-textGreen" : "text-textError"}`}>
+                {formatAmount(remaining, budget.currency)}
+              </span>
             </div>
           )}
           <button
             onClick={openEditor}
-            className="h-9 desktop:h-7 px-3 flex items-center gap-1.5 rounded-lg border border-borderFaint desktop:hover:bg-buttonTransBgHover active:bg-buttonTransBgHover cursor-pointer transition-colors text-text2 text-xs shrink-0"
+            className="h-9 desktop:h-7 px-3 flex items-center gap-1.5 rounded-lg border border-borderFaint desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover cursor-pointer transition-colors text-textSecondary text-xs shrink-0"
           >
             <FiEdit2 className="text-xs" />
             <span>{budget.amount === 0 ? "Set budget" : "Edit"}</span>

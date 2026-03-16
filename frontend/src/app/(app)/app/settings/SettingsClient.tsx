@@ -107,7 +107,7 @@ export default function Settings({ provider, email, userId }: { provider: string
       <SettingsCard title="Active Sheet Settings">
         {/*--- Select Active Sheet ---*/}
         <div className="flex-none w-full py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
-          <div>Active Sheet</div>
+          <div className="settingsLabel">Active Sheet</div>
           {data ? (
             <Select
               variant="transparent"
@@ -130,7 +130,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         </div>
 
         {/*--- Categories & Tags ---*/}
-        <div className="my-3 cardInner">
+        <div className="my-3 px-6 pt-4 pb-6 flex flex-col gap-6 rounded-3xl border border-borderFaint">
           <SettingsCategoryContainer
             label="Categories"
             addButtonLabel="Category"
@@ -148,7 +148,7 @@ export default function Settings({ provider, email, userId }: { provider: string
                   workspaceId={data.workspace._id}
                 />
               ) : (
-                <div className="text-center text-slate-500 italic">No categories</div>
+                <div className="text-center text-textSecondary italic">No categories</div>
               )
             ) : (
               <SettingsSkeleton size="lg" />
@@ -172,7 +172,7 @@ export default function Settings({ provider, email, userId }: { provider: string
                   setClickedTag={setClickedTag}
                 />
               ) : (
-                <div className="text-center text-slate-500 italic">No tags</div>
+                <div className="text-center text-textSecondary italic">No tags</div>
               )
             ) : (
               <SettingsSkeleton size="lg" />

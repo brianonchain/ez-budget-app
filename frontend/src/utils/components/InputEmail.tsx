@@ -23,7 +23,7 @@ export default function InputEmail({
         {label}
       </label>
       <Input
-        className={isError ? "!border-buttonRedBg focus:!border-buttonRedBg" : ""}
+        className={isError ? "!border-buttonDangerBg focus:!border-buttonDangerBg" : ""}
         id={_id} // reusable components shouldn't hardcode id
         autoComplete="email" // for sign-in form, must override with "username"
         type="email"

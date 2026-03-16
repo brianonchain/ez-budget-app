@@ -32,7 +32,7 @@ export default function EnterName({
         <textarea
           value={description}
           onChange={(e) => setDescription(e.currentTarget.value)}
-          className="p-4 w-full h-50 desktop:h-30 text-2xl desktop:text-lg rounded-2xl input1Color"
+          className="p-4 w-full h-50 desktop:h-30 text-2xl desktop:text-lg rounded-2xl inputPrimaryColor"
           placeholder="Enter a short item description"
           autoFocus
         />

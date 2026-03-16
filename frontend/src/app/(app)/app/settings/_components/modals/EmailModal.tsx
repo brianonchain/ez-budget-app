@@ -176,7 +176,7 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   onChange={(e) => handleChange(e, index)}
                   onPaste={index === 0 ? handlePaste : undefined}
-                  className="w-[52px] h-[52px] desktop:w-[43px] desktop:h-[43px] text-[18px] text-center border-2 rounded-lg input1Color"
+                  className="w-[52px] h-[52px] desktop:w-[43px] desktop:h-[43px] text-[18px] text-center border-2 rounded-lg inputPrimaryColor"
                   disabled={isLoading}
                 />
               ))}
@@ -202,7 +202,7 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
         />
 
         {/*--- error message ---*/}
-        <div className="py-2 text-textRed font-medium min-h-13">{errorMessage || ""}</div>
+        <div className="py-2 text-textError font-medium min-h-13">{errorMessage || ""}</div>
 
         {/*--- resend code button ---*/}
         {content === "verifyOtp" && (

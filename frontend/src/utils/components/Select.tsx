@@ -18,8 +18,8 @@ export default function Select({
   ...props
 }: SelectProps) {
   const variants = {
-    primary: "input1Color",
-    transparent: "inputTransColor",
+    primary: "inputPrimaryColor",
+    transparent: "inputOutlineColor",
   };
   const sizes = {
     xs: "h-11 desktop:h-8 pl-3 desktop:pl-2.5 pr-8 desktop:pr-6.5 textSmApp rounded-lg", // used in DetailsModal.tsx

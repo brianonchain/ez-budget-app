@@ -380,13 +380,13 @@
   }
 }
 
-.animate-labelText1 {
-  animation: labelText1 15s ease-in-out infinite;
+.animate-labeltextPrimary {
+  animation: labeltextPrimary 15s ease-in-out infinite;
 }
-.animate-labelText2 {
-  animation: labelText2 15s ease-in-out infinite;
+.animate-labeltextSecondary {
+  animation: labeltextSecondary 15s ease-in-out infinite;
 }
-@keyframes labelText1 {
+@keyframes labeltextPrimary {
   0% {
     opacity: 0;
   }
@@ -400,7 +400,7 @@
     opacity: 1;
   }
 }
-@keyframes labelText2 {
+@keyframes labeltextSecondary {
   0% {
     opacity: 0;
   }
@@ -479,8 +479,8 @@
   }
 }
 
-.animate-button1 {
-  animation: button1 15s ease-in-out infinite;
+.animate-buttonPrimary {
+  animation: buttonPrimary 15s ease-in-out infinite;
 }
 .animate-button2 {
   animation: button2 15s ease-in-out infinite;
@@ -492,7 +492,7 @@
   animation: button4 15s ease-in-out infinite;
 }
 
-@keyframes button1 {
+@keyframes buttonPrimary {
   6% {
     transform: scale(1);
   }

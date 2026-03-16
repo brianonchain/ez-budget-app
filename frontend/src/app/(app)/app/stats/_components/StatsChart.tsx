@@ -26,7 +26,7 @@ function CustomTooltip({ active, payload, currency }: any) {
         .map((entry: any, i: number) => (
           <div key={i} className="flex items-center gap-2 text-xs">
             <span className="w-2.5 h-2.5 rounded-full flex-none" style={{ backgroundColor: entry.color }} />
-            <span className="text-text2 flex-1">{entry.dataKey}</span>
+            <span className="text-textSecondary flex-1">{entry.dataKey}</span>
             <span className="font-medium">{symbol + entry.value.toFixed(decimals)}</span>
           </div>
         ))}
@@ -47,7 +47,7 @@ function CustomXTick({ x, y, payload, period, narrow }: any) {
   // week (Mon-Sun) and year (Jan-Dec): always show all labels
   if (period !== "month") {
     return (
-      <text x={x} y={y} dy={14} textAnchor="middle" fontSize={13} fill="var(--color-text2)">
+      <text x={x} y={y} dy={14} textAnchor="middle" fontSize={13} fill="var(--color-textSecondary)">
         {val}
       </text>
     );
@@ -60,7 +60,7 @@ function CustomXTick({ x, y, payload, period, narrow }: any) {
   }
 
   return (
-    <text x={x} y={y} dy={14} textAnchor="middle" fontSize={13} fill="var(--color-text2)">
+    <text x={x} y={y} dy={14} textAnchor="middle" fontSize={13} fill="var(--color-textSecondary)">
       {val}
     </text>
   );
@@ -114,7 +114,7 @@ export default function StatsChart({ data, currency }: StatsChartProps) {
           />
           <YAxis
             width={54}
-            tick={{ fontSize: 13, fill: "var(--color-text2)" }}
+            tick={{ fontSize: 13, fill: "var(--color-textSecondary)" }}
             tickLine={false}
             axisLine={{ stroke: "var(--color-borderFaint)" }}
             domain={[0, "auto"]}
@@ -125,17 +125,31 @@ export default function StatsChart({ data, currency }: StatsChartProps) {
               return v.toFixed(decimals);
             }}
           >
-            <Label value={currencyLabel} angle={-90} position="insideLeft" offset={-4} style={{ textAnchor: "middle", fontSize: 13, fill: "var(--color-text2)" }} />
+            <Label
+              value={currencyLabel}
+              angle={-90}
+              position="insideLeft"
+              offset={-4}
+              style={{ textAnchor: "middle", fontSize: 13, fill: "var(--color-textSecondary)" }}
+            />
           </YAxis>
-          {!isEmpty && <Tooltip content={<CustomTooltip currency={currency} />} cursor={{ fill: "var(--color-borderFaint)", opacity: 0.5 }} />}
+          {!isEmpty && (
+            <Tooltip content={<CustomTooltip currency={currency} />} cursor={{ fill: "var(--color-borderFaint)", opacity: 0.5 }} />
+          )}
           {!isEmpty &&
             categories.map((cat, i) => (
-              <Bar key={cat} dataKey={cat} stackId="stack" fill={getCategoryColor(i)} radius={i === categories.length - 1 ? [2, 2, 0, 0] : [0, 0, 0, 0]} />
+              <Bar
+                key={cat}
+                dataKey={cat}
+                stackId="stack"
+                fill={getCategoryColor(i)}
+                radius={i === categories.length - 1 ? [2, 2, 0, 0] : [0, 0, 0, 0]}
+              />
             ))}
         </BarChart>
       </ResponsiveContainer>
       {isEmpty && (
-        <div className="absolute inset-0 flex items-center justify-center text-text2 textBaseApp pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center text-textSecondary textBaseApp pointer-events-none">
           No expenses
         </div>
       )}

@@ -22,13 +22,13 @@ export default function Button({
 }: ButtonProps) {
   const variants = {
     primary:
-      "text-button1Text bg-button1Bg desktop:hover:bg-button1BgHover active:bg-button1BgHover disabled:opacity-80 [transition:background-color_200ms]",
+      "text-buttonPrimaryText bg-buttonPrimaryBg desktop:hover:bg-buttonPrimaryBgHover active:bg-buttonPrimaryBgHover disabled:opacity-80 [transition:background-color_200ms]",
     transparent:
-      "text-button2Text bg-transparent desktop:hover:bg-buttonTransBgHover active:bg-buttonTransBgHover disabled:opacity-80 border border-inputTransBorder [transition:background-color_200ms]",
+      "text-button2Text bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover disabled:opacity-80 border border-inputOutlineBorder [transition:background-color_200ms]",
     danger:
-      "text-buttonRedText bg-buttonRedBg desktop:hover:bg-buttonRedBgHover active:bg-buttonRedBgHover disabled:opacity-80 [transition:background-color_200ms]",
+      "text-buttonDangerText bg-buttonDangerBg desktop:hover:bg-buttonDangerBgHover active:bg-buttonDangerBgHover disabled:opacity-80 [transition:background-color_200ms]",
     dangerTrans:
-      "text-textRed hover:text-textRedHover bg-transparent desktop:hover:bg-buttonTransBgHover active:bg-buttonTransBgHover disabled:opacity-80 border border-inputTransBorder [transition:background-color_200ms]",
+      "text-textError hover:text-textErrorHover bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover disabled:opacity-80 border border-inputOutlineBorder [transition:background-color_200ms]",
   };
 
   const sizes = {

@@ -30,7 +30,7 @@ export default function InputPassword({
         <Input
           id={_id}
           className={`!pr-[calc(1.2em+2rem)] desktop:!pr-[calc(1.2em+1.5rem)] ${
-            isError ? "!border-buttonRedBg focus:!border-buttonRedBg" : ""
+            isError ? "!border-buttonDangerBg focus:!border-buttonDangerBg" : ""
           } peer`}
           type={show ? "text" : "password"}
           autoCapitalize="none"

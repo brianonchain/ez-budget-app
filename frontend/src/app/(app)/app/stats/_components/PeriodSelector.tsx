@@ -27,7 +27,9 @@ export default function PeriodSelector({ period, setPeriod, anchorDate, onPrev, 
             key={p.value}
             onClick={() => setPeriod(p.value)}
             className={`flex-1 py-2 text-sm desktop:text-xs font-medium cursor-pointer transition-colors duration-200 ${
-              period === p.value ? "bg-button1Bg text-button1Text" : "bg-transparent text-text2 desktop:hover:bg-buttonTransBgHover"
+              period === p.value
+                ? "bg-buttonPrimaryBg text-buttonPrimaryText"
+                : "bg-transparent text-textSecondary desktop:hover:bg-buttonOutlineBgHover"
             }`}
           >
             {p.label}
@@ -38,16 +40,16 @@ export default function PeriodSelector({ period, setPeriod, anchorDate, onPrev, 
       <div className="flex items-center justify-between">
         <button
           onClick={onPrev}
-          className="w-9 h-9 desktop:w-7 desktop:h-7 flex items-center justify-center rounded-lg desktop:hover:bg-buttonTransBgHover active:bg-buttonTransBgHover cursor-pointer transition-colors"
+          className="w-9 h-9 desktop:w-7 desktop:h-7 flex items-center justify-center rounded-lg desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover cursor-pointer transition-colors"
         >
-          <FaChevronLeft className="text-sm text-text2" />
+          <FaChevronLeft className="text-sm text-textSecondary" />
         </button>
         <span className="textBaseApp font-semibold">{formatPeriodLabel(period, anchorDate)}</span>
         <button
           onClick={onNext}
-          className="w-9 h-9 desktop:w-7 desktop:h-7 flex items-center justify-center rounded-lg desktop:hover:bg-buttonTransBgHover active:bg-buttonTransBgHover cursor-pointer transition-colors"
+          className="w-9 h-9 desktop:w-7 desktop:h-7 flex items-center justify-center rounded-lg desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover cursor-pointer transition-colors"
         >
-          <FaChevronRight className="text-sm text-text2" />
+          <FaChevronRight className="text-sm text-textSecondary" />
         </button>
       </div>
     </div>

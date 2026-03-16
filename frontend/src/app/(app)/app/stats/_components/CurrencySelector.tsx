@@ -18,8 +18,8 @@ export default function CurrencySelector({ currencies, selected, onSelect }: Cur
           onClick={() => onSelect(c)}
           className={`px-3 py-1.5 desktop:py-1 rounded-full text-sm desktop:text-xs font-medium cursor-pointer transition-colors duration-200 border ${
             selected === c
-              ? "bg-button1Bg text-button1Text border-button1Bg"
-              : "bg-transparent text-text2 border-borderFaint desktop:hover:bg-buttonTransBgHover"
+              ? "bg-buttonPrimaryBg text-buttonPrimaryText border-buttonPrimaryBg"
+              : "bg-transparent text-textSecondary border-borderFaint desktop:hover:bg-buttonOutlineBgHover"
           }`}
         >
           {SYMBOLS[c] ?? ""} {c}

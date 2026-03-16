@@ -165,7 +165,7 @@ export default function ShareWorkspaceModal({
                       label="Pending"
                       variant="transparent"
                       size="pill"
-                      iconRight={<FaX className="text-sm desktop:text-xs translate-y-[1px] text-textRed" />}
+                      iconRight={<FaX className="text-sm desktop:text-xs translate-y-[1px] text-textError" />}
                       onClick={() => deletePendingSharedUser(user)}
                       isLoading={status === `deletingSharedUser${user._id}`}
                       disabled={isPending}

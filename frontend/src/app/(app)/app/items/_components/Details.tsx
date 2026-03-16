@@ -175,7 +175,7 @@ export default function Details({
               {settingsData.workspace.categoryObjects.map((i: CategoryObject) => (
                 <div
                   key={i.category}
-                  className={`detailsOption ${draftItem.category === i.category ? "!bg-button1Bg text-button1Text" : ""} `}
+                  className={`detailsOption ${draftItem.category === i.category ? "!bg-buttonPrimaryBg text-buttonPrimaryText" : ""} `}
                   onClick={() => setDraftItem((prev) => ({ ...prev, category: i.category, subcategory: "none" }))}
                 >
                   {i.category}
@@ -190,7 +190,7 @@ export default function Details({
               {selectedCategoryObject.subcategories.map((i: string) => (
                 <div
                   key={i}
-                  className={`detailsOption ${i === draftItem.subcategory ? "!bg-button1Bg text-button1Text" : ""} `}
+                  className={`detailsOption ${i === draftItem.subcategory ? "!bg-buttonPrimaryBg text-buttonPrimaryText" : ""} `}
                   onClick={() => setDraftItem((prev) => ({ ...prev, subcategory: i }))}
                 >
                   {i}
@@ -205,7 +205,7 @@ export default function Details({
               {settingsData.workspace.tags.map((i: string) => (
                 <div
                   key={i}
-                  className={`detailsOption ${draftItem.tag === i ? "!bg-button1Bg text-button1Text" : ""} `}
+                  className={`detailsOption ${draftItem.tag === i ? "!bg-buttonPrimaryBg text-buttonPrimaryText" : ""} `}
                   onClick={() => {
                     setDraftItem((prev) => ({ ...prev, tag: i }));
                     localStorage.setItem(`lastTag:${settingsData.workspace._id}`, i);

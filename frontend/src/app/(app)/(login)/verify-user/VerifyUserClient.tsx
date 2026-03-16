@@ -147,7 +147,7 @@ export default function VerifyUserClient() {
         <div className="mt-[24px] flex gap-[6px]">
           {otp.map((digit, index) => (
             <input
-              className="w-13 h-14 desktop:w-[2.8125rem] desktop:h-[2.8125rem] text-[24px] text-center rounded-xl input1Color"
+              className="w-13 h-14 desktop:w-[2.8125rem] desktop:h-[2.8125rem] text-[24px] text-center rounded-xl inputPrimaryColor"
               key={index}
               ref={(el) => {
                 inputsRef.current[index] = el;
