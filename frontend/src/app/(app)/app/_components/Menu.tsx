@@ -31,7 +31,7 @@ export default function Menu() {
               onClick={() => setPath(i.path)}
             >
               {i.icon}
-              <p className="text-[0.8125rem] desktop:text-sm">{i.text}</p>
+              <p className="text-xs portrait:sm:text-sm landscape:lg:text-sm">{i.text}</p>
             </Link>
           ))}
         </div>

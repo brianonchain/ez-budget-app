@@ -264,7 +264,7 @@ can potentially add desktop-only variables here
 }
 
 .menuPbSafeArea {
-  @apply portrait:pb-[28px] portrait:sm:pb-[40px];
+  @apply portrait:pb-[26px] portrait:sm:pb-[40px];
 }
 
 .appPageContainer {
