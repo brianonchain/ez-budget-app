@@ -98,7 +98,7 @@ body {
 
 html.dark,
 html.dark body {
-  background: #111536; /* --color-card = bg1 overlaid with blue-400/10 */
+  background: #0a0826; /* --color-card = bg1 overlaid with blue-400/10 */
 }
 
 /*--- scrollbar ---*/
