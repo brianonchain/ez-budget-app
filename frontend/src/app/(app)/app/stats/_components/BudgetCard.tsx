@@ -41,7 +41,7 @@ export default function BudgetCard({ workspaceId, budget, monthlySpent }: Budget
   const remaining = budget.amount - monthlySpent;
 
   return (
-    <div className="w-full rounded-2xl border border-borderFaint dark:border-blue-400/6 bg-transparent dark:bg-blue-400/5 px-4 py-3">
+    <div className="w-full rounded-2xl border border-borderFaint bg-card px-4 py-3">
       {editing ? (
         <div className="flex items-center gap-2 flex-wrap">
           <span className="textBaseApp font-semibold shrink-0">Monthly Budget</span>

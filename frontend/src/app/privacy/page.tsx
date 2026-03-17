@@ -23,7 +23,7 @@ export default function PrivacyPage() {
 
   return (
     <>
-      <div className="bg-bg1 text-textPrimary min-h-screen flex flex-col gap-[12px] mx-auto p-8">
+      <div className="bg-primaryBg text-textPrimary min-h-screen flex flex-col gap-[12px] mx-auto p-8">
         <h1 className="font-bold">Privacy Policy</h1>
         <p>Effective Date: April 26, 2025</p>
 

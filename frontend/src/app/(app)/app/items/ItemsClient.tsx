@@ -67,7 +67,7 @@ export default function Items() {
             {itemsData.items.map((item, index) => (
               <div
                 key={index}
-                className="px-[3%] w-full listItemHeight grid grid-cols-[50%_20%_30%] items-center border-b border-borderFaint desktop:cursor-pointer desktop:hover:bg-bg1 dark:desktop:hover:bg-blue-500/10"
+                className="px-[3%] w-full listItemHeight grid grid-cols-[50%_20%_30%] items-center border-b border-borderFaint desktop:cursor-pointer desktop:hover:bg-surface"
                 onClick={() => {
                   setDraftItem(item);
                   setDetailsModal(true);

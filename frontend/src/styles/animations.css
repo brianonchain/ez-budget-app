@@ -287,16 +287,16 @@
   }
 }
 
-.animate-labelTypeBg1 {
-  animation: labelTypeBg1 15s ease-in-out infinite;
+.animate-labelTypeprimaryBg {
+  animation: labelTypeprimaryBg 15s ease-in-out infinite;
 }
-.animate-labelTypeBg2 {
-  animation: labelTypeBg2 15s ease-in-out infinite;
+.animate-labelTypesurface {
+  animation: labelTypesurface 15s ease-in-out infinite;
 }
 .animate-labelTypeBg3 {
   animation: labelTypeBg3 15s ease-in-out infinite;
 }
-@keyframes labelTypeBg1 {
+@keyframes labelTypeprimaryBg {
   0% {
     background-color: #0364ff;
   }
@@ -310,7 +310,7 @@
     background-color: transparent;
   }
 }
-@keyframes labelTypeBg2 {
+@keyframes labelTypesurface {
   0% {
     background-color: transparent;
   }

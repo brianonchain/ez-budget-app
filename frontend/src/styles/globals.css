@@ -4,8 +4,13 @@
 
 @theme {
   /* bg & text */
-  --color-bg1: #f7edf7;
-  --color-bg2: #ffffff;
+  --color-primaryBg: #f7edf7;
+  --color-surface: #f6f9fc;
+  --color-surfaceSolid: #f6f9fc;
+  --color-card: #ffffff;
+  /* borders */
+  --color-borderFaint: oklch(92.9% 0.013 255.508); /* slate-200 */
+  /* text */
   --color-textPrimary: #212427;
   --color-textSecondary: #62748e; /* slate-500 */
   --color-textTertiary: #90a1b9; /* slate-400 */
@@ -14,33 +19,29 @@
   --color-textError: #ff295d;
   --color-textErrorHover: #d91f4f;
   --color-textDisabled: #212427b3; /* textPrimary/70% */
-  /* button primary */
+  /* buttons */
+  --color-buttonPrimaryText: #ffffff;
   --color-buttonPrimaryBg: #0084d1; /* sky-600 */
   --color-buttonPrimaryBgHover: oklch(50% 0.134 242.749); /* sky-700 */
-  --color-buttonPrimaryText: #ffffff;
   --color-buttonOutlineBg: transparent;
-  --color-buttonOutlineBgHover: #f0e7f0;
-  --color-buttonOutlineText: #ffffff;
+  --color-buttonOutlineBgHover: #f6f9fc;
   --color-buttonDangerBg: #ff295d;
   --color-buttonDangerBgHover: #d91f4f;
-  --color-buttonDangerText: #ffffff;
-  /* input 1 */
+  /* input primary */
   --color-inputPrimaryBg: #ffffff;
   --color-inputPrimaryBorder: #b1daee;
   --color-inputPrimaryBorderHover: #77c7f0;
   --color-inputPrimaryBorderFocus: #0084d1; /* sky-600 */
   --color-inputPrimaryRing: #77c7f0;
   --color-inputPrimaryPlaceholder: #90a1b9; /* slate-400 */
-  /* input 2 */
+  /* input outline */
   --color-inputOutlineBg: transparent;
   --color-inputOutlineBorder: #e2e8f1; /* slate-200 */
   --color-inputOutlineBorderHover: #77c7f0;
   --color-inputOutlineBorderFocus: oklch(58.8% 0.158 241.966);
   --color-inputOutlineRing: #77c7f0;
-  --color-inputOutlinePlaceholder: oklch(70.4% 0.04 256.788); /* slate-400 */
-  /* card & others */
-  --color-card: #ffffff;
-  --color-borderFaint: oklch(92.9% 0.013 255.508); /* slate-200 */
+  --color-inputOutlinePlaceholder: #90a1b9; /* slate-400 */
+
   /* breakpoints */
   --breakpoint-xs: 480px;
   --breakpoint-sm: 600px;
@@ -51,8 +52,13 @@
 }
 
 .dark {
-  --color-bg1: #0a0826; /* was 0b0f37*/
-  --color-bg2: #171049;
+  --color-primaryBg: #0a0826; /* was 0b0f37*/
+  --color-surface: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
+  --color-surfaceSolid: #11153c; /* blue-400/14 overlaid on primaryBg */
+  --color-card: oklch(70.7% 0.165 254.624 / 7%); /* blue-400/7 */
+  /* borders */
+  --color-borderFaint: oklch(70.7% 0.165 254.624 / 8%); /* blue-400/8 */
+  /* text */
   --color-textPrimary: #e9e8f6;
   --color-textSecondary: #90a1b9; /* slate-400 */
   --color-textTertiary: #62748e; /* slate-500 */
@@ -61,32 +67,27 @@
   --color-textError: #ff3a6a;
   --color-textErrorHover: #ff507a;
   /* buttons */
+  --color-buttonPrimaryText: #ffffff;
   --color-buttonPrimaryBg: #0364ff;
   --color-buttonPrimaryBgHover: #1c73ff;
-  --color-buttonPrimaryText: #ffffff;
   --color-buttonOutlineBg: transparent;
-  --color-buttonOutlineBgHover: oklch(70.7% 0.165 254.624 / 10%); /*  blue-400/9 */
-  --color-buttonOutlineText: #ffffff;
+  --color-buttonOutlineBgHover: oklch(70.7% 0.165 254.624 / 14%); /*  blue-400/14 */
   --color-buttonDangerBg: #ff3a6a;
   --color-buttonDangerBgHover: #ff507a;
-  --color-buttonDangerText: #ffffff;
-  /* input */
+  /* input primary */
   --color-inputPrimaryBg: #07112e;
   --color-inputPrimaryBorder: #1f2c54;
   --color-inputPrimaryBorderHover: #2e417a;
   --color-inputPrimaryBorderFocus: #374d8f;
   --color-inputPrimaryRing: #243568;
   --color-inputPrimaryPlaceholder: #45556c; /* slate-600 */
-  /* input 2 */
+  /* input outline */
   --color-inputOutlineBg: transparent;
   --color-inputOutlineBorder: #22346a;
   --color-inputOutlineBorderHover: #2f4d97;
   --color-inputOutlineBorderFocus: #2f4d97;
   --color-inputOutlineRing: #26407f;
   --color-inputOutlinePlaceholder: oklch(44.6% 0.043 257.281); /* slate-600 */
-  /* card & others */
-  --color-card: oklch(70.7% 0.165 254.624 / 10%); /* blue-400/10 */
-  --color-borderFaint: rgb(255 255 255 / 0.08);
 }
 
 /*--- top header in standalone mode ---*/
@@ -98,7 +99,7 @@ body {
 
 html.dark,
 html.dark body {
-  background: #0a0826; /* --color-card = bg1 overlaid with blue-400/10 */
+  background: #0a0826; /* --color-card = primaryBg overlaid with blue-400/10 */
 }
 
 /*--- scrollbar ---*/
@@ -260,7 +261,7 @@ can potentially add desktop-only variables here
 }
 
 .menuBg {
-  @apply bg-card dark:bg-bg1 dark:portrait:bg-gradient-to-b dark:landscape:bg-gradient-to-l dark:from-blue-400/8 dark:to-transparent dark:to-60%;
+  @apply bg-card dark:bg-primaryBg dark:portrait:bg-gradient-to-b dark:landscape:bg-gradient-to-l dark:from-blue-400/8 dark:to-transparent dark:to-60%;
 }
 
 .menuShadow {
@@ -282,7 +283,7 @@ can potentially add desktop-only variables here
 /*--- app: items page ---*/
 
 .listHeaderColor {
-  @apply text-textSecondary bg-bg1 dark:portrait:sm:bg-blue-400/20 dark:landscape:lg:bg-blue-400/20;
+  @apply text-textSecondary bg-surface border-b border-borderFaint dark:bg-primaryBg dark:portrait:sm:bg-blue-400/20 dark:landscape:lg:bg-blue-400/20;
 }
 
 .listContainerColor {
@@ -290,7 +291,7 @@ can potentially add desktop-only variables here
 }
 
 .listButtonContainerColor {
-  @apply bg-bg1 portrait:sm:bg-transparent landscape:lg:bg-transparent;
+  @apply bg-primaryBg portrait:sm:bg-transparent landscape:lg:bg-transparent;
 }
 
 .listTotalHeight {
@@ -334,7 +335,7 @@ can potentially add desktop-only variables here
 /*--- modal ---*/
 
 @utility modalFullColor {
-  @apply bg-card dark:bg-[#0B0F37] desktop:border border-slate-300 dark:border-blue-500/30;
+  @apply bg-surfaceSolid desktop:border border-inputOutlineBorder;
 }
 
 .modalErrorMessage {

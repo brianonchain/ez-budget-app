@@ -26,7 +26,7 @@ export default function Button({
     transparent:
       "text-button2Text bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover disabled:opacity-80 border border-inputOutlineBorder [transition:background-color_200ms]",
     danger:
-      "text-buttonDangerText bg-buttonDangerBg desktop:hover:bg-buttonDangerBgHover active:bg-buttonDangerBgHover disabled:opacity-80 [transition:background-color_200ms]",
+      "text-buttonPrimaryText bg-buttonDangerBg desktop:hover:bg-buttonDangerBgHover active:bg-buttonDangerBgHover disabled:opacity-80 [transition:background-color_200ms]",
     dangerTrans:
       "text-textError hover:text-textErrorHover bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover disabled:opacity-80 border border-inputOutlineBorder [transition:background-color_200ms]",
   };

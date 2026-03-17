@@ -130,7 +130,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         </div>
 
         {/*--- Categories & Tags ---*/}
-        <div className="my-3 px-6 pt-4 pb-6 flex flex-col gap-6 rounded-3xl border border-borderFaint">
+        <div className="my-3 px-6 pt-4 pb-6 flex flex-col gap-6 rounded-3xl border border-inputOutlineBorder">
           <SettingsCategoryContainer
             label="Categories"
             addButtonLabel="Category"

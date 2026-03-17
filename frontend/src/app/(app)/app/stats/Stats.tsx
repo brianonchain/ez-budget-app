@@ -82,7 +82,7 @@ export default function Stats() {
         {currencies.length > 1 && <CurrencySelector currencies={currencies} selected={activeCurrency} onSelect={setSelectedCurrency} />}
 
         {/* chart container */}
-        <div className="w-full rounded-2xl border border-borderFaint dark:border-blue-400/6 bg-transparent dark:bg-blue-400/5 p-3 portrait:sm:p-4 landscape:lg:p-4">
+        <div className="w-full rounded-2xl border border-borderFaint bg-card p-3 portrait:sm:p-4 landscape:lg:p-4">
           <div className="w-full h-[280px] portrait:sm:h-[340px] landscape:lg:h-[340px]">
             {isLoading ? (
               <div className="w-full h-full flex items-center justify-center">
@@ -98,7 +98,7 @@ export default function Stats() {
 
         {/* category breakdown pie chart */}
         {filteredItems.length > 0 && (
-          <div className="w-full rounded-2xl border border-borderFaint dark:border-blue-400/6 bg-transparent dark:bg-blue-400/5 p-4">
+          <div className="w-full rounded-2xl border border-borderFaint bg-card p-4">
             <CategoryLegend items={filteredItems} currency={activeCurrency} />
           </div>
         )}
