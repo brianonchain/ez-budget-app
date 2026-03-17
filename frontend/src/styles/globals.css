@@ -115,7 +115,7 @@ html.dark body {
 }
 
 @utility textBaseApp {
-  @apply text-lg desktop:text-sm;
+  @apply text-base desktop:text-sm;
 }
 
 @utility textLgApp {
