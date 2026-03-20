@@ -2,8 +2,8 @@ import { ImSpinner2 } from "react-icons/im";
 
 type ButtonProps = {
   label?: string;
-  variant?: "primary" | "transparent" | "danger" | "dangerTrans";
-  size?: "pill" | "sm" | "base";
+  variant?: "primary" | "outline" | "danger" | "dangerOutline" | "ghost";
+  size?: "pill" | "icon" | "sm" | "base" | "hug" | "statsIcon";
   isLoading?: boolean;
   className?: string;
   icon?: React.ReactNode;
@@ -23,18 +23,22 @@ export default function Button({
   const variants = {
     primary:
       "text-buttonPrimaryText bg-buttonPrimaryBg desktop:hover:bg-buttonPrimaryBgHover active:bg-buttonPrimaryBgHover disabled:opacity-80 [transition:background-color_200ms]",
-    transparent:
+    outline:
       "text-button2Text bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover disabled:opacity-80 border border-inputOutlineBorder [transition:background-color_200ms]",
     danger:
       "text-buttonPrimaryText bg-buttonDangerBg desktop:hover:bg-buttonDangerBgHover active:bg-buttonDangerBgHover disabled:opacity-80 [transition:background-color_200ms]",
-    dangerTrans:
+    dangerOutline:
       "text-textError hover:text-textErrorHover bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover disabled:opacity-80 border border-inputOutlineBorder [transition:background-color_200ms]",
+    ghost: "desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover",
   };
 
   const sizes = {
-    pill: "h-11 desktop:h-8 px-4 desktop:px-3.5 textSmApp rounded-full font-normal gap-2", // used in DetailsModal.tsx
-    sm: "h-12 desktop:h-9 px-3 desktop:px-2.5 textBaseApp rounded-lg", // same height and px as input(sm) and select(sm)
-    base: "h-14 desktop:h-10 px-4 desktop:px-3 textBaseApp rounded-lg",
+    pill: "h-11 desktop:h-8 px-4 desktop:px-3.5 textSm rounded-full font-normal gap-2", // used in DetailsModal.tsx
+    icon: "w-9 h-9 desktop:w-9 desktop:h-9 rounded-lg",
+    sm: "h-12 desktop:h-9 px-3 desktop:px-2.5 textBase rounded-lg", // same height and px as input(sm) and select(sm)
+    base: "h-14 desktop:h-10 px-4 desktop:px-3 textBase rounded-lg",
+    hug: "",
+    statsIcon: "w-9 h-9 rounded-lg text-textTertiary",
   };
 
   // consider adding "inline-flex" to base className

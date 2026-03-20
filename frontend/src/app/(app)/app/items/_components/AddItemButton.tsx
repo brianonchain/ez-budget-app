@@ -4,7 +4,7 @@ export default function AddItemButton({ className, ...props }: React.ButtonHTMLA
   return (
     <button
       {...props}
-      className={`buttonPrimaryColor w-[200px] h-[60px] rounded-full flex items-center gap-[8px] justify-center desktop:cursor-pointer ${
+      className={`buttonPrimaryColor w-[200px] h-[60px] rounded-full flex items-center gap-2 justify-center desktop:cursor-pointer ${
         className ?? ""
       }`}
     >

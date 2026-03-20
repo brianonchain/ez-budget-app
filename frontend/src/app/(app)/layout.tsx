@@ -3,7 +3,7 @@ import PWAGate from "./PWAGate";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="textBaseApp">
+    <div className="textBase">
       <PWAGate>
         <ThemeProvider attribute="class">{children}</ThemeProvider>
       </PWAGate>

@@ -101,32 +101,32 @@ export default function EditButtons({
   return (
     <>
       <button
-        className="ml-1 desktop:ml-2 flex-none w-10 h-10 text-xl desktop:w-auto desktop:h-8 desktop:text-base flex justify-center items-center desktop:cursor-pointer linkGrayColor disabled:opacity-80"
+        className="ml-1 desktop:ml-2 flex-none w-10 h-10 desktop:w-auto desktop:h-8 flex justify-center items-center desktop:cursor-pointer linkGrayColor disabled:opacity-80"
         type="button"
         onClick={moveUp}
         disabled={rowIndex === 0 || isPending || status !== "initial"}
         aria-label="Move up"
       >
-        <FaArrowUp />
+        <FaArrowUp className="text-xl desktop:text-base" />
       </button>
       <button
-        className="ml-0 desktop:ml-2 flex-none w-10 h-10 text-xl desktop:w-auto desktop:h-8 desktop:text-base flex justify-center items-center desktop:cursor-pointer linkGrayColor disabled:opacity-80"
+        className="ml-0 desktop:ml-2 flex-none w-10 h-10 desktop:w-auto desktop:h-8 flex justify-center items-center desktop:cursor-pointer linkGrayColor disabled:opacity-80"
         type="button"
         onClick={moveDown}
         disabled={rowIndex === subcategoriesWithId.length - 1 || isPending || status !== "initial"}
         aria-label="Move down"
       >
-        <FaArrowDown />
+        <FaArrowDown className="text-xl desktop:text-base" />
       </button>
       <button
-        className="flex-none ml-3 desktop:ml-5 w-10 h-10 desktop:w-auto desktop:h-8 text-2xl desktop:text-lg flex justify-center items-center desktop:cursor-pointer linkRedColor disabled:opacity-80"
+        className="flex-none ml-3 desktop:ml-5 w-10 h-10 desktop:w-auto desktop:h-8 flex justify-center items-center desktop:cursor-pointer linkRedColor disabled:opacity-80"
         type="button"
         disabled={isPending || status !== "initial"}
         aria-label="Delete subcategory"
         onClick={() => deleteSubcategory(rowIndex)}
       >
         {status === `deletingSubcategory${rowIndex}` ? (
-          <FaCircleNotch className="animate-spin" />
+          <FaCircleNotch className="animate-spin text-xl desktop:text-base" />
         ) : (
           <FaX className="text-lg desktop:text-sm" />
         )}

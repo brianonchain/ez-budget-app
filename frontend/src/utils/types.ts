@@ -30,16 +30,17 @@ export type SettingsData = {
   sharedUsers: SharedUser[];
   pendingSharedUsers: PendingSharedUser[];
 };
-export type MonthlyBudget = { amount: number; currency: string };
 export type Workspace = {
   _id: string;
   name: string;
+  ownerId: string;
+  ownerEmail: string;
   defaultCurrency: string;
-  monthlyBudgets: Record<string, MonthlyBudget>;
+  discretionaryBudget: DiscretionaryBudget;
   categoryObjects: CategoryObject[];
   tags: string[];
-  ownerId: string;
 };
+export type DiscretionaryBudget = { amount: number; currency: string; categoryObjects: CategoryObject[] };
 export type WorkspaceOption = {
   _id: string;
   name: string;
@@ -83,7 +84,8 @@ export type MutateSettingsPayload =
   | { type: "deleteSubcategory"; workspaceId: string; category: string; subcategory: string } // category, subcategory
   // others
   | { type: "changeCurrency"; workspaceId: string; currency: string } // currency
-  | { type: "setMonthlyBudget"; workspaceId: string; month: string; amount: number; currency: string }; // month (YYYY-MM), amount, currency
+  | { type: "setDiscretionaryBudget"; workspaceId: string; amount: number; currency: string } // amount, currency
+  | { type: "setDiscretionaryBudgetCategories"; workspaceId: string; categoryObjects: CategoryObject[] }; // categoryObjects
 
 // 1) various authorization gates, 2) invalidates "settings" and "items"
 export type MutateUserPayload =
@@ -106,6 +108,8 @@ export type StatsRawItem = {
   cost: number;
   currency: string;
   category: string;
+  subcategory: string;
+  tag: string;
 };
 export type StatsData = {
   items: StatsRawItem[];

@@ -2,8 +2,7 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useStatsQuery, useSettingsQuery } from "@/utils/hooks";
-import { StatsPeriod, MonthlyBudget } from "@/utils/types";
-import { getMonthKey } from "@/utils/functions";
+import { StatsPeriod, DiscretionaryBudget } from "@/utils/types";
 import { shiftDate } from "./_components/chartHelpers";
 import BudgetCard from "./_components/BudgetCard";
 import PeriodSelector from "./_components/PeriodSelector";
@@ -11,58 +10,79 @@ import CurrencySelector from "./_components/CurrencySelector";
 import StatsChart from "./_components/StatsChart";
 import CategoryLegend from "./_components/CategoryLegend";
 import Spinner from "@/utils/components/Spinner";
+import BudgetModal from "./_components/BudgetModal";
 
 export default function Stats() {
+  // hooks
   const session = useSession();
   const email = session?.data?.user?.email;
+
+  // states
   const [period, setPeriod] = useState<StatsPeriod>("month");
   const [anchorDate, setAnchorDate] = useState<Date>(new Date());
   const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
+  const [currentMonthSpent, setCurrentMonthSpent] = useState<number | null>(null);
+  // modal
+  const [budgetModal, setBudgetModal] = useState(false);
 
+  // hooks that depend on states
   const dateParam = anchorDate.toISOString();
-  const { data, isLoading, isError } = useStatsQuery(email, period, dateParam);
+  const { data: statsData, isLoading, isError } = useStatsQuery(email, period, dateParam);
   const { data: settingsData } = useSettingsQuery(email);
 
-  const currentMonthKey = getMonthKey(new Date());
-  const budget: MonthlyBudget | null = settingsData?.workspace.monthlyBudgets[currentMonthKey] ?? null;
+  // calculate sum of discretionary budget items
+  useEffect(() => {
+    if (!statsData || !settingsData) return;
+    if (statsData.period !== "month") return;
 
-  const monthlySpent = useMemo(() => {
-    if (!data || !budget) return 0;
+    const budget = settingsData.workspace.discretionaryBudget;
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-    return data.items
-      .filter((i) => i.currency === budget.currency && new Date(i.date) >= monthStart && new Date(i.date) < monthEnd)
-      .reduce((sum, i) => sum + i.cost, 0);
-  }, [data, budget]);
+
+    const spent = statsData.items
+      .filter((item) => {
+        if (item.currency !== budget.currency) return false;
+
+        const itemDate = new Date(item.date);
+        if (itemDate < monthStart || itemDate >= monthEnd) return false;
+
+        const matchedBudgetCategory = budget.categoryObjects.find((budgetObj) => budgetObj.category === item.category);
+        if (!matchedBudgetCategory) return false;
+
+        return matchedBudgetCategory.subcategories.includes("all") || matchedBudgetCategory.subcategories.includes(item.subcategory);
+      })
+      .reduce((sum, item) => sum + item.cost, 0);
+    setCurrentMonthSpent(spent);
+  }, [!!statsData, settingsData?.workspace.discretionaryBudget]);
 
   const currencies = useMemo(() => {
-    if (!data) return [];
-    const set = new Set(data.items.map((i) => i.currency));
+    if (!statsData) return [];
+    const set = new Set(statsData.items.map((i) => i.currency));
     const sorted = Array.from(set).sort();
-    if (set.has(data.defaultCurrency)) {
-      return [data.defaultCurrency, ...sorted.filter((c) => c !== data.defaultCurrency)];
+    if (set.has(statsData.defaultCurrency)) {
+      return [statsData.defaultCurrency, ...sorted.filter((c) => c !== statsData.defaultCurrency)];
     }
     return sorted;
-  }, [data]);
+  }, [statsData]);
 
   useEffect(() => {
-    if (!data) return;
+    if (!statsData) return;
     if (selectedCurrency && currencies.includes(selectedCurrency)) return;
-    setSelectedCurrency(currencies.includes(data.defaultCurrency) ? data.defaultCurrency : currencies[0] ?? null);
-  }, [data, currencies]);
+    setSelectedCurrency(currencies.includes(statsData.defaultCurrency) ? statsData.defaultCurrency : currencies[0] ?? null);
+  }, [statsData, currencies]);
 
-  const activeCurrency = selectedCurrency ?? data?.defaultCurrency ?? "USD";
+  const activeCurrency = selectedCurrency ?? statsData?.defaultCurrency ?? "USD";
 
   const filteredItems = useMemo(() => {
-    if (!data) return [];
-    return data.items.filter((i) => i.currency === activeCurrency);
-  }, [data, activeCurrency]);
+    if (!statsData) return [];
+    return statsData.items.filter((i) => i.currency === activeCurrency);
+  }, [statsData, activeCurrency]);
 
   const filteredData = useMemo(() => {
-    if (!data) return null;
-    return { ...data, items: filteredItems };
-  }, [data, filteredItems]);
+    if (!statsData) return null;
+    return { ...statsData, items: filteredItems };
+  }, [statsData, filteredItems]);
 
   const onPrev = useCallback(() => setAnchorDate((d) => shiftDate(d, period, -1)), [period]);
   const onNext = useCallback(() => setAnchorDate((d) => shiftDate(d, period, 1)), [period]);
@@ -74,8 +94,12 @@ export default function Stats() {
 
   return (
     <div className="appPageContainer relative z-0">
-      <div className="z-10 w-full max-w-[680px] flex flex-col items-center gap-4 px-4 py-4 portrait:sm:py-6 landscape:lg:py-6">
-        {settingsData && budget && <BudgetCard workspaceId={settingsData.workspace._id} budget={budget} monthlySpent={monthlySpent} />}
+      <div className="z-10 w-full pageContentMaxWidth py-4 portrait:sm:py-6 landscape:lg:py-6 flex flex-col items-center gap-4">
+        <BudgetCard
+          discretionaryBudget={settingsData?.workspace.discretionaryBudget}
+          monthlySpent={currentMonthSpent}
+          setBudgetModal={setBudgetModal}
+        />
 
         <PeriodSelector period={period} setPeriod={handleSetPeriod} anchorDate={anchorDate} onPrev={onPrev} onNext={onNext} />
 
@@ -89,20 +113,28 @@ export default function Stats() {
                 <Spinner />
               </div>
             ) : isError ? (
-              <div className="w-full h-full flex items-center justify-center text-textError textBaseApp">Failed to load stats</div>
+              <div className="w-full h-full flex items-center justify-center text-textError textBase">Failed to load stats</div>
             ) : filteredData ? (
               <StatsChart data={filteredData} currency={activeCurrency} />
             ) : null}
           </div>
         </div>
 
-        {/* category breakdown pie chart */}
+        {/* --- pie chart --- */}
         {filteredItems.length > 0 && (
           <div className="w-full rounded-2xl border border-borderFaint bg-card p-4">
             <CategoryLegend items={filteredItems} currency={activeCurrency} />
           </div>
         )}
       </div>
+      {budgetModal && settingsData && (
+        <BudgetModal
+          workspaceId={settingsData.workspace._id}
+          discretionaryBudget={settingsData.workspace.discretionaryBudget}
+          categoryObjects={settingsData.workspace.categoryObjects}
+          setBudgetModal={setBudgetModal}
+        />
+      )}
     </div>
   );
 }

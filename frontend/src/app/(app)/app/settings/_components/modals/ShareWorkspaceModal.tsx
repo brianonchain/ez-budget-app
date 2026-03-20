@@ -126,7 +126,7 @@ export default function ShareWorkspaceModal({
               <Select
                 className="w-full"
                 selectSize="base"
-                variant="transparent"
+                variant="outline"
                 value={inviteRole}
                 onChange={(e) => setInviteRole(e.currentTarget.value as Role)}
                 disabled={isPending}
@@ -153,7 +153,7 @@ export default function ShareWorkspaceModal({
         {/*--- shared users list ---*/}
         <div className="py-6 border-t-[1.5px] border-borderFaint">
           <p className="inputLabel">Shared With</p>
-          <div className="mt-4 flex flex-col gap-4 textSmApp">
+          <div className="mt-4 flex flex-col gap-4 textSm">
             {sharedUsers.length === 0 && pendingSharedUsers.length === 0 ? (
               <div className="text-center opacity-70 py-4">No shared users yet.</div>
             ) : (
@@ -163,7 +163,7 @@ export default function ShareWorkspaceModal({
                     <div className="min-w-0 flex-1 truncate">{user.invitedEmail}</div>
                     <Button
                       label="Pending"
-                      variant="transparent"
+                      variant="outline"
                       size="pill"
                       iconRight={<FaX className="text-sm desktop:text-xs translate-y-[1px] text-textError" />}
                       onClick={() => deletePendingSharedUser(user)}
@@ -177,7 +177,7 @@ export default function ShareWorkspaceModal({
                     <div className="min-w-0 flex-1 truncate">{user.email}</div>
                     <Select
                       selectSize="xs"
-                      variant="transparent"
+                      variant="outline"
                       value={user.role}
                       onChange={(e) => {
                         if (e.currentTarget.value === "remove") {

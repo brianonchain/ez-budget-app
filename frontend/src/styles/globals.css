@@ -12,7 +12,7 @@
   --color-borderFaint: oklch(92.9% 0.013 255.508); /* slate-200 */
   /* text */
   --color-textPrimary: #212427;
-  --color-textSecondary: #62748e; /* slate-500 */
+  --color-textSecondary: #798aa3; /* slate-450 */
   --color-textTertiary: #90a1b9; /* slate-400 */
   --color-link: #0364ff;
   --color-linkHover: #1c73ff;
@@ -60,7 +60,7 @@
   --color-borderFaint: oklch(70.7% 0.165 254.624 / 8%); /* blue-400/8 */
   /* text */
   --color-textPrimary: #e9e8f6;
-  --color-textSecondary: #90a1b9; /* slate-400 */
+  --color-textSecondary: #90a1b9cc; /* slate-400/80% */
   --color-textTertiary: #62748e; /* slate-500 */
   --color-link: #2374f6;
   --color-linkHover: #4286f3;
@@ -110,24 +110,38 @@ html.dark body {
 
 /*--- text size ---*/
 
-@utility textSmApp {
-  @apply text-base desktop:text-[0.8125rem];
+/*--- 16px / 13px ---*/
+@utility textSm {
+  @apply text-base desktop:text-[0.8125rem] leading-[1.5];
 }
 
-@utility textBaseApp {
-  @apply text-base desktop:text-sm;
+/*--- 17px / 14px ---*/
+@utility textBase {
+  @apply text-[1.0625rem] desktop:text-sm leading-[1.4];
 }
 
-@utility textLgApp {
-  @apply text-xl desktop:text-lg;
+/*--- 18px / 15px ---*/
+@utility textLg {
+  @apply text-lg desktop:text-[0.9375rem] leading-[1.35];
 }
 
-@utility textSecondaryXlApp {
-  @apply text-3xl desktop:text-2xl;
+/*--- 20px / 16px ---*/
+@utility textXl {
+  @apply text-xl desktop:text-base leading-[1.35];
+}
+
+/*--- 24px / 20px ---*/
+@utility text2xl {
+  @apply text-2xl desktop:text-xl leading-[1.3];
+}
+
+/*--- 30px / 24px ---*/
+@utility text3xl {
+  @apply text-3xl desktop:text-2xl leading-[1.2];
 }
 
 @utility errorText {
-  @apply text-textErrorHover textBaseApp font-medium;
+  @apply text-textErrorHover textBase font-medium;
 }
 
 /*--- buttons ---*/
@@ -137,11 +151,11 @@ html.dark body {
 }
 
 .homeButton {
-  @apply buttonPrimaryColor px-7 desktop:px-6 py-4 desktop:py-3 textLgApp font-medium rounded-full cursor-pointer;
+  @apply buttonPrimaryColor px-7 desktop:px-6 py-4 desktop:py-3 textXl font-medium rounded-full cursor-pointer;
 }
 
 .buttonSignOut {
-  @apply flex-none h-14 desktop:h-10 textBaseApp buttonPrimaryColor rounded-full w-32 desktop:w-25 mx-auto my-12;
+  @apply flex-none h-14 desktop:h-10 textBase buttonPrimaryColor rounded-full w-32 desktop:w-25 mx-auto my-12;
 }
 
 .xButton {
@@ -151,7 +165,7 @@ html.dark body {
 /*--- login button ---*/
 
 @utility loginButtonBase {
-  @apply w-full h-16 desktop:h-13 flex items-center justify-center cursor-pointer gap-[12px] textBaseApp font-medium;
+  @apply w-full h-16 desktop:h-13 flex items-center justify-center cursor-pointer gap-[12px] textBase font-medium;
 }
 
 @utility loginButtonColor {
@@ -201,7 +215,7 @@ html.dark body {
 }
 
 .inputLabel {
-  @apply font-medium textBaseApp;
+  @apply font-medium textBase;
 }
 
 /*--- landing ---*/
@@ -261,7 +275,7 @@ can potentially add desktop-only variables here
 }
 
 .menuBg {
-  @apply bg-card dark:bg-primaryBg dark:portrait:bg-gradient-to-b dark:landscape:bg-gradient-to-l dark:from-blue-400/8 dark:to-transparent dark:to-60%;
+  @apply bg-card dark:bg-primaryBg dark:portrait:bg-gradient-to-b dark:landscape:bg-gradient-to-l dark:from-card dark:to-transparent dark:to-60%;
 }
 
 .menuShadow {
@@ -278,6 +292,10 @@ can potentially add desktop-only variables here
 
 .appPageContainer {
   @apply relative h-[calc(100dvh-var(--menuHeight))] portrait:w-full landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:desktop:!w-[calc(100%-200px)] landscape:ml-[120px] landscape:lg:ml-[160px] landscape:desktop:!ml-[200px] flex flex-col items-center overflow-y-auto overflow-x-hidden;
+}
+
+.pageContentMaxWidth {
+  @apply px-4 max-w-150 desktop:max-w-140;
 }
 
 /*--- app: items page ---*/

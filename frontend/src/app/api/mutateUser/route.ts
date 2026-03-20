@@ -91,13 +91,13 @@ export const POST = async (request: Request) => {
           ownerId: userId,
           ownerEmail: userEmail,
           defaultCurrency,
+          categoryObjects: [{ category: "none", subcategories: ["none"] }],
           tags: ["none"],
-          categoryObjects: [
-            {
-              category: "none",
-              subcategories: ["none"],
-            },
-          ],
+          discretionaryBudget: {
+            amount: 0,
+            currency: defaultCurrency,
+            categoryObjects: [{ category: "none", subcategories: ["all"] }],
+          },
         });
         // create membership (owner)
         await MembershipModel.create({

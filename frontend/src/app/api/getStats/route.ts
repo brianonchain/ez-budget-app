@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
       workspaceId: activeWorkspaceId,
       date: { $gte: startDate, $lt: endDate },
     })
-      .select("date cost currency category")
+      .select("date cost currency category subcategory tag")
       .lean<{ date: Date; cost: number; currency: string; category: string }[]>();
 
     return NextResponse.json(

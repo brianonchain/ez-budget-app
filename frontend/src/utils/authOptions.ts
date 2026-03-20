@@ -25,6 +25,11 @@ async function ensurePersonalWorkspace(userId: Types.ObjectId, email: string) {
     defaultCurrency: "USD",
     categoryObjects: [{ category: "none", subcategories: ["none"] }],
     tags: ["none"],
+    discretionaryBudget: {
+      amount: 0,
+      currency: "USD",
+      categoryObjects: [{ category: "none", subcategories: ["all"] }],
+    },
   });
   // Create membership
   await MembershipModel.create({ userId, workspaceId: ws._id, role: "owner" });

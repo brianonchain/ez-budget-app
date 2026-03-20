@@ -3,7 +3,7 @@ import { SelectHTMLAttributes } from "react";
 
 type SelectProps = {
   children: React.ReactNode;
-  variant: "primary" | "transparent";
+  variant: "primary" | "outline";
   selectSize: "xs" | "sm" | "base";
   className?: string;
   fullWidth?: boolean;
@@ -19,12 +19,12 @@ export default function Select({
 }: SelectProps) {
   const variants = {
     primary: "inputPrimaryColor",
-    transparent: "inputOutlineColor",
+    outline: "inputOutlineColor",
   };
   const sizes = {
-    xs: "h-11 desktop:h-8 pl-3 desktop:pl-2.5 pr-8 desktop:pr-6.5 textSmApp rounded-lg", // used in DetailsModal.tsx
-    sm: "h-12 desktop:h-9 pl-3 desktop:pl-2.5 pr-8 desktop:pr-6.5 textBaseApp rounded-lg",
-    base: "h-13 desktop:h-10 pl-3.5 desktop:pl-3 pr-9 desktop:pr-7.5 textBaseApp rounded-lg",
+    xs: "h-11 desktop:h-8 pl-3 desktop:pl-2.5 pr-8 desktop:pr-6.5 textSm rounded-lg", // used in DetailsModal.tsx
+    sm: "h-12 desktop:h-9 pl-3 desktop:pl-2.5 pr-8 desktop:pr-6.5 textBase rounded-lg",
+    base: "h-13 desktop:h-10 pl-3.5 desktop:pl-3 pr-9 desktop:pr-7.5 textBase rounded-lg",
   };
   const iconSizes = {
     xs: "right-3 desktop:right-2.5 text-sm desktop:text-[0.625rem]", // used in DetailsModal.tsx

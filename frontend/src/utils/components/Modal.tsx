@@ -45,12 +45,12 @@ export default function Modal({
         </button>
 
         {/*--- title ---*/}
-        <div id={titleId} className="mx-[60px] py-6 text-center text-2xl desktop:text-xl font-semibold">
+        <div id={titleId} className="mx-[60px] py-6 text-center text2xl font-semibold">
           {title}
         </div>
         {/*--- content ---*/}
         <div
-          className="flex-1 min-h-0 w-full flex flex-col pb-6 px-[16px] portrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[48px] overflow-y-auto thinScrollbar textBaseApp"
+          className="flex-1 min-h-0 w-full flex flex-col pb-6 px-4 portrait:sm:px-8 landscape:lg:px-8 desktop:!px-12 overflow-y-auto thinScrollbar textBase"
           style={{ scrollbarGutter: "stable" }}
         >
           {children}

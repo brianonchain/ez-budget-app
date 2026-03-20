@@ -1,16 +1,11 @@
 "use client";
-import { useState, useCallback } from "react";
-import { MonthlyBudget } from "@/utils/types";
-import { useSettingsMutation } from "@/utils/hooks";
-import { CURRENCIES, SYMBOLS, DECIMALS } from "@/utils/constants";
-import { getMonthKey } from "@/utils/functions";
-import { FiEdit2, FiCheck, FiX } from "react-icons/fi";
-
-interface BudgetCardProps {
-  workspaceId: string;
-  budget: MonthlyBudget;
-  monthlySpent: number;
-}
+import { useState } from "react";
+import { DiscretionaryBudget } from "@/utils/types";
+import { SYMBOLS, DECIMALS } from "@/utils/constants";
+import { FiEdit2 } from "react-icons/fi";
+import Card from "@/utils/components/Card";
+import Button from "@/utils/components/Button";
+import Skeleton from "@/utils/components/Skeleton";
 
 function formatAmount(amount: number, currency: string) {
   const sym = SYMBOLS[currency] ?? "";
@@ -18,93 +13,41 @@ function formatAmount(amount: number, currency: string) {
   return `${sym}${amount.toLocaleString(undefined, { minimumFractionDigits: dec, maximumFractionDigits: dec })}`;
 }
 
-export default function BudgetCard({ workspaceId, budget, monthlySpent }: BudgetCardProps) {
-  const [editing, setEditing] = useState(false);
-  const [draftAmount, setDraftAmount] = useState(String(budget.amount));
-  const [draftCurrency, setDraftCurrency] = useState(budget.currency);
-  const mutation = useSettingsMutation();
-
-  const openEditor = useCallback(() => {
-    setDraftAmount(String(budget.amount));
-    setDraftCurrency(budget.currency);
-    setEditing(true);
-  }, [budget]);
-
-  const save = useCallback(() => {
-    const parsed = parseFloat(draftAmount);
-    if (isNaN(parsed) || parsed < 0) return;
-    const month = getMonthKey(new Date());
-    mutation.mutate({ type: "setMonthlyBudget", workspaceId, month, amount: parsed, currency: draftCurrency });
-    setEditing(false);
-  }, [draftAmount, draftCurrency, workspaceId, mutation]);
-
-  const remaining = budget.amount - monthlySpent;
-
+export default function BudgetCard({
+  discretionaryBudget,
+  monthlySpent,
+  setBudgetModal,
+}: {
+  discretionaryBudget: DiscretionaryBudget | undefined | null;
+  monthlySpent: number | undefined | null;
+  setBudgetModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   return (
-    <div className="w-full rounded-2xl border border-borderFaint bg-card px-4 py-3">
-      {editing ? (
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="textBaseApp font-semibold shrink-0">Monthly Budget</span>
-          <select
-            value={draftCurrency}
-            onChange={(e) => setDraftCurrency(e.target.value)}
-            className="h-9 desktop:h-7 rounded-lg border border-borderFaint bg-transparent text-textPrimary textBaseApp px-2 cursor-pointer"
-          >
-            {CURRENCIES.map((c) => (
-              <option key={c} value={c}>
-                {SYMBOLS[c]} {c}
-              </option>
-            ))}
-          </select>
-          <input
-            type="number"
-            min="0"
-            step="any"
-            value={draftAmount}
-            onChange={(e) => setDraftAmount(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && save()}
-            className="h-9 desktop:h-7 w-28 rounded-lg border border-borderFaint bg-transparent text-textPrimary textBaseApp px-2 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-            autoFocus
-          />
-          <button
-            onClick={save}
-            disabled={mutation.isPending}
-            className="h-9 w-9 desktop:h-7 desktop:w-7 flex items-center justify-center rounded-lg desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover cursor-pointer transition-colors text-textGreen"
-          >
-            <FiCheck className="text-base" />
-          </button>
-          <button
-            onClick={() => setEditing(false)}
-            className="h-9 w-9 desktop:h-7 desktop:w-7 flex items-center justify-center rounded-lg desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover cursor-pointer transition-colors text-textSecondary"
-          >
-            <FiX className="text-base" />
-          </button>
-        </div>
-      ) : (
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex flex-col gap-0.5">
-            <span className="text-xs text-textSecondary">Monthly Budget</span>
-            <span className="textBaseApp font-semibold">
-              {budget.amount === 0 ? "Not set" : formatAmount(budget.amount, budget.currency)}
-            </span>
+    <Card className="relative flex flex-col items-center">
+      <div className="font-semibold text-textSecondary">Discretionary Budget</div>
+      <Button
+        className="absolute right-2 top-2 desktop:top-3 desktop:right-3"
+        variant="outline"
+        size="statsIcon"
+        icon={<FiEdit2 className="text-sm" />}
+        onClick={() => setBudgetModal(true)}
+      ></Button>
+
+      {discretionaryBudget && monthlySpent ? (
+        <>
+          <div className="mt-2 text2xl font-semibold">
+            {formatAmount(discretionaryBudget.amount - monthlySpent, discretionaryBudget.currency)}
           </div>
-          {budget.amount > 0 && (
-            <div className="flex flex-col items-end gap-0.5">
-              <span className="text-xs text-textSecondary">Remaining</span>
-              <span className={`textBaseApp font-semibold ${remaining >= 0 ? "text-textGreen" : "text-textError"}`}>
-                {formatAmount(remaining, budget.currency)}
-              </span>
-            </div>
-          )}
-          <button
-            onClick={openEditor}
-            className="h-9 desktop:h-7 px-3 flex items-center gap-1.5 rounded-lg border border-borderFaint desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover cursor-pointer transition-colors text-textSecondary text-xs shrink-0"
-          >
-            <FiEdit2 className="text-xs" />
-            <span>{budget.amount === 0 ? "Set budget" : "Edit"}</span>
-          </button>
-        </div>
+          <div className="mt-2 desktop:mt-1 textSm text-textTertiary">
+            remaining from {formatAmount(discretionaryBudget.amount, discretionaryBudget.currency)}
+          </div>
+        </>
+      ) : (
+        <>
+          <Skeleton className="mt-2 text2xl w-40" />
+          <Skeleton className="mt-2 desktop:mt-1 textSm w-40" />
+        </>
       )}
-    </div>
+    </Card>
   );
 }

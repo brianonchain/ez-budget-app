@@ -7,9 +7,8 @@ import MembershipModel from "@/db/MembershipModel";
 import WorkspaceModel from "@/db/WorkspaceModel";
 import PendingWorkspaceInviteModel from "@/db/PendingWorkspaceInviteModel";
 // utils
-import { MonthlyBudget, Role, Workspace } from "@/utils/types";
+import { Workspace } from "@/utils/types";
 import { getUserInfo } from "@/utils/serverFunctions";
-import { getMonthKey } from "@/utils/functions";
 
 export async function GET() {
   const userInfo = await getUserInfo();
@@ -52,24 +51,11 @@ export async function GET() {
 
     // 5) load workspace settings
     const workspace = await WorkspaceModel.findById(activeWorkspaceId)
-      .select("name defaultCurrency monthlyBudgets categoryObjects tags ownerId")
+      .select("name ownerId ownerEmail defaultCurrency categoryObjects tags discretionaryBudget")
       .lean<Workspace>(); // .lean() converts Map to plain object
     if (!workspace) return NextResponse.json({ status: "error", message: "Workspace not found" }, { status: 404 });
 
-    // 6) inherit from previous month if missing
-    const monthlyBudgets: Record<string, MonthlyBudget> = workspace.monthlyBudgets ?? {};
-    const now = new Date();
-    const currentKey = getMonthKey(now);
-    if (!monthlyBudgets[currentKey]) {
-      const prevKey = getMonthKey(new Date(now.getFullYear(), now.getMonth() - 1, 1));
-      const prev = monthlyBudgets[prevKey];
-      const inherited: MonthlyBudget = prev ? { ...prev } : { amount: 0, currency: workspace.defaultCurrency };
-      monthlyBudgets[currentKey] = inherited;
-      await WorkspaceModel.updateOne({ _id: activeWorkspaceId }, { $set: { [`monthlyBudgets.${currentKey}`]: inherited } });
-    }
-    workspace.monthlyBudgets = monthlyBudgets;
-
-    // 7) load shared users for active workspace TODO: do this when entering modal, may improve TTL
+    // 6) load shared users for active workspace TODO: do this when entering modal, may improve TTL
     const [sharedUsersRaw, pendingSharedUsersRaw] = await Promise.all([
       MembershipModel.find({ workspaceId: activeWorkspaceId, role: { $ne: "owner" } })
         .select("userId role")

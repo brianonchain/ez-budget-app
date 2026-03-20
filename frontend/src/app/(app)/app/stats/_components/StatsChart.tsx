@@ -149,9 +149,7 @@ export default function StatsChart({ data, currency }: StatsChartProps) {
         </BarChart>
       </ResponsiveContainer>
       {isEmpty && (
-        <div className="absolute inset-0 flex items-center justify-center text-textSecondary textBaseApp pointer-events-none">
-          No expenses
-        </div>
+        <div className="absolute inset-0 flex items-center justify-center text-textSecondary textBase pointer-events-none">No expenses</div>
       )}
     </div>
   );

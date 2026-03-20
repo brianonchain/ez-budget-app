@@ -116,7 +116,7 @@ export default function SignUpClient() {
       </form>
 
       {/*--- other options ---*/}
-      <p className="mt-14 desktop:mt-12 link underline-animate textSmApp" onClick={() => router.push("/login")}>
+      <p className="mt-14 desktop:mt-12 link underline-animate textSm" onClick={() => router.push("/login")}>
         Have an account? Sign in
       </p>
       {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}

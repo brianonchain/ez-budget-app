@@ -63,7 +63,7 @@ export default function CategoryContainer({
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        <div className="w-[90%] flex flex-col textSmApp border-y border-dashed border-borderFaint">
+        <div className="w-[90%] flex flex-col textSm border-y border-dashed border-borderFaint">
           {items.map((item, index) => (
             <Category
               key={item.id}

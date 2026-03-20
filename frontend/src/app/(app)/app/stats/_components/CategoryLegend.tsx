@@ -71,7 +71,7 @@ export default function CategoryLegend({ items, currency }: CategoryLegendProps)
 
       {/* legend */}
       <div className="w-full flex flex-col gap-1.5">
-        <div className="flex items-center justify-between textBaseApp font-semibold">
+        <div className="flex items-center justify-between textBase font-semibold">
           <span>Total</span>
           <span>{symbol + grandTotal.toFixed(decimals)}</span>
         </div>

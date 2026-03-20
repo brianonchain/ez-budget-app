@@ -110,7 +110,7 @@ export default function Settings({ provider, email, userId }: { provider: string
           <div className="settingsLabel">Active Sheet</div>
           {data ? (
             <Select
-              variant="transparent"
+              variant="outline"
               selectSize="sm"
               fullWidth={true}
               value={workspaceId}
@@ -184,7 +184,7 @@ export default function Settings({ provider, email, userId }: { provider: string
           data.role === "owner" ? (
             <SettingsField label="Default Currency">
               <Select
-                variant="transparent"
+                variant="outline"
                 selectSize="sm"
                 value={defaultCurrency}
                 onChange={(e) => onChangeDefaultCurrency(e, data.workspace._id)}
@@ -209,7 +209,7 @@ export default function Settings({ provider, email, userId }: { provider: string
             <SettingsField label="Share This Sheet">
               <Button
                 label="Share"
-                variant="transparent"
+                variant="outline"
                 size="sm"
                 type="button"
                 icon={<FiShare2 />}
@@ -226,13 +226,13 @@ export default function Settings({ provider, email, userId }: { provider: string
         {showData ? (
           data.role === "owner" ? (
             <SettingsField label="Delete Sheet" className="border-none">
-              <Button label="Delete" variant="dangerTrans" size="sm" type="button" icon={<FiTrash2 />} onClick={onClickDeleteSheet} />
+              <Button label="Delete" variant="dangerOutline" size="sm" type="button" icon={<FiTrash2 />} onClick={onClickDeleteSheet} />
             </SettingsField>
           ) : (
             <SettingsField label="Leave Shared Sheet" className="border-none">
               <Button
                 label="Leave"
-                variant="transparent"
+                variant="outline"
                 size="sm"
                 type="button"
                 icon={<FiUserMinus />}
@@ -251,7 +251,7 @@ export default function Settings({ provider, email, userId }: { provider: string
       <SettingsCard title="Account">
         {/*--- Sign Out ---*/}
         <SettingsField label="Sign Out">
-          <Button label="Sign Out" variant="transparent" size="sm" type="button" onClick={() => signOut({ callbackUrl: "/login" })} />
+          <Button label="Sign Out" variant="outline" size="sm" type="button" onClick={() => signOut({ callbackUrl: "/login" })} />
         </SettingsField>
         {/*--- Email ---*/}
         <SettingsField label="Email">
@@ -260,7 +260,7 @@ export default function Settings({ provider, email, userId }: { provider: string
             {provider === "credentials" && (
               <Button
                 className="h-12 desktop:h-9 flex items-center gap-2"
-                variant="transparent"
+                variant="outline"
                 size="sm"
                 type="button"
                 icon={<FiEdit className="" />}
@@ -276,7 +276,7 @@ export default function Settings({ provider, email, userId }: { provider: string
               {"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}
               <Button
                 className="h-12 desktop:h-9 flex items-center gap-2"
-                variant="transparent"
+                variant="outline"
                 size="sm"
                 type="button"
                 icon={<FiEdit className="" />}
@@ -293,7 +293,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         <SettingsField label="Delete Account" className="border-none">
           <Button
             label="Delete"
-            variant="dangerTrans"
+            variant="dangerOutline"
             size="sm"
             type="button"
             icon={<FiTrash2 />}

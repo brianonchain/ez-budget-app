@@ -365,12 +365,28 @@ export const POST = async (request: Request) => {
         break;
       }
 
-      case "setMonthlyBudget": {
-        const { month, amount, currency } = payload;
-        if (!month || typeof amount !== "number" || amount < 0 || !currency) return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
-        if (!/^\d{4}-\d{2}$/.test(month)) return NextResponse.json({ status: "error", message: "Invalid month format." }, { status: 400 });
-        if (!CURRENCIES.includes(currency)) return NextResponse.json({ status: "error", message: "Currency not supported." }, { status: 400 });
-        await WorkspaceModel.updateOne({ _id: workspaceId }, { $set: { [`monthlyBudgets.${month}`]: { amount, currency } } });
+      case "setDiscretionaryBudget": {
+        const { amount, currency } = payload;
+        // check type
+        if (typeof amount !== "number" || amount < 0 || !CURRENCIES.includes(currency))
+          return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
+        // mutate
+        await WorkspaceModel.updateOne(
+          { _id: workspaceId },
+          { $set: { "discretionaryBudget.amount": amount, "discretionaryBudget.currency": currency } }
+        );
+        break;
+      }
+
+      case "setDiscretionaryBudgetCategories": {
+        if (!Array.isArray(payload.categoryObjects) || !payload.categoryObjects.every(isCategoryObject))
+          return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
+        const categoryObjects = payload.categoryObjects;
+        for (const co of categoryObjects) {
+          if (!co.category || co.subcategories.length === 0)
+            return NextResponse.json({ status: "error", message: "Invalid payload." }, { status: 400 });
+        }
+        await WorkspaceModel.updateOne({ _id: workspaceId }, { $set: { "discretionaryBudget.categoryObjects": categoryObjects } });
         break;
       }
 
