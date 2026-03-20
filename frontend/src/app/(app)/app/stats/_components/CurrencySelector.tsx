@@ -1,5 +1,4 @@
 "use client";
-import { SYMBOLS } from "@/utils/constants";
 
 interface CurrencySelectorProps {
   currencies: string[];
@@ -11,7 +10,7 @@ export default function CurrencySelector({ currencies, selected, onSelect }: Cur
   if (currencies.length <= 1) return null;
 
   return (
-    <div className="flex items-center gap-2 flex-wrap">
+    <div className="mx-auto flex items-center gap-2 flex-wrap">
       {currencies.map((c) => (
         <button
           key={c}
@@ -22,7 +21,7 @@ export default function CurrencySelector({ currencies, selected, onSelect }: Cur
               : "bg-transparent text-textSecondary border-borderFaint desktop:hover:bg-buttonOutlineBgHover"
           }`}
         >
-          {SYMBOLS[c] ?? ""} {c}
+          {c}
         </button>
       ))}
     </div>

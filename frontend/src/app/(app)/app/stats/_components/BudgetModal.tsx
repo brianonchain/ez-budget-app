@@ -58,9 +58,8 @@ export default function BudgetModal({
   function toggleSub(category: string, sub: string, allSubs: string[]) {
     // exists
     const entry = draftBudgetCategoryObjects.find((c) => c.category === category);
-    if (!entry) return;
-    // if "all", replace with all subcategories
-    const currentSubs = entry.subcategories[0] === "all" ? allSubs : entry.subcategories;
+    // 1) if !entry, create empty subcategory array 2) if "all", replace with all subcategories
+    const currentSubs = !entry ? [] : entry.subcategories[0] === "all" ? allSubs : entry.subcategories;
     // add or remove sub from list
     const nextSubs = currentSubs.includes(sub) ? currentSubs.filter((s) => s !== sub) : [...currentSubs, sub];
     // uncheck category if all subcategories become unchecked
@@ -173,8 +172,9 @@ function CheckboxRow({
         type="checkbox"
         className="w-6 h-6 desktop:w-5 desktop:h-5 shrink-0 accent-buttonPrimaryBg"
         checked={checked}
-        disabled={disabled}
-        onChange={onChange}
+        aria-disabled={disabled}
+        tabIndex={disabled ? -1 : 0}
+        onChange={disabled ? () => {} : onChange}
       />
       <span className={labelClassName}>{label}</span>
     </label>

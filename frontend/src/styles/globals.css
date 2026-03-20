@@ -110,9 +110,9 @@ html.dark body {
 
 /*--- text size ---*/
 
-/*--- 16px / 13px ---*/
+/*--- 14px / 12px ---*/
 @utility textSm {
-  @apply text-base desktop:text-[0.8125rem] leading-[1.5];
+  @apply text-sm desktop:text-xs leading-[1.5];
 }
 
 /*--- 17px / 14px ---*/
@@ -159,7 +159,7 @@ html.dark body {
 }
 
 .xButton {
-  @apply absolute right-0 top-0 w-16 h-16 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl cursor-pointer desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover disabled:opacity-80 [transition:background-color_300ms];
+  @apply absolute right-0 top-0 w-16 h-16 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl cursor-pointer desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms];
 }
 
 /*--- login button ---*/

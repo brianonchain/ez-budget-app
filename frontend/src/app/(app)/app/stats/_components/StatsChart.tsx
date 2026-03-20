@@ -40,21 +40,19 @@ function CustomTooltip({ active, payload, currency }: any) {
   );
 }
 
+const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_LABEL_INDICES = new Set([0, 2, 4, 6, 8, 10]); // Jan, Mar, May, Jul, Sep, Nov
+
 function CustomXTick({ x, y, payload, period, narrow }: any) {
   const val = payload.value;
   const num = Number(val);
 
-  // week (Mon-Sun) and year (Jan-Dec): always show all labels
-  if (period !== "month") {
-    return (
-      <text x={x} y={y} dy={14} textAnchor="middle" fontSize={13} fill="var(--color-textSecondary)">
-        {val}
-      </text>
-    );
+  if (period === "year" && narrow) {
+    const idx = MONTH_LABELS.indexOf(val);
+    if (idx !== -1 && !MONTH_LABEL_INDICES.has(idx)) return null;
   }
 
-  // month: filter which day labels to show
-  if (!isNaN(num)) {
+  if (period === "month" && !isNaN(num)) {
     const step = narrow ? 5 : 2;
     if (num % step !== 0) return null;
   }

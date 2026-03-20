@@ -38,7 +38,7 @@ export default function Button({
     sm: "h-12 desktop:h-9 px-3 desktop:px-2.5 textBase rounded-lg", // same height and px as input(sm) and select(sm)
     base: "h-14 desktop:h-10 px-4 desktop:px-3 textBase rounded-lg",
     hug: "",
-    statsIcon: "w-9 h-9 rounded-lg text-textTertiary",
+    statsIcon: "aspect-square w-9 desktop:w-8 rounded-lg text-textTertiary",
   };
 
   // consider adding "inline-flex" to base className

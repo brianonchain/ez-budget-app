@@ -78,3 +78,9 @@ export function generateOtp() {
 export function createIsUsedMsg(item: string) {
   return `This ${item} is being used in at least one item. Remove it from all items before deleting.`;
 }
+
+export function getMonthKey(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // 01–12
+  return `${year}-${month}`;
+}

@@ -11,6 +11,8 @@ import StatsChart from "./_components/StatsChart";
 import CategoryLegend from "./_components/CategoryLegend";
 import Spinner from "@/utils/components/Spinner";
 import BudgetModal from "./_components/BudgetModal";
+import Card from "@/utils/components/Card";
+import { getMonthKey } from "@/utils/functions";
 
 export default function Stats() {
   // hooks
@@ -31,30 +33,22 @@ export default function Stats() {
   const { data: settingsData } = useSettingsQuery(email);
 
   // calculate sum of discretionary budget items
+  const runCalculation = statsData?.period === "month" && getMonthKey(new Date(statsData.startDate)) === getMonthKey(new Date());
   useEffect(() => {
-    if (!statsData || !settingsData) return;
-    if (statsData.period !== "month") return;
-
+    if (!runCalculation || !statsData || !settingsData) return;
     const budget = settingsData.workspace.discretionaryBudget;
-    const now = new Date();
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-
     const spent = statsData.items
       .filter((item) => {
         if (item.currency !== budget.currency) return false;
-
-        const itemDate = new Date(item.date);
-        if (itemDate < monthStart || itemDate >= monthEnd) return false;
-
-        const matchedBudgetCategory = budget.categoryObjects.find((budgetObj) => budgetObj.category === item.category);
-        if (!matchedBudgetCategory) return false;
-
-        return matchedBudgetCategory.subcategories.includes("all") || matchedBudgetCategory.subcategories.includes(item.subcategory);
+        const budgetCategoryObject = budget.categoryObjects.find((budgetObj) => budgetObj.category === item.category);
+        if (!budgetCategoryObject) return false;
+        if (budgetCategoryObject.subcategories[0] === "all") return true;
+        if (budgetCategoryObject.subcategories.includes(item.subcategory)) return true;
+        return false;
       })
       .reduce((sum, item) => sum + item.cost, 0);
     setCurrentMonthSpent(spent);
-  }, [!!statsData, settingsData?.workspace.discretionaryBudget]);
+  }, [runCalculation, settingsData?.workspace.discretionaryBudget]);
 
   const currencies = useMemo(() => {
     if (!statsData) return [];
@@ -101,13 +95,12 @@ export default function Stats() {
           setBudgetModal={setBudgetModal}
         />
 
-        <PeriodSelector period={period} setPeriod={handleSetPeriod} anchorDate={anchorDate} onPrev={onPrev} onNext={onNext} />
-
-        {currencies.length > 1 && <CurrencySelector currencies={currencies} selected={activeCurrency} onSelect={setSelectedCurrency} />}
-
-        {/* chart container */}
-        <div className="w-full rounded-2xl border border-borderFaint bg-card p-3 portrait:sm:p-4 landscape:lg:p-4">
-          <div className="w-full h-[280px] portrait:sm:h-[340px] landscape:lg:h-[340px]">
+        {/* combined chart card */}
+        <Card className="flex flex-col gap-6">
+          <PeriodSelector period={period} setPeriod={handleSetPeriod} anchorDate={anchorDate} onPrev={onPrev} onNext={onNext} />
+          {currencies.length > 1 && <CurrencySelector currencies={currencies} selected={activeCurrency} onSelect={setSelectedCurrency} />}
+          {filteredItems.length > 0 && <CategoryLegend items={filteredItems} currency={activeCurrency} />}
+          <div className="w-full h-[200px] portrait:sm:h-[240px] landscape:lg:h-[240px]">
             {isLoading ? (
               <div className="w-full h-full flex items-center justify-center">
                 <Spinner />
@@ -118,14 +111,7 @@ export default function Stats() {
               <StatsChart data={filteredData} currency={activeCurrency} />
             ) : null}
           </div>
-        </div>
-
-        {/* --- pie chart --- */}
-        {filteredItems.length > 0 && (
-          <div className="w-full rounded-2xl border border-borderFaint bg-card p-4">
-            <CategoryLegend items={filteredItems} currency={activeCurrency} />
-          </div>
-        )}
+        </Card>
       </div>
       {budgetModal && settingsData && (
         <BudgetModal

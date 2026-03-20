@@ -75,7 +75,7 @@ export default function Items() {
               >
                 <div className="">{item.description}</div>
                 <div className="">{SYMBOLS[item.currency] + item.cost.toFixed(DECIMALS[item.currency])}</div>
-                <div className="flex flex-col justify-self-end text-end text-sm desktop:text-xs leading-tight desktop:leading-tight">
+                <div className="flex flex-col justify-self-end text-end textSm leading-tight desktop:leading-tight">
                   {item.category !== "none" && <p className="">{item.category}</p>}
                   {item.subcategory !== "none" && <p className="italic text-textSecondary">{item.subcategory}</p>}
                   {item.tag !== "none" && <div className="text-buttonPrimaryBg truncate">{item.tag}</div>}

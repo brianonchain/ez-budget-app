@@ -118,8 +118,8 @@ export function formatPeriodLabel(period: StatsPeriod, anchorDate: Date): string
     monday.setDate(anchorDate.getDate() - diff);
     const sunday = new Date(monday);
     sunday.setDate(monday.getDate() + 6);
-    const fmt = (d: Date) => `${months[d.getMonth()].slice(0, 3)} ${d.getDate()}`;
-    return `${fmt(monday)} – ${fmt(sunday)}, ${sunday.getFullYear()}`;
+    const fmt = (d: Date) => `${d.getMonth() + 1}/${d.getDate()}`;
+    return `${fmt(monday)}-${fmt(sunday)}, ${sunday.getFullYear()}`;
   }
   if (period === "month") {
     return `${months[anchorDate.getMonth()]} ${anchorDate.getFullYear()}`;
