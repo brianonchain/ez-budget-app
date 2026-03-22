@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useItemsQuery, useSettingsQuery } from "@/utils/hooks";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,7 @@ import EnterCost from "./_components/EnterCost";
 import EnterName from "./_components/EnterName";
 import Details from "./_components/Details";
 import Loading from "./loading";
+import Spinner from "@/utils/components/Spinner";
 // constants
 import { SYMBOLS, DECIMALS } from "@/utils/constants";
 // types
@@ -29,7 +30,7 @@ export default function Items() {
     }
   }, [session.status]);
 
-  const { data: itemsData } = useItemsQuery(session?.data?.user?.email);
+  const { data: itemsData, fetchNextPage, hasNextPage, isFetchingNextPage } = useItemsQuery(session?.data?.user?.email);
   const { data: settingsData } = useSettingsQuery(session?.data?.user?.email);
   // states
   const [errorMessage, setErrorMessage] = useState("");
@@ -38,9 +39,26 @@ export default function Items() {
   const [detailsModal, setDetailsModal] = useState(false);
   const [draftItem, setDraftItem] = useState<DraftItem>(emptyItem);
 
-  // useEffect(() => {
-  //   if (isError) setErrorModal("Unable to fetch you data. Refresh app or re-login. We apologize for the inconvenience.");
-  // }, [isError]);
+  // flatten pages into a single items array
+  const allItems = useMemo(() => itemsData?.pages.flatMap((p) => p.items) ?? [], [itemsData]);
+  const defaultCurrency = itemsData?.pages[0]?.defaultCurrency;
+
+  // infinite scroll sentinel
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (!itemsData) {
     return <Loading />;
@@ -60,12 +78,12 @@ export default function Items() {
   return (
     <>
       <ItemsShell footer={["owner", "editor"].includes(settingsData?.role ?? "") ? <AddItemButton onClick={addItemOnClick} /> : null}>
-        {itemsData.items.length === 0 ? (
+        {allItems.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center">No items yet</div>
         ) : (
           <>
-            {itemsData.items.map((item, index) => {
-              const prevDate = index > 0 ? itemsData.items[index - 1].date.slice(0, 10) : null;
+            {allItems.map((item, index) => {
+              const prevDate = index > 0 ? allItems[index - 1].date.slice(0, 10) : null;
               const curDate = item.date.slice(0, 10);
               const showHeader = curDate !== prevDate;
 
@@ -94,6 +112,10 @@ export default function Items() {
                 </div>
               );
             })}
+            {/* sentinel for infinite scroll */}
+            <div ref={sentinelRef} className="w-full h-12 flex items-center justify-center">
+              {isFetchingNextPage && <Spinner />}
+            </div>
           </>
         )}
       </ItemsShell>

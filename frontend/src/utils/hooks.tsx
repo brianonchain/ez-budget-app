@@ -1,15 +1,17 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
-import { ItemsData, SettingsData, StatsData, StatsPeriod, MutateUserPayload, MutateSettingsPayload, MutateItemsPayload } from "@/utils/types";
+import { ItemsPage, SettingsData, StatsData, StatsPeriod, MutateUserPayload, MutateSettingsPayload, MutateItemsPayload } from "@/utils/types";
 import { fetchPost, fetchGet } from "./functions";
 
 export const useItemsQuery = (email: string | null | undefined) => {
-  return useQuery<ItemsData, Error>({
+  return useInfiniteQuery<ItemsPage, Error>({
     queryKey: ["items"],
-    queryFn: async (): Promise<ItemsData> => {
-      const resJson = await fetchGet("/api/getItems");
+    queryFn: async ({ pageParam }): Promise<ItemsPage> => {
+      const resJson = await fetchGet(`/api/getItems?page=${pageParam}`);
       if (resJson.status === "success") return resJson.data;
       throw new Error(resJson.message || "Failed to load items.");
     },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => (lastPage.hasMore ? allPages.length : undefined),
     enabled: !!email,
     staleTime: Infinity,
     gcTime: Infinity,

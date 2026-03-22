@@ -1,10 +1,11 @@
 import { CategoryObject } from "@/db/WorkspaceModel";
 import { CURRENCIES } from "./constants";
 
-// useItemsQuery data
-export type ItemsData = {
+// useItemsQuery data (paginated)
+export type ItemsPage = {
   items: DraftItem[];
   defaultCurrency: string;
+  hasMore: boolean;
 };
 // 1) id, createdBy doesn't exist for new items, 2) compared to IItem, DraftItem doesn't have workspaceId, createdAt, updatedAt, 3) date is string
 export type DraftItem = {
