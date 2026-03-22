@@ -30,7 +30,7 @@ export default function Items() {
     }
   }, [session.status]);
 
-  const { data: itemsData, fetchNextPage, hasNextPage, isFetchingNextPage } = useItemsQuery(session?.data?.user?.email);
+  const { data: itemsData, fetchNextPage, hasNextPage, isFetchingNextPage } = useItemsQuery(session?.data?.user?.email); // itemsData = { pages: [{items, defaultCurrency, hasMore},...], pageParams: [0,1,2,...] }
   const { data: settingsData } = useSettingsQuery(session?.data?.user?.email);
   // states
   const [errorMessage, setErrorMessage] = useState("");
@@ -39,9 +39,20 @@ export default function Items() {
   const [detailsModal, setDetailsModal] = useState(false);
   const [draftItem, setDraftItem] = useState<DraftItem>(emptyItem);
 
-  // flatten pages into a single items array
+  // flatten pages into a single items array, then group by date
   const allItems = useMemo(() => itemsData?.pages.flatMap((p) => p.items) ?? [], [itemsData]);
-  const defaultCurrency = itemsData?.pages[0]?.defaultCurrency;
+  const dateGroups = useMemo(() => {
+    const groups: { date: string; items: DraftItem[] }[] = [];
+    for (const item of allItems) {
+      const d = item.date.slice(0, 10);
+      if (groups.length === 0 || groups[groups.length - 1].date !== d) {
+        groups.push({ date: d, items: [item] });
+      } else {
+        groups[groups.length - 1].items.push(item);
+      }
+    }
+    return groups;
+  }, [allItems]);
 
   // infinite scroll sentinel
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -75,26 +86,25 @@ export default function Items() {
     setCostModal(true);
   };
 
+  // better UI if button is shown on first paint (then remove button if user is not "owner" or "editor")
+  const isSettingsLoading = !settingsData;
+  const canAddItem = ["owner", "editor"].includes(settingsData?.role ?? "");
+
   return (
     <>
-      <ItemsShell footer={["owner", "editor"].includes(settingsData?.role ?? "") ? <AddItemButton onClick={addItemOnClick} /> : null}>
-        {allItems.length === 0 ? (
+      <ItemsShell footer={isSettingsLoading || canAddItem ? <AddItemButton onClick={addItemOnClick} disabled={isSettingsLoading} /> : null}>
+        {dateGroups.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center">No items yet</div>
         ) : (
           <>
-            {allItems.map((item, index) => {
-              const prevDate = index > 0 ? allItems[index - 1].date.slice(0, 10) : null;
-              const curDate = item.date.slice(0, 10);
-              const showHeader = curDate !== prevDate;
-
-              return (
-                <div key={item._id ?? index}>
-                  {showHeader && (
-                    <div className="sticky top-0 z-10 px-[3%] h-8 desktop:h-7 flex items-center textSm font-semibold text-textSecondary bg-surface border-b border-borderFaint">
-                      {formatDateHeader(item.date)}
-                    </div>
-                  )}
+            {dateGroups.map((group) => (
+              <div key={group.date}>
+                <div className="sticky top-0 z-10 backdrop-blur-md px-[3%] h-8 desktop:h-7 flex items-center textSm font-semibold text-textSecondary listDateColor border-b border-borderFaint">
+                  {formatDateHeader(group.items[0].date)}
+                </div>
+                {group.items.map((item, i) => (
                   <div
+                    key={item._id ?? `${group.date}-${i}`}
                     className="px-[3%] w-full listItemHeight grid grid-cols-[50%_20%_30%] items-center border-b border-borderFaint desktop:cursor-pointer desktop:hover:bg-surface"
                     onClick={() => {
                       setDraftItem(item);
@@ -109,9 +119,9 @@ export default function Items() {
                       {item.tag !== "none" && <div className="text-buttonPrimaryBg truncate">{item.tag}</div>}
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                ))}
+              </div>
+            ))}
             {/* sentinel for infinite scroll */}
             <div ref={sentinelRef} className="w-full h-12 flex items-center justify-center">
               {isFetchingNextPage && <Spinner />}

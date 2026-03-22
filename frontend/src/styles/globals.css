@@ -7,6 +7,7 @@
   --color-primaryBg: #f7edf7;
   --color-surface: #f6f9fc;
   --color-surfaceSolid: #f6f9fc;
+  --color-surface2: #f6f9fc;
   --color-card: #ffffff;
   /* borders */
   --color-borderFaint: oklch(92.9% 0.013 255.508); /* slate-200 */
@@ -53,9 +54,10 @@
 
 .dark {
   --color-primaryBg: #0a0826; /* was 0b0f37*/
-  --color-surface: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
-  --color-surfaceSolid: #11153c; /* blue-400/14 overlaid on primaryBg */
   --color-card: oklch(70.7% 0.165 254.624 / 7%); /* blue-400/7 */
+  --color-surface: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
+  --color-surfaceSolid: #141e43; /* blue-400/14 overlaid on primaryBg */
+  --color-surface2: #182751;
   /* borders */
   --color-borderFaint: oklch(70.7% 0.165 254.624 / 8%); /* blue-400/8 */
   /* text */
@@ -301,7 +303,11 @@ can potentially add desktop-only variables here
 /*--- app: items page ---*/
 
 .listHeaderColor {
-  @apply text-textSecondary bg-surface border-b border-borderFaint dark:bg-primaryBg dark:portrait:sm:bg-blue-400/20 dark:landscape:lg:bg-blue-400/20;
+  @apply text-textSecondary bg-primaryBg portrait:sm:bg-card landscape:lg:bg-card dark:portrait:sm:bg-surface dark:landscape:lg:bg-surface border-b border-borderFaint;
+}
+
+.listDateColor {
+  @apply bg-surface;
 }
 
 .listContainerColor {
@@ -309,7 +315,7 @@ can potentially add desktop-only variables here
 }
 
 .listButtonContainerColor {
-  @apply bg-primaryBg portrait:sm:bg-transparent landscape:lg:bg-transparent;
+  @apply bg-primaryBg portrait:sm:bg-transparent landscape:lg:bg-transparent; /*--- need solid bg for mobile ---*/
 }
 
 .listTotalHeight {

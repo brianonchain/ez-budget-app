@@ -1,5 +1,13 @@
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
-import { ItemsPage, SettingsData, StatsData, StatsPeriod, MutateUserPayload, MutateSettingsPayload, MutateItemsPayload } from "@/utils/types";
+import {
+  ItemsPage,
+  SettingsData,
+  StatsData,
+  StatsPeriod,
+  MutateUserPayload,
+  MutateSettingsPayload,
+  MutateItemsPayload,
+} from "@/utils/types";
 import { fetchPost, fetchGet } from "./functions";
 
 export const useItemsQuery = (email: string | null | undefined) => {
@@ -11,7 +19,7 @@ export const useItemsQuery = (email: string | null | undefined) => {
       throw new Error(resJson.message || "Failed to load items.");
     },
     initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => (lastPage.hasMore ? allPages.length : undefined),
+    getNextPageParam: (lastPage, allPages) => (lastPage.hasMore ? allPages.length : undefined), // lastPage = { items, defaultCurrency, hasMore }, allPages = [[items, defaultCurrency, hasMore]]
     enabled: !!email,
     staleTime: Infinity,
     gcTime: Infinity,
