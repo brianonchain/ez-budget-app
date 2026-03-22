@@ -6,13 +6,11 @@ import { StatsPeriod, DiscretionaryBudget } from "@/utils/types";
 import { shiftDate } from "./_components/chartHelpers";
 import BudgetCard from "./_components/BudgetCard";
 import PeriodSelector from "./_components/PeriodSelector";
-import CurrencySelector from "./_components/CurrencySelector";
 import StatsChart from "./_components/StatsChart";
 import CategoryLegend from "./_components/CategoryLegend";
 import Spinner from "@/utils/components/Spinner";
 import BudgetModal from "./_components/BudgetModal";
 import Card from "@/utils/components/Card";
-import Select from "@/utils/components/Select";
 import { getMonthKey } from "@/utils/functions";
 
 export default function Stats() {
@@ -105,31 +103,22 @@ export default function Stats() {
 
         {/* combined chart card */}
         <Card className="flex flex-col gap-6">
-          <PeriodSelector period={period} setPeriod={handleSetPeriod} anchorDate={anchorDate} onPrev={onPrev} onNext={onNext} />
-          {/* filters row */}
-          <div className="flex items-center justify-center gap-2 flex-wrap">
-            {currencies.length > 1 && <CurrencySelector currencies={currencies} selected={activeCurrency} onSelect={setSelectedCurrency} />}
-            {settingsData && (
-              <>
-                <Select variant="outline" selectSize="xs" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-                  <option value="all">All categories</option>
-                  {settingsData.workspace.categoryObjects.map((co) => (
-                    <option key={co.category} value={co.category}>
-                      {co.category === "none" ? '"none"' : co.category}
-                    </option>
-                  ))}
-                </Select>
-                <Select variant="outline" selectSize="xs" value={selectedTag} onChange={(e) => setSelectedTag(e.target.value)}>
-                  <option value="all">All tags</option>
-                  {settingsData.workspace.tags.map((tag) => (
-                    <option key={tag} value={tag}>
-                      {tag === "none" ? '"none"' : tag}
-                    </option>
-                  ))}
-                </Select>
-              </>
-            )}
-          </div>
+          <PeriodSelector
+            period={period}
+            setPeriod={handleSetPeriod}
+            anchorDate={anchorDate}
+            onPrev={onPrev}
+            onNext={onNext}
+            currencies={currencies}
+            activeCurrency={activeCurrency}
+            onSelectCurrency={setSelectedCurrency}
+            categoryObjects={settingsData?.workspace.categoryObjects}
+            tags={settingsData?.workspace.tags}
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+            selectedTag={selectedTag}
+            onSelectTag={setSelectedTag}
+          />
           {filteredItems.length > 0 && <CategoryLegend items={filteredItems} currency={activeCurrency} groupBy={groupBy} />}
           <div className="w-full h-[200px] portrait:sm:h-[240px] landscape:lg:h-[240px]">
             {isLoading ? (

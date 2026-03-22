@@ -7,7 +7,6 @@
   --color-primaryBg: #f7edf7;
   --color-surface: #f6f9fc;
   --color-surfaceSolid: #f6f9fc;
-  --color-surface2: #f6f9fc;
   --color-card: #ffffff;
   /* borders */
   --color-borderFaint: oklch(92.9% 0.013 255.508); /* slate-200 */
@@ -57,7 +56,6 @@
   --color-card: oklch(70.7% 0.165 254.624 / 7%); /* blue-400/7 */
   --color-surface: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
   --color-surfaceSolid: #141e43; /* blue-400/14 overlaid on primaryBg */
-  --color-surface2: #182751;
   /* borders */
   --color-borderFaint: oklch(70.7% 0.165 254.624 / 8%); /* blue-400/8 */
   /* text */
@@ -307,7 +305,7 @@ can potentially add desktop-only variables here
 }
 
 .listDateColor {
-  @apply bg-surface;
+  @apply bg-surface dark:bg-card dark:portrait:sm:bg-surface dark:landscape:lg:bg-surface;
 }
 
 .listContainerColor {
