@@ -8,6 +8,7 @@ import { getCategoryColor } from "./chartHelpers";
 interface CategoryLegendProps {
   items: StatsRawItem[];
   currency: string;
+  groupBy?: "category" | "subcategory";
 }
 
 function PieTooltip({ active, payload, symbol, decimals }: any) {
@@ -21,14 +22,19 @@ function PieTooltip({ active, payload, symbol, decimals }: any) {
   );
 }
 
-export default function CategoryLegend({ items, currency }: CategoryLegendProps) {
+export default function CategoryLegend({ items, currency, groupBy = "category" }: CategoryLegendProps) {
   const { slices, categories, grandTotal } = useMemo(() => {
     const map = new Map<string, number>();
     for (const item of items) {
-      const cat = item.category === "none" ? "Uncategorized" : item.category;
+      const raw = groupBy === "subcategory" ? item.subcategory : item.category;
+      const cat = raw === "none" ? "Uncategorized" : raw;
       map.set(cat, (map.get(cat) || 0) + item.cost);
     }
-    const cats = Array.from(new Set(items.map((i) => (i.category === "none" ? "Uncategorized" : i.category)))).sort();
+    const getKey = (i: StatsRawItem) => {
+      const raw = groupBy === "subcategory" ? i.subcategory : i.category;
+      return raw === "none" ? "Uncategorized" : raw;
+    };
+    const cats = Array.from(new Set(items.map(getKey))).sort();
     const total = Array.from(map.values()).reduce((s, v) => s + v, 0);
     const sorted = Array.from(map.entries())
       .sort((a, b) => b[1] - a[1])

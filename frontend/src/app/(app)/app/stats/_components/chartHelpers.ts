@@ -13,17 +13,19 @@ export type ChartBar = {
 export function buildChartData(
   items: StatsRawItem[],
   period: StatsPeriod,
-  startDate: string
+  startDate: string,
+  groupBy: "category" | "subcategory" = "category"
 ): { bars: ChartBar[]; categories: string[] } {
   const start = new Date(startDate);
   const categorySet = new Set<string>();
 
-  // bucket map: bucketKey -> { category -> sum }
+  // bucket map: bucketKey -> { groupLabel -> sum }
   const buckets = new Map<string, Map<string, number>>();
 
   for (const item of items) {
     const d = new Date(item.date);
-    const cat = item.category === "none" ? "Uncategorized" : item.category;
+    const raw = groupBy === "subcategory" ? item.subcategory : item.category;
+    const cat = raw === "none" ? "Uncategorized" : raw;
     categorySet.add(cat);
 
     let key: string;

@@ -64,24 +64,36 @@ export default function Items() {
           <div className="w-full h-full flex items-center justify-center">No items yet</div>
         ) : (
           <>
-            {itemsData.items.map((item, index) => (
-              <div
-                key={index}
-                className="px-[3%] w-full listItemHeight grid grid-cols-[50%_20%_30%] items-center border-b border-borderFaint desktop:cursor-pointer desktop:hover:bg-surface"
-                onClick={() => {
-                  setDraftItem(item);
-                  setDetailsModal(true);
-                }}
-              >
-                <div className="">{item.description}</div>
-                <div className="">{SYMBOLS[item.currency] + item.cost.toFixed(DECIMALS[item.currency])}</div>
-                <div className="flex flex-col justify-self-end text-end textSm leading-tight desktop:leading-tight">
-                  {item.category !== "none" && <p className="">{item.category}</p>}
-                  {item.subcategory !== "none" && <p className="italic text-textSecondary">{item.subcategory}</p>}
-                  {item.tag !== "none" && <div className="text-buttonPrimaryBg truncate">{item.tag}</div>}
+            {itemsData.items.map((item, index) => {
+              const prevDate = index > 0 ? itemsData.items[index - 1].date.slice(0, 10) : null;
+              const curDate = item.date.slice(0, 10);
+              const showHeader = curDate !== prevDate;
+
+              return (
+                <div key={item._id ?? index}>
+                  {showHeader && (
+                    <div className="sticky top-0 z-10 px-[3%] h-8 desktop:h-7 flex items-center textSm font-semibold text-textSecondary bg-surface border-b border-borderFaint">
+                      {formatDateHeader(item.date)}
+                    </div>
+                  )}
+                  <div
+                    className="px-[3%] w-full listItemHeight grid grid-cols-[50%_20%_30%] items-center border-b border-borderFaint desktop:cursor-pointer desktop:hover:bg-surface"
+                    onClick={() => {
+                      setDraftItem(item);
+                      setDetailsModal(true);
+                    }}
+                  >
+                    <div className="">{item.description}</div>
+                    <div className="">{SYMBOLS[item.currency] + item.cost.toFixed(DECIMALS[item.currency])}</div>
+                    <div className="flex flex-col justify-self-end text-end textSm leading-tight desktop:leading-tight">
+                      {item.category !== "none" && <p className="">{item.category}</p>}
+                      {item.subcategory !== "none" && <p className="italic text-textSecondary">{item.subcategory}</p>}
+                      {item.tag !== "none" && <div className="text-buttonPrimaryBg truncate">{item.tag}</div>}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </>
         )}
       </ItemsShell>
@@ -101,4 +113,11 @@ export default function Items() {
       {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
   );
+}
+
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+function formatDateHeader(isoDate: string): string {
+  const d = new Date(isoDate);
+  return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
 }

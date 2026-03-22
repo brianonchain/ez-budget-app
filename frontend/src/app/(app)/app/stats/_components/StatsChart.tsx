@@ -8,6 +8,7 @@ import { buildChartData, getCategoryColor } from "./chartHelpers";
 interface StatsChartProps {
   data: StatsData;
   currency: string;
+  groupBy?: "category" | "subcategory";
 }
 
 function CustomTooltip({ active, payload, currency }: any) {
@@ -64,8 +65,8 @@ function CustomXTick({ x, y, payload, period, narrow }: any) {
   );
 }
 
-export default function StatsChart({ data, currency }: StatsChartProps) {
-  const { bars, categories } = useMemo(() => buildChartData(data.items, data.period, data.startDate), [data]);
+export default function StatsChart({ data, currency, groupBy = "category" }: StatsChartProps) {
+  const { bars, categories } = useMemo(() => buildChartData(data.items, data.period, data.startDate, groupBy), [data, groupBy]);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [chartWidth, setChartWidth] = useState(600);

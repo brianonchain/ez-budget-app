@@ -12,6 +12,7 @@ import CategoryLegend from "./_components/CategoryLegend";
 import Spinner from "@/utils/components/Spinner";
 import BudgetModal from "./_components/BudgetModal";
 import Card from "@/utils/components/Card";
+import Select from "@/utils/components/Select";
 import { getMonthKey } from "@/utils/functions";
 
 export default function Stats() {
@@ -23,6 +24,8 @@ export default function Stats() {
   const [period, setPeriod] = useState<StatsPeriod>("month");
   const [anchorDate, setAnchorDate] = useState<Date>(new Date());
   const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedTag, setSelectedTag] = useState<string>("all");
   const [currentMonthSpent, setCurrentMonthSpent] = useState<number | null>(null);
   // modal
   const [budgetModal, setBudgetModal] = useState(false);
@@ -70,8 +73,13 @@ export default function Stats() {
 
   const filteredItems = useMemo(() => {
     if (!statsData) return [];
-    return statsData.items.filter((i) => i.currency === activeCurrency);
-  }, [statsData, activeCurrency]);
+    let items = statsData.items.filter((i) => i.currency === activeCurrency);
+    if (selectedCategory !== "all") items = items.filter((i) => i.category === selectedCategory);
+    if (selectedTag !== "all") items = items.filter((i) => i.tag === selectedTag);
+    return items;
+  }, [statsData, activeCurrency, selectedCategory, selectedTag]);
+
+  const groupBy = selectedCategory !== "all" ? "subcategory" : "category";
 
   const filteredData = useMemo(() => {
     if (!statsData) return null;
@@ -98,8 +106,31 @@ export default function Stats() {
         {/* combined chart card */}
         <Card className="flex flex-col gap-6">
           <PeriodSelector period={period} setPeriod={handleSetPeriod} anchorDate={anchorDate} onPrev={onPrev} onNext={onNext} />
-          {currencies.length > 1 && <CurrencySelector currencies={currencies} selected={activeCurrency} onSelect={setSelectedCurrency} />}
-          {filteredItems.length > 0 && <CategoryLegend items={filteredItems} currency={activeCurrency} />}
+          {/* filters row */}
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            {currencies.length > 1 && <CurrencySelector currencies={currencies} selected={activeCurrency} onSelect={setSelectedCurrency} />}
+            {settingsData && (
+              <>
+                <Select variant="outline" selectSize="xs" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                  <option value="all">All categories</option>
+                  {settingsData.workspace.categoryObjects.map((co) => (
+                    <option key={co.category} value={co.category}>
+                      {co.category === "none" ? '"none"' : co.category}
+                    </option>
+                  ))}
+                </Select>
+                <Select variant="outline" selectSize="xs" value={selectedTag} onChange={(e) => setSelectedTag(e.target.value)}>
+                  <option value="all">All tags</option>
+                  {settingsData.workspace.tags.map((tag) => (
+                    <option key={tag} value={tag}>
+                      {tag === "none" ? '"none"' : tag}
+                    </option>
+                  ))}
+                </Select>
+              </>
+            )}
+          </div>
+          {filteredItems.length > 0 && <CategoryLegend items={filteredItems} currency={activeCurrency} groupBy={groupBy} />}
           <div className="w-full h-[200px] portrait:sm:h-[240px] landscape:lg:h-[240px]">
             {isLoading ? (
               <div className="w-full h-full flex items-center justify-center">
@@ -108,7 +139,7 @@ export default function Stats() {
             ) : isError ? (
               <div className="w-full h-full flex items-center justify-center text-textError textBase">Failed to load stats</div>
             ) : filteredData ? (
-              <StatsChart data={filteredData} currency={activeCurrency} />
+              <StatsChart data={filteredData} currency={activeCurrency} groupBy={groupBy} />
             ) : null}
           </div>
         </Card>
