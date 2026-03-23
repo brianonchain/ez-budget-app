@@ -116,14 +116,14 @@ export default function Details({
     <Modal title="Item Info" setModal={setDetailsModal}>
       <div className="flex-1 mx-auto w-full h-full max-w-100 flex flex-col items-center">
         {/*--- date, name, cost ---*/}
-        <div className="w-full grid grid-cols-[auto_1fr] gap-y-1 gap-x-2 items-center">
+        <div className="mt-1 w-full grid grid-cols-[auto_1fr] gap-y-1 gap-x-2 items-center">
           <label className="detailsLabel" htmlFor="details-date">
             Date
           </label>
           <div className="relative z-[200]">
             <button
               id="details-date"
-              className="relative z-[1] w-full detailsInput flex items-center cursor-pointer"
+              className="relative z-20 w-full detailsInput flex items-center cursor-pointer"
               onClick={() => setShowCalendar(true)}
             >
               {new Date(draftItem.date).toLocaleString("en-US")}

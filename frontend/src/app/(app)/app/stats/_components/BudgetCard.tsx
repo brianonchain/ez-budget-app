@@ -37,7 +37,7 @@ export default function BudgetCard({
           <div className="mt-3 text2xl font-semibold">
             {formatAmount(discretionaryBudget.amount - monthlySpent, discretionaryBudget.currency)}
           </div>
-          <div className="mt-1 textSm text-textTertiary">
+          <div className="mt-1 textSm text-textSecondary">
             remaining from {formatAmount(discretionaryBudget.amount, discretionaryBudget.currency)}
           </div>
         </>

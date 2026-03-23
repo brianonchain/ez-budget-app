@@ -15,6 +15,7 @@ import AddTagModal from "./_components/modals/AddTagModal";
 import ShareWorkspaceModal from "./_components/modals/ShareWorkspaceModal";
 import ConfirmActionModal from "./_components/modals/ConfirmActionModal";
 import AddWorkspaceModal from "./_components/modals/AddWorkspaceModal";
+import ExportModal from "./_components/modals/ExportModal";
 import ErrorModal from "@/utils/components/ErrorModal";
 // components
 import CategoryContainer from "./_components/CategoryContainer";
@@ -54,6 +55,7 @@ export default function Settings({ provider, email, userId }: { provider: string
   const [deleteWorkspaceModal, setDeleteWorkspaceModal] = useState(false);
   const [leaveWorkspaceModal, setLeaveWorkspaceModal] = useState(false);
   const [deleteAccountModal, setDeleteAccountModal] = useState(false);
+  const [exportModal, setExportModal] = useState(false);
 
   const showData = !!data && data.workspace._id === workspaceId;
 
@@ -203,6 +205,10 @@ export default function Settings({ provider, email, userId }: { provider: string
             <SettingsSkeleton size="sm" />
           </SettingsField>
         )}
+        {/*--- Export Sheet ---*/}
+        <SettingsField label="Export Sheet">
+          <Button label="Export" variant="outline" size="sm" type="button" onClick={() => setExportModal(true)} />
+        </SettingsField>
         {/*--- Share Sheet ---*/}
         {showData ? (
           data.role === "owner" ? (
@@ -358,6 +364,7 @@ export default function Settings({ provider, email, userId }: { provider: string
           onSuccess={() => signOut({ callbackUrl: "/accountDeleted" })}
         />
       )}
+      {exportModal && <ExportModal workspaceId={workspaceId} setExportModal={setExportModal} />}
       {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
   );

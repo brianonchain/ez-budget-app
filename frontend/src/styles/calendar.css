@@ -75,14 +75,13 @@
 
 .rdp-day {
   /* width: var(--rdp-day-width);
-  height: var(--rdp-day-height); */
-  border-radius: 8px;
+  height: var(--rdp-day-height);
+  border-radius: 8px; */
   text-align: center;
 }
 
 .rdp-day_button {
-  cursor: pointer;
-  /* background: none;
+  background: none;
   padding: 0;
   margin: 0;
   cursor: pointer;
@@ -91,7 +90,7 @@
   justify-content: center;
   align-items: center;
   display: flex;
-  width: var(--rdp-day_button-width);
+  /* width: var(--rdp-day_button-width);
   height: var(--rdp-day_button-height);
   border: var(--rdp-day_button-border);
   border-radius: var(--rdp-day_button-border-radius); */
@@ -120,7 +119,7 @@
 .rdp-button_next,
 .rdp-button_previous {
   /* border: 1px solid; */
-  border-radius: 8px;
+  /* border-radius: 8px; */
   /* background: none; */
   padding: 0;
   margin: 0;

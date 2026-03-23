@@ -7,6 +7,7 @@
   --color-primaryBg: #f7edf7;
   --color-surface: #f6f9fc;
   --color-surfaceSolid: #f6f9fc;
+  --color-surface2Solid: #f6f9fc;
   --color-card: #ffffff;
   /* borders */
   --color-borderFaint: oklch(92.9% 0.013 255.508); /* slate-200 */
@@ -55,7 +56,8 @@
   --color-primaryBg: #0a0826; /* was 0b0f37*/
   --color-card: oklch(70.7% 0.165 254.624 / 7%); /* blue-400/7 */
   --color-surface: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
-  --color-surfaceSolid: #141e43; /* blue-400/14 overlaid on primaryBg */
+  --color-surfaceSolid: #141344; /* blue-400/14 overlaid on primaryBg */
+  --color-surface2Solid: #1d3169; /* blue-400/20 overlaid on primaryBg */
   /* borders */
   --color-borderFaint: oklch(70.7% 0.165 254.624 / 8%); /* blue-400/8 */
   /* text */
@@ -110,9 +112,14 @@ html.dark body {
 
 /*--- text size ---*/
 
-/*--- 14px / 12px ---*/
+/*--- 13px / 12px ---*/
+@utility textXs {
+  @apply text-[0.8125rem] desktop:text-xs leading-[1.5];
+}
+
+/*--- 15px / 12px ---*/
 @utility textSm {
-  @apply text-sm desktop:text-xs leading-[1.5];
+  @apply text-[0.9375rem] desktop:text-xs leading-[1.5];
 }
 
 /*--- 17px / 14px ---*/
@@ -325,7 +332,7 @@ can potentially add desktop-only variables here
 }
 
 .detailsInput {
-  @apply h-11 desktop:h-8 px-3 desktop:px-2 text-base desktop:text-[0.8125rem] rounded-lg inputPrimaryColor;
+  @apply h-11 desktop:h-8 px-3 desktop:px-2.5 text-base desktop:text-[0.8125rem] rounded-lg inputPrimaryColor;
 }
 
 .detailsLabel {
@@ -477,4 +484,56 @@ input:-webkit-autofill {
 
 .underline-animate:hover::after {
   width: 100%;
+}
+
+.myCalendar {
+  /* nav height */
+  --rdp-nav_button-height: 2.75rem; /* The height of the navigation buttons. */
+  --rdp-nav_button-width: 2.75rem; /* The width of the navigation buttons. */
+  --rdp-nav-height: 2.75rem; /* The height of the navigation bar. */
+  /* day size */
+  --calendar-day-size: 2.75rem;
+  --rdp-day-width: var(--calendar-day-size);
+  --rdp-day-height: var(--calendar-day-size);
+  --rdp-day_button-width: var(--calendar-day-size);
+  --rdp-day_button-height: var(--calendar-day-size);
+  /* day border */
+  --rdp-day_button-border-radius: 8px; /* The border radius of the day cells. */
+  --rdp-day_button-border: 1px solid transparent; /* The border of the day cells. */
+
+  /* selected */
+  --rdp-selected-border: 1px solid transparent; /* The border of the selected days. */
+
+  --rdp-accent-color: var(--color-buttonPrimaryBg);
+  --rdp-accent-background-color: var(--color-buttonPrimaryBg);
+
+  /* range mode */
+  --rdp-range_middle-background-color: var(--color-buttonPrimaryBg);
+  --rdp-range_middle-color: var(--color-buttonPrimaryBg);
+  --rdp-range_start-color: var(--color-buttonPrimaryBg);
+  --rdp-range_end-color: var(--color-buttonPrimaryBg);
+
+  --rdp-today-color: var(--rdp-buttonPrimaryText); /* The color of the today's date. */
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .myCalendar {
+    --calendar-day-size: 2rem;
+    --rdp-nav_button-height: 2rem; /* The height of the navigation buttons. */
+    --rdp-nav_button-width: 2rem; /* The width of the navigation buttons. */
+    --rdp-nav-height: 2.2rem; /* The height of the navigation bar. */
+  }
+}
+
+.dark .myCalendar {
+  --rdp-accent-color: var(--color-buttonPrimaryBg);
+  --rdp-accent-background-color: var(--color-buttonPrimaryBg);
+
+  /* range mode */
+  --rdp-range_middle-background-color: var(--color-buttonPrimaryBg);
+  --rdp-range_middle-color: var(--color-buttonPrimaryBg);
+  --rdp-range_start-color: var(--color-buttonPrimaryBg);
+  --rdp-range_end-color: var(--color-buttonPrimaryBg);
+
+  --rdp-today-color: var(--color-buttonPrimaryText); /* The color of the today's date. */
 }

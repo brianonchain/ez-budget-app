@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { getServerSession } from "next-auth";
 import SessionProvider from "./SessionProvider";
-// import "react-day-picker/style.css";
-import "@/styles/calendar.css";
+import "react-day-picker/style.css";
+// import "@/styles/calendar.css";
 import "@/styles/globals.css";
 
 const inter = Inter({

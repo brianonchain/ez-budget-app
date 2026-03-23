@@ -27,7 +27,7 @@ export default function Modal({
         tabIndex={-1} // so modal is focusable with javascript
       >
         {/*--- glow ---*/}
-        <div className="absolute w-[200%] h-[150%] left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-[-1] modalGlow dark:block hidden" />
+        <div className="absolute w-[200%] h-[150%] right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-[-1] modalGlow dark:block hidden" />
         {/*--- content ---*/}
         <div className="flex-1 min-h-0 px-6 pt-6 pb-8 ortrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[48px] overflow-y-auto thinScrollbar textBase">
           <FaTriangleExclamation className="mx-auto text-5xl text-textError" />

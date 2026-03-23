@@ -49,27 +49,23 @@ export default function PeriodSelector({
     <div className="w-full flex flex-col gap-4">
       {/* nav arrows + label */}
       <div className="flex items-center justify-center">
-        <button
-          onClick={onPrev}
-          className="aspect-square w-9 desktop:w-8 flex items-center justify-center rounded-lg border border-inputOutlineBorder desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover cursor-pointer transition-colors"
-        >
+        <button onClick={onPrev} className="flex items-center justify-center cursor-pointer">
           <FaChevronLeft className="textLg text-textSecondary" />
         </button>
         <span className="w-50 desktop:w-43 textXl font-semibold text-center">{formatPeriodLabel(period, anchorDate)}</span>
-        <button
-          onClick={onNext}
-          className="aspect-square w-9 desktop:w-8 flex items-center justify-center rounded-lg border border-inputOutlineBorder desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover cursor-pointer transition-colors"
-        >
+        <button onClick={onNext} className="flex items-center justify-center cursor-pointer">
           <FaChevronRight className="textLg text-textSecondary" />
         </button>
       </div>
 
-      <div className="mx-auto flex items-center gap-4">
-        {PERIODS.map((p) => (
+      <div className="mx-auto flex items-center">
+        {PERIODS.map((p, index) => (
           <button
             key={p.value}
             onClick={() => setPeriod(p.value)}
-            className={`px-3.5 h-9 desktop:h-8 rounded-full textSm font-medium cursor-pointer transition-colors duration-200 ${
+            className={`px-3.5 h-9 desktop:h-8 textSm font-medium cursor-pointer transition-colors duration-200 ${
+              index === 0 ? "rounded-l-lg" : ""
+            } ${index === 2 ? "rounded-r-lg" : ""} ${
               period === p.value
                 ? "bg-buttonPrimaryBg text-buttonPrimaryText"
                 : "bg-transparent text-textSecondary desktop:hover:bg-buttonOutlineBgHover border border-inputOutlineBorder"
@@ -81,7 +77,7 @@ export default function PeriodSelector({
       </div>
 
       {/* filters + period buttons */}
-      <div className="flex items-center justify-center gap-4 textSm">
+      <div className="flex items-center justify-center gap-3 textSm">
         {categoryObjects && (
           <Select fullWidth variant="outline" selectSize="xxs" value={selectedCategory} onChange={(e) => onSelectCategory(e.target.value)}>
             <option value="all">All categories</option>

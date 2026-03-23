@@ -4,12 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLin
 import { StatsData } from "@/utils/types";
 import { SYMBOLS, DECIMALS, CURRENCY_NAMES } from "@/utils/constants";
 import { buildChartData, getCategoryColor } from "./chartHelpers";
-
-interface StatsChartProps {
-  data: StatsData;
-  currency: string;
-  groupBy?: "category" | "subcategory";
-}
+import { useIsDesktop } from "@/utils/hooks";
 
 function CustomTooltip({ active, payload, currency }: any) {
   if (!active || !payload?.length) return null;
@@ -44,7 +39,7 @@ function CustomTooltip({ active, payload, currency }: any) {
 const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const MONTH_LABEL_INDICES = new Set([0, 2, 4, 6, 8, 10]); // Jan, Mar, May, Jul, Sep, Nov
 
-function CustomXTick({ x, y, payload, period, narrow }: any) {
+function CustomXTick({ x, y, payload, period, narrow, isDesktop }: any) {
   const val = payload.value;
   const num = Number(val);
 
@@ -59,13 +54,22 @@ function CustomXTick({ x, y, payload, period, narrow }: any) {
   }
 
   return (
-    <text x={x} y={y} dy={14} textAnchor="middle" fontSize={13} fill="var(--color-textSecondary)">
+    <text x={x} y={y} dy={14} textAnchor="middle" fontSize={isDesktop ? 13 : 15} fill="var(--color-textSecondary)">
       {val}
     </text>
   );
 }
 
-export default function StatsChart({ data, currency, groupBy = "category" }: StatsChartProps) {
+export default function StatsChart({
+  data,
+  currency,
+  groupBy = "category",
+}: {
+  data: StatsData;
+  currency: string;
+  groupBy?: "category" | "subcategory";
+}) {
+  const isDesktop = useIsDesktop();
   const { bars, categories } = useMemo(() => buildChartData(data.items, data.period, data.startDate, groupBy), [data, groupBy]);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -80,7 +84,7 @@ export default function StatsChart({ data, currency, groupBy = "category" }: Sta
   }, []);
 
   const decimals = DECIMALS[currency] ?? 2;
-  const currencyLabel = CURRENCY_NAMES[currency] ?? currency;
+  const currencyLabel = SYMBOLS[currency] ?? currency;
 
   const maxTotal = Math.max(...bars.map((b) => b.total), 0);
   const isEmpty = bars.length === 0 || maxTotal === 0;
@@ -89,16 +93,19 @@ export default function StatsChart({ data, currency, groupBy = "category" }: Sta
   // build Y-axis ticks excluding 0
   const yTicks = useMemo(() => {
     if (isEmpty) return [1];
-    const step = Math.pow(10, Math.floor(Math.log10(maxTotal))) / 2 || 1;
+    const step = Math.pow(10, Math.floor(Math.log10(maxTotal))) / 1 || 1;
+    const maxTick = Math.ceil(maxTotal / step) * step;
     const ticks: number[] = [];
-    for (let v = step; v <= maxTotal * 1.1; v += step) {
+    for (let v = step; v <= maxTick; v += step) {
       ticks.push(Math.round(v));
     }
-    return ticks.length > 0 ? ticks : [1];
+    return ticks;
   }, [maxTotal, isEmpty]);
 
+  console.log(yTicks);
+
   return (
-    <div ref={containerRef} className="w-full h-full relative">
+    <div ref={containerRef} className="mt-2 w-full h-full relative">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={bars} margin={{ top: 8, right: 4, left: 12, bottom: 0 }} barCategoryGap={data.period === "month" ? "10%" : "20%"}>
           {yTicks.map((t) => (
@@ -106,17 +113,17 @@ export default function StatsChart({ data, currency, groupBy = "category" }: Sta
           ))}
           <XAxis
             dataKey="label"
-            tick={<CustomXTick period={data.period} narrow={narrow} />}
+            tick={<CustomXTick period={data.period} narrow={narrow} isDesktop={isDesktop} />}
             tickLine={false}
             axisLine={{ stroke: "var(--color-borderFaint)" }}
             interval={0}
           />
           <YAxis
             width={54}
-            tick={{ fontSize: 13, fill: "var(--color-textSecondary)" }}
+            tick={{ fontSize: isDesktop ? 13 : 15, fill: "var(--color-textSecondary)" }}
             tickLine={false}
             axisLine={{ stroke: "var(--color-borderFaint)" }}
-            domain={[0, "auto"]}
+            domain={[0, yTicks[yTicks.length - 1]]}
             ticks={yTicks}
             tickFormatter={(v: number) => {
               if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + "M";
@@ -129,7 +136,7 @@ export default function StatsChart({ data, currency, groupBy = "category" }: Sta
               angle={-90}
               position="insideLeft"
               offset={-4}
-              style={{ textAnchor: "middle", fontSize: 13, fill: "var(--color-textSecondary)" }}
+              style={{ textAnchor: "middle", fontSize: isDesktop ? 13 : 15, fill: "var(--color-textSecondary)" }}
             />
           </YAxis>
           {!isEmpty && (

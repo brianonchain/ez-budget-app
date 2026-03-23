@@ -48,7 +48,7 @@ export default function CategoryLegend({ items, currency, groupBy = "category" }
   if (slices.length === 0) return null;
 
   return (
-    <div className="mx-auto flex items-center gap-4">
+    <div className="mt-6 mx-auto flex items-center gap-4">
       {/* labels + totals */}
       <div className="flex flex-col gap-0.5">
         <div className="flex items-center justify-between textBase font-semibold">

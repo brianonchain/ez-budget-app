@@ -102,7 +102,7 @@ export default function Stats() {
         />
 
         {/* combined chart card */}
-        <Card className="flex flex-col gap-6">
+        <Card className="flex flex-col">
           <PeriodSelector
             period={period}
             setPeriod={handleSetPeriod}
@@ -120,7 +120,7 @@ export default function Stats() {
             onSelectTag={setSelectedTag}
           />
           {filteredItems.length > 0 && <CategoryLegend items={filteredItems} currency={activeCurrency} groupBy={groupBy} />}
-          <div className="w-full h-[200px] portrait:sm:h-[240px] landscape:lg:h-[240px]">
+          <div className="w-full h-55 portrait:sm:h-[240px] landscape:lg:h-[240px]">
             {isLoading ? (
               <div className="w-full h-full flex items-center justify-center">
                 <Spinner />
@@ -133,6 +133,7 @@ export default function Stats() {
           </div>
         </Card>
       </div>
+
       {budgetModal && settingsData && (
         <BudgetModal
           workspaceId={settingsData.workspace._id}
