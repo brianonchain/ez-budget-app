@@ -16,7 +16,7 @@ export default function Menu() {
   ];
 
   return (
-    <div className="fixed z-50 portrait:bottom-0 landscape:left-0 flex portrait:items-end landscape:items-center justify-center menuSize menuBg menuShadow">
+    <div className="fixed z-20 portrait:bottom-0 landscape:left-0 flex portrait:items-end landscape:items-center justify-center menuSize menuBg menuShadow">
       <div className="landscape:w-full landscape:h-[80%] landscape:max-h-100 portrait:w-[80%] portrait:max-w-140 menuPbSafeArea flex landscape:flex-col items-center justify-between">
         {menuItems.map((i) => (
           <Link

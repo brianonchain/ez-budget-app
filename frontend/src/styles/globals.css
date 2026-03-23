@@ -298,7 +298,7 @@ can potentially add desktop-only variables here
 }
 
 .appPageContainer {
-  @apply relative h-[calc(100dvh-var(--menuHeight))] portrait:w-full landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:desktop:!w-[calc(100%-200px)] landscape:ml-[120px] landscape:lg:ml-[160px] landscape:desktop:!ml-[200px] flex flex-col items-center overflow-y-auto overflow-x-hidden;
+  @apply z-10 relative h-[calc(100dvh-var(--menuHeight))] portrait:w-full landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:ml-[120px] landscape:lg:ml-[160px] flex flex-col items-center overflow-y-auto scrollbar-stable;
 }
 
 .pageContentMaxWidth {

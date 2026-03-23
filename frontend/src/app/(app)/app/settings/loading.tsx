@@ -7,11 +7,12 @@ import SettingsCategoryContainer from "./_components/SettingsCategoryContainer";
 export default function Loading() {
   return (
     <SettingsShell>
+      {/*--- Active Sheet Settings ---*/}
       <SettingsCard title="Active Sheet Settings">
-        <SettingsField label="Active Sheet">
+        <SettingsField label="Active Sheet" className="border-none">
           <SettingsSkeleton size="lg" className="sm:flex-1" />
         </SettingsField>
-        <div className="my-3 cardInner">
+        <div className="my-3 px-6 pt-4 pb-6 flex flex-col gap-6 rounded-3xl border border-inputOutlineBorder">
           <SettingsCategoryContainer label="Categories" addButtonLabel="Category">
             <SettingsSkeleton size="lg" />
           </SettingsCategoryContainer>
@@ -22,6 +23,9 @@ export default function Loading() {
         <SettingsField label="Default Currency">
           <SettingsSkeleton size="sm" />
         </SettingsField>
+        <SettingsField label="Export Sheet">
+          <SettingsSkeleton size="sm" />
+        </SettingsField>
         <SettingsField label="Share This Sheet">
           <SettingsSkeleton size="sm" />
         </SettingsField>
@@ -29,7 +33,7 @@ export default function Loading() {
           <SettingsSkeleton size="sm" />
         </SettingsField>
       </SettingsCard>
-
+      {/*--- Account Settings ---*/}
       <SettingsCard title="Account">
         <SettingsField label="Sign Out">
           <SettingsSkeleton size="sm" />
@@ -44,7 +48,7 @@ export default function Loading() {
           <SettingsSkeleton size="sm" />
         </SettingsField>
       </SettingsCard>
-
+      {/*--- Display Settings ---*/}
       <SettingsCard title="Display">
         <SettingsField label="Dark" className="border-none">
           <SettingsSkeleton size="sm" />

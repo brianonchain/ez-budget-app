@@ -3,8 +3,8 @@ import PageGlow from "../_components/PageGlow";
 // portrait:sm and landscape:lg shows list container
 export default function ItemsShell({ children, footer }: { children: React.ReactNode; footer: React.ReactNode }) {
   return (
-    <div className="appPageContainer">
-      <div className="z-10 portrait:sm:mt-6 landscape:lg:mt-6 w-full max-w-142 desktop:max-w-132 portrait:sm:rounded-2xl landscape:lg:rounded-2xl portrait:sm:border landscape:lg:border border-borderFaint overflow-hidden shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none">
+    <>
+      <div className="portrait:sm:mt-6 landscape:lg:mt-6 w-full max-w-142 desktop:max-w-132 portrait:sm:rounded-2xl landscape:lg:rounded-2xl overflow-hidden shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none">
         {/*--- header, scrollbar-stable also applied ---*/}
         <div className="px-[3%] h-[var(--listHeaderHeight)] listHeaderColor flex items-center font-semibold portrait:sm:overflow-y-auto landscape:lg:overflow-y-auto thinScrollbar scrollbar-stable">
           <p className="w-[50%]">Item</p>
@@ -20,6 +20,6 @@ export default function ItemsShell({ children, footer }: { children: React.React
       <div className="z-10 flex-none w-full h-[var(--listButtonContainerHeight)] flex items-center justify-center listButtonContainerColor">
         {footer}
       </div>
-    </div>
+    </>
   );
 }

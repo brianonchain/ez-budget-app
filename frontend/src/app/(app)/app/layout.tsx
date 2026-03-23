@@ -7,7 +7,9 @@ export default async function AppLayout({ children }: Readonly<{ children: React
     <div className="bg-primaryBg relative">
       <PageGlow />
       <Menu />
-      <ContextProvider>{children}</ContextProvider>
+      <ContextProvider>
+        <div className="appPageContainer">{children}</div>
+      </ContextProvider>
     </div>
   );
 }

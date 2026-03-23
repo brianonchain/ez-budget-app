@@ -1,13 +1,20 @@
 import Spinner from "@/utils/components/Spinner";
+import Card from "@/utils/components/Card";
+import TextSkeleton from "@/utils/components/TextSkeleton";
 
 export default function loading() {
   return (
-    <div className="appPageContainer justify-center items-center bg-primaryBg relative z-0">
-      <Spinner />
-
-      <div className="absolute w-full h-full left-0 top-0 overflow-hidden z-[-1]">
-        <div className="absolute bottom-[0px] translate-y-[50%] left-1/2 -translate-x-1/2 w-[70%] h-[95%] xs:h-[70%] rounded-full bg-white dark:bg-[#0444B7] blur-[200px] dark:blur-[300px] pointer-events-none"></div>
-      </div>
+    <div className="w-full pageContentMaxWidth py-4 portrait:sm:py-6 landscape:lg:py-6 flex flex-col items-center gap-4">
+      <Card className="relative flex flex-col items-center">
+        <div className="font-semibold text-textSecondary">Discretionary Budget</div>
+        <TextSkeleton className="mt-3 text2xl font-semibold w-40" />
+        <TextSkeleton className="mt-1 textSm w-40" />
+      </Card>
+      <Card className="flex flex-col items-center">
+        <div className="w-full h-100 flex items-center justify-center">
+          <Spinner />
+        </div>
+      </Card>
     </div>
   );
 }

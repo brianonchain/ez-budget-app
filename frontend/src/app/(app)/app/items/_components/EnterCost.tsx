@@ -30,7 +30,6 @@ export default function EnterCost({
   const decimals = DECIMALS[currency];
   const multiplier = MULTIPLIER[currency];
   const maxFractionDigits = decimals + Math.log10(multiplier); // max digits after decimal when including the multiplier (100.123 VND = 100,123 VND)
-  console.log(multiplier);
 
   function onClickNumber(key: string) {
     setAmount((prev) => {

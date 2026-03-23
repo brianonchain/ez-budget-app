@@ -93,46 +93,46 @@ export default function Stats() {
   }, []);
 
   return (
-    <div className="appPageContainer relative z-0">
-      <div className="z-10 w-full pageContentMaxWidth py-4 portrait:sm:py-6 landscape:lg:py-6 flex flex-col items-center gap-4">
+    <div className="w-full pageContentMaxWidth py-4 portrait:sm:py-6 landscape:lg:py-6 flex flex-col items-center gap-4">
+      <Card className="relative flex flex-col items-center">
+        <div className="font-semibold text-textSecondary">Discretionary Budget</div>
         <BudgetCard
           discretionaryBudget={settingsData?.workspace.discretionaryBudget}
           monthlySpent={currentMonthSpent}
           setBudgetModal={setBudgetModal}
         />
+      </Card>
 
-        {/* combined chart card */}
-        <Card className="flex flex-col">
-          <PeriodSelector
-            period={period}
-            setPeriod={handleSetPeriod}
-            anchorDate={anchorDate}
-            onPrev={onPrev}
-            onNext={onNext}
-            currencies={currencies}
-            activeCurrency={activeCurrency}
-            onSelectCurrency={setSelectedCurrency}
-            categoryObjects={settingsData?.workspace.categoryObjects}
-            tags={settingsData?.workspace.tags}
-            selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
-            selectedTag={selectedTag}
-            onSelectTag={setSelectedTag}
-          />
-          {filteredItems.length > 0 && <CategoryLegend items={filteredItems} currency={activeCurrency} groupBy={groupBy} />}
-          <div className="w-full h-55 portrait:sm:h-[240px] landscape:lg:h-[240px]">
-            {isLoading ? (
-              <div className="w-full h-full flex items-center justify-center">
-                <Spinner />
-              </div>
-            ) : isError ? (
-              <div className="w-full h-full flex items-center justify-center text-textError textBase">Failed to load stats</div>
-            ) : filteredData ? (
-              <StatsChart data={filteredData} currency={activeCurrency} groupBy={groupBy} />
-            ) : null}
-          </div>
-        </Card>
-      </div>
+      <Card className="flex flex-col items-center">
+        <PeriodSelector
+          period={period}
+          setPeriod={handleSetPeriod}
+          anchorDate={anchorDate}
+          onPrev={onPrev}
+          onNext={onNext}
+          currencies={currencies}
+          activeCurrency={activeCurrency}
+          onSelectCurrency={setSelectedCurrency}
+          categoryObjects={settingsData?.workspace.categoryObjects}
+          tags={settingsData?.workspace.tags}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+          selectedTag={selectedTag}
+          onSelectTag={setSelectedTag}
+        />
+        {filteredItems.length > 0 && <CategoryLegend items={filteredItems} currency={activeCurrency} groupBy={groupBy} />}
+        <div className="w-full">
+          {isLoading ? (
+            <div className="w-full h-80 flex items-center justify-center">
+              <Spinner />
+            </div>
+          ) : isError ? (
+            <div className="w-full h-80 flex items-center justify-center text-textError textBase">Failed to load stats</div>
+          ) : filteredData ? (
+            <StatsChart data={filteredData} currency={activeCurrency} groupBy={groupBy} />
+          ) : null}
+        </div>
+      </Card>
 
       {budgetModal && settingsData && (
         <BudgetModal

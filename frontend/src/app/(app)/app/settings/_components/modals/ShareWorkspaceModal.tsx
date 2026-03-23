@@ -94,7 +94,6 @@ export default function ShareWorkspaceModal({
     setErrorMessage("");
     setStatus(`deletingPendingSharedUser${user._id}`);
     try {
-      console.log(user);
       await userMutateAsync({ type: "deletePendingSharedUser", workspaceId, invitedEmail: user.invitedEmail });
     } catch {} // error will show on UI
     setStatus("");

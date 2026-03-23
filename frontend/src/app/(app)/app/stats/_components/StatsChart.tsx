@@ -102,10 +102,8 @@ export default function StatsChart({
     return ticks;
   }, [maxTotal, isEmpty]);
 
-  console.log(yTicks);
-
   return (
-    <div ref={containerRef} className="mt-2 w-full h-full relative">
+    <div ref={containerRef} className="mt-4 w-full h-50 portrait:sm:h-60 landscape:lg:h-60 relative">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={bars} margin={{ top: 8, right: 4, left: 12, bottom: 0 }} barCategoryGap={data.period === "month" ? "10%" : "20%"}>
           {yTicks.map((t) => (

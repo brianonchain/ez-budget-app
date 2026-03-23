@@ -1,9 +1,7 @@
 "use client";
-import { useState } from "react";
 import { DiscretionaryBudget } from "@/utils/types";
 import { SYMBOLS, DECIMALS } from "@/utils/constants";
 import { FiEdit2 } from "react-icons/fi";
-import Card from "@/utils/components/Card";
 import Button from "@/utils/components/Button";
 import TextSkeleton from "@/utils/components/TextSkeleton";
 
@@ -23,8 +21,7 @@ export default function BudgetCard({
   setBudgetModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
-    <Card className="relative flex flex-col items-center">
-      <div className="font-semibold text-textSecondary">Discretionary Budget</div>
+    <>
       <Button
         className="absolute right-2 top-2 xs:top-3 xs:right-3"
         variant="outline"
@@ -43,10 +40,10 @@ export default function BudgetCard({
         </>
       ) : (
         <>
-          <TextSkeleton className="mt-3 text2xl w-40" />
-          <TextSkeleton className="mt-2 textSm w-40" />
+          <TextSkeleton className="mt-3 text2xl font-semibold w-40" />
+          <TextSkeleton className="mt-1 textSm w-40" />
         </>
       )}
-    </Card>
+    </>
   );
 }
