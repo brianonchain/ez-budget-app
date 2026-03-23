@@ -105,15 +105,15 @@ export default function Items() {
                 {group.items.map((item, i) => (
                   <div
                     key={item._id ?? `${group.date}-${i}`}
-                    className="px-[3%] w-full listItemHeight grid grid-cols-[50%_20%_30%] items-center border-b border-borderFaint desktop:cursor-pointer desktop:hover:bg-surface"
+                    className="px-[3%] w-full listItemHeight flex items-center gap-2 border-b border-borderFaint desktop:cursor-pointer desktop:hover:bg-surface dark:desktop:hover:bg-card"
                     onClick={() => {
                       setDraftItem(item);
                       setDetailsModal(true);
                     }}
                   >
-                    <div className="">{item.description}</div>
-                    <div className="">{SYMBOLS[item.currency] + item.cost.toFixed(DECIMALS[item.currency])}</div>
-                    <div className="flex flex-col justify-self-end text-end textSm leading-tight desktop:leading-tight">
+                    <div className="w-[50%] truncate">{item.description}</div>
+                    <div className="w-[25%]">{SYMBOLS[item.currency] + item.cost.toFixed(DECIMALS[item.currency])}</div>
+                    <div className="w-[25%] flex flex-col justify-self-end text-end text-sm desktop:text-[0.8125rem] leading-[1.2]">
                       {item.category !== "none" && <p className="">{item.category}</p>}
                       {item.subcategory !== "none" && <p className="italic text-textSecondary">{item.subcategory}</p>}
                       {item.tag !== "none" && <div className="text-buttonPrimaryBg truncate">{item.tag}</div>}

@@ -48,27 +48,27 @@ export default function CategoryLegend({ items, currency, groupBy = "category" }
   if (slices.length === 0) return null;
 
   return (
-    <div className="mt-6 mx-auto flex items-center gap-4">
+    <div className="mt-6 w-full flex items-center justify-center gap-4 xs:gap-8">
       {/* labels + totals */}
-      <div className="flex flex-col gap-0.5">
-        <div className="flex items-center justify-between textBase font-semibold">
-          <span>Total</span>
-          <span className="tabular-nums">{symbol + grandTotal.toFixed(decimals)}</span>
+      <div className="min-w-0 flex flex-col gap-0.5">
+        <div className="flex items-center justify-between font-semibold">
+          <span className="">Total</span>
+          <span className="shrink-0 tabular-nums">{symbol + grandTotal.toFixed(decimals)}</span>
         </div>
         {slices.map((cat) => {
           const colorIndex = categories.indexOf(cat.name);
           return (
             <div key={cat.name} className="flex items-center gap-2 textSm">
-              <span className="w-2.5 h-2.5 rounded-full flex-none" style={{ backgroundColor: getCategoryColor(colorIndex) }} />
-              <span className="flex-1 text-textSecondary truncate min-w-0">{cat.name}</span>
-              <span className="ml-6 font-medium tabular-nums shrink-0">{symbol + cat.value.toFixed(decimals)}</span>
+              <span className="shrink-0 w-2.5 h-2.5 rounded-full" style={{ backgroundColor: getCategoryColor(colorIndex) }} />
+              <span className="flex-1 text-textSecondary truncate">{cat.name}</span>
+              <span className="shrink-0 ml-2 font-medium tabular-nums shrink-0">{symbol + cat.value.toFixed(decimals)}</span>
             </div>
           );
         })}
       </div>
 
       {/* pie chart */}
-      <div className="shrink-0 w-[120px] h-[120px] portrait:sm:w-[140px] portrait:sm:h-[140px] landscape:lg:w-[140px] landscape:lg:h-[140px]">
+      <div className="shrink-0 aspect-square w-[110px] portrait:sm:w-[140px] landscape:lg:w-[140px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -77,8 +77,8 @@ export default function CategoryLegend({ items, currency, groupBy = "category" }
               nameKey="name"
               cx="50%"
               cy="50%"
-              innerRadius="35%"
-              outerRadius="80%"
+              innerRadius="40%"
+              outerRadius="100%"
               paddingAngle={1}
               strokeWidth={0}
             >

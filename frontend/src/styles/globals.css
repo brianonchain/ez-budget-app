@@ -308,11 +308,11 @@ can potentially add desktop-only variables here
 /*--- app: items page ---*/
 
 .listHeaderColor {
-  @apply text-textSecondary bg-primaryBg portrait:sm:bg-card landscape:lg:bg-card dark:portrait:sm:bg-surface dark:landscape:lg:bg-surface border-b border-borderFaint;
+  @apply text-textSecondary bg-primaryBg portrait:sm:bg-card landscape:lg:bg-card border-b border-borderFaint;
 }
 
 .listDateColor {
-  @apply bg-surface dark:bg-card dark:portrait:sm:bg-surface dark:landscape:lg:bg-surface;
+  @apply bg-surface dark:bg-card;
 }
 
 .listContainerColor {
