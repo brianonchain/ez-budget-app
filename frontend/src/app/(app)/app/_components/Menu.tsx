@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { FaGear, FaChartSimple, FaList } from "react-icons/fa6";
 
-export default function Menu({ className }: { className?: string }) {
+export default function Menu() {
   const pathname = usePathname();
   const [path, setPath] = useState(pathname); // to create faster feel compared to pathname
 
@@ -16,7 +16,7 @@ export default function Menu({ className }: { className?: string }) {
   ];
 
   return (
-    <nav className={`z-20 flex portrait:items-end landscape:items-center justify-center menuSize menuBg menuShadow ${className}`}>
+    <div className="fixed z-20 portrait:bottom-0 landscape:left-0 flex portrait:items-end landscape:items-center justify-center menuSize menuBg menuShadow">
       <div className="landscape:w-full landscape:h-[80%] landscape:max-h-100 portrait:w-[80%] portrait:max-w-140 menuPbSafeArea flex landscape:flex-col items-center justify-between">
         {menuItems.map((i) => (
           <Link
@@ -32,6 +32,6 @@ export default function Menu({ className }: { className?: string }) {
           </Link>
         ))}
       </div>
-    </nav>
+    </div>
   );
 }

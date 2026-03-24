@@ -297,6 +297,10 @@ can potentially add desktop-only variables here
   @apply portrait:pb-[26px] portrait:sm:pb-[40px];
 }
 
+.appPageContainer {
+  @apply z-10 relative h-[calc(100dvh-var(--menuHeight))] portrait:w-full landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:ml-[120px] landscape:lg:ml-[160px] flex flex-col items-center overflow-y-auto scrollbar-stable;
+}
+
 .pageContentMaxWidth {
   @apply px-4 max-w-150 desktop:max-w-140;
 }
