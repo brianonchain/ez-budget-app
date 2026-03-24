@@ -8,7 +8,9 @@ export default async function AppLayout({ children }: Readonly<{ children: React
       <PageGlow />
       <Menu />
       <ContextProvider>
-        <div className="appPageContainer">{children}</div>
+        <div className="z-10 relative h-[calc(100dvh-var(--menuHeight))] portrait:w-full landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:ml-[120px] landscape:lg:ml-[160px] flex flex-col items-center overflow-y-auto scrollbar-stable">
+          {children}
+        </div>
       </ContextProvider>
     </div>
   );
