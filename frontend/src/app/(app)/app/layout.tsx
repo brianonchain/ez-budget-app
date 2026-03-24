@@ -4,14 +4,12 @@ import PageGlow from "./_components/PageGlow";
 
 export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="bg-primaryBg relative">
-      <PageGlow />
-      <Menu />
-      <ContextProvider>
-        <div className="z-10 relative h-[calc(100dvh-var(--menuHeight))] portrait:w-full landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:ml-[120px] landscape:lg:ml-[160px] flex flex-col items-center overflow-y-auto scrollbar-stable">
-          {children}
-        </div>
-      </ContextProvider>
+    <div className="h-dvh overflow-hidden grid portrait:grid-rows-[1fr_80px] portrait:sm:grid-rows-[1fr_120px] landscape:grid-cols-[120px_1fr] landscape:lg:grid-cols-[160px_1fr]">
+      <div className="relative order-1 landscape:order-2 min-h-0 min-w-0 bg-primaryBg flex flex-col items-center overflow-y-auto scrollbar-stable">
+        <PageGlow />
+        <ContextProvider>{children}</ContextProvider>
+      </div>
+      <Menu className="order-2 landscape:order-1" />
     </div>
   );
 }
