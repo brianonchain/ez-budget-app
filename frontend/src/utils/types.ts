@@ -29,6 +29,10 @@ export type SettingsData = {
   workspace: Workspace;
   role: "owner" | "editor" | "viewer";
   workspaceOptions: WorkspaceOption[];
+};
+
+// useSharedUsersQuery data
+export type SharedUsersData = {
   sharedUsers: SharedUser[];
   pendingSharedUsers: PendingSharedUser[];
 };
@@ -59,7 +63,7 @@ export type PendingSharedUser = {
   _id: string;
   invitedEmail: string;
   invitedRole: "editor" | "viewer";
-  expiresAt: Date;
+  expiresAt: string;
 };
 export type Role = "owner" | "editor" | "viewer";
 

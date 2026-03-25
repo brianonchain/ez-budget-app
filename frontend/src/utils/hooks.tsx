@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tansta
 import {
   ItemsPage,
   SettingsData,
+  SharedUsersData,
   StatsData,
   StatsPeriod,
   MutateUserPayload,
@@ -37,6 +38,20 @@ export const useSettingsQuery = (activeWorkspaceId: string | null) => {
     enabled: !!activeWorkspaceId,
     staleTime: Infinity,
     gcTime: Infinity,
+  });
+};
+
+export const useSharedUsersQuery = (workspaceId: string | null | undefined) => {
+  return useQuery<SharedUsersData, Error>({
+    queryKey: ["sharedUsers", workspaceId],
+    queryFn: async (): Promise<SharedUsersData> => {
+      const resJson = await fetchGet(`/api/getSharedUsers?workspaceId=${workspaceId}`);
+      if (resJson.status === "success") return resJson.data;
+      throw new Error(resJson.message || "Failed to load shared users.");
+    },
+    enabled: !!workspaceId,
+    staleTime: 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 };
 
@@ -94,6 +109,7 @@ export const useUserMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["settings"] });
       queryClient.invalidateQueries({ queryKey: ["items"] });
+      queryClient.invalidateQueries({ queryKey: ["sharedUsers"] });
     },
   });
 };

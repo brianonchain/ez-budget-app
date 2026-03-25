@@ -50,28 +50,6 @@ export async function GET(request: Request) {
 
     if (!workspace) return NextResponse.json({ status: "error", message: "Workspace not found" }, { status: 404 });
 
-    // 4) load shared users for active workspace TODO: do this when entering modal, may improve TTL
-    // const [sharedUsersRaw, pendingSharedUsersRaw] = await Promise.all([
-    //   MembershipModel.find({ workspaceId: activeWorkspaceId, role: { $ne: "owner" } })
-    //     .select("userId role")
-    //     .populate({ path: "userId", select: "email" })
-    //     .lean(),
-    //   PendingWorkspaceInviteModel.find({ workspaceId: activeWorkspaceId, expiresAt: { $gt: new Date() } })
-    //     .select("invitedEmail invitedRole expiresAt")
-    //     .lean(),
-    // ]);
-    // const sharedUsers = sharedUsersRaw.map((i: any) => ({
-    //   _id: i.userId._id,
-    //   email: i.userId.email,
-    //   role: i.role,
-    // }));
-    // const pendingSharedUsers = pendingSharedUsersRaw.map((i: any) => ({
-    //   _id: i._id,
-    //   invitedEmail: i.invitedEmail,
-    //   invitedRole: i.invitedRole,
-    //   expiresAt: i.expiresAt,
-    // }));
-
     return NextResponse.json(
       {
         status: "success",
@@ -79,8 +57,6 @@ export async function GET(request: Request) {
           workspace,
           role: activeMembership.role,
           workspaceOptions,
-          // sharedUsers,
-          // pendingSharedUsers,
         },
       },
       { status: 200 }

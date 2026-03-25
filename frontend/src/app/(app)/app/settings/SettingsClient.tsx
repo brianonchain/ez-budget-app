@@ -342,13 +342,7 @@ export default function Settings({
       {addTagModal && data?.workspace && <AddTagModal workspace={data.workspace} setAddTagModal={setAddTagModal} clickedTag={clickedTag} />}
       {addWorkspaceModal && data?.workspace && <AddWorkspaceModal setAddWorkspaceModal={setAddWorkspaceModal} />}
       {shareWorkspaceModal && data?.workspace && (
-        <ShareWorkspaceModal
-          sharedUsers={data.sharedUsers}
-          pendingSharedUsers={data.pendingSharedUsers}
-          workspaceId={data.workspace._id}
-          workspaceName={data.workspace.name}
-          setShareWorkspaceModal={setShareWorkspaceModal}
-        />
+        <ShareWorkspaceModal workspaceId={data.workspace._id} workspaceName={data.workspace.name} setShareWorkspaceModal={setShareWorkspaceModal} />
       )}
 
       {leaveWorkspaceModal && data?.workspace && (

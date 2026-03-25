@@ -5,9 +5,10 @@ import Button from "@/utils/components/Button";
 import Modal from "@/utils/components/Modal";
 import { FaX } from "react-icons/fa6";
 // utils
-import { useUserMutation } from "@/utils/hooks";
+import { useUserMutation, useSharedUsersQuery } from "@/utils/hooks";
+import Spinner from "@/utils/components/Spinner";
 import { checkEmail } from "@/utils/functions";
-import { Role, SharedUser, PendingSharedUser } from "@/utils/types";
+import { Role, PendingSharedUser } from "@/utils/types";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
 import ErrorMessage from "@/utils/components/ErrorMessage";
@@ -16,18 +17,17 @@ export default function ShareWorkspaceModal({
   workspaceId,
   workspaceName,
   setShareWorkspaceModal,
-  sharedUsers,
-  pendingSharedUsers,
 }: {
   workspaceId: string;
   workspaceName: string;
   setShareWorkspaceModal: React.Dispatch<React.SetStateAction<boolean>>;
-  sharedUsers: SharedUser[];
-  pendingSharedUsers: PendingSharedUser[];
 }) {
   // hooks
   const { data: session } = useSession();
   const userEmail = session?.user?.email;
+  const { data: sharedData, isLoading: isLoadingShared, isError: isSharedError } = useSharedUsersQuery(workspaceId);
+  const sharedUsers = sharedData?.sharedUsers ?? [];
+  const pendingSharedUsers = sharedData?.pendingSharedUsers ?? [];
   // states
   const { mutateAsync: userMutateAsync, error, isError, isPending } = useUserMutation();
   const [inviteEmail, setInviteEmail] = useState("");
@@ -150,7 +150,13 @@ export default function ShareWorkspaceModal({
         <div className="py-6 border-t-[1.5px] border-borderFaint">
           <p className="labelBase">Shared With</p>
           <div className="mt-4 flex flex-col gap-4 textXs">
-            {sharedUsers.length === 0 && pendingSharedUsers.length === 0 ? (
+            {isLoadingShared ? (
+              <div className="w-full flex items-center justify-center py-8">
+                <Spinner />
+              </div>
+            ) : isSharedError ? (
+              <div className="text-center text-textError py-4">Failed to load shared users.</div>
+            ) : sharedUsers.length === 0 && pendingSharedUsers.length === 0 ? (
               <div className="text-center opacity-70 py-4">No shared users yet.</div>
             ) : (
               <>
@@ -163,7 +169,7 @@ export default function ShareWorkspaceModal({
                       size="pill"
                       iconRight={<FaX className="text-sm desktop:text-xs translate-y-[1px] text-textError" />}
                       onClick={() => deletePendingSharedUser(user)}
-                      isLoading={status === `deletingSharedUser${user._id}`}
+                      isLoading={status === `deletingPendingSharedUser${user._id}`}
                       disabled={isPending}
                     />
                   </div>
