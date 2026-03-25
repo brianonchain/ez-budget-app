@@ -311,7 +311,11 @@ export default function Settings({ provider, email, userId }: { provider: string
       {/*--- DISPLAY  ---*/}
       <SettingsCard title="Display">
         <SettingsField label="Dark" className="border-none">
-          <Toggle checked={resolvedTheme === "dark"} onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")} />
+          <Toggle
+            ariaLabel="Dark mode"
+            checked={resolvedTheme === "dark"}
+            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+          />
         </SettingsField>
       </SettingsCard>
 

@@ -1,6 +1,6 @@
 "use client";
 import { useMemo } from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { PieChart, Pie, ResponsiveContainer, Tooltip } from "recharts";
 import { StatsRawItem } from "@/utils/types";
 import { SYMBOLS, DECIMALS } from "@/utils/constants";
 import { getCategoryColor } from "./chartHelpers";
@@ -38,9 +38,9 @@ export default function CategoryLegend({ items, currency, groupBy = "category" }
     const total = Array.from(map.values()).reduce((s, v) => s + v, 0);
     const sorted = Array.from(map.entries())
       .sort((a, b) => b[1] - a[1])
-      .map(([name, value]) => ({ name, value }));
+      .map(([name, value]) => ({ name, value, fill: getCategoryColor(cats.indexOf(name)) }));
     return { slices: sorted, categories: cats, grandTotal: total };
-  }, [items]);
+  }, [items, groupBy]);
 
   const symbol = SYMBOLS[currency] || "$";
   const decimals = DECIMALS[currency] ?? 2;
@@ -81,11 +81,7 @@ export default function CategoryLegend({ items, currency, groupBy = "category" }
               outerRadius="100%"
               paddingAngle={1}
               strokeWidth={0}
-            >
-              {slices.map((s) => (
-                <Cell key={s.name} fill={getCategoryColor(categories.indexOf(s.name))} />
-              ))}
-            </Pie>
+            />
             <Tooltip content={<PieTooltip symbol={symbol} decimals={decimals} />} />
           </PieChart>
         </ResponsiveContainer>

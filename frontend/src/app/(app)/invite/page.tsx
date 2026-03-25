@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import Loading from "../loading";
 import NoScrollPageGlow from "@/utils/components/NoScrollPageGlow";
 import LargeSpinnerAndText from "@/utils/components/LargeSpinnerAndText";
 

@@ -522,3 +522,23 @@ input:-webkit-autofill {
 
   --rdp-today-color: var(--color-buttonPrimaryText); /* The color of the today's date. */
 }
+
+.recharts-surface {
+  outline: none;
+}
+
+.recharts-surface:focus {
+  outline: none;
+}
+
+.recharts-surface:focus-visible {
+  outline: none;
+}
+
+.recharts-sector:focus {
+  outline: none;
+}
+
+.recharts-tooltip-wrapper:focus {
+  outline: none !important;
+}
