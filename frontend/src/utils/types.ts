@@ -4,6 +4,8 @@ import { CURRENCIES } from "./constants";
 // useItemsQuery data (paginated)
 export type ItemsPage = {
   items: DraftItem[];
+  activeWorkspaceId: string;
+  role: Role;
   hasMore: boolean;
 };
 // 1) id, createdBy doesn't exist for new items, 2) compared to IItem, DraftItem doesn't have workspaceId, createdAt, updatedAt, 3) date is string

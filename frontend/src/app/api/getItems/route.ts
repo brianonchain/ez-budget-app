@@ -6,6 +6,7 @@ import MembershipModel from "@/db/MembershipModel";
 import ItemModel from "@/db/ItemModel";
 import WorkspaceModel from "@/db/WorkspaceModel";
 import { getUserInfo } from "@/utils/serverFunctions";
+import { Role } from "@/utils/types";
 
 const PAGE_SIZE = 40;
 
@@ -29,17 +30,23 @@ export async function GET(request: Request) {
     if (!user) return NextResponse.json({ status: "error", message: "User not found" }, { status: 404 });
     // 2) check if active workspace exists and if user is member; if either is false, pick the next available workspace
     let activeWorkspaceId = user.activeWorkspaceId;
+    let role: Role = "viewer";
     if (activeWorkspaceId) {
-      const hasAccess = await MembershipModel.exists({ userId, workspaceId: activeWorkspaceId });
-      if (!hasAccess) activeWorkspaceId = null;
+      const membership = await MembershipModel.findOne({ userId, workspaceId: activeWorkspaceId }, { role: 1 }).lean<{
+        role: Role;
+      } | null>();
+      if (!membership) activeWorkspaceId = null;
+      role = membership?.role ?? "viewer";
     }
+
     if (!activeWorkspaceId) {
       const nextMembership = await MembershipModel.findOne({ userId })
-        .select("workspaceId")
+        .select("workspaceId role")
         .sort({ createdAt: 1 })
-        .lean<{ workspaceId: Types.ObjectId } | null>();
+        .lean<{ workspaceId: Types.ObjectId; role: Role } | null>();
       if (!nextMembership) return NextResponse.json({ status: "error", message: "No workspace membership" }, { status: 404 });
       activeWorkspaceId = nextMembership.workspaceId;
+      role = nextMembership.role;
       await UserModel.updateOne({ _id: userId }, { $set: { activeWorkspaceId } });
     }
     // 3) load items (fetch PAGE_SIZE + 1 to determine hasMore) and default currency
@@ -52,7 +59,7 @@ export async function GET(request: Request) {
       .lean();
     const hasMore = items.length > PAGE_SIZE;
     if (hasMore) items.pop(); // remove the extra item
-    return NextResponse.json({ status: "success", data: { items, hasMore } }, { status: 200 });
+    return NextResponse.json({ status: "success", data: { items, activeWorkspaceId, role, hasMore } }, { status: 200 });
   } catch (e) {
     return NextResponse.json({ status: "error", message: "Database error" }, { status: 500 });
   }

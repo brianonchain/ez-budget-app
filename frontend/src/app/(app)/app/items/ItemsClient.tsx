@@ -22,16 +22,9 @@ export default function Items() {
   const router = useRouter();
   const session = useSession();
 
-  // if user is not authenticated, redirect to login
-  // only needed for Items.tsx, as this is start_url for PWA and you want to redirect in the client (not the server); other pages can redirect in server (i.e., in page.tsx)
-  useEffect(() => {
-    if (session.status === "unauthenticated") {
-      router.replace("/login"); // use router.replace for auth redirect
-    }
-  }, [session.status]);
+  const { data: itemsData, fetchNextPage, hasNextPage, isFetchingNextPage } = useItemsQuery(); // itemsData = { pages: [{items, defaultCurrency, hasMore},...], pageParams: [0,1,2,...] }
+  const { data: settingsData } = useSettingsQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
 
-  const { data: itemsData, fetchNextPage, hasNextPage, isFetchingNextPage } = useItemsQuery(session?.data?.user?.email); // itemsData = { pages: [{items, defaultCurrency, hasMore},...], pageParams: [0,1,2,...] }
-  const { data: settingsData } = useSettingsQuery(session?.data?.user?.email);
   // states
   const [errorMessage, setErrorMessage] = useState("");
   const [costModal, setCostModal] = useState(false);
@@ -53,6 +46,14 @@ export default function Items() {
     }
     return groups;
   }, [allItems]);
+
+  // if user is not authenticated, redirect to login
+  // only needed for Items.tsx, as this is start_url for PWA and you want to redirect in the client (not the server); other pages can redirect in server (i.e., in page.tsx)
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.replace("/login"); // use router.replace for auth redirect
+    }
+  }, [session.status]);
 
   // infinite scroll sentinel
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -87,12 +88,12 @@ export default function Items() {
   };
 
   // better UI if button is shown on first paint (then remove button if user is not "owner" or "editor")
-  const isSettingsLoading = !settingsData;
-  const canAddItem = ["owner", "editor"].includes(settingsData?.role ?? "");
+  const isItemsLoading = !itemsData;
+  const canAddItem = ["owner", "editor"].includes(itemsData?.pages[0]?.role ?? "");
 
   return (
     <>
-      <ItemsShell footer={isSettingsLoading || canAddItem ? <AddItemButton onClick={addItemOnClick} disabled={isSettingsLoading} /> : null}>
+      <ItemsShell footer={isItemsLoading || canAddItem ? <AddItemButton onClick={addItemOnClick} disabled={isItemsLoading} /> : null}>
         {dateGroups.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center">No items yet</div>
         ) : (

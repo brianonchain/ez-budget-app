@@ -32,10 +32,20 @@ import { useSettingsMutation, useSettingsQuery, useUserMutation } from "@/utils/
 import Toggle from "@/utils/components/Toggle";
 import { CURRENCIES } from "@/utils/constants";
 
-export default function Settings({ provider, email, userId }: { provider: string; email: string; userId: string }) {
+export default function Settings({
+  provider,
+  email,
+  userId,
+  activeWorkspaceId,
+}: {
+  provider: string;
+  email: string;
+  userId: string;
+  activeWorkspaceId: string | null;
+}) {
   // hooks
   const { resolvedTheme, setTheme } = useTheme();
-  const { data, isError, isFetching: isFetchingSettings } = useSettingsQuery(email);
+  const { data, isError, isFetching: isFetchingSettings } = useSettingsQuery(activeWorkspaceId);
   const { mutateAsync: settingsMutateAsync, isPending: isMutatingSettings } = useSettingsMutation();
   const { mutateAsync: userMutateAsync, isPending: isMutatingUser } = useUserMutation();
 

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useStatsQuery, useSettingsQuery } from "@/utils/hooks";
+import { useStatsQuery, useSettingsQuery, useItemsQuery } from "@/utils/hooks";
 import { StatsPeriod, DiscretionaryBudget } from "@/utils/types";
 import { shiftDate } from "./_components/chartHelpers";
 import BudgetCard from "./_components/BudgetCard";
@@ -30,8 +30,9 @@ export default function Stats() {
 
   // hooks that depend on states
   const dateParam = anchorDate.toISOString();
+  const { data: itemsData } = useItemsQuery();
   const { data: statsData, isLoading, isError } = useStatsQuery(email, period, dateParam);
-  const { data: settingsData } = useSettingsQuery(email);
+  const { data: settingsData } = useSettingsQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
 
   // calculate sum of discretionary budget items
   const runCalculation = statsData?.period === "month" && getMonthKey(new Date(statsData.startDate)) === getMonthKey(new Date());

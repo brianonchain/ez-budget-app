@@ -11,7 +11,7 @@ import {
 } from "@/utils/types";
 import { fetchPost, fetchGet } from "./functions";
 
-export const useItemsQuery = (email: string | null | undefined) => {
+export const useItemsQuery = () => {
   return useInfiniteQuery<ItemsPage, Error>({
     queryKey: ["items"],
     queryFn: async ({ pageParam }): Promise<ItemsPage> => {
@@ -21,21 +21,20 @@ export const useItemsQuery = (email: string | null | undefined) => {
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => (lastPage.hasMore ? allPages.length : undefined), // lastPage = { items, defaultCurrency, hasMore }, allPages = [[items, defaultCurrency, hasMore]]
-    enabled: !!email,
     staleTime: Infinity,
     gcTime: Infinity,
   });
 };
 
-export const useSettingsQuery = (email: string | null | undefined) => {
+export const useSettingsQuery = (activeWorkspaceId: string | null) => {
   return useQuery<SettingsData, Error>({
-    queryKey: ["settings"],
+    queryKey: ["settings", activeWorkspaceId],
     queryFn: async (): Promise<SettingsData> => {
-      const resJson = await fetchGet("/api/getSettings");
+      const resJson = await fetchGet(`/api/getSettings?activeWorkspaceId=${activeWorkspaceId}`);
       if (resJson.status === "success") return resJson.data;
       throw new Error(resJson.message || "Failed to load settings.");
     },
-    enabled: !!email,
+    enabled: !!activeWorkspaceId,
     staleTime: Infinity,
     gcTime: Infinity,
   });
