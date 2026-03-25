@@ -5,12 +5,11 @@ import { CURRENCIES } from "@/utils/constants";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
+import ErrorMessage from "@/utils/components/ErrorMessage";
 
-export default function AddTagModal({
-  workspaceId,
+export default function AddWorkspaceModal({
   setAddWorkspaceModal,
 }: {
-  workspaceId: string;
   setAddWorkspaceModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { mutateAsync: userMutateAsync, error, isError, isPending } = useUserMutation();
@@ -68,9 +67,7 @@ export default function AddTagModal({
           ))}
         </Select>
         {/*--- error message ---*/}
-        <div className="min-h-26 desktop:min-h-20 modalErrorMessage">
-          {validationError ? validationError : isError ? error?.message : ""}
-        </div>
+        <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
         {/*--- button ---*/}
         <Button
           className="w-full"

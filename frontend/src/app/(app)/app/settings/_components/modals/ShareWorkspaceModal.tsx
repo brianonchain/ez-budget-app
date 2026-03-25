@@ -10,6 +10,7 @@ import { checkEmail } from "@/utils/functions";
 import { Role, SharedUser, PendingSharedUser } from "@/utils/types";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
+import ErrorMessage from "@/utils/components/ErrorMessage";
 
 export default function ShareWorkspaceModal({
   workspaceId,
@@ -31,7 +32,7 @@ export default function ShareWorkspaceModal({
   const { mutateAsync: userMutateAsync, error, isError, isPending } = useUserMutation();
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<Role>("viewer");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [validationError, setValidationError] = useState("");
   const [status, setStatus] = useState("initial"); // "initial", "sharing", "deletingSharedUser{id}", "deletingPendingSharedUser{id}"
 
   async function onSubmit(e: React.FormEvent) {
@@ -40,22 +41,22 @@ export default function ShareWorkspaceModal({
     // exists
     const email = inviteEmail.trim().toLowerCase();
     if (!email) {
-      setErrorMessage("Please enter an email.");
+      setValidationError("Please enter an email.");
       return;
     }
     // validate email
     if (!checkEmail(email)) {
-      setErrorMessage("Invalid email.");
+      setValidationError("Invalid email.");
       return;
     }
     // cannot invite self
     if (email === userEmail) {
-      setErrorMessage("Cannot invite yourself.");
+      setValidationError("Cannot invite yourself.");
       return;
     }
     // mutation
     setStatus("sharing");
-    setErrorMessage("");
+    setValidationError("");
     try {
       await userMutateAsync({
         type: "shareWorkspace",
@@ -73,7 +74,7 @@ export default function ShareWorkspaceModal({
 
   async function updateRole(sharedUserId: string, role: "editor" | "viewer") {
     if (!workspaceId || isPending) return;
-    setErrorMessage("");
+    setValidationError("");
     try {
       await userMutateAsync({ type: "updateSharedUser", workspaceId, sharedUserId, role });
     } catch {} // error will show on UI
@@ -81,7 +82,7 @@ export default function ShareWorkspaceModal({
 
   async function deleteSharedUser(sharedUserId: string) {
     if (!workspaceId || isPending) return;
-    setErrorMessage("");
+    setValidationError("");
     setStatus(`deletingSharedUser${sharedUserId}`);
     try {
       await userMutateAsync({ type: "deleteSharedUser", workspaceId, sharedUserId });
@@ -91,7 +92,7 @@ export default function ShareWorkspaceModal({
 
   async function deletePendingSharedUser(user: PendingSharedUser) {
     if (!workspaceId || isPending) return;
-    setErrorMessage("");
+    setValidationError("");
     setStatus(`deletingPendingSharedUser${user._id}`);
     try {
       await userMutateAsync({ type: "deletePendingSharedUser", workspaceId, invitedEmail: user.invitedEmail });
@@ -103,39 +104,35 @@ export default function ShareWorkspaceModal({
     <Modal title="Share Workspace" setModal={setShareWorkspaceModal} disableCloseButton={isPending}>
       <div className="mx-auto w-full max-w-100 flex flex-col">
         {/*--- invite form ---*/}
-        <form className="w-full flex flex-col" onSubmit={onSubmit} noValidate>
-          <div className="flex gap-2">
-            <div className="flex-1">
-              <label className="block pb-1.5 labelBase">Email</label>
-              <Input
-                className="w-full"
-                inputSize="base"
-                variant="primary"
-                type="email"
-                value={inviteEmail}
-                onChange={(e) => {
-                  setInviteEmail(e.currentTarget.value);
-                  setErrorMessage("");
-                }}
-                disabled={isPending}
-              />
-            </div>
-            <div>
-              <label className="block pb-1.5 labelBase">Role</label>
-              <Select
-                className="w-full"
-                selectSize="base"
-                variant="outline"
-                value={inviteRole}
-                onChange={(e) => setInviteRole(e.currentTarget.value as Role)}
-                disabled={isPending}
-              >
-                <option value="editor">Editor</option>
-                <option value="viewer">Viewer</option>
-              </Select>
-            </div>
+        <form className="w-full" onSubmit={onSubmit} noValidate>
+          <div className="grid grid-cols-[1fr_auto] gap-x-3">
+            <label className="block pb-1.5 labelBase">Email</label>
+            <label className="block pb-1.5 labelBase">Role</label>
+            <Input
+              className="w-full"
+              inputSize="base"
+              variant="primary"
+              type="email"
+              value={inviteEmail}
+              onChange={(e) => {
+                setInviteEmail(e.currentTarget.value);
+                setValidationError("");
+              }}
+              disabled={isPending}
+            />
+            <Select
+              className="w-full"
+              selectSize="base"
+              variant="outline"
+              value={inviteRole}
+              onChange={(e) => setInviteRole(e.currentTarget.value as Role)}
+              disabled={isPending}
+            >
+              <option value="editor">Editor</option>
+              <option value="viewer">Viewer</option>
+            </Select>
           </div>
-          {/*--- Share Workspace button ---*/}
+          {/*--- Share button ---*/}
           <Button
             className="mt-4 w-full"
             label="Share Workspace"
@@ -146,7 +143,7 @@ export default function ShareWorkspaceModal({
             type="submit"
           />
           {/*--- error message ---*/}
-          <div className="min-h-19 desktop:min-h-15 modalErrorMessage">{errorMessage || (isError ? error?.message : "")}</div>
+          <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />{" "}
         </form>
 
         {/*--- shared users list ---*/}

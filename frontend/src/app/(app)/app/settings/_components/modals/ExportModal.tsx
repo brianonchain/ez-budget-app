@@ -27,6 +27,7 @@ export default function ExportModal({
 
   function onSelectDate(selected: Date | undefined) {
     console.log("selected", selected);
+    console.log("activeField", activeField);
     if (!selected) return;
     if (activeField === "start") {
       setStartDate(selected);
@@ -118,7 +119,7 @@ export default function ExportModal({
             isElevated={activeField === "end"}
             onClick={() => setActiveField("end")}
             aria-labelledby="label-end"
-            date={startDate}
+            date={endDate}
           />
           {/* --- calendar --- */}
           {activeField && (

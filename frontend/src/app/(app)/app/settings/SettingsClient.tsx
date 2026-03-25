@@ -326,9 +326,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         />
       )}
       {addTagModal && data?.workspace && <AddTagModal workspace={data.workspace} setAddTagModal={setAddTagModal} clickedTag={clickedTag} />}
-      {addWorkspaceModal && data?.workspace && (
-        <AddWorkspaceModal workspaceId={data.workspace._id} setAddWorkspaceModal={setAddWorkspaceModal} />
-      )}
+      {addWorkspaceModal && data?.workspace && <AddWorkspaceModal setAddWorkspaceModal={setAddWorkspaceModal} />}
       {shareWorkspaceModal && data?.workspace && (
         <ShareWorkspaceModal
           sharedUsers={data.sharedUsers}

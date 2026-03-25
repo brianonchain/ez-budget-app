@@ -4,6 +4,7 @@ import Modal from "@/utils/components/Modal";
 import { Workspace } from "@/utils/types";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
+import ErrorMessage from "@/utils/components/ErrorMessage";
 
 export default function AddTagModal({
   workspace,
@@ -29,7 +30,7 @@ export default function AddTagModal({
     // validation
     if (!workspace || status !== "initial" || isPending || isEdit) return;
     if (!_tag) {
-      setValidationError("Please enter a tag");
+      setValidationError("Please enter a tag.");
       return;
     }
     if (workspace.tags.some((i) => i.toLowerCase() === _tag.toLowerCase())) {
@@ -37,7 +38,7 @@ export default function AddTagModal({
       return;
     }
     if (_tag === "none") {
-      setValidationError(`Cannot use "none" as a tag`);
+      setValidationError(`Cannot use "none" as a tag.`);
       return;
     }
 
@@ -114,9 +115,7 @@ export default function AddTagModal({
           onBlur={isEdit ? onRename : undefined}
         />
         {/*--- validation error ---*/}
-        <div className="min-h-26 desktop:min-h-20 modalErrorMessage">
-          {validationError ? validationError : isError ? error?.message : ""}
-        </div>
+        <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
         {/*--- button ---*/}
         {isEdit ? (
           <Button

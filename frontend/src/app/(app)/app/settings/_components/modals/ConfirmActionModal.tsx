@@ -4,6 +4,7 @@ import { useSettingsMutation, useUserMutation } from "@/utils/hooks";
 import Modal from "@/utils/components/Modal";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
+import ErrorMessage from "@/utils/components/ErrorMessage";
 
 export default function ConfirmActionModal({
   setModal,
@@ -22,7 +23,7 @@ export default function ConfirmActionModal({
   const { mutateAsync: userMutateAsync, error, isError, isPending } = useUserMutation();
   // states
   const [inputValue, setInputValue] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [validationError, setValidationError] = useState("");
 
   // updated on every render
   const isMatch = inputValue.trim() === textToMatch;
@@ -34,12 +35,12 @@ export default function ConfirmActionModal({
     const _inputValue = inputValue.trim();
     // exists
     if (!_inputValue) {
-      setErrorMessage("Please enter the bolded text.");
+      setValidationError("Please enter the bolded text.");
       return;
     }
     // matches
     if (_inputValue !== textToMatch) {
-      setErrorMessage("Input does not match the bolded text.");
+      setValidationError("Input does not match the bolded text.");
       return;
     }
     // mutation
@@ -65,11 +66,11 @@ export default function ConfirmActionModal({
           value={inputValue}
           onChange={(e) => {
             setInputValue(e.currentTarget.value);
-            if (errorMessage) setErrorMessage("");
+            if (validationError) setValidationError("");
           }}
           onBlur={(e) => {
             if (inputValue.trim() && e.currentTarget.value !== textToMatch) {
-              setErrorMessage("Input does not match the bolded text.");
+              setValidationError("Input does not match the bolded text.");
             }
           }}
           type="text"
@@ -77,7 +78,7 @@ export default function ConfirmActionModal({
           autoFocus
         />
         {/*--- error message ---*/}
-        <div className="min-h-26 desktop:min-h-20 modalErrorMessage">{errorMessage ? errorMessage : isError ? error?.message : ""}</div>
+        <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
         {/*--- button ---*/}
         <Button
           className="w-full"

@@ -7,6 +7,7 @@ import { Workspace } from "@/utils/types";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
 import SettingsAddButton from "../SettingsAddButton";
+import ErrorMessage from "@/utils/components/ErrorMessage";
 
 export type SubcategoryWithId = { value: string; isNew: boolean };
 export type AddCategoryModalStatus = "initial" | "adding" | "editing" | "deleting" | `deletingSubcategory${number}`;
@@ -268,7 +269,7 @@ export default function AddCategoryModal({
             </div>
           ))}
         </div>
-        {/*--- add subcategory field ---*/}
+        {/*--- add subcategory button ---*/}
         <SettingsAddButton
           className="self-center mt-4"
           onClick={addSubcategoryField}
@@ -277,9 +278,7 @@ export default function AddCategoryModal({
           type="button"
         />
         {/*--- validation error ---*/}
-        <div className="min-h-26 desktop:min-h-20 modalErrorMessage">
-          {validationError ? validationError : isError ? error?.message : ""}
-        </div>
+        <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
         {/*--- button ---*/}
         {isEdit ? (
           <Button

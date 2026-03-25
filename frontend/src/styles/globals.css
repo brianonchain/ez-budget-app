@@ -18,8 +18,8 @@
   --color-textPrimary: #212427;
   --color-textSecondary: #798aa3; /* slate-450 */
   --color-textTertiary: #90a1b9; /* slate-400 */
-  --color-link: #0364ff;
-  --color-linkHover: #1c73ff;
+  --color-link: #0084d1; /* sky-500 */
+  --color-linkHover: oklch(50% 0.134 242.749); /* sky-600 */
   --color-textError: #ff295d;
   --color-textErrorHover: #d91f4f;
   --color-textDisabled: #212427b3; /* textPrimary/70% */

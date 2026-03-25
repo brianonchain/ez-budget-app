@@ -8,6 +8,7 @@ import { DraftItem, SettingsData } from "@/utils/types";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
 import Calendar from "@/utils/components/Calendar";
+import ErrorMessage from "@/utils/components/ErrorMessage";
 
 export default function Details({
   settingsData,
@@ -228,7 +229,7 @@ export default function Details({
           </div>
         </div>
 
-        {/*--- save changes button ---*/}
+        {/*--- save/add button ---*/}
         {["owner", "editor"].includes(settingsData.role) && (
           <Button
             className="mt-6 w-full"
@@ -241,11 +242,9 @@ export default function Details({
             type="button"
           />
         )}
-        {/*--- validation error message ---*/}
-        <div className="shrink-0 errorText h-24 desktop:h-16 flex items-center justify-center">
-          {validationError ? validationError : isError ? error?.message : ""}
-        </div>
-        {/*--- (optiona) delete button ---*/}
+        {/*--- error message ---*/}
+        <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
+        {/*--- delete button ---*/}
         {draftItem._id && ["owner", "editor"].includes(settingsData.role) && (
           <Button
             className="w-full"
