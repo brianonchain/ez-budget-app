@@ -4,7 +4,7 @@ import PageGlow from "./_components/PageGlow";
 
 export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="bg-primaryBg relative">
+    <div className="relative">
       <PageGlow />
       <Menu />
       <ContextProvider>

@@ -1,3 +1,5 @@
-export default async function Layout({ children }: { children: React.ReactNode }) {
-  return <div className="dark bg-primaryBg text-textPrimary text-lg">{children}</div>;
+import { ThemeProvider } from "next-themes";
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return <ThemeProvider forcedTheme="dark">{children}</ThemeProvider>;
 }

@@ -22,7 +22,7 @@ export default function Menu() {
           <Link
             href={i.path}
             className={`${
-              i.path === path ? "text-textPrimary" : "text-textTertiary"
+              i.path === path ? "" : "text-textTertiary"
             } desktop:hover:text-textPrimary w-20 portrait:sm:w-25 landscape:lg:w-25 flex flex-col items-center justify-center gap-0.5 portrait:sm:gap-1 landscape:lg:gap-1 cursor-pointer`}
             key={i.text}
             onClick={() => setPath(i.path)}

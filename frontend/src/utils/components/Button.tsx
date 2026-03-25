@@ -33,8 +33,8 @@ export default function Button({
   };
 
   const sizes = {
-    pillSm: "h-9 desktop:h-8 px-3.5 textSm rounded-full font-medium gap-2",
-    pill: "h-11 desktop:h-8 px-4 desktop:px-3.5 textSm rounded-full font-normal gap-2", // used in DetailsModal.tsx
+    pillSm: "h-9 desktop:h-8 px-3.5 textXs rounded-full font-medium gap-2",
+    pill: "h-11 desktop:h-8 px-4 desktop:px-3.5 textXs rounded-full font-normal gap-2", // used in DetailsModal.tsx
     icon: "w-9 h-9 desktop:w-9 desktop:h-9 rounded-lg",
     sm: "h-12 desktop:h-9 px-3 desktop:px-2.5 textBase rounded-lg", // same height and px as input(sm) and select(sm)
     base: "h-14 desktop:h-10 px-4 desktop:px-3 textBase rounded-lg",

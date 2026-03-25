@@ -44,7 +44,7 @@ export default function Modal({
         </div>
         {/*--- content ---*/}
         <div
-          className="flex-1 min-h-0 w-full flex flex-col pb-6 px-4 portrait:sm:px-8 landscape:lg:px-8 desktop:!px-12 overflow-y-auto thinScrollbar textBase"
+          className="flex-1 min-h-0 w-full flex flex-col pb-6 px-4 portrait:sm:px-8 landscape:lg:px-8 desktop:!px-12 textBase overflow-y-auto thinScrollbar"
           style={{ scrollbarGutter: "stable" }}
         >
           {children}

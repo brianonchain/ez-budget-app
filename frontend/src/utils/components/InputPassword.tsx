@@ -23,7 +23,7 @@ export default function InputPassword({
 
   return (
     <div className={`flex flex-col items-start gap-1 ${className}`}>
-      <label className="inputLabel" htmlFor={_id}>
+      <label className="labelBase" htmlFor={_id}>
         {label}
       </label>
       <div className="w-full relative">

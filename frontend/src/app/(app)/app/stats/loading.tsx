@@ -8,7 +8,7 @@ export default function loading() {
       <Card className="relative flex flex-col items-center">
         <div className="font-semibold text-textSecondary">Discretionary Budget</div>
         <TextSkeleton className="mt-3 text2xl font-semibold w-40" />
-        <TextSkeleton className="mt-1 textSm w-40" />
+        <TextSkeleton className="mt-1 textXs w-40" />
       </Card>
       <Card className="flex flex-col items-center">
         <div className="w-full h-100 flex items-center justify-center">

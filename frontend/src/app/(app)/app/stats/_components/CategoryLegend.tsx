@@ -58,7 +58,7 @@ export default function CategoryLegend({ items, currency, groupBy = "category" }
         {slices.map((cat) => {
           const colorIndex = categories.indexOf(cat.name);
           return (
-            <div key={cat.name} className="flex items-center gap-2 textSm">
+            <div key={cat.name} className="flex items-center gap-2 textXs">
               <span className="shrink-0 w-2.5 h-2.5 rounded-full" style={{ backgroundColor: getCategoryColor(colorIndex) }} />
               <span className="flex-1 text-textSecondary truncate">{cat.name}</span>
               <span className="shrink-0 ml-2 font-medium tabular-nums shrink-0">{symbol + cat.value.toFixed(decimals)}</span>

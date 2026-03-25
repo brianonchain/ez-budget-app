@@ -98,7 +98,7 @@ export default function Ani() {
           <LuMousePointer2 className="text-[40px]" style={{ filter: "drop-shadow(0 0 10px #facc15)" }} />
         </div>
         {/*--- Pages Container ---*/}
-        <div className="flex-none w-full h-[calc(100%-80px)] mb-[80px] flex flex-col items-center overflow-hidden overflow-y-auto text-base bg-primaryBg relative z-0">
+        <div className="flex-none w-full h-[calc(100%-80px)] mb-[80px] flex flex-col items-center overflow-hidden overflow-y-auto text-base relative z-0">
           {/*--- glow ---*/}
           <div className="absolute w-full h-full left-0 top-0 overflow-hidden z-[-1]">
             <div className="absolute top-1/2 right-0 translate-y-[-50%] translate-x-[50%] w-[90%] h-[50%] rounded-full bg-[#0444B7] blur-[200px] pointer-events-none"></div>

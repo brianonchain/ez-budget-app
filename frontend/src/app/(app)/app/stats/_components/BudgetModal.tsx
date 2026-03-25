@@ -89,7 +89,7 @@ export default function BudgetModal({
         <div className="mt-2">{validationError ? validationError : isError ? error?.message : ""}</div>
         {/* --- amount --- */}
         <div className="py-6 desktop:py-4 border-b border-borderFaint flex items-center">
-          <label className="shrink-0 pr-4 inputLabel">Monthly Amount</label>
+          <label className="shrink-0 pr-4 labelBase">Monthly Amount</label>
           <Select
             variant="primary"
             selectSize="base"
@@ -118,7 +118,7 @@ export default function BudgetModal({
         </div>
 
         {/*--- category checkboxes ---*/}
-        <div className="pt-6 desktop:pt-4 inputLabel">Which categories are part of your discretionary budget?</div>
+        <div className="pt-6 desktop:pt-4 labelBase">Which categories are part of your discretionary budget?</div>
         <div className="mt-6 grid grid-cols-2 gap-8">
           {categoryObjects.map((catObj) => {
             return (
@@ -129,7 +129,7 @@ export default function BudgetModal({
                   checked={isCategoryChecked(catObj.category)}
                   disabled={isPending}
                   onChange={() => toggleCategory(catObj.category)}
-                  labelClassName="textBase truncate font-medium"
+                  labelClassName="truncate font-medium"
                 />
                 {/* ---- subcategories ---- */}
                 <div className="ml-6 mt-4 flex flex-col gap-4">
@@ -140,7 +140,7 @@ export default function BudgetModal({
                       checked={isSubChecked(catObj.category, sub)}
                       disabled={isPending}
                       onChange={() => toggleSub(catObj.category, sub, catObj.subcategories)}
-                      labelClassName="textSm truncate"
+                      labelClassName="textXs truncate"
                     />
                   ))}
                 </div>

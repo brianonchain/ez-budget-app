@@ -3,12 +3,15 @@
 @import "./animations.css";
 
 @theme {
-  /* bg & text */
-  --color-primaryBg: #f7edf7;
+  /* bg main */
+  --color-primaryBg: #f7f3f9;
   --color-surface: #f6f9fc;
+  --color-card: #ffffff;
+  /* bg custom */
+  --color-modal: #f6f9fc;
   --color-surfaceSolid: #f6f9fc;
   --color-surface2Solid: #f6f9fc;
-  --color-card: #ffffff;
+  --color-selected: #f7f3f9;
   /* borders */
   --color-borderFaint: oklch(92.9% 0.013 255.508); /* slate-200 */
   /* text */
@@ -25,7 +28,7 @@
   --color-buttonPrimaryBg: #0084d1; /* sky-600 */
   --color-buttonPrimaryBgHover: oklch(50% 0.134 242.749); /* sky-700 */
   --color-buttonOutlineBg: transparent;
-  --color-buttonOutlineBgHover: #f6f9fc;
+  --color-buttonOutlineBgHover: #f7f3f9;
   --color-buttonDangerBg: #ff295d;
   --color-buttonDangerBgHover: #d91f4f;
   /* input primary */
@@ -53,11 +56,14 @@
 }
 
 .dark {
+  /* bg main */
   --color-primaryBg: #0a0826; /* was 0b0f37*/
   --color-card: oklch(70.7% 0.165 254.624 / 7%); /* blue-400/7 */
   --color-surface: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
+  /* bg custom */
   --color-surfaceSolid: #141344; /* blue-400/14 overlaid on primaryBg */
   --color-surface2Solid: #1d3169; /* blue-400/20 overlaid on primaryBg */
+  --color-selected: oklch(70.7% 0.165 254.624 / 22%); /* blue-400/22 */
   /* borders */
   --color-borderFaint: oklch(70.7% 0.165 254.624 / 8%); /* blue-400/8 */
   /* text */
@@ -92,18 +98,6 @@
   --color-inputOutlinePlaceholder: oklch(44.6% 0.043 257.281); /* slate-600 */
 }
 
-/*--- top header in standalone mode ---*/
-
-html,
-body {
-  background: #f7edf7; /* --color-card */
-}
-
-html.dark,
-html.dark body {
-  background: #0a0826; /* --color-card = primaryBg overlaid with blue-400/10 */
-}
-
 /*--- scrollbar ---*/
 
 @utility scrollbar-stable {
@@ -112,16 +106,15 @@ html.dark body {
 
 /*--- text size ---*/
 
-/*--- 13px / 12px ---*/
-@utility textXs {
-  @apply text-[0.8125rem] desktop:text-xs leading-[1.5];
-}
-
 /*--- 15px / 12px ---*/
-@utility textSm {
+@utility textXs {
   @apply text-[0.9375rem] desktop:text-xs leading-[1.5];
 }
 
+/*--- 16px / 13px ---*/
+@utility textSm {
+  @apply text-base desktop:text-[0.8125rem] leading-[1.45];
+}
 /*--- 17px / 14px ---*/
 @utility textBase {
   @apply text-[1.0625rem] desktop:text-sm leading-[1.4];
@@ -148,7 +141,7 @@ html.dark body {
 }
 
 @utility errorText {
-  @apply text-textErrorHover textBase font-medium;
+  @apply text-textErrorHover font-medium;
 }
 
 /*--- buttons ---*/
@@ -161,10 +154,6 @@ html.dark body {
   @apply buttonPrimaryColor px-7 desktop:px-6 py-4 desktop:py-3 textXl font-medium rounded-full cursor-pointer;
 }
 
-.buttonSignOut {
-  @apply flex-none h-14 desktop:h-10 textBase buttonPrimaryColor rounded-full w-32 desktop:w-25 mx-auto my-12;
-}
-
 .xButton {
   @apply absolute right-0 top-0 w-16 h-16 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl cursor-pointer desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms];
 }
@@ -172,7 +161,7 @@ html.dark body {
 /*--- login button ---*/
 
 @utility loginButtonBase {
-  @apply w-full h-16 desktop:h-13 flex items-center justify-center cursor-pointer gap-[12px] textBase font-medium;
+  @apply w-full h-16 desktop:h-13 flex items-center justify-center cursor-pointer gap-[12px] font-medium;
 }
 
 @utility loginButtonColor {
@@ -219,10 +208,6 @@ html.dark body {
 
 .inputMaxWidth {
   @apply max-w-[380px];
-}
-
-.inputLabel {
-  @apply font-medium textBase;
 }
 
 /*--- landing ---*/
@@ -297,10 +282,6 @@ can potentially add desktop-only variables here
   @apply portrait:pb-[26px] portrait:sm:pb-[40px];
 }
 
-.appPageContainer {
-  @apply z-10 relative h-[calc(100dvh-var(--menuHeight))] portrait:w-full landscape:w-[calc(100%-120px)] landscape:lg:w-[calc(100%-160px)] landscape:ml-[120px] landscape:lg:ml-[160px] flex flex-col items-center overflow-y-auto scrollbar-stable;
-}
-
 .pageContentMaxWidth {
   @apply px-4 max-w-150 desktop:max-w-140;
 }
@@ -308,7 +289,7 @@ can potentially add desktop-only variables here
 /*--- app: items page ---*/
 
 .listHeaderColor {
-  @apply text-textSecondary bg-primaryBg portrait:sm:bg-card landscape:lg:bg-card border-b border-borderFaint;
+  @apply text-textSecondary portrait:sm:bg-card landscape:lg:bg-card border-b border-borderFaint;
 }
 
 .listDateColor {
@@ -332,11 +313,15 @@ can potentially add desktop-only variables here
 }
 
 .detailsInput {
-  @apply h-11 desktop:h-8 px-3 desktop:px-2.5 text-base desktop:text-[0.8125rem] rounded-lg inputPrimaryColor;
+  @apply h-11 desktop:h-8 px-3 desktop:px-2.5 rounded-lg inputPrimaryColor;
 }
 
-.detailsLabel {
-  @apply font-medium text-base desktop:text-xs opacity-70;
+.labelBase {
+  @apply font-medium textBase;
+}
+
+.labelSm {
+  @apply font-medium textSm text-textSecondary;
 }
 
 .detailsOptionContainer {

@@ -66,8 +66,8 @@ export default function PeriodSelector({
             <button
               key={p.value}
               onClick={() => setPeriod(p.value)}
-              className={`px-3 h-full textSm font-medium cursor-pointer transition-colors duration-200 text-textPrimary ${
-                period === p.value ? "bg-primaryBg dark:bg-blue-400/22" : "bg-transparent desktop:hover:bg-blue-400/22"
+              className={`px-3 h-full textXs font-medium cursor-pointer transition-colors duration-200 ${
+                period === p.value ? "bg-selected" : "desktop:hover:bg-selected"
               }`}
             >
               {p.label}

@@ -127,7 +127,7 @@ export default function Stats() {
               <Spinner />
             </div>
           ) : isError ? (
-            <div className="w-full h-80 flex items-center justify-center text-textError textBase">Failed to load stats</div>
+            <div className="w-full h-80 flex items-center justify-center text-textError">Failed to load stats</div>
           ) : filteredData ? (
             <StatsChart data={filteredData} currency={activeCurrency} groupBy={groupBy} />
           ) : null}

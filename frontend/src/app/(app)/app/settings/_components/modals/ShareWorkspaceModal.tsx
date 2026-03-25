@@ -106,7 +106,7 @@ export default function ShareWorkspaceModal({
         <form className="w-full flex flex-col" onSubmit={onSubmit} noValidate>
           <div className="flex gap-2">
             <div className="flex-1">
-              <label className="block pb-1.5 inputLabel">Email</label>
+              <label className="block pb-1.5 labelBase">Email</label>
               <Input
                 className="w-full"
                 inputSize="base"
@@ -121,7 +121,7 @@ export default function ShareWorkspaceModal({
               />
             </div>
             <div>
-              <label className="block pb-1.5 inputLabel">Role</label>
+              <label className="block pb-1.5 labelBase">Role</label>
               <Select
                 className="w-full"
                 selectSize="base"
@@ -151,8 +151,8 @@ export default function ShareWorkspaceModal({
 
         {/*--- shared users list ---*/}
         <div className="py-6 border-t-[1.5px] border-borderFaint">
-          <p className="inputLabel">Shared With</p>
-          <div className="mt-4 flex flex-col gap-4 textSm">
+          <p className="labelBase">Shared With</p>
+          <div className="mt-4 flex flex-col gap-4 textXs">
             {sharedUsers.length === 0 && pendingSharedUsers.length === 0 ? (
               <div className="text-center opacity-70 py-4">No shared users yet.</div>
             ) : (

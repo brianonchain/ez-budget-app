@@ -3,7 +3,7 @@ import LargeSpinnerAndText from "@/utils/components/LargeSpinnerAndText";
 
 export default function loading() {
   return (
-    <div className="relative w-full min-h-screen flex flex-col justify-center items-center bg-primaryBg">
+    <div className="relative w-full min-h-screen flex flex-col justify-center items-center">
       <NoScrollPageGlow />
       <LargeSpinnerAndText />
     </div>

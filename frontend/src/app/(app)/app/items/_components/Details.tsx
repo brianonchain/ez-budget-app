@@ -1,14 +1,13 @@
 import { useState, useMemo } from "react";
-import { FaChevronDown } from "react-icons/fa6";
 import { useItemsMutation } from "@/utils/hooks";
 import Modal from "@/utils/components/Modal";
 import Button from "@/utils/components/Button";
 import { CategoryObject } from "@/db/WorkspaceModel";
-import DetailsCalendar from "./DetailsCalendar";
 import { CURRENCIES, DECIMALS } from "@/utils/constants";
 import { DraftItem, SettingsData } from "@/utils/types";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
+import Calendar from "@/utils/components/Calendar";
 
 export default function Details({
   settingsData,
@@ -116,11 +115,11 @@ export default function Details({
     <Modal title="Item Info" setModal={setDetailsModal}>
       <div className="flex-1 mx-auto w-full h-full max-w-100 flex flex-col items-center">
         {/*--- date, name, cost ---*/}
-        <div className="mt-1 w-full grid grid-cols-[auto_1fr] gap-y-1 gap-x-2 items-center">
-          <label className="detailsLabel" htmlFor="details-date">
+        <div className="w-full grid grid-cols-[auto_1fr] gap-1.5 items-center">
+          <label className="labelSm" htmlFor="details-date">
             Date
           </label>
-          <div className="relative z-[200]">
+          <div className="relative">
             <button
               id="details-date"
               className="relative z-20 w-full detailsInput flex items-center cursor-pointer"
@@ -128,9 +127,20 @@ export default function Details({
             >
               {new Date(draftItem.date).toLocaleString("en-US")}
             </button>
-            {showCalendar && <DetailsCalendar setShowCalendar={setShowCalendar} draftItem={draftItem} setDraftItem={setDraftItem} />}
+            {showCalendar && (
+              <Calendar
+                position="right"
+                onClose={() => setShowCalendar(false)}
+                selected={new Date(draftItem?.date)}
+                onSelect={(selected) => {
+                  if (!selected) return;
+                  setDraftItem((prev) => ({ ...prev, date: selected.toISOString() }));
+                  setShowCalendar(false);
+                }}
+              />
+            )}
           </div>
-          <label className="detailsLabel" htmlFor="details-desc">
+          <label className="labelSm" htmlFor="details-desc">
             Item
           </label>
           <Input
@@ -142,7 +152,7 @@ export default function Details({
             onChange={(e) => setDescription(e.currentTarget.value)}
             onBlur={(e) => setDraftItem((prev) => ({ ...prev, description }))}
           />
-          <label className="detailsLabel" htmlFor="details-cost">
+          <label className="labelSm" htmlFor="details-cost">
             Cost
           </label>
           <div className="flex items-center gap-1">
@@ -170,7 +180,7 @@ export default function Details({
         <div className="mt-6 w-full min-h-50 max-h-100 desktop:min-h-40 desktop:max-h-90 flex gap-1.5">
           {/*--- Category ---*/}
           <div className="flex-1 flex flex-col">
-            <p className="text-center detailsLabel">Category</p>
+            <p className="text-center labelSm">Category</p>
             <div className="detailsOptionContainer overflow-y-auto thinScrollbar">
               {settingsData.workspace.categoryObjects.map((i: CategoryObject) => (
                 <div
@@ -185,7 +195,7 @@ export default function Details({
           </div>
           {/*--- Subcategory ---*/}
           <div className="flex-1 flex flex-col">
-            <p className="text-center detailsLabel">Subcategory</p>
+            <p className="text-center labelSm">Subcategory</p>
             <div className="detailsOptionContainer overflow-y-auto thinScrollbar">
               {selectedCategoryObject.subcategories.map((i: string) => (
                 <div
@@ -200,7 +210,7 @@ export default function Details({
           </div>
           {/*--- Tags ---*/}
           <div className="flex-1 flex flex-col">
-            <p className="text-center detailsLabel">Tags</p>
+            <p className="text-center labelSm">Tags</p>
             <div className="detailsOptionContainer overflow-y-auto thinScrollbar">
               {settingsData.workspace.tags.map((i: string) => (
                 <div

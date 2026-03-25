@@ -223,7 +223,7 @@ export default function AddCategoryModal({
     >
       <form className="mt-4 mx-auto w-full max-w-100 flex flex-col" onSubmit={onSubmit}>
         {/*--- category ---*/}
-        <label className="pb-1.5 inputLabel">Category{isEdit ? "" : " (e.g., Food)"}</label>
+        <label className="pb-1.5 labelBase">Category{isEdit ? "" : " (e.g., Food)"}</label>
         <Input
           className="w-full"
           inputSize="base"
@@ -236,7 +236,7 @@ export default function AddCategoryModal({
           onBlur={isEdit ? renameCategory : undefined}
         />
         {/*--- subcategory ---*/}
-        <label className="mt-6 pb-1.5 inputLabel">Subcategories{isEdit ? "" : " (e.g., restaurants, groceries)"}</label>
+        <label className="mt-6 pb-1.5 labelBase">Subcategories{isEdit ? "" : " (e.g., restaurants, groceries)"}</label>
         <div className="space-y-2">
           {subcategoriesWithId.map((i, index) => (
             <div key={index} className="w-full flex items-center">
