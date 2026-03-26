@@ -9,9 +9,10 @@ export default function Loading() {
     <SettingsShell>
       {/*--- Active Sheet Settings ---*/}
       <SettingsCard title="Active Sheet Settings">
-        <SettingsField label="Active Sheet" className="border-none">
+        <div className="flex-none w-full py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+          <div className="settingsLabel">Active Sheet</div>
           <SettingsSkeleton size="lg" className="sm:flex-1" />
-        </SettingsField>
+        </div>
         <div className="my-3 px-6 pt-4 pb-6 flex flex-col gap-6 rounded-3xl border border-inputOutlineBorder">
           <SettingsCategoryContainer label="Categories" addButtonLabel="Category">
             <SettingsSkeleton size="lg" />

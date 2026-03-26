@@ -28,24 +28,15 @@ import Button from "@/utils/components/Button";
 import Select from "@/utils/components/Select";
 // utils
 import { capitalizeFirst } from "@/utils/functions";
-import { useSettingsMutation, useSettingsQuery, useUserMutation } from "@/utils/hooks";
+import { useSettingsMutation, useSettingsQuery, useUserMutation, useItemsQuery } from "@/utils/hooks";
 import Toggle from "@/utils/components/Toggle";
 import { CURRENCIES } from "@/utils/constants";
 
-export default function Settings({
-  provider,
-  email,
-  userId,
-  activeWorkspaceId,
-}: {
-  provider: string;
-  email: string;
-  userId: string;
-  activeWorkspaceId: string | null;
-}) {
+export default function Settings({ provider, email, userId }: { provider: string; email: string; userId: string }) {
   // hooks
   const { resolvedTheme, setTheme } = useTheme();
-  const { data, isError, isFetching: isFetchingSettings } = useSettingsQuery(activeWorkspaceId);
+  const { data: itemsData } = useItemsQuery();
+  const { data, isError, isFetching: isFetchingSettings } = useSettingsQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
   const { mutateAsync: settingsMutateAsync, isPending: isMutatingSettings } = useSettingsMutation();
   const { mutateAsync: userMutateAsync, isPending: isMutatingUser } = useUserMutation();
 
@@ -211,14 +202,20 @@ export default function Settings({
             </SettingsField>
           ) : null
         ) : (
-          <SettingsField label="Default Currency" className="border-none">
+          <SettingsField label="Default Currency">
             <SettingsSkeleton size="sm" />
           </SettingsField>
         )}
         {/*--- Export Sheet ---*/}
-        <SettingsField label="Export Sheet">
-          <Button label="Export" variant="outline" size="sm" type="button" onClick={() => setExportModal(true)} />
-        </SettingsField>
+        {showData ? (
+          <SettingsField label="Export Sheet">
+            <Button label="Export" variant="outline" size="sm" type="button" onClick={() => setExportModal(true)} />
+          </SettingsField>
+        ) : (
+          <SettingsField label="Export Sheet">
+            <SettingsSkeleton size="sm" />
+          </SettingsField>
+        )}
         {/*--- Share Sheet ---*/}
         {showData ? (
           data.role === "owner" ? (
@@ -342,7 +339,11 @@ export default function Settings({
       {addTagModal && data?.workspace && <AddTagModal workspace={data.workspace} setAddTagModal={setAddTagModal} clickedTag={clickedTag} />}
       {addWorkspaceModal && data?.workspace && <AddWorkspaceModal setAddWorkspaceModal={setAddWorkspaceModal} />}
       {shareWorkspaceModal && data?.workspace && (
-        <ShareWorkspaceModal workspaceId={data.workspace._id} workspaceName={data.workspace.name} setShareWorkspaceModal={setShareWorkspaceModal} />
+        <ShareWorkspaceModal
+          workspaceId={data.workspace._id}
+          workspaceName={data.workspace.name}
+          setShareWorkspaceModal={setShareWorkspaceModal}
+        />
       )}
 
       {leaveWorkspaceModal && data?.workspace && (
