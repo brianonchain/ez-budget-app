@@ -16,6 +16,7 @@ export const useItemsQuery = () => {
   return useInfiniteQuery<ItemsPage, Error>({
     queryKey: ["items"],
     queryFn: async ({ pageParam }): Promise<ItemsPage> => {
+      console.log("useItemsQuery ran");
       const resJson = await fetchGet(`/api/getItems?page=${pageParam}`);
       if (resJson.status === "success") return resJson.data;
       throw new Error(resJson.message || "Failed to load items.");
@@ -31,6 +32,7 @@ export const useSettingsQuery = (activeWorkspaceId: string | null) => {
   return useQuery<SettingsData, Error>({
     queryKey: ["settings", activeWorkspaceId],
     queryFn: async (): Promise<SettingsData> => {
+      console.log("useSettingsQuery ran", activeWorkspaceId);
       const resJson = await fetchGet(`/api/getSettings?activeWorkspaceId=${activeWorkspaceId}`);
       if (resJson.status === "success") return resJson.data;
       throw new Error(resJson.message || "Failed to load settings.");

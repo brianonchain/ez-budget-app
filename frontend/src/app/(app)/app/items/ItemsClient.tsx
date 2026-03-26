@@ -25,6 +25,20 @@ export default function Items() {
   const { data: itemsData, fetchNextPage, hasNextPage, isFetchingNextPage } = useItemsQuery(); // itemsData = { pages: [{items, defaultCurrency, hasMore},...], pageParams: [0,1,2,...] }
   const { data: settingsData } = useSettingsQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
 
+  // measure performance
+  const [itemsTime, setItemsTime] = useState<number | null>(null);
+  const [settingsTime, setSettingsTime] = useState<number | null>(null);
+  useEffect(() => {
+    if (itemsData && itemsTime === null) {
+      setItemsTime(performance.now());
+    }
+  }, [itemsData, itemsTime]);
+  useEffect(() => {
+    if (settingsData && settingsTime === null) {
+      setSettingsTime(performance.now());
+    }
+  }, [settingsData, settingsTime]);
+
   // states
   const [errorMessage, setErrorMessage] = useState("");
   const [costModal, setCostModal] = useState(false);
@@ -114,7 +128,7 @@ export default function Items() {
                   >
                     <div className="w-[50%] truncate">{item.description}</div>
                     <div className="w-[25%]">{SYMBOLS[item.currency] + item.cost.toFixed(DECIMALS[item.currency])}</div>
-                    <div className="w-[25%] flex flex-col justify-self-end text-end text-sm desktop:text-[0.8125rem] leading-[1.2]">
+                    <div className="w-[25%] flex flex-col justify-self-end text-end textXs leading-[1.2]">
                       {item.category !== "none" && <p className="">{item.category}</p>}
                       {item.subcategory !== "none" && <p className="italic text-textSecondary">{item.subcategory}</p>}
                       {item.tag !== "none" && <div className="text-buttonPrimaryBg truncate">{item.tag}</div>}
@@ -123,9 +137,14 @@ export default function Items() {
                 ))}
               </div>
             ))}
-            {/* sentinel for infinite scroll */}
+            {/* --- sentinel for infinite scroll --- */}
             <div ref={sentinelRef} className="w-full h-12 flex items-center justify-center">
               {isFetchingNextPage && <Spinner />}
+            </div>
+            {/* --- performance metrics --- */}
+            <div className="fixed bottom-50 right-3 z-50 rounded-lg bg-black/70 px-3 py-2 text-xs text-white backdrop-blur-sm space-y-1">
+              <div>Items: {itemsTime?.toFixed(0) ?? "NA"} ms</div>
+              <div>Settings: {settingsTime?.toFixed(0) ?? "NA"} ms</div>
             </div>
           </>
         )}

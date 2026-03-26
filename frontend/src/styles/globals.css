@@ -224,7 +224,7 @@
 /* --- mobile --- */
 @media (orientation: portrait) {
   :root {
-    --listPaddingTop: 0px;
+    --listPadding: 0px;
     --listHeaderHeight: 3rem;
     --listButtonContainerHeight: 90px;
     --menuHeight: 80px;
@@ -233,7 +233,7 @@
 }
 @media (orientation: landscape) {
   :root {
-    --listPaddingTop: 0px;
+    --listPadding: 0px;
     --listHeaderHeight: 3rem;
     --listButtonContainerHeight: 90px;
     --menuHeight: 0px;
@@ -243,7 +243,7 @@
 /* --- tablet --- */
 @media (orientation: portrait) and (min-width: 600px) {
   :root {
-    --listPaddingTop: 24px;
+    --listPadding: 3rem;
     --listHeaderHeight: 3rem;
     --listButtonContainerHeight: 100px;
     --menuHeight: 120px;
@@ -252,7 +252,7 @@
 }
 @media (orientation: landscape) and (min-width: 980px) {
   :root {
-    --listPaddingTop: 24px;
+    --listPadding: 3rem;
     --listHeaderHeight: 3rem;
     --listButtonContainerHeight: 100px;
     --menuHeight: 0px;
@@ -286,13 +286,13 @@ can potentially add desktop-only variables here
 }
 
 .pageContentMaxWidth {
-  @apply px-4 max-w-150 desktop:max-w-140;
+  @apply max-w-150 desktop:max-w-140;
 }
 
 /*--- app: items page ---*/
 
 .listHeaderColor {
-  @apply text-textSecondary portrait:sm:bg-card landscape:lg:bg-card border-b border-borderFaint;
+  @apply bg-primaryBg portrait:sm:bg-card landscape:lg:bg-card;
 }
 
 .listDateColor {
@@ -303,17 +303,9 @@ can potentially add desktop-only variables here
   @apply bg-card portrait:sm:bg-card landscape:lg:bg-card;
 }
 
-.listButtonContainerColor {
-  @apply bg-gradient-to-t from-primaryBg to-transparent;
-}
-
 .listTotalHeight {
-  @apply h-[calc(100dvh-var(--menuHeight)-var(--listHeaderHeight))];
+  @apply h-[calc(100dvh-var(--menuHeight)-var(--listHeaderHeight)-var(--listPadding))];
 }
-
-/* .listItemHeight {
-  @apply h-[calc((100dvh-var(--listPaddingTop)-var(--listHeaderHeight)-var(--listButtonContainerHeight)-var(--menuHeight))/var(--numRows))] min-h-[3.25rem] max-h-[4.05rem];
-} */
 
 .listFade {
   -webkit-mask-image: linear-gradient(
