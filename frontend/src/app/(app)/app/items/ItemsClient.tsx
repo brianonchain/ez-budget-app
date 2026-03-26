@@ -114,7 +114,7 @@ export default function Items() {
           <>
             {dateGroups.map((group) => (
               <div key={group.date}>
-                <div className="sticky top-0 z-10 backdrop-blur-md px-[3%] h-8 desktop:h-7 flex items-center textXs font-semibold text-textSecondary listDateColor border-b border-borderFaint">
+                <div className="sticky top-0 z-[1] backdrop-blur-md px-[3%] h-8 desktop:h-7 flex items-center textXs font-semibold text-textSecondary listDateColor border-b border-borderFaint">
                   {formatDateHeader(group.items[0].date)}
                 </div>
                 {group.items.map((item, i) => (

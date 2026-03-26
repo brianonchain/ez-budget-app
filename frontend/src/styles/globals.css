@@ -286,7 +286,7 @@ can potentially add desktop-only variables here
 }
 
 .pageContentMaxWidth {
-  @apply max-w-150 desktop:max-w-140;
+  @apply portrait:sm:max-w-150 landscape:lg:max-w-150 desktop:max-w-140;
 }
 
 /*--- app: items page ---*/
