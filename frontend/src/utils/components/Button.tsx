@@ -33,10 +33,10 @@ export default function Button({
   };
 
   const sizes = {
-    sm: "h-12 desktop:h-9 px-3 desktop:px-2.5 textBase rounded-lg", // same height and px as input(sm) and select(sm)
-    base: "h-14 desktop:h-10 px-4 desktop:px-3 textBase rounded-lg",
+    sm: "h-12 desktop:h-9 px-3 desktop:px-2.5 textBase rounded-lg font-medium", // same height and px as input(sm) and select(sm)
+    base: "h-14 desktop:h-10 px-4 desktop:px-3 textBase rounded-lg font-semibold",
     // special sizes
-    pill: "h-11 desktop:h-8 px-4 desktop:px-3.5 textXs rounded-full font-normal gap-2", // used in DetailsModal.tsx
+    pill: "h-11 desktop:h-8 px-4 desktop:px-3.5 textXs rounded-full gap-2 font-normal", // used in DetailsModal.tsx
     icon: "w-9 h-9 desktop:w-9 desktop:h-9 rounded-lg",
     hug: "",
     statsIcon: "aspect-square w-9 desktop:w-8 rounded-lg text-textTertiary",
@@ -46,7 +46,7 @@ export default function Button({
   return (
     <button
       {...props}
-      className={`flex-none font-semibold flex items-center justify-center gap-1 desktop:cursor-pointer disabled:cursor-default select-none ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`flex-none flex items-center justify-center gap-1 desktop:cursor-pointer disabled:cursor-default select-none ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={isLoading || props.disabled}
     >
       {isLoading ? (
