@@ -16,7 +16,7 @@ export default function ItemsShell({ children, footer }: { children: React.React
             {children}
           </div>
           {/*--- fade overlay ---*/}
-          <div className="absolute z-[2] left-0 bottom-0 w-full h-[calc(var(--listButtonContainerHeight)+1rem)] bg-gradient-to-b from-transparent via-[#141542]/60 via-40% to-[#141542]" />
+          <div className="absolute z-[2] left-0 bottom-0 w-full h-[calc(var(--listButtonContainerHeight)+1rem)] bg-gradient-to-b from-transparent via-white/60 dark:via-[#141542]/60 via-40% to-white dark:to-[#141542]" />
           {/*--- + item button ---*/}
           <div className="z-[3] absolute left-0 bottom-0 w-full h-[var(--listButtonContainerHeight)] flex items-center justify-center">
             {footer}
