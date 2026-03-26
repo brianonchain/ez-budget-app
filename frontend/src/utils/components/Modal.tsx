@@ -26,7 +26,11 @@ export default function Modal({
     <>
       <div className="z-[99] fixed inset-0 bg-black/70" aria-hidden />
 
-      <FocusTrap>
+      <FocusTrap
+        focusTrapOptions={{
+          initialFocus: false,
+        }}
+      >
         <div
           className="z-[100] fixed inset-0 desktop:inset-auto desktop:w-100 desktop:max-h-[90dvh] desktop:pb-3 desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:rounded-2xl flex flex-col overflow-hidden modalFullColor"
           role="dialog"

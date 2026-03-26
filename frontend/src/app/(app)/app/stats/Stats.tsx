@@ -2,16 +2,19 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useStatsQuery, useSettingsQuery, useItemsQuery } from "@/utils/hooks";
-import { StatsPeriod, DiscretionaryBudget } from "@/utils/types";
-import { shiftDate } from "./_components/chartHelpers";
+// components
 import BudgetCard from "./_components/BudgetCard";
 import PeriodSelector from "./_components/PeriodSelector";
-import StatsChart from "./_components/StatsChart";
 import CategoryLegend from "./_components/CategoryLegend";
-import Spinner from "@/utils/components/Spinner";
+import BarChart from "./_components/BarChart";
 import BudgetModal from "./_components/BudgetModal";
+import Spinner from "@/utils/components/Spinner";
 import Card from "@/utils/components/Card";
+// functions
+import { shiftDate } from "./_components/chartHelpers";
 import { getMonthKey } from "@/utils/functions";
+// types
+import { StatsPeriod } from "@/utils/types";
 
 export default function Stats() {
   // hooks
@@ -130,7 +133,7 @@ export default function Stats() {
           ) : isError ? (
             <div className="w-full h-80 flex items-center justify-center text-textError">Failed to load stats</div>
           ) : filteredData ? (
-            <StatsChart data={filteredData} currency={activeCurrency} groupBy={groupBy} />
+            <BarChart data={filteredData} currency={activeCurrency} groupBy={groupBy} />
           ) : null}
         </div>
       </Card>

@@ -301,15 +301,34 @@ can potentially add desktop-only variables here
 }
 
 .listButtonContainerColor {
-  @apply bg-primaryBg portrait:sm:bg-transparent landscape:lg:bg-transparent; /*--- need solid bg for mobile ---*/
+  @apply bg-transparent;
 }
 
 .listTotalHeight {
-  @apply h-[calc(100dvh-var(--listPaddingTop)-var(--listHeaderHeight)-var(--listButtonContainerHeight)-var(--menuHeight))];
+  @apply h-[calc(100dvh-var(--menuHeight)-var(--listHeaderHeight))];
+}
+
+/* .listItemHeight {
+  @apply h-[calc((100dvh-var(--listPaddingTop)-var(--listHeaderHeight)-var(--listButtonContainerHeight)-var(--menuHeight))/var(--numRows))] min-h-[3.25rem] max-h-[4.05rem];
+} */
+
+.listFade {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black calc(100% - var(--listButtonContainerHeight)),
+    rgba(0, 0, 0, 0.4) calc(100% - calc(var(--listButtonContainerHeight) * 0.7)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black calc(100% - var(--listButtonContainerHeight)),
+    rgba(0, 0, 0, 0.4) calc(100% - calc(var(--listButtonContainerHeight) * 0.7)),
+    transparent 100%
+  );
 }
 
 .listItemHeight {
-  @apply h-[calc((100dvh-var(--listPaddingTop)-var(--listHeaderHeight)-var(--listButtonContainerHeight)-var(--menuHeight))/var(--numRows))] min-h-[3.25rem] max-h-[4.05rem];
+  @apply h-14 desktop:h-13;
 }
 
 .detailsInput {

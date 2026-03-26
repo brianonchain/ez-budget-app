@@ -94,6 +94,7 @@ export default function Items() {
   return (
     <>
       <ItemsShell footer={isItemsLoading || canAddItem ? <AddItemButton onClick={addItemOnClick} disabled={isItemsLoading} /> : null}>
+        {/* <div className="absolute bottom-0 left-0 w-full h-[var(--listButtonContainerHeight)] bg-gradient-to-t from-primaryBg to-transparent"></div> */}
         {dateGroups.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center">No items yet</div>
         ) : (

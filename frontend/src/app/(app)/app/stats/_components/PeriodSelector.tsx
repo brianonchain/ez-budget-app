@@ -45,8 +45,9 @@ export default function PeriodSelector({
   selectedTag,
   onSelectTag,
 }: PeriodSelectorProps) {
+  // lg: all buttons become single row
   return (
-    <div className="w-full flex flex-col items-center gap-4 lg:gap-6">
+    <div className="w-full flex flex-col items-center gap-3 lg:gap-4">
       {/* --- nav arrows + period label --- */}
       <div className="flex items-center justify-center">
         <button onClick={onPrev} className="flex items-center justify-center cursor-pointer">
@@ -59,7 +60,7 @@ export default function PeriodSelector({
       </div>
 
       {/* --- week / month / year + category and tag selectors --- */}
-      <div className="w-full flex flex-col lg:flex-row items-center gap-4 lg:gap-2">
+      <div className="w-full flex flex-col lg:flex-row items-center gap-3 lg:gap-2">
         {/* --- week / month / year --- */}
         <div className="shrink-0 h-9 desktop:h-8 grid grid-cols-3 border border-inputOutlineBorder rounded-lg overflow-hidden divide-x divide-inputOutlineBorder">
           {PERIODS.map((p, index) => (
@@ -75,7 +76,7 @@ export default function PeriodSelector({
           ))}
         </div>
         {/* --- category and tag selectors --- */}
-        <div className="w-full max-w-88 flex items-center justify-center gap-4 lg:gap-2">
+        <div className="w-full max-w-88 flex items-center justify-center gap-3 lg:gap-2">
           <Select fullWidth variant="outline" selectSize="xxs" value={selectedCategory} onChange={(e) => onSelectCategory(e.target.value)}>
             <option value="all">All categories</option>
             {categoryObjects?.map((co) => (
