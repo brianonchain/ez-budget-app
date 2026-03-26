@@ -420,12 +420,12 @@ can potentially add desktop-only variables here
 .dark .modalGlow {
   background: radial-gradient(
     ellipse at center bottom,
-    rgba(42, 84, 222, 0.4) 0%,
-    rgba(42, 84, 222, 0.3) 20%,
-    rgba(42, 84, 222, 0.2) 40%,
-    rgba(42, 84, 222, 0.2) 60%,
-    rgba(42, 84, 222, 0.01) 80%,
-    transparent 90%
+    rgba(42, 84, 222, 0.5) 0%,
+    rgba(42, 84, 222, 0.42) 15%,
+    rgba(42, 84, 222, 0.32) 30%,
+    rgba(42, 84, 222, 0.25) 45%,
+    rgba(42, 84, 222, 0.15) 60%,
+    transparent 70%
   );
 }
 
