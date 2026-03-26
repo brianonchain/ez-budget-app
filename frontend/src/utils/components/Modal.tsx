@@ -38,7 +38,7 @@ export default function Modal({
           aria-labelledby={titleId}
         >
           {/*--- glow ---*/}
-          <div className="absolute w-[200%] h-[150%] right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-[-1] modalGlow dark:block hidden" />
+          <div className="absolute w-[100dvh] h-[100dvh] left-1/2 -translate-x-1/2 z-[-1] modalGlow dark:block hidden" />
           {/*--- close ---*/}
           <button className="xButton" type="button" disabled={disableCloseButton} aria-label="Close" onClick={() => setModal(false)}>
             &#10005;

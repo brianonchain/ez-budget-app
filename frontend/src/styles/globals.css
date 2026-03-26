@@ -8,16 +8,17 @@
   --color-surface: #f6f9fc;
   --color-card: #ffffff;
   /* bg custom */
-  --color-modal: #f6f9fc;
+  --color-modal: #f7f3f9;
   --color-surfaceSolid: #f6f9fc;
   --color-surface2Solid: #f6f9fc;
   --color-selected: #f7f3f9;
   /* borders */
   --color-borderFaint: oklch(92.9% 0.013 255.508); /* slate-200 */
   /* text */
-  --color-textPrimary: #212427;
-  --color-textSecondary: #798aa3; /* slate-450 */
-  --color-textTertiary: #90a1b9; /* slate-400 */
+  --color-textPrimary: rgb(33 36 39);
+  --color-textSecondary: rgb(33 36 39 / 0.6);
+  --color-textTertiary: rgb(33 36 39 / 0.4);
+  --color-textDisabled: rgb(33 36 39 / 0.3);
   --color-link: #0084d1; /* sky-500 */
   --color-linkHover: oklch(50% 0.134 242.749); /* sky-600 */
   --color-textError: #ff295d;
@@ -61,15 +62,17 @@
   --color-card: oklch(70.7% 0.165 254.624 / 7%); /* blue-400/7 */
   --color-surface: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
   /* bg custom */
+  --color-modal: #0a0826;
   --color-surfaceSolid: #141344; /* blue-400/14 overlaid on primaryBg */
   --color-surface2Solid: #1d3169; /* blue-400/20 overlaid on primaryBg */
   --color-selected: oklch(70.7% 0.165 254.624 / 22%); /* blue-400/22 */
   /* borders */
   --color-borderFaint: oklch(70.7% 0.165 254.624 / 8%); /* blue-400/8 */
   /* text */
-  --color-textPrimary: #e9e8f6;
-  --color-textSecondary: #90a1b9cc; /* slate-400/80% */
-  --color-textTertiary: #62748e; /* slate-500 */
+  --color-textPrimary: rgb(233 232 246);
+  --color-textSecondary: rgb(233 232 246 / 0.6);
+  --color-textTertiary: rgb(233 232 246 / 0.4);
+  --color-textDisabled: rgb(233 232 246 / 0.3);
   --color-link: #2374f6;
   --color-linkHover: #4286f3;
   --color-textError: #ff3a6a;
@@ -301,7 +304,7 @@ can potentially add desktop-only variables here
 }
 
 .listButtonContainerColor {
-  @apply bg-transparent;
+  @apply bg-gradient-to-t from-primaryBg to-transparent;
 }
 
 .listTotalHeight {
@@ -368,7 +371,7 @@ can potentially add desktop-only variables here
 /*--- modal ---*/
 
 @utility modalFullColor {
-  @apply bg-surfaceSolid desktop:border border-inputOutlineBorder;
+  @apply bg-modal portrait:sm:bg-surfaceSolid landscape:lg:bg-surfaceSolid desktop:border border-inputOutlineBorder;
 }
 
 .modalErrorMessage {
@@ -424,13 +427,13 @@ can potentially add desktop-only variables here
 
 .dark .modalGlow {
   background: radial-gradient(
-    ellipse at center,
-    rgba(42, 84, 222, 0.3) 0%,
-    rgba(42, 84, 222, 0.25) 12%,
-    rgba(42, 84, 222, 0.18) 28%,
-    rgba(42, 84, 222, 0.1) 40%,
-    rgba(42, 84, 222, 0.05) 50%,
-    transparent 100%
+    ellipse at center bottom,
+    rgba(42, 84, 222, 0.4) 0%,
+    rgba(42, 84, 222, 0.3) 20%,
+    rgba(42, 84, 222, 0.2) 40%,
+    rgba(42, 84, 222, 0.2) 60%,
+    rgba(42, 84, 222, 0.01) 80%,
+    transparent 90%
   );
 }
 

@@ -12,7 +12,7 @@ export default function ItemsShell({ children, footer }: { children: React.React
           <p className="w-[25%] text-end">Category</p>
         </div>
         {/*--- list container (either items or skeleton) ---*/}
-        <div className="listFade w-full listTotalHeight text-base desktop:text-sm listContainerColor overscroll-none overflow-y-auto select-none relative portrait:sm:thinScrollbar landscape:lg:thinScrollbar scrollbar-stable">
+        <div className="w-full listTotalHeight text-base desktop:text-sm listContainerColor overscroll-none overflow-y-auto select-none relative portrait:sm:thinScrollbar landscape:lg:thinScrollbar scrollbar-stable">
           {children}
         </div>
       </div>
