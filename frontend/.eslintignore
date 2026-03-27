@@ -1,2 +1,8 @@
-**/_unused/**
-**/unused/**
+node_modules
+.next
+out
+dist
+build
+coverage
+.env*
+*.log
