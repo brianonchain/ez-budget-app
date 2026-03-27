@@ -4,7 +4,7 @@
 
 @theme {
   /* bg main */
-  --color-primaryBg: #f7f3f9;
+  --color-bgPrimary: #f7f3f9;
   --color-surface: #f6f9fc;
   --color-card: #ffffff;
   /* bg custom */
@@ -58,13 +58,13 @@
 
 .dark {
   /* bg main */
-  --color-primaryBg: #0a0826; /* was 0b0f37*/
+  --color-bgPrimary: #0a0826; /* was 0b0f37*/
   --color-card: oklch(70.7% 0.165 254.624 / 7%); /* blue-400/7 */
   --color-surface: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
   /* bg custom */
   --color-modal: #0a0826;
-  --color-surfaceSolid: #141344; /* blue-400/14 overlaid on primaryBg */
-  --color-surface2Solid: #1d3169; /* blue-400/20 overlaid on primaryBg */
+  --color-surfaceSolid: #141344; /* blue-400/14 overlaid on bgPrimary */
+  --color-surface2Solid: #1d3169; /* blue-400/20 overlaid on bgPrimary */
   --color-selected: oklch(70.7% 0.165 254.624 / 22%); /* blue-400/22 */
   /* borders */
   --color-borderFaint: oklch(70.7% 0.165 254.624 / 8%); /* blue-400/8 */
@@ -270,7 +270,7 @@ can potentially add desktop-only variables here
 }
 
 .menuBg {
-  @apply bg-card dark:bg-primaryBg dark:portrait:bg-gradient-to-b dark:landscape:bg-gradient-to-l dark:from-card dark:to-transparent dark:to-60%;
+  @apply bg-card dark:bg-bgPrimary dark:portrait:bg-gradient-to-b dark:landscape:bg-gradient-to-l dark:from-card dark:to-transparent dark:to-60%;
 }
 
 .menuShadow {
@@ -292,7 +292,7 @@ can potentially add desktop-only variables here
 /*--- app: items page ---*/
 
 .listHeaderColor {
-  @apply bg-primaryBg portrait:sm:bg-card landscape:lg:bg-card;
+  @apply bg-bgPrimary portrait:sm:bg-card landscape:lg:bg-card;
 }
 
 .listDateColor {
