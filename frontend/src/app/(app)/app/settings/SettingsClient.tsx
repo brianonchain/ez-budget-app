@@ -26,10 +26,10 @@ import SettingsSkeleton from "./_components/SettingsSkeleton";
 import SettingsCategoryContainer from "./_components/SettingsCategoryContainer";
 import Button from "@/utils/components/Button";
 import Select from "@/utils/components/Select";
+import Toggle from "@/utils/components/Toggle";
 // utils
 import { capitalizeFirst } from "@/utils/functions";
 import { useSettingsMutation, useSettingsQuery, useUserMutation, useItemsQuery } from "@/utils/hooks";
-import Toggle from "@/utils/components/Toggle";
 import { CURRENCIES } from "@/utils/constants";
 
 export default function Settings({ provider, email, userId }: { provider: string; email: string; userId: string }) {
@@ -133,7 +133,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         </div>
 
         {/*--- Categories & Tags ---*/}
-        <div className="my-3 px-6 pt-4 pb-6 flex flex-col gap-6 rounded-3xl border border-inputOutlineBorder">
+        <div className="my-3 px-4 xs:px-6 py-5 flex flex-col gap-6 rounded-3xl border border-inputOutlineBorder">
           <SettingsCategoryContainer
             label="Categories"
             addButtonLabel="Category"
@@ -319,9 +319,9 @@ export default function Settings({ provider, email, userId }: { provider: string
       <SettingsCard title="Display">
         <SettingsField label="Dark" className="border-none">
           <Toggle
-            ariaLabel="Dark mode"
-            checked={resolvedTheme === "dark"}
             onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+            checked={resolvedTheme === "dark"}
+            ariaLabel={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
           />
         </SettingsField>
       </SettingsCard>

@@ -4,7 +4,7 @@ export default function Toggle({ ariaLabel, checked, onClick }: { ariaLabel: str
       role="switch"
       aria-checked={checked}
       aria-label={ariaLabel}
-      className="w-[56px] h-[30px] desktop:w-[46px] desktop:h-[25px] flex items-center relative cursor-pointer"
+      className="w-[56px] h-[30px] desktop:w-[46px] desktop:h-[25px] flex items-center relative"
       onClick={onClick}
     >
       <input readOnly={true} type="checkbox" checked={checked} className="sr-only peer" />

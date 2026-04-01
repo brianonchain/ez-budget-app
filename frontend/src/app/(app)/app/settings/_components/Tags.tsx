@@ -23,7 +23,8 @@ export default function Tags({
   };
 
   return (
-    <div
+    <button
+      type="button"
       ref={setNodeRef}
       {...attributes}
       {...listeners}
@@ -33,11 +34,12 @@ export default function Tags({
         setClickedTag(tag);
         setAddTagModal(true);
       }}
+      aria-label={`Edit tag ${tag}`}
     >
       <div>
         <p className="font-medium leading-tight line-clamp-1">{tag}</p>
       </div>
       <SlMenu className="text-lg desktop:text-sm" />
-    </div>
+    </button>
   );
 }

@@ -32,7 +32,7 @@ export const useSettingsQuery = (activeWorkspaceId: string | null) => {
   return useQuery<SettingsData, Error>({
     queryKey: ["settings", activeWorkspaceId],
     queryFn: async (): Promise<SettingsData> => {
-      console.log("useSettingsQuery ran", activeWorkspaceId);
+      console.log("useSettingsQuery ran");
       const resJson = await fetchGet(`/api/getSettings?activeWorkspaceId=${activeWorkspaceId}`);
       if (resJson.status === "success") return resJson.data;
       throw new Error(resJson.message || "Failed to load settings.");

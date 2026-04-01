@@ -11,7 +11,7 @@ export default function SettingsCard({
 }) {
   return (
     <Card className={`${className}`}>
-      <div className="w-full pt-2 pb-4 text-2xl font-bold flex items-center justify-center text-buttonPrimaryBg dark:text-textPrimary">
+      <div className="w-full pt-2 pb-4 textXl font-bold flex items-center justify-center text-buttonPrimaryBg dark:text-textPrimary">
         {title}
       </div>
       {children}

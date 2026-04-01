@@ -28,31 +28,33 @@ export async function fetchPost(url: string, body: Record<string, any>) {
     throw new Error("Network error. Please check your connection.");
   }
   const resJson = await res.json().catch(() => null); // parses JSON and prevents crash if it fails
-
+  // throw if not 200-299 status
   if (!res.ok) {
-    throw new Error(resJson?.message || "Server error. Please try again."); // throw if not 200-299 status
+    throw new Error(resJson?.message || "Server error. Please try again.");
   }
-
-  // so users will not see "cannot read properties of null" error message for resJson.status and resJson.message
+  // so users will not see "cannot read properties of null" error message for resJson.status and resJson.message (if resJson=null)
   if (resJson === null) {
     throw new Error("Server error. Please try again.");
   }
-
   return resJson;
 }
 
 export async function fetchGet(url: string) {
-  const res = await fetch(url);
+  let res: Response;
+  try {
+    res = await fetch(url);
+  } catch {
+    throw new Error("Network error. Please check your connection.");
+  }
   const resJson = await res.json().catch(() => null); // parses JSON and prevents crash if it fails
   // throw error if not 200-299 status
   if (!res.ok) {
     throw new Error(resJson?.message || "Server error. Please try again.");
   }
-  // throw error if resJson=null, to prevent "cannot read properties of null" error message (resJson.status and resJson.message used in frontend)
+  // so users will not see "cannot read properties of null" error message for resJson.status and resJson.message (if resJson=null)
   if (resJson === null) {
     throw new Error("Server error. Please try again.");
   }
-
   return resJson;
 }
 

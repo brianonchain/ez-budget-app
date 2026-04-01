@@ -35,7 +35,7 @@ export default function CategoryContainer({
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 5 },
-    })
+    }),
   );
 
   const onDragEnd = async (event: any) => {
@@ -63,7 +63,7 @@ export default function CategoryContainer({
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        <div className="w-[90%] flex flex-col textXs border-y border-dashed border-borderFaint">
+        <div className="w-full flex flex-col textXs border-y border-dashed border-borderFaint">
           {items.map((item, index) => (
             <Category
               key={item.id}

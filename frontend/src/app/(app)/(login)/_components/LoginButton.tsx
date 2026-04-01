@@ -15,7 +15,7 @@ export default function LoginButton({
   onClick: () => void;
 }) {
   return (
-    <button onClick={onClick} className="relative loginButtonBase loginButtonRoundness loginButtonColor">
+    <button className="relative loginButtonBase loginButtonRoundness loginButtonColor" onClick={onClick} type="button">
       <div className="relative w-7 h-7 desktop:w-5 desktotp:h-5">
         <Image src={imageSrc} alt={imageAlt} fill />
       </div>

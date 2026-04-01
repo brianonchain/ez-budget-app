@@ -63,7 +63,7 @@ export default function InvitePage() {
         <>
           <h1 className="text-2xl font-semibold">Invitation accepted!</h1>
           <p className="mt-12 text-xl opacity-80">Open EZ Budget from your Home Screen to continue</p>
-          <Link className="mt-12 text-xl desktop:text-base link" href="/saveAppToHome">
+          <Link className="mt-12 text-xl desktop:text-base linkColor" href="/saveAppToHome">
             Download the app
           </Link>
         </>

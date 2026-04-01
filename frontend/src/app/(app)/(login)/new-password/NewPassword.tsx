@@ -2,5 +2,5 @@
 import { useState } from "react";
 
 export default function NewPassword() {
-  return <div>New Password</div>;
+  return <div className="text-textSecondary">Under construction...</div>;
 }

@@ -31,7 +31,7 @@ export default function Calendar({
           classNames={{
             // month and nav buttons
             month_caption: `${defaultClassNames.month_caption}`,
-            caption_label: `${defaultClassNames.caption_label} textXl font-semibold`,
+            caption_label: `${defaultClassNames.caption_label} textLg font-semibold`,
             nav: `${defaultClassNames.nav}`,
             button_previous: `${defaultClassNames.button_previous}`,
             button_next: `${defaultClassNames.button_next}`,

@@ -102,12 +102,12 @@ export default function ShareWorkspaceModal({
 
   return (
     <Modal title="Share Workspace" setModal={setShareWorkspaceModal} disableCloseButton={isPending}>
-      <div className="mx-auto w-full max-w-100 flex flex-col">
-        {/*--- invite form ---*/}
+      <div className="mt-4 w-full flex flex-col">
+        {/*--- INVITE FORM ---*/}
         <form className="w-full" onSubmit={onSubmit} noValidate>
           <div className="grid grid-cols-[1fr_auto] gap-x-3">
-            <label className="block pb-1.5 labelBase">Email</label>
-            <label className="block pb-1.5 labelBase">Role</label>
+            <label className="inputLabel">Email</label>
+            <label className="inputLabel">Role</label>
             <Input
               className="w-full"
               inputSize="base"
@@ -123,7 +123,7 @@ export default function ShareWorkspaceModal({
             <Select
               className="w-full"
               selectSize="base"
-              variant="outline"
+              variant="primary"
               value={inviteRole}
               onChange={(e) => setInviteRole(e.currentTarget.value as Role)}
               disabled={isPending}
@@ -146,10 +146,10 @@ export default function ShareWorkspaceModal({
           <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />{" "}
         </form>
 
-        {/*--- shared users list ---*/}
+        {/*--- SHARED WITH ---*/}
         <div className="py-6 border-t-[1.5px] border-borderFaint">
-          <p className="labelBase">Shared With</p>
-          <div className="mt-4 flex flex-col gap-4 textXs">
+          <p className="font-medium">Shared With</p>
+          <div className="mt-4 flex flex-col gap-4 textSm portrait:sm:textBase landscape:lg:textBase">
             {isLoadingShared ? (
               <div className="w-full flex items-center justify-center py-8">
                 <Spinner />
@@ -178,8 +178,8 @@ export default function ShareWorkspaceModal({
                   <div key={user._id} className="flex items-center gap-2">
                     <div className="min-w-0 flex-1 truncate">{user.email}</div>
                     <Select
-                      selectSize="xs"
-                      variant="outline"
+                      selectSize="base"
+                      variant="primary"
                       value={user.role}
                       onChange={(e) => {
                         if (e.currentTarget.value === "remove") {

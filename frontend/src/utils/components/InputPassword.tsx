@@ -22,8 +22,8 @@ export default function InputPassword({
   const [show, setShow] = useState(false);
 
   return (
-    <div className={`flex flex-col items-start gap-1 ${className}`}>
-      <label className="labelBase" htmlFor={_id}>
+    <div className={`flex flex-col items-start ${className}`}>
+      <label className="inputLabel" htmlFor={_id}>
         {label}
       </label>
       <div className="w-full relative">
@@ -38,10 +38,11 @@ export default function InputPassword({
           {...props}
         />
         <button
-          className="absolute right-0 top-1/2 -translate-y-1/2 pr-[0.8em] desktop:cursor-pointer text-slate-400 peer-focus:text-slate-600 dark:text-slate-600 dark:peer-focus:text-slate-400 [transition:color_500ms]"
-          type="button"
-          onMouseDown={(e) => e.preventDefault()}
+          className="absolute right-0 top-1/2 -translate-y-1/2 mr-[0.8em] rounded-md text-slate-400 peer-focus:text-slate-600 dark:text-slate-600 dark:peer-focus:text-slate-400 [transition:color_500ms]"
           onClick={() => setShow((prev) => !prev)}
+          onMouseDown={(e) => e.preventDefault()}
+          type="button"
+          aria-label={show ? "Hide password" : "Show password"}
         >
           {show ? (
             <PiEyeLight className="text-[2rem] desktop:text-[1.5rem]" />

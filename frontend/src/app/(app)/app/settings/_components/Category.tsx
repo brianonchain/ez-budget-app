@@ -25,7 +25,7 @@ export default function Category({
   };
 
   return (
-    <div
+    <button
       ref={setNodeRef}
       {...attributes}
       {...listeners}
@@ -35,12 +35,14 @@ export default function Category({
         setClickedCategory(category);
         setAddCategoryModal(true);
       }}
+      type="button"
+      aria-label={`Edit category ${category}`}
     >
-      <div>
-        <p className="font-medium leading-tight line-clamp-1">{category}</p>
-        <p className="italic leading-tight line-clamp-1">{subcategories.slice(1).join(", ")}</p>
+      <div className="min-w-0 text-left">
+        <p className="font-medium leading-tight truncate">{category}</p>
+        <p className="italic leading-tight truncate">{subcategories.slice(1).join(", ")}</p>
       </div>
       <SlMenu className="flex-none text-lg desktop:text-sm" />
-    </div>
+    </button>
   );
 }

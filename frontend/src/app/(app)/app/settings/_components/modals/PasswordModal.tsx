@@ -63,7 +63,7 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
 
   return (
     <Modal title="Change Password" setModal={setPasswordModal} disableCloseButton={status === "pending"}>
-      <div className="w-full inputMaxWidth h-[410px]">
+      <div className="mt-4 w-full flex flex-col">
         {status !== "success" ? (
           <form className="" onSubmit={onSubmit}>
             <div className="space-y-4">

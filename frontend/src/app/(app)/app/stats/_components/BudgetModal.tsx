@@ -6,6 +6,7 @@ import { CategoryObject } from "@/db/WorkspaceModel";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
 import { CURRENCIES } from "@/utils/constants";
+import ErrorMessage from "@/utils/components/ErrorMessage";
 
 export default function BudgetModal({
   workspaceId,
@@ -84,12 +85,10 @@ export default function BudgetModal({
 
   return (
     <Modal title="Discretionary Budget" setModal={setBudgetModal} disableCloseButton={isPending}>
-      <div className="mx-auto w-full max-w-100">
-        {/*--- error ---*/}
-        <div className="mt-2">{validationError ? validationError : isError ? error?.message : ""}</div>
+      <div className="mt-4 w-full">
         {/* --- amount --- */}
-        <div className="py-6 desktop:py-4 border-b border-borderFaint flex items-center">
-          <label className="shrink-0 pr-4 labelBase">Monthly Amount</label>
+        <div className="flex items-center gap-3 desktop:gap-4">
+          <label className="shrink-0 font-medium">Monthly Amount</label>
           <Select
             variant="primary"
             selectSize="base"
@@ -116,9 +115,13 @@ export default function BudgetModal({
             onBlur={onBlurAmount}
           />
         </div>
+        {/*--- validation error ---*/}
+        <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
 
         {/*--- category checkboxes ---*/}
-        <div className="pt-6 desktop:pt-4 labelBase">Which categories are part of your discretionary budget?</div>
+        <div className="pt-6 desktop:pt-4 font-medium border-t border-borderFaint">
+          Which categories are part of your discretionary budget?
+        </div>
         <div className="mt-6 grid grid-cols-2 gap-8">
           {categoryObjects.map((catObj) => {
             return (

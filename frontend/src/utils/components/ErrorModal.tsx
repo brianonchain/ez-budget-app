@@ -26,7 +26,7 @@ export default function Modal({
         }}
       >
         <div
-          className="z-[100] fixed py-2 w-[85dvw] max-w-90 max-h-[70dvh] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl flex flex-col overflow-hidden modalFullColor border"
+          className="z-[100] fixed py-2 w-[85dvw] max-w-90 max-h-[70dvh] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl flex flex-col overflow-hidden modalColor border"
           role="dialog"
           aria-modal="true"
         >

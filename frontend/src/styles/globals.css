@@ -8,7 +8,6 @@
   --color-surface: #f6f9fc;
   --color-card: #ffffff;
   /* bg custom */
-  --color-modal: #f7f3f9;
   --color-surfaceSolid: #f6f9fc;
   --color-surface2Solid: #f6f9fc;
   --color-selected: #f7f3f9;
@@ -32,12 +31,15 @@
   --color-buttonOutlineBgHover: #f7f3f9;
   --color-buttonDangerBg: #ff295d;
   --color-buttonDangerBgHover: #d91f4f;
+  /* button focus ring */
+  --color-buttonRing: #6bbfea;
   /* input primary */
   --color-inputPrimaryBg: #ffffff;
   --color-inputPrimaryBorder: #b1daee;
   --color-inputPrimaryBorderHover: #77c7f0;
   --color-inputPrimaryBorderFocus: #0084d1; /* sky-600 */
   --color-inputPrimaryRing: #77c7f0;
+  --color-inputPrimaryRingOffset: #f7f3f9;
   --color-inputPrimaryPlaceholder: #90a1b9; /* slate-400 */
   /* input outline */
   --color-inputOutlineBg: transparent;
@@ -62,7 +64,6 @@
   --color-card: oklch(70.7% 0.165 254.624 / 7%); /* blue-400/7 */
   --color-surface: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
   /* bg custom */
-  --color-modal: #0a0826;
   --color-surfaceSolid: #141344; /* blue-400/14 overlaid on bgPrimary */
   --color-surface2Solid: #1d3169; /* blue-400/20 overlaid on bgPrimary */
   --color-selected: oklch(70.7% 0.165 254.624 / 22%); /* blue-400/22 */
@@ -85,12 +86,14 @@
   --color-buttonOutlineBgHover: oklch(70.7% 0.165 254.624 / 14%); /*  blue-400/14 */
   --color-buttonDangerBg: #ff3a6a;
   --color-buttonDangerBgHover: #ff507a;
+  /* button focus ring */
+  --color-buttonRing: #546bb0;
   /* input primary */
   --color-inputPrimaryBg: #07112e;
   --color-inputPrimaryBorder: #1f2c54;
   --color-inputPrimaryBorderHover: #2e417a;
-  --color-inputPrimaryBorderFocus: #374d8f;
-  --color-inputPrimaryRing: #243568;
+  --color-inputPrimaryBorderFocus: #475da1;
+  --color-inputPrimaryRing: #374d8f;
   --color-inputPrimaryPlaceholder: #45556c; /* slate-600 */
   /* input outline */
   --color-inputOutlineBg: transparent;
@@ -101,13 +104,30 @@
   --color-inputOutlinePlaceholder: oklch(44.6% 0.043 257.281); /* slate-600 */
 }
 
+button {
+  cursor: pointer;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-buttonRing);
+  outline-offset: 2px;
+}
+/*--- for buttons styled as inputs (e.g., select date) ---*/
+.inputPrimaryColor:focus-visible {
+  outline: none;
+}
+/* --- for scroll containers that contains buttons (e.g., item list or details list) ---*/
+.outlineInside:focus-visible {
+  outline-offset: -2px;
+}
+
 /*--- scrollbar ---*/
 
 @utility scrollbar-stable {
   scrollbar-gutter: stable;
 }
 
-/*--- text size ---*/
+/*--- TEXT SIZES ---*/
 
 /*--- 15px / 12px ---*/
 @utility textXs {
@@ -123,24 +143,19 @@
   @apply text-[1.0625rem] desktop:text-sm leading-[1.4];
 }
 
-/*--- 18px / 15px ---*/
-@utility textLg {
-  @apply text-lg desktop:text-[0.9375rem] leading-[1.35];
-}
-
 /*--- 20px / 16px ---*/
-@utility textXl {
+@utility textLg {
   @apply text-xl desktop:text-base leading-[1.35];
 }
 
 /*--- 24px / 20px ---*/
-@utility text2xl {
+@utility textXl {
   @apply text-2xl desktop:text-xl leading-[1.3];
 }
 
-/*--- 30px / 24px ---*/
-@utility text3xl {
-  @apply text-3xl desktop:text-2xl leading-[1.2];
+/*--- 30px / 26px ---*/
+@utility text2xl {
+  @apply text-3xl desktop:text-[1.625rem] leading-[1.2];
 }
 
 @utility errorText {
@@ -153,18 +168,14 @@
   @apply text-buttonPrimaryText bg-buttonPrimaryBg desktop:hover:bg-buttonPrimaryBgHover active:bg-buttonPrimaryBgHover disabled:opacity-80 [transition:background-color_200ms];
 }
 
-.homeButton {
-  @apply buttonPrimaryColor px-7 desktop:px-6 py-4 desktop:py-3 textXl font-medium rounded-full cursor-pointer;
-}
-
 .xButton {
-  @apply absolute right-0 top-0 w-16 h-16 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl cursor-pointer desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms];
+  @apply absolute right-0 top-0 w-16 h-16 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms];
 }
 
 /*--- login button ---*/
 
 @utility loginButtonBase {
-  @apply w-full h-16 desktop:h-13 flex items-center justify-center cursor-pointer gap-[12px] font-medium;
+  @apply w-full h-16 desktop:h-13 flex items-center justify-center gap-3 font-medium;
 }
 
 @utility loginButtonColor {
@@ -209,8 +220,15 @@
   @apply inputOutlineBgAndTextColor inputOutlineBorder inputOutlineRing outline-none transition-all duration-300;
 }
 
-.inputMaxWidth {
-  @apply max-w-[380px];
+/*--- labels ---*/
+.inputLabel {
+  @apply pb-1.5 desktop:pb-1 font-medium;
+}
+.detailsLabel {
+  @apply textSm font-medium text-textSecondary;
+}
+.settingsLabel {
+  @apply font-medium;
 }
 
 /*--- landing ---*/
@@ -259,164 +277,49 @@
     --numRows: 10;
   }
 }
-/* --- desktop --- */
-/* @media (hover: hover) and (pointer: fine) {
-can potentially add desktop-only variables here
-} */
-
-/* dark:landscape:bg-gradient-to-r dark:portrait:bg-gradient-to-t dark:from-[#03082E] dark:to-blue-500/18 */
-.menuSize {
-  @apply landscape:w-[120px] landscape:lg:w-[160px] landscape:h-screen portrait:w-full portrait:h-[80px] portrait:sm:h-[120px];
-}
-
-.menuBg {
-  @apply bg-card dark:bg-bgPrimary dark:portrait:bg-gradient-to-b dark:landscape:bg-gradient-to-l dark:from-card dark:to-transparent dark:to-60%;
-}
-
-.menuShadow {
-  @apply portrait:shadow-[0px_0px_16px_0px_rgba(0,0,0,0.08)] landscape:shadow-[2px_0px_8px_0px_rgba(0,0,0,0.06)] dark:shadow-none;
-}
-
-.menuIcon {
-  @apply text-[1.375rem] portrait:sm:text-[2rem] landscape:lg:text-[2rem];
-}
-
-.menuPbSafeArea {
-  @apply portrait:pb-[26px] portrait:sm:pb-[40px];
-}
 
 .pageContentMaxWidth {
   @apply portrait:sm:max-w-150 landscape:lg:max-w-150 desktop:max-w-140;
 }
 
 /*--- app: items page ---*/
-
-.listHeaderColor {
-  @apply bg-bgPrimary portrait:sm:bg-card landscape:lg:bg-card;
-}
-
-.listDateColor {
-  @apply bg-surface dark:bg-card;
-}
-
-.listContainerColor {
-  @apply bg-card portrait:sm:bg-card landscape:lg:bg-card;
-}
-
 .listTotalHeight {
   @apply h-[calc(100dvh-var(--menuHeight)-var(--listHeaderHeight)-var(--listPadding))];
 }
 
-.listFade {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    black calc(100% - var(--listButtonContainerHeight)),
-    rgba(0, 0, 0, 0.4) calc(100% - calc(var(--listButtonContainerHeight) * 0.7)),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    black calc(100% - var(--listButtonContainerHeight)),
-    rgba(0, 0, 0, 0.4) calc(100% - calc(var(--listButtonContainerHeight) * 0.7)),
-    transparent 100%
-  );
-}
-
-.listItemHeight {
-  @apply h-14 desktop:h-13;
-}
-
-.detailsInput {
-  @apply h-11 desktop:h-8 px-3 desktop:px-2.5 rounded-lg inputPrimaryColor;
-}
-
-.labelBase {
-  @apply font-medium textBase;
-}
-
-.labelSm {
-  @apply font-medium textSm text-textSecondary;
-}
-
-.detailsOptionContainer {
-  @apply mt-1 grid grid-cols-1 rounded-lg border-[1.5px] bg-inputPrimaryBg border-inputPrimaryBorder divide-y-[1.5px] divide-borderFaint overflow-y-auto;
-}
-
-.detailsOption {
-  @apply flex-none w-full px-1 h-10 desktop:h-7 text-base desktop:text-[0.8125rem] flex items-center desktop:hover:bg-buttonOutlineBgHover truncate desktop:cursor-pointer;
-}
-
 /*--- app: settings page ---*/
-
-.settingsLabel {
-  @apply font-medium;
-}
-
-.settingsEditIcon {
-  @apply flex-none text-2xl desktop:text-lg text-buttonPrimaryBg desktop:cursor-pointer desktop:hover:brightness-[1.2];
-}
-
 .settingsDraggableElement {
-  @apply px-[4px] h-13 desktop:h-10 flex items-center justify-between border-t border-b border-dashed border-borderFaint desktop:cursor-pointer desktop:hover:text-slate-400;
+  @apply px-1 h-13 desktop:h-10 flex items-center justify-between border-t border-b border-dashed border-borderFaint desktop:hover:text-textSecondary;
 }
 
 /*--- modal ---*/
-
-@utility modalFullColor {
-  @apply bg-modal portrait:sm:bg-surfaceSolid landscape:lg:bg-surfaceSolid desktop:border border-inputOutlineBorder;
+@utility modalColor {
+  @apply bg-surfaceSolid desktop:border border-inputOutlineBorder;
 }
 
-.modalErrorMessage {
-  @apply py-2 errorText flex items-center justify-center;
-}
-
-/*--- utilities ---*/
-
+/*--- links ---*/
 @utility linkRedColor {
   @apply text-textError desktop:hover:text-textErrorHover active:text-textErrorHover;
 }
-
 @utility linkGrayColor {
   @apply text-textTertiary desktop:hover:text-textSecondary active:text-textSecondary;
 }
-
 @utility linkColor {
   @apply text-link desktop:hover:text-linkHover active:text-linkHover;
 }
 
-.link {
-  @apply linkColor desktop:cursor-pointer;
-}
-
 /*--- background glows ---*/
-
 .dark .pageGlow {
   background: radial-gradient(
     ellipse at center,
-    rgba(65, 47, 201, 0.5) 0%,
-    rgba(65, 47, 201, 0.4) 8%,
-    rgba(65, 47, 201, 0.3) 16%,
-    rgba(65, 47, 201, 0.2) 26%,
-    rgba(65, 47, 201, 0.05) 50%,
-    transparent 100%
+    rgba(42, 84, 222, 0.6) 0%,
+    rgba(42, 84, 222, 0.45) 6%,
+    rgba(42, 84, 222, 0.35) 12%,
+    rgba(42, 84, 222, 0.17) 24%,
+    rgba(42, 84, 222, 0.07) 36%,
+    transparent 50%
   );
 }
-
-/* ≥480px override */
-@media (min-width: 480px) {
-  .dark .pageGlow {
-    background: radial-gradient(
-      ellipse at center,
-      rgba(42, 84, 222, 0.6) 0%,
-      rgba(42, 84, 222, 0.45) 6%,
-      rgba(42, 84, 222, 0.35) 12%,
-      rgba(42, 84, 222, 0.17) 24%,
-      rgba(42, 84, 222, 0.07) 36%,
-      transparent 50%
-    );
-  }
-}
-
 .dark .modalGlow {
   background: radial-gradient(
     ellipse at center bottom,
@@ -430,33 +333,27 @@ can potentially add desktop-only variables here
 }
 
 /*--- autofill ---*/
-
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px var(--inputPrimaryBg) inset !important;
   -webkit-text-fill-color: var(--inputPrimaryText) !important;
 }
 
 /*--- scrollbar ---*/
-
 @utility thinScrollbar {
   --scrollbar-track: #f6f9fc;
   --scrollbar-thumb: #cbd5e1;
-
   .dark & {
     --scrollbar-track: rgba(255, 255, 255, 0.07);
     --scrollbar-thumb: rgba(255, 255, 255, 0.1);
   }
-
   &::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
-
   &::-webkit-scrollbar-track {
     border-radius: 6px;
     background-color: var(--scrollbar-track);
   }
-
   &::-webkit-scrollbar-thumb {
     border-radius: 6px;
     background-color: var(--scrollbar-thumb);
@@ -464,12 +361,10 @@ input:-webkit-autofill {
 }
 
 /*--- underline animate ---*/
-
 .underline-animate {
   position: relative;
   display: inline-block;
 }
-
 .underline-animate::after {
   content: "";
   position: absolute;
@@ -480,11 +375,11 @@ input:-webkit-autofill {
   background-color: currentColor;
   transition: all 0.3s ease;
 }
-
 .underline-animate:hover::after {
   width: 100%;
 }
 
+/*--- REACT DAY PICKER ---*/
 .myCalendar {
   /* nav height */
   --rdp-nav_button-height: 2.75rem; /* The height of the navigation buttons. */
@@ -537,22 +432,19 @@ input:-webkit-autofill {
   --rdp-today-color: var(--color-buttonPrimaryText); /* The color of the today's date. */
 }
 
+/*--- RECHARTS ---*/
 .recharts-surface {
   outline: none;
 }
-
 .recharts-surface:focus {
   outline: none;
 }
-
 .recharts-surface:focus-visible {
   outline: none;
 }
-
 .recharts-sector:focus {
   outline: none;
 }
-
 .recharts-tooltip-wrapper:focus {
   outline: none !important;
 }

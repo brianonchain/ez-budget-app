@@ -25,13 +25,15 @@ export default function BudgetCard({
       <Button
         className="absolute right-2 top-2 xs:top-3 xs:right-3"
         variant="outline"
-        size="statsIcon"
-        icon={<FiEdit2 className="text-sm desktop:text-xs" />}
+        size="icon"
+        icon={<FiEdit2 className="text-sm desktop:text-xs linkGrayColor" />}
         onClick={() => setBudgetModal(true)}
+        aria-label="Edit discretionary budget"
       ></Button>
-      {discretionaryBudget && monthlySpent ? (
+      {/* 0 is falsy so need != null, which checks for null and undefined */}
+      {discretionaryBudget && monthlySpent != null ? (
         <>
-          <div className="mt-3 text2xl font-semibold">
+          <div className="mt-3 textXl font-semibold">
             {formatAmount(discretionaryBudget.amount - monthlySpent, discretionaryBudget.currency)}
           </div>
           <div className="mt-1 textXs text-textSecondary">
@@ -40,7 +42,7 @@ export default function BudgetCard({
         </>
       ) : (
         <>
-          <TextSkeleton className="mt-3 text2xl font-semibold w-40" />
+          <TextSkeleton className="mt-3 textXl font-semibold w-40" />
           <TextSkeleton className="mt-1 textXs w-40" />
         </>
       )}

@@ -101,7 +101,7 @@ export default function EditButtons({
   return (
     <>
       <button
-        className="ml-1 desktop:ml-2 flex-none w-10 h-10 desktop:w-auto desktop:h-8 flex justify-center items-center desktop:cursor-pointer linkGrayColor disabled:opacity-80"
+        className="ml-1 desktop:ml-2 flex-none w-10 h-10 desktop:w-auto desktop:h-8 flex justify-center items-center linkGrayColor disabled:opacity-80"
         type="button"
         onClick={moveUp}
         disabled={rowIndex === 0 || isPending || status !== "initial"}
@@ -110,7 +110,7 @@ export default function EditButtons({
         <FaArrowUp className="text-xl desktop:text-base" />
       </button>
       <button
-        className="ml-0 desktop:ml-2 flex-none w-10 h-10 desktop:w-auto desktop:h-8 flex justify-center items-center desktop:cursor-pointer linkGrayColor disabled:opacity-80"
+        className="ml-0 desktop:ml-2 flex-none w-10 h-10 desktop:w-auto desktop:h-8 flex justify-center items-center linkGrayColor disabled:opacity-80"
         type="button"
         onClick={moveDown}
         disabled={rowIndex === subcategoriesWithId.length - 1 || isPending || status !== "initial"}
@@ -119,7 +119,7 @@ export default function EditButtons({
         <FaArrowDown className="text-xl desktop:text-base" />
       </button>
       <button
-        className="flex-none ml-3 desktop:ml-5 w-10 h-10 desktop:w-auto desktop:h-8 flex justify-center items-center desktop:cursor-pointer linkRedColor disabled:opacity-80"
+        className="flex-none ml-3 desktop:ml-5 w-10 h-10 desktop:w-auto desktop:h-8 flex justify-center items-center linkRedColor disabled:opacity-80"
         type="button"
         disabled={isPending || status !== "initial"}
         aria-label="Delete subcategory"

@@ -7,7 +7,7 @@ type SettingsAddButtonProps = {
 
 export default function SettingsAddButton({ label, className, ...props }: SettingsAddButtonProps) {
   return (
-    <button className={`font-medium link flex items-center gap-1 ${className}`} {...props}>
+    <button className={`font-medium linkColor flex items-center gap-1 ${className}`} type="button" {...props}>
       <FaPlus /> New {label}
     </button>
   );

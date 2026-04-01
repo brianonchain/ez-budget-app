@@ -1,11 +1,11 @@
 import crypto from "crypto";
-const nodemailer = require("nodemailer"); // nodemailer does not suppot es6
 import { serverEnv } from "@/utils/serverEnv";
 
 export function hashOtp(otp: string) {
   return crypto.createHmac("sha256", serverEnv.OTP_HMAC_SECRET).update(otp).digest("base64url");
 }
 
+const nodemailer = require("nodemailer"); // nodemailer does not suppot es6
 let transporter: any = null; // ← cache here
 export async function getGmailTransporter() {
   if (transporter) return transporter; // ← reuse if exists

@@ -37,8 +37,8 @@ export default function AddWorkspaceModal({
 
   return (
     <Modal title="Add New Sheet" setModal={setAddWorkspaceModal} disableCloseButton={isPending}>
-      <form className="mt-4 mx-auto w-full max-w-100 flex flex-col" onSubmit={onSubmit}>
-        <label className="pb-1.5 w-full labelBase">Sheet Name</label>
+      <form className="mt-4 w-full flex flex-col" onSubmit={onSubmit}>
+        <label className="inputLabel">Sheet Name</label>
         <Input
           className="w-full"
           inputSize="base"
@@ -49,7 +49,7 @@ export default function AddWorkspaceModal({
             if (validationError) setValidationError("");
           }}
         />
-        <label className="mt-[16px] pb-1.5 w-full labelBase">Default Currency</label>
+        <label className="mt-[16px] inputLabel">Default Currency</label>
         <Select
           className="w-full"
           selectSize="base"

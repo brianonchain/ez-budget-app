@@ -167,15 +167,15 @@ export default function VerifyUserClient() {
         <Button className="mt-[64px] w-full" label="Submit" variant="primary" size="base" isLoading={isLoading} type="submit" />
       </form>
       {resendStatus === "initial" && (
-        <div className="mt-[60px] link underline-animate" onClick={resendVerificationCode}>
+        <button className="mt-[60px] linkColor underline-animate" onClick={resendVerificationCode} type="button">
           Resend verification code
-        </div>
+        </button>
       )}
       {resendStatus === "sending" && <div className="mt-[60px]">Sending email...</div>}
       {resendStatus === "sent" && (
         <div className="mt-[64px] ">
           Email sent!{" "}
-          <button className="inline-flex underline-animate" type="button" onClick={resendVerificationCode}>
+          <button className="inline-flex underline-animate linkColor" type="button" onClick={resendVerificationCode}>
             Resend email
           </button>
         </div>

@@ -2,6 +2,7 @@
 // nextjs
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 // utils
 import { checkEmail, checkPassword, fetchPost } from "@/utils/functions";
 import InputEmail from "@/utils/components/InputEmail";
@@ -116,9 +117,9 @@ export default function SignUpClient() {
       </form>
 
       {/*--- other options ---*/}
-      <p className="mt-14 desktop:mt-12 link underline-animate textXs" onClick={() => router.push("/login")}>
+      <Link className="mt-14 desktop:mt-12 linkColor underline-animate" href="/login">
         Have an account? Sign in
-      </p>
+      </Link>
       {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
   );

@@ -7,7 +7,7 @@ export default function loading() {
     <div className="w-full pageContentMaxWidth py-4 portrait:sm:py-6 landscape:lg:py-6 flex flex-col items-center gap-4">
       <Card className="relative flex flex-col items-center">
         <div className="font-semibold text-textSecondary">Discretionary Budget</div>
-        <TextSkeleton className="mt-3 text2xl font-semibold w-40" />
+        <TextSkeleton className="mt-3 textXl font-semibold w-40" />
         <TextSkeleton className="mt-1 textXs w-40" />
       </Card>
       <Card className="flex flex-col items-center">

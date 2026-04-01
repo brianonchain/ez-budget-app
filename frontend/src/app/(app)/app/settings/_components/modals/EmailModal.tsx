@@ -142,7 +142,7 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
 
   return (
     <Modal disableCloseButton={isLoading} setModal={setEmailModal} title="Change Email">
-      <form className="mx-auto w-full inputMaxWidth" onSubmit={onSubmit}>
+      <form className="mt-4 w-full" onSubmit={onSubmit}>
         {content === "changeEmail" && (
           <InputEmail
             _id="email"
@@ -208,16 +208,16 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
         {content === "verifyOtp" && (
           <div className="mt-1 h-8 flex justify-center items-center">
             {resendStatus === "initial" && (
-              <div className="mt-1 link underline-animate" onClick={resendCode}>
+              <button className="mt-1 linkColor underline-animate" type="button" onClick={resendCode}>
                 Resend verification code
-              </div>
+              </button>
             )}
             {resendStatus === "sending" && "Sending email..."}
             {resendStatus === "sent" && (
               <div className="flex items-center gap-2">
                 <FaCircleCheck className="text-green-500" />
                 Email sent!
-                <button className="inline-flex underline-animate link" type="button" onClick={resendCode}>
+                <button className="inline-flex underline-animate linkColor" type="button" onClick={resendCode}>
                   Resend
                 </button>
               </div>

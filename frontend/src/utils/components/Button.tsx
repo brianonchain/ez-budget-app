@@ -2,8 +2,8 @@ import { ImSpinner2 } from "react-icons/im";
 
 type ButtonProps = {
   label?: string;
-  variant?: "primary" | "outline" | "danger" | "dangerOutline" | "ghost";
-  size?: "sm" | "base" | "pill" | "icon" | "hug" | "statsIcon";
+  variant?: "primary" | "outline" | "danger" | "dangerOutline" | "ghost" | "input";
+  size?: "xs" | "sm" | "base" | "pill" | "icon" | "hug";
   isLoading?: boolean;
   className?: string;
   icon?: React.ReactNode;
@@ -30,23 +30,24 @@ export default function Button({
     dangerOutline:
       "text-textError hover:text-textErrorHover bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover border border-inputOutlineBorder [transition:background-color_200ms]",
     ghost: "desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover",
+    input: "text-left justify-start inputPrimaryColor !font-normal", // inputPrimaryColor includes focus ring, used in Selct Date button
   };
 
   const sizes = {
-    sm: "h-12 desktop:h-9 px-3 desktop:px-2.5 textBase rounded-lg font-medium", // same height and px as input(sm) and select(sm)
+    xs: "h-11 desktop:h-8 px-3 desktop:px-2.5 textSm rounded-lg font-medium", // used in DetailsModal.tsx
+    sm: "h-12 desktop:h-9 px-3 desktop:px-2.5 textBase rounded-lg font-medium",
     base: "h-14 desktop:h-10 px-4 desktop:px-3 textBase rounded-lg font-semibold",
     // special sizes
-    pill: "h-11 desktop:h-8 px-4 desktop:px-3.5 textXs rounded-full gap-2 font-normal", // used in DetailsModal.tsx
-    icon: "w-9 h-9 desktop:w-9 desktop:h-9 rounded-lg",
+    icon: "flex-none aspect-square w-9 desktop:w-8 rounded-lg",
+    pill: "h-11 desktop:h-8 px-4 desktop:px-3.5 textXs rounded-full gap-2 font-normal",
     hug: "",
-    statsIcon: "aspect-square w-9 desktop:w-8 rounded-lg text-textTertiary",
   };
 
   // consider adding "inline-flex" to base className
   return (
     <button
       {...props}
-      className={`flex-none flex items-center justify-center gap-1 desktop:cursor-pointer disabled:cursor-default select-none ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`flex items-center justify-center gap-1 disabled:cursor-default select-none ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={isLoading || props.disabled}
     >
       {isLoading ? (

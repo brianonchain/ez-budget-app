@@ -87,7 +87,10 @@ export default function Ani() {
   ];
 
   return (
-    <div className="justify-self-center lg:justify-self-end align-self-center w-[300px] h-[700px] lg:h-auto flex items-center justify-center overflow-hidden relative">
+    <div
+      className="justify-self-center lg:justify-self-end align-self-center w-[300px] h-[700px] lg:h-auto flex items-center justify-center overflow-hidden relative"
+      aria-hidden="true"
+    >
       <div className="absolute w-[390px] h-[844px] scale-[65%]">
         {/*--- phone outline ---*/}
         <div className="absolute left-[-155px] top-[-140px] w-[700px] h-[1092px] bg-red-500/0">
@@ -172,7 +175,7 @@ export default function Ani() {
                 </div>
               </div>
               {/*--- button ---*/}
-              <button className="animate-button2 mt-[30px] w-full h-[52px] buttonPrimaryColor rounded-[12px] text-xl font-medium cursor-pointer">
+              <button className="animate-button2 mt-[30px] w-full h-[52px] buttonPrimaryColor rounded-[12px] text-xl font-medium">
                 Enter
               </button>
             </div>
@@ -193,7 +196,7 @@ export default function Ani() {
                 <textarea className="p-[16px] w-full h-[200px] text-2xl border rounded-[16px] border-slate-400" disabled />
                 <div className={`absolute top-[16px] left-[16px] text-[30px] animate-name ${robotoMono.className}`}>Starbucks latte</div>
               </div>
-              <button className="animate-button3 mt-[30px] w-full h-[52px] buttonPrimaryColor rounded-[12px] text-xl font-medium cursor-pointer">
+              <button className="animate-button3 mt-[30px] w-full h-[52px] buttonPrimaryColor rounded-[12px] text-xl font-medium">
                 Enter
               </button>
             </div>
@@ -290,7 +293,7 @@ export default function Ani() {
             </div>
             {/*--- button ---*/}
             <div className="flex-none pb-[40px]">
-              <button className="animate-button4 mt-[30px] w-[360px] h-[52px] buttonPrimaryColor rounded-[12px] text-xl font-medium cursor-pointer">
+              <button className="animate-button4 mt-[30px] w-[360px] h-[52px] buttonPrimaryColor rounded-[12px] text-xl font-medium">
                 Done
               </button>
             </div>

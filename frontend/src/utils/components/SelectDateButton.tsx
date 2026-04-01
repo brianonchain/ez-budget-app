@@ -11,7 +11,7 @@ type Props = {
 export default function SelectDateButton({ isElevated, date, ...props }: Props) {
   return (
     <button
-      className={`flex-1 text-left inputPrimaryColor ring-0 h-12 desktop:h-9 px-3 desktop:px-2.5 rounded-lg desktop:cursor-pointer truncate ${
+      className={`flex-1 text-left inputPrimaryColor ring-0 h-12 desktop:h-9 px-3 desktop:px-2.5 rounded-lg truncate ${
         isElevated ? "z-20" : ""
       }`}
       aria-haspopup="dialog"

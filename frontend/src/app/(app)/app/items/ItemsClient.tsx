@@ -80,7 +80,7 @@ export default function Items() {
           fetchNextPage();
         }
       },
-      { threshold: 0 }
+      { threshold: 0 },
     );
     observer.observe(el);
     return () => observer.disconnect();
@@ -114,17 +114,18 @@ export default function Items() {
           <>
             {dateGroups.map((group) => (
               <div key={group.date}>
-                <div className="sticky top-0 z-[1] backdrop-blur-md px-[3%] h-8 desktop:h-7 flex items-center textXs font-semibold text-textSecondary listDateColor border-b border-borderFaint">
+                <div className="sticky top-0 z-[1] backdrop-blur-md px-[3%] h-8 desktop:h-7 flex items-center textXs font-semibold text-textSecondary bg-surface dark:bg-card border-b border-borderFaint">
                   {formatDateHeader(group.items[0].date)}
                 </div>
                 {group.items.map((item, i) => (
-                  <div
+                  <button
                     key={item._id ?? `${group.date}-${i}`}
-                    className="px-[3%] w-full listItemHeight flex items-center gap-2 border-b border-borderFaint desktop:cursor-pointer desktop:hover:bg-surface dark:desktop:hover:bg-card"
+                    className="outlineInside text-left px-[3%] w-full h-14 desktop:h-13 flex items-center gap-2 border-b border-borderFaint desktop:hover:bg-surface dark:desktop:hover:bg-card"
                     onClick={() => {
                       setDraftItem(item);
                       setDetailsModal(true);
                     }}
+                    type="button"
                   >
                     <div className="w-[50%] truncate">{item.description}</div>
                     <div className="w-[25%]">{SYMBOLS[item.currency] + item.cost.toFixed(DECIMALS[item.currency])}</div>
@@ -133,7 +134,7 @@ export default function Items() {
                       {item.subcategory !== "none" && <p className="italic text-textSecondary">{item.subcategory}</p>}
                       {item.tag !== "none" && <div className="text-buttonPrimaryBg truncate">{item.tag}</div>}
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             ))}

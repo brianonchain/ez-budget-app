@@ -85,8 +85,8 @@ export default function AddCategoryModal({
         subcategoriesWithId
           .map((i) => i.value.trim())
           .filter((i) => i !== "")
-          .filter((i) => i.toLowerCase() !== "none")
-      )
+          .filter((i) => i.toLowerCase() !== "none"),
+      ),
     );
     const _subcategories = ["none", ...cleaned];
 
@@ -222,9 +222,9 @@ export default function AddCategoryModal({
       setModal={setAddCategoryModal}
       disableCloseButton={isPending}
     >
-      <form className="mt-4 mx-auto w-full max-w-100 flex flex-col" onSubmit={onSubmit}>
+      <form className="mt-4 w-full flex flex-col" onSubmit={onSubmit}>
         {/*--- category ---*/}
-        <label className="pb-1.5 labelBase">Category{isEdit ? "" : " (e.g., Food)"}</label>
+        <label className="inputLabel">Category{isEdit ? "" : " (e.g., Food)"}</label>
         <Input
           className="w-full"
           inputSize="base"
@@ -237,7 +237,7 @@ export default function AddCategoryModal({
           onBlur={isEdit ? renameCategory : undefined}
         />
         {/*--- subcategory ---*/}
-        <label className="mt-6 pb-1.5 labelBase">Subcategories{isEdit ? "" : " (e.g., restaurants, groceries)"}</label>
+        <label className="mt-6 inputLabel">Subcategories{isEdit ? "" : " (e.g., restaurants, groceries)"}</label>
         <div className="space-y-2">
           {subcategoriesWithId.map((i, index) => (
             <div key={index} className="w-full flex items-center">
@@ -275,7 +275,6 @@ export default function AddCategoryModal({
           onClick={addSubcategoryField}
           disabled={isPending || status !== "initial"}
           label="Subcategory Field"
-          type="button"
         />
         {/*--- validation error ---*/}
         <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />

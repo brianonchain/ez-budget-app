@@ -50,26 +50,26 @@ export default function PeriodSelector({
     <div className="w-full flex flex-col items-center gap-3 lg:gap-4">
       {/* --- nav arrows + period label --- */}
       <div className="flex items-center justify-center">
-        <button onClick={onPrev} className="flex items-center justify-center cursor-pointer">
-          <FaChevronLeft className="textLg text-textSecondary" />
+        <button onClick={onPrev} className="flex items-center justify-center" type="button" aria-label="Previous period">
+          <FaChevronLeft className="text-lg desktop:text-[0.9375rem] text-textSecondary" />
         </button>
-        <span className="w-65 desktop:w-50 text2xl font-semibold text-center">{formatPeriodLabel(period, anchorDate)}</span>
-        <button onClick={onNext} className="flex items-center justify-center cursor-pointer">
-          <FaChevronRight className="textLg text-textSecondary" />
+        <span className="w-65 desktop:w-50 textXl font-semibold text-center">{formatPeriodLabel(period, anchorDate)}</span>
+        <button onClick={onNext} className="flex items-center justify-center" type="button" aria-label="Next period">
+          <FaChevronRight className="text-lg desktop:text-[0.9375rem] text-textSecondary" />
         </button>
       </div>
 
       {/* --- week / month / year + category and tag selectors --- */}
       <div className="w-full flex flex-col lg:flex-row items-center gap-3 lg:gap-2">
-        {/* --- week / month / year --- */}
-        <div className="shrink-0 h-9 desktop:h-8 grid grid-cols-3 border border-inputOutlineBorder rounded-lg overflow-hidden divide-x divide-inputOutlineBorder">
+        {/* --- week / month / year (can't have overflow-hidden on container or outline will be cut off) --- */}
+        <div className="shrink-0 h-9 desktop:h-8 grid grid-cols-3 border border-inputOutlineBorder rounded-lg divide-x divide-inputOutlineBorder">
           {PERIODS.map((p, index) => (
             <button
               key={p.value}
               onClick={() => setPeriod(p.value)}
-              className={`px-3 h-full textXs font-medium cursor-pointer transition-colors duration-200 ${
+              className={`px-2 h-full textXs font-medium [transition:background-color_200ms] ${
                 period === p.value ? "bg-selected" : "desktop:hover:bg-selected"
-              }`}
+              } ${index === 0 ? "rounded-l-lg" : index === 2 ? "rounded-r-lg" : ""}`}
             >
               {p.label}
             </button>

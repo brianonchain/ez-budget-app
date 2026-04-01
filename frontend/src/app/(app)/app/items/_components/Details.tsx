@@ -9,6 +9,7 @@ import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
 import Calendar from "@/utils/components/Calendar";
 import ErrorMessage from "@/utils/components/ErrorMessage";
+import DetailsList from "./DetailsList";
 
 export default function Details({
   settingsData,
@@ -114,20 +115,21 @@ export default function Details({
 
   return (
     <Modal title="Item Info" setModal={setDetailsModal}>
-      <div className="flex-1 mx-auto w-full h-full max-w-100 flex flex-col items-center">
+      <div className="mt-1 w-full flex flex-col">
         {/*--- date, name, cost ---*/}
         <div className="w-full grid grid-cols-[auto_1fr] gap-1.5 items-center">
-          <label className="labelSm" htmlFor="details-date">
+          <label className="detailsLabel" htmlFor="details-date">
             Date
           </label>
           <div className="relative">
-            <button
-              id="details-date"
-              className="relative z-20 w-full detailsInput flex items-center cursor-pointer"
+            <Button
+              className="relative z-20 w-full"
+              label={new Date(draftItem.date).toLocaleString("en-US")}
+              variant="input"
+              size="xs"
+              type="button"
               onClick={() => setShowCalendar(true)}
-            >
-              {new Date(draftItem.date).toLocaleString("en-US")}
-            </button>
+            />
             {showCalendar && (
               <Calendar
                 position="right"
@@ -141,7 +143,7 @@ export default function Details({
               />
             )}
           </div>
-          <label className="labelSm" htmlFor="details-desc">
+          <label className="detailsLabel" htmlFor="details-desc">
             Item
           </label>
           <Input
@@ -153,7 +155,7 @@ export default function Details({
             onChange={(e) => setDescription(e.currentTarget.value)}
             onBlur={(e) => setDraftItem((prev) => ({ ...prev, description }))}
           />
-          <label className="labelSm" htmlFor="details-cost">
+          <label className="detailsLabel" htmlFor="details-cost">
             Cost
           </label>
           <div className="flex items-center gap-1">
@@ -179,54 +181,24 @@ export default function Details({
 
         {/*--- label options ---*/}
         <div className="mt-6 w-full min-h-50 max-h-100 desktop:min-h-40 desktop:max-h-90 flex gap-1.5">
-          {/*--- Category ---*/}
-          <div className="flex-1 flex flex-col">
-            <p className="text-center labelSm">Category</p>
-            <div className="detailsOptionContainer overflow-y-auto thinScrollbar">
-              {settingsData.workspace.categoryObjects.map((i: CategoryObject) => (
-                <div
-                  key={i.category}
-                  className={`detailsOption ${draftItem.category === i.category ? "!bg-buttonPrimaryBg text-buttonPrimaryText" : ""} `}
-                  onClick={() => setDraftItem((prev) => ({ ...prev, category: i.category, subcategory: "none" }))}
-                >
-                  {i.category}
-                </div>
-              ))}
-            </div>
-          </div>
-          {/*--- Subcategory ---*/}
-          <div className="flex-1 flex flex-col">
-            <p className="text-center labelSm">Subcategory</p>
-            <div className="detailsOptionContainer overflow-y-auto thinScrollbar">
-              {selectedCategoryObject.subcategories.map((i: string) => (
-                <div
-                  key={i}
-                  className={`detailsOption ${i === draftItem.subcategory ? "!bg-buttonPrimaryBg text-buttonPrimaryText" : ""} `}
-                  onClick={() => setDraftItem((prev) => ({ ...prev, subcategory: i }))}
-                >
-                  {i}
-                </div>
-              ))}
-            </div>
-          </div>
-          {/*--- Tags ---*/}
-          <div className="flex-1 flex flex-col">
-            <p className="text-center labelSm">Tags</p>
-            <div className="detailsOptionContainer overflow-y-auto thinScrollbar">
-              {settingsData.workspace.tags.map((i: string) => (
-                <div
-                  key={i}
-                  className={`detailsOption ${draftItem.tag === i ? "!bg-buttonPrimaryBg text-buttonPrimaryText" : ""} `}
-                  onClick={() => {
-                    setDraftItem((prev) => ({ ...prev, tag: i }));
-                    localStorage.setItem(`lastTag:${settingsData.workspace._id}`, i);
-                  }}
-                >
-                  {i}
-                </div>
-              ))}
-            </div>
-          </div>
+          <DetailsList
+            label="Category"
+            items={settingsData.workspace.categoryObjects}
+            selectedItem={draftItem.category}
+            onClick={(i) => setDraftItem((prev) => ({ ...prev, category: typeof i === "string" ? i : i.category, subcategory: "none" }))}
+          />
+          <DetailsList
+            label="Subcategory"
+            items={selectedCategoryObject.subcategories}
+            selectedItem={draftItem.subcategory}
+            onClick={(i) => setDraftItem((prev) => ({ ...prev, subcategory: i }))}
+          />
+          <DetailsList
+            label="Tag"
+            items={settingsData.workspace.tags}
+            selectedItem={draftItem.tag}
+            onClick={(i) => setDraftItem((prev) => ({ ...prev, tag: i }))}
+          />
         </div>
 
         {/*--- save/add button ---*/}

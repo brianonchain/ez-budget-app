@@ -133,14 +133,18 @@ export default function Login() {
               : "loginButtonColor cursor-pointer"
           }`}
         >
-          <button className="relative loginButtonBase" onClick={() => setShowEmailPassword(!showEmailPassword)} type="button">
+          <button
+            className="relative loginButtonBase loginButtonRoundness"
+            onClick={() => setShowEmailPassword(!showEmailPassword)}
+            type="button"
+          >
             <p>Sign in with Email/Password</p>
             {showEmailPassword ? <FaAngleUp className="absolute right-6 w-4 h-4" /> : <FaAngleDown className="absolute right-6 w-4 h-4" />}
           </button>
           <Accordion isOpen={showEmailPassword}>
-            <form className="px-3 pb-7 w-full flex flex-col" onSubmit={onSubmitCredentials}>
+            <form className="px-3 pb-7 w-full flex flex-col gap-3" onSubmit={onSubmitCredentials}>
               <InputEmail
-                className="mt-2"
+                className=""
                 _id="email"
                 label="Email"
                 isError={errors.email}
@@ -152,7 +156,7 @@ export default function Login() {
                 name="username"
               />
               <InputPassword
-                className="py-2"
+                className=""
                 label="Password"
                 _id="password"
                 isError={errors.password}
@@ -164,7 +168,7 @@ export default function Login() {
                 name="password"
               />
               <Button
-                className="mt-2"
+                className="mt-3"
                 label="Sign In"
                 variant="primary"
                 size="base"
@@ -172,10 +176,10 @@ export default function Login() {
                 isLoading={isLoading === "credentials" ? true : false}
               />
               <div className="mt-7 gap-7 w-full flex flex-col items-center">
-                <Link className="link underline-animate" href="/new-password">
+                <Link className="linkColor underline-animate" href="/new-password">
                   Forgot password?
                 </Link>
-                <Link className="link underline-animate" href="/signup">
+                <Link className="linkColor underline-animate" href="/signup">
                   Create new account
                 </Link>
               </div>

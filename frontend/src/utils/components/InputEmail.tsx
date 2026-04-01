@@ -18,8 +18,8 @@ export default function InputEmail({
   ...props
 }: InputProps) {
   return (
-    <div className={`flex flex-col items-start gap-1 ${className}`}>
-      <label className="labelBase" htmlFor={_id}>
+    <div className={`flex flex-col items-start ${className}`}>
+      <label className="inputLabel" htmlFor={_id}>
         {label}
       </label>
       <Input

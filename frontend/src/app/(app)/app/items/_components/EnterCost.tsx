@@ -113,7 +113,7 @@ export default function EnterCost({
             <FaChevronDown className="absolute right-3 pointer-events-none text-sm desktop:text-[0.625rem] opacity-80" />
           </div>
           {/*--- amount ---*/}
-          <div className="flex-none px-2.5 desktop:px-2 w-[calc(12rem)] desktop:w-[calc(3rem*3+0.375rem*2)] h-full flex items-center justify-center border-2 border-blue-500/20 rounded-2xl desktop:rounded-xl text3xl font-semibold tabular-nums text-center">
+          <div className="flex-none px-2.5 desktop:px-2 w-[calc(12rem)] desktop:w-[calc(3rem*3+0.375rem*2)] h-full flex items-center justify-center border-2 border-blue-500/20 rounded-2xl desktop:rounded-xl text2xl font-semibold tabular-nums text-center">
             {amount || (decimals === 0 ? "0" : `0.${"0".repeat(decimals)}`)}
           </div>
           {/*--- multiplier ---*/}
@@ -127,11 +127,11 @@ export default function EnterCost({
             <button
               key={index}
               type="button"
-              className={`w-20 h-20 desktop:w-12 desktop:h-12 flex items-center justify-center text2xl font-semibold bg-slate-200 dark:bg-blue-500/30 rounded-full select-none
+              className={`w-20 h-20 desktop:w-12 desktop:h-12 flex items-center justify-center textXl font-semibold bg-slate-200 dark:bg-blue-500/30 rounded-full select-none
                   ${
                     maxFractionDigits === 0 && i === "."
                       ? "opacity-40 cursor-not-allowed"
-                      : "hover:bg-slate-300 dark:desktop:hover:bg-blue-500/40 active:scale-95 active:opacity-90 cursor-pointer"
+                      : "hover:bg-slate-300 dark:desktop:hover:bg-blue-500/40 active:scale-95 active:opacity-90"
                   }`}
               onClick={() => onClickNumber(i)}
               disabled={maxFractionDigits === 0 && i === "."}
@@ -142,9 +142,9 @@ export default function EnterCost({
           ))}
 
           <button
-            type="button"
-            className="w-20 h-20 desktop:w-12 desktop:h-12 flex items-center justify-center text2xl font-semibold bg-slate-200 hover:bg-slate-300 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-full cursor-pointer select-none active:scale-95 active:opacity-90"
+            className="w-20 h-20 desktop:w-12 desktop:h-12 flex items-center justify-center textXl font-semibold bg-slate-200 hover:bg-slate-300 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-full select-none active:scale-95 active:opacity-90"
             onClick={onBackspace}
+            type="button"
             aria-label="Backspace"
           >
             <FaDeleteLeft />
