@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { FaArrowUp, FaArrowDown, FaX, FaCircleNotch } from "react-icons/fa6";
 import { useSettingsMutation } from "@/utils/hooks";
 import { SubcategoryWithId, AddCategoryModalStatus } from "./AddCategoryModal";
-import DeleteRowButton from "@/utils/components/DeleteRowButton";
 
 export default function EditButtons({
   setSubcategoriesWithId,
