@@ -16,7 +16,7 @@ export default function LoginButton({
 }) {
   return (
     <button className="relative loginButtonBase loginButtonRoundness loginButtonColor" onClick={onClick} type="button">
-      <div className="relative w-7 h-7 desktop:w-5 desktotp:h-5">
+      <div className="relative aspect-square w-7 desktop:w-6">
         <Image src={imageSrc} alt={imageAlt} fill />
       </div>
       <div className="relative">{label}</div>

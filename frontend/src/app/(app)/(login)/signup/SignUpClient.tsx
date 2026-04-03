@@ -76,25 +76,34 @@ export default function SignUpClient() {
       {/*--- form ---*/}
       <form className="w-full flex flex-col gap-4" onSubmit={signUp}>
         <InputEmail
-          label="Email"
+          // for InputEmail
           _id="email"
+          label="Email"
+          isSignIn={false}
           isError={errors.email}
           errorMsg="Invalid email"
+          // for Input
+          inputSize="login"
+          // for <input>
           onBlur={(e) => validateEmail(e.target.value)}
           onChange={(e) => setEmail(e.target.value)}
           value={email}
-          autoComplete="email"
         />
         <div className="group relative">
           <InputPassword
-            label="Password"
+            // for InputPassword
             _id="password1"
+            label="Password"
+            isCurrentPassword={false}
+            name="password"
             isError={errors.password1}
             errorMsg="Must be &ge; 8 characters and contain a lowercase letter, an uppercase letter, and a number"
+            // for Input
+            inputSize="login"
+            // for <input>
             onBlur={(e) => validatePassword1(e.target.value)}
             onChange={(e) => setPassword1(e.target.value)}
             value={password1}
-            autoComplete="new-password"
           />
           <div className="absolute right-0 bottom-[calc(100%-16px)] pointer-events-none p-3 bg-slate-800 text-white text-base desktop:text-xs space-y-[8px] rounded-lg opacity-0 group-focus-within:opacity-100 [transition:opacity_300ms]">
             <p>&bull;&nbsp; at least 8 characters</p>
@@ -104,16 +113,21 @@ export default function SignUpClient() {
           </div>
         </div>
         <InputPassword
-          label="Re-enter Password"
+          // for InputPassword
           _id="password2"
+          label="Re-enter Password"
+          isCurrentPassword={false}
+          name="confirmPassword"
           isError={errors.password2}
           errorMsg="Password does not match"
+          // for Input
+          inputSize="login"
+          // for <input>
           onBlur={(e) => validatePassword2(e.target.value)}
           onChange={(e) => setPassword2(e.target.value)}
           value={password2}
-          autoComplete="new-password"
         />
-        <Button className="mt-4" label="Sign Up" variant="primary" size="base" type="submit" isLoading={isLoading} disabled={isLoading} />
+        <Button className="mt-4" label="Sign Up" variant="primary" size="login" type="submit" isLoading={isLoading} disabled={isLoading} />
       </form>
 
       {/*--- other options ---*/}

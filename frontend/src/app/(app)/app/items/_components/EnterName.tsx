@@ -2,6 +2,7 @@ import { useState } from "react";
 import { DraftItem } from "@/utils/types";
 import Button from "@/utils/components/Button";
 import Modal from "@/utils/components/Modal";
+import ErrorMessage from "@/utils/components/ErrorMessage";
 
 export default function EnterName({
   setNameModal,
@@ -36,9 +37,7 @@ export default function EnterName({
           placeholder="Enter a short item description"
           autoFocus
         />
-        <div className="mt-6 mb-2 shrink-0 errorText h-12 desktop:h-6 flex items-center justify-center">
-          {errorMessage ? errorMessage : ""}
-        </div>
+        <ErrorMessage message={errorMessage} />
         <Button className="w-full" label="Enter" variant="primary" size="base" type="submit" />
       </form>
     </Modal>

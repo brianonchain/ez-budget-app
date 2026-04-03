@@ -155,7 +155,7 @@ export default function ShareWorkspaceModal({
                 <Spinner />
               </div>
             ) : isSharedError ? (
-              <div className="text-center text-textError py-4">Failed to load shared users.</div>
+              <div className="text-center text-textDanger py-4">Failed to load shared users.</div>
             ) : sharedUsers.length === 0 && pendingSharedUsers.length === 0 ? (
               <div className="text-center opacity-70 py-4">No shared users yet.</div>
             ) : (
@@ -167,7 +167,7 @@ export default function ShareWorkspaceModal({
                       label="Pending"
                       variant="outline"
                       size="pill"
-                      iconRight={<FaX className="text-sm desktop:text-xs translate-y-[1px] text-textError" />}
+                      iconRight={<FaX className="text-sm desktop:text-xs translate-y-[1px] text-textDanger" />}
                       onClick={() => deletePendingSharedUser(user)}
                       isLoading={status === `deletingPendingSharedUser${user._id}`}
                       disabled={isPending}

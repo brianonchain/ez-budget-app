@@ -18,7 +18,7 @@ export default async function Hero() {
         </div>
         <div className="text-xl leading-[1.6]">Use EZ Budget App to track your daily expenses with speed and customizability.</div>
         <Link
-          className="mt-4 buttonPrimaryColor px-7 desktop:px-6 py-4 desktop:py-3 textLg font-medium rounded-full mx-auto lg:mx-0"
+          className="mt-4 buttonPrimaryColor px-7 desktop:px-6 py-4 desktop:py-3 font-medium rounded-full mx-auto lg:mx-0"
           href={session ? "/app/items" : "/login"}
         >
           Enter App

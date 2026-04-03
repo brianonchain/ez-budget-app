@@ -26,7 +26,7 @@ export default function Modal({
         }}
       >
         <div
-          className="z-[100] fixed py-2 w-[85dvw] max-w-90 max-h-[70dvh] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl flex flex-col overflow-hidden modalColor border"
+          className="app textBase z-[100] fixed py-2 w-[85dvw] max-w-90 max-h-[70dvh] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl flex flex-col overflow-hidden modalColor border"
           role="dialog"
           aria-modal="true"
         >
@@ -34,7 +34,7 @@ export default function Modal({
           <div className="absolute w-[200%] h-[150%] right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-[-1] modalGlow dark:block hidden" />
           {/*--- content ---*/}
           <div className="flex-1 min-h-0 px-6 pt-6 pb-8 ortrait:sm:px-[32px] landscape:lg:px-[32px] desktop:!px-[48px] overflow-y-auto thinScrollbar">
-            <FaTriangleExclamation className="mx-auto text-5xl text-textError" />
+            <FaTriangleExclamation className="mx-auto text-5xl text-textDanger" />
             <p className="mt-6">{errorMessage}</p>
             <Button className="mt-8 w-full" label="Close" variant="primary" size="base" onClick={() => setErrorMessage("")} />
           </div>

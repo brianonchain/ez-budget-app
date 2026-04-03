@@ -8,7 +8,7 @@ import { signOut } from "next-auth/react";
 // components
 import Button from "@/utils/components/Button";
 import Modal from "@/utils/components/Modal";
-
+import ErrorMessage from "@/utils/components/ErrorMessage";
 const defaultErrors = { newPassword1: false, newPassword2: false, submit: "" };
 
 export default function PasswordModal({ setPasswordModal, email }: { setPasswordModal: any; email: string }) {
@@ -68,26 +68,34 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
           <form className="" onSubmit={onSubmit}>
             <div className="space-y-4">
               <InputPassword
+                // for InputPassword
                 _id="oldPassword"
-                className=""
                 label="Old Password"
+                isCurrentPassword={true}
+                name="currentPassword"
+                // isError={false} // no error for this field
+                // errorMsg="Invalid password" // no error message for this field
+                // for Input
+                inputSize="base"
+                // for <input>
                 onChange={(e) => setOldPassword(e.target.value)}
                 value={oldPassword}
-                autoComplete="current-password"
-                disabled={status === "initial" ? false : true}
               />
               <div className="group relative">
                 <InputPassword
+                  // for InputPassword
                   _id="newPassword1"
-                  className=""
                   label="New Password"
+                  isCurrentPassword={false}
+                  name="newPassword"
                   isError={errors.newPassword1}
                   errorMsg="Must be at least 8 characters and contain a lowercase letter, an uppercase letter, and a number"
+                  // for Input
+                  inputSize="base"
+                  // for <input>
                   onBlur={(e) => validatePassword1(e.target.value)}
                   onChange={(e) => setNewPassword1(e.target.value)}
                   value={newPassword1}
-                  autoComplete="new-password"
-                  disabled={status === "initial" ? false : true}
                 />
                 <div className="absolute right-0 bottom-[calc(100%-16px)] pointer-events-none p-3 bg-slate-800 text-white text-base desktop:text-xs space-y-[8px] rounded-lg opacity-0 group-focus-within:opacity-100 [transition:opacity_300ms]">
                   <p>&bull;&nbsp; at least 8 characters</p>
@@ -97,16 +105,19 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
                 </div>
               </div>
               <InputPassword
+                // for InputPassword
                 _id="newPassword2"
-                className=""
                 label="Re-enter New Password"
+                isCurrentPassword={false}
+                name="confirmNewPassword"
                 isError={errors.newPassword2}
                 errorMsg="Password does not match"
+                // for Input
+                inputSize="base"
+                // for <input>
                 onBlur={(e) => validatePassword2(e.target.value)}
                 onChange={(e) => setNewPassword2(e.target.value)}
                 value={newPassword2}
-                autoComplete="new-password"
-                disabled={status === "initial" ? false : true}
               />
             </div>
             <Button
@@ -116,9 +127,8 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
               size="base"
               type="submit"
               isLoading={status === "pending"}
-              disabled={status !== "initial"}
             />
-            {errors.submit && <div className="mt-[32px] text-textError font-medium text-center">{errors.submit}</div>}
+            {errors.submit && <ErrorMessage message={errors.submit} />}
           </form>
         ) : (
           <div className="w-full h-[300px] desktop:h-[240px] flex flex-col items-center justify-center gap-[32px] font-medium text-center">

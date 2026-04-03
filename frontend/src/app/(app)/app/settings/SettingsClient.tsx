@@ -9,7 +9,7 @@ import { FiShare2, FiTrash2, FiLogOut, FiUserMinus, FiEdit } from "react-icons/f
 import { FaUserMinus, FaTrashCan, FaArrowRightFromBracket, FaShareNodes } from "react-icons/fa6";
 // components (modals)
 import PasswordModal from "./_components/modals/PasswordModal";
-import EmailModal from "./_components/modals/EmailModal";
+import ChangeEmailModal from "./_components/modals/ChangeEmailModal";
 import AddCategoryModal from "./_components/modals/AddCategoryModal";
 import AddTagModal from "./_components/modals/AddTagModal";
 import ShareWorkspaceModal from "./_components/modals/ShareWorkspaceModal";
@@ -27,6 +27,8 @@ import SettingsCategoryContainer from "./_components/SettingsCategoryContainer";
 import Button from "@/utils/components/Button";
 import Select from "@/utils/components/Select";
 import Toggle from "@/utils/components/Toggle";
+import EditIcon from "@/utils/components/EditIcon";
+
 // utils
 import { capitalizeFirst } from "@/utils/functions";
 import { useSettingsMutation, useSettingsQuery, useUserMutation, useItemsQuery } from "@/utils/hooks";
@@ -270,16 +272,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         <SettingsField label="Email">
           <div className="h-12 desktop:h-9 flex items-center gap-2 overflow-hidden">
             <p className="grow font-medium truncate">{email}</p>
-            {provider === "credentials" && (
-              <Button
-                className="h-12 desktop:h-9 flex items-center gap-2"
-                variant="outline"
-                size="sm"
-                type="button"
-                icon={<FiEdit className="" />}
-                onClick={() => setEmailModal(true)}
-              />
-            )}
+            {provider === "credentials" && <EditIcon onClick={() => setEmailModal(true)} ariaLabel="Change email" />}
           </div>
         </SettingsField>
         {/*--- Login Method or Password ---*/}
@@ -287,14 +280,7 @@ export default function Settings({ provider, email, userId }: { provider: string
           <SettingsField label="Password">
             <div className="h-12 desktop:h-9 flex items-center gap-2">
               {"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}
-              <Button
-                className="h-12 desktop:h-9 flex items-center gap-2"
-                variant="outline"
-                size="sm"
-                type="button"
-                icon={<FiEdit className="" />}
-                onClick={() => setPasswordModal(true)}
-              />
+              <EditIcon onClick={() => setPasswordModal(true)} ariaLabel="Change password" />
             </div>
           </SettingsField>
         ) : (
@@ -327,7 +313,7 @@ export default function Settings({ provider, email, userId }: { provider: string
       </SettingsCard>
 
       {passwordModal && <PasswordModal setPasswordModal={setPasswordModal} email={email} />}
-      {emailModal && <EmailModal setEmailModal={setEmailModal} />}
+      {emailModal && <ChangeEmailModal setEmailModal={setEmailModal} />}
       {addCategoryModal && data?.workspace && (
         <AddCategoryModal
           workspace={data.workspace}

@@ -4,37 +4,51 @@ import Accordion from "./Accordion";
 import Input from "./Input";
 
 type InputProps = {
+  inputSize: "xs" | "sm" | "base" | "login";
   _id: string;
-  label?: string;
+  isCurrentPassword: boolean; // true for sign in form and "current password" field in change password form
+  name: string;
+  // name should be:
+  // sing in form = "password"
+  // sign up form = "password", "confirmPassword"
+  // change password form = "currentPassword", "newPassword", "confirmNewPassword"
+  label: string;
   isError?: boolean;
   errorMsg?: string;
-  className?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 export default function InputPassword({
+  inputSize,
   _id,
-  label = "Password",
+  isCurrentPassword,
+  name,
+  label,
   isError = false,
   errorMsg = "Invalid password",
-  className = "",
   ...props
 }: InputProps) {
   const [show, setShow] = useState(false);
 
   return (
-    <div className={`flex flex-col items-start ${className}`}>
-      <label className="inputLabel" htmlFor={_id}>
+    <div className="flex flex-col items-start">
+      <label className={`inputLabel ${inputSize === "login" ? "textSm text-textSecondary" : ""}`} htmlFor={_id}>
         {label}
       </label>
       <div className="w-full relative">
         <Input
-          id={_id}
           className={`!pr-[calc(1.2em+2rem)] desktop:!pr-[calc(1.2em+1.5rem)] ${
             isError ? "!border-buttonDangerBg focus:!border-buttonDangerBg" : ""
           } peer`}
+          variant="primary"
+          inputSize={inputSize}
+          // props specific for InputPassword
+          id={_id}
+          name={name}
+          autoComplete={isCurrentPassword ? "current-password" : "new-password"}
           type={show ? "text" : "password"}
           autoCapitalize="none"
           autoCorrect="off"
+          spellCheck={false}
           {...props}
         />
         <button
@@ -52,7 +66,7 @@ export default function InputPassword({
         </button>
       </div>
       <Accordion isOpen={isError ? true : false}>
-        <p className="errorText">{errorMsg}</p>
+        <p className="mt-1 text-textDanger">{errorMsg}</p>
       </Accordion>
     </div>
   );

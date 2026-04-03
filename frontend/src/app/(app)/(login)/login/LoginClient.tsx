@@ -14,6 +14,7 @@ import InputEmail from "@/utils/components/InputEmail";
 import InputPassword from "@/utils/components/InputPassword";
 import ErrorModal from "@/utils/components/ErrorModal";
 import Accordion from "@/utils/components/Accordion";
+import Input from "@/utils/components/Input";
 // images
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 
@@ -113,7 +114,7 @@ export default function Login() {
       <div className="w-full flex flex-col items-center gap-6">
         {/*--- Google ---*/}
         <LoginButton
-          label="Sign in with Google"
+          label="Continue with Google"
           imageSrc="/google.svg"
           imageAlt="google"
           isLoading={isLoading === "google" ? true : false}
@@ -138,44 +139,49 @@ export default function Login() {
             onClick={() => setShowEmailPassword(!showEmailPassword)}
             type="button"
           >
-            <p>Sign in with Email/Password</p>
+            <p>Continue with Email/Password</p>
             {showEmailPassword ? <FaAngleUp className="absolute right-6 w-4 h-4" /> : <FaAngleDown className="absolute right-6 w-4 h-4" />}
           </button>
           <Accordion isOpen={showEmailPassword}>
-            <form className="px-3 pb-7 w-full flex flex-col gap-3" onSubmit={onSubmitCredentials}>
+            <form className="mt-1 xs:mt-2 px-3 xs:px-5 pb-7 w-full flex flex-col gap-5" onSubmit={onSubmitCredentials}>
               <InputEmail
-                className=""
-                _id="email"
+                // for InputEmail
+                _id="loginEmail"
                 label="Email"
+                isSignIn={true}
                 isError={errors.email}
                 errorMsg="Invalid email"
+                // for Input
+                inputSize="login"
+                // for <input>
                 onBlur={(e) => validateEmail(e.target.value)}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
-                autoComplete="username"
-                name="username"
               />
               <InputPassword
-                className=""
-                label="Password"
+                // for InputPassword
                 _id="password"
+                label="Password"
+                isCurrentPassword={true}
+                name="password"
                 isError={errors.password}
                 errorMsg="Password should contain a lowercase letter, an uppercase letter, and a number"
+                // for Input
+                inputSize="login"
+                // for <input>
                 onBlur={(e) => validatePassword(e.target.value)}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
-                autoComplete="current-password"
-                name="password"
               />
               <Button
                 className="mt-3"
                 label="Sign In"
                 variant="primary"
-                size="base"
+                size="login"
                 type="submit"
                 isLoading={isLoading === "credentials" ? true : false}
               />
-              <div className="mt-7 gap-7 w-full flex flex-col items-center">
+              <div className="mt-7 gap-7 w-full flex flex-col items-center textSm">
                 <Link className="linkColor underline-animate" href="/new-password">
                   Forgot password?
                 </Link>

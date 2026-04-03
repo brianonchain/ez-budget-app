@@ -28,7 +28,7 @@ export default async function RootLayout({
   const session = await getServerSession();
   return (
     <html className="bg-bgPrimary" suppressHydrationWarning lang="en">
-      <body className={`${inter.className} bg-bgPrimary text-textPrimary antialiased`}>
+      <body className={`${inter.className} bg-bgPrimary text-textPrimary textBase antialiased`}>
         <SessionProvider session={session}>{children}</SessionProvider>
       </body>
     </html>

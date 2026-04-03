@@ -20,8 +20,8 @@
   --color-textDisabled: rgb(33 36 39 / 0.3);
   --color-link: #0084d1; /* sky-500 */
   --color-linkHover: oklch(50% 0.134 242.749); /* sky-600 */
-  --color-textError: #ff295d;
-  --color-textErrorHover: #d91f4f;
+  --color-textDanger: #d91f4f;
+  --color-textDangerHover: #d91f4f;
   --color-textDisabled: #212427b3; /* textPrimary/70% */
   /* buttons */
   --color-buttonPrimaryText: #ffffff;
@@ -76,8 +76,8 @@
   --color-textDisabled: rgb(233 232 246 / 0.3);
   --color-link: #2374f6;
   --color-linkHover: #4286f3;
-  --color-textError: #ff3a6a;
-  --color-textErrorHover: #ff507a;
+  --color-textDanger: #ff3a6a;
+  --color-textDangerHover: #ff507a;
   /* buttons */
   --color-buttonPrimaryText: #ffffff;
   --color-buttonPrimaryBg: #0364ff;
@@ -104,9 +104,14 @@
   --color-inputOutlinePlaceholder: oklch(44.6% 0.043 257.281); /* slate-600 */
 }
 
+/*--- BASIC STYLES ---*/
 button {
   cursor: pointer;
 }
+@utility scrollbar-stable {
+  scrollbar-gutter: stable;
+}
+/*--- custom focus outline ---*/
 :focus-visible {
   outline: 2px solid var(--color-buttonRing);
   outline-offset: 2px;
@@ -115,20 +120,13 @@ button {
 .inputPrimaryColor:focus-visible {
   outline: none;
 }
-/* --- for scroll containers that contains buttons (e.g., item list or details list) ---*/
+/* --- add this to buttons within scroll containers where outline overflow becomes clipped (e.g., item list or details list) ---*/
 .outlineInside:focus-visible {
   outline-offset: -2px;
 }
 
-/*--- scrollbar ---*/
-
-@utility scrollbar-stable {
-  scrollbar-gutter: stable;
-}
-
-/*--- TEXT SIZES ---*/
-/* landing */
-.landing {
+/*--- TEXT SIZES (must reapply text size after using "landing", "app", and "login" classes)---*/
+:root {
   --font-xs: 0.875rem; /* 14px */
   --font-sm: 1rem; /* 16px */
   --font-base: 1.125rem; /* 18px */
@@ -170,8 +168,8 @@ button {
 /* app login (desktop) */
 @media (hover: hover) and (pointer: fine) {
   .login {
-    --font-xs: 0.75rem; /* 12px */
-    --font-sm: 0.875rem; /* 14px */
+    --font-xs: 0.8125rem; /* 13px */
+    --font-sm: 0.9375rem; /* 15px */
     --font-base: 1rem; /* 16px */
     --font-lg: 1.125rem; /* 18px */
     --font-xl: 1.375rem; /* 22px */
@@ -203,10 +201,6 @@ button {
   line-height: var(--leading-2xl);
 }
 
-@utility errorText {
-  @apply text-textErrorHover font-medium;
-}
-
 /*--- buttons ---*/
 
 @utility buttonPrimaryColor {
@@ -220,7 +214,7 @@ button {
 /*--- login button ---*/
 
 @utility loginButtonBase {
-  @apply w-full h-16 desktop:h-13 flex items-center justify-center gap-3 font-medium;
+  @apply w-full h-16 desktop:h-15 px-8 desktop:px-7 flex items-center gap-4 font-medium select-none;
 }
 
 @utility loginButtonColor {
@@ -228,7 +222,7 @@ button {
 }
 
 @utility loginButtonRoundness {
-  @apply rounded-[33px] desktop:rounded-[1.65rem];
+  @apply rounded-[33px] desktop:rounded-[1.9rem];
 }
 
 /*--- input ---*/
@@ -344,7 +338,7 @@ button {
 
 /*--- links ---*/
 @utility linkRedColor {
-  @apply text-textError desktop:hover:text-textErrorHover active:text-textErrorHover;
+  @apply text-textDanger desktop:hover:text-textDangerHover active:text-textDangerHover;
 }
 @utility linkGrayColor {
   @apply text-textTertiary desktop:hover:text-textSecondary active:text-textSecondary;

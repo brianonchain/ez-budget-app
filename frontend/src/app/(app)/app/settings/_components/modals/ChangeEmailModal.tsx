@@ -21,6 +21,7 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (isLoading) return; // avoid double submitting
     if (content === "changeEmail") createPendingEmailChange();
     if (content === "verifyOtp") verifyPendingEmailChange();
     if (content === "changed") {
@@ -145,9 +146,13 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
       <form className="mt-4 w-full" onSubmit={onSubmit}>
         {content === "changeEmail" && (
           <InputEmail
+            // for InputEmail
             _id="email"
-            className="w-full"
             label="New Email"
+            isSignIn={false}
+            // for Input
+            inputSize="base"
+            // for <input>
             onBlur={(e) => {
               if (e.currentTarget.value && !checkEmail(e.currentTarget.value)) {
                 setErrorMessage("Please enter a valid email.");
@@ -155,13 +160,12 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
             }}
             onChange={(e) => setNewEmail(e.target.value)}
             value={newEmail}
-            disabled={isLoading}
           />
         )}
         {content === "verifyOtp" && (
           <div className="h-[100px] desktop:h-[80px] flex flex-col items-center justify-between">
             <div>Enter the 6-digit code sent to your email</div>
-            <div className="flex items-center justify-center gap-[8px]">
+            <div className="flex items-center justify-center gap-1">
               {otp.map((digit, index) => (
                 <input
                   key={index}
@@ -176,7 +180,7 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   onChange={(e) => handleChange(e, index)}
                   onPaste={index === 0 ? handlePaste : undefined}
-                  className="w-[52px] h-[52px] desktop:w-[43px] desktop:h-[43px] text-[18px] text-center border-2 rounded-lg inputPrimaryColor"
+                  className="aspect-square w-[52px] desktop:w-[51px] textXl text-center border-2 rounded-lg inputPrimaryColor"
                   disabled={isLoading}
                 />
               ))}
@@ -202,7 +206,7 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
         />
 
         {/*--- error message ---*/}
-        <div className="py-2 text-textError font-medium min-h-13">{errorMessage || ""}</div>
+        <div className="py-2 text-textDanger font-medium min-h-13">{errorMessage || ""}</div>
 
         {/*--- resend code button ---*/}
         {content === "verifyOtp" && (

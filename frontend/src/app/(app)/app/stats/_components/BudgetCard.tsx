@@ -1,9 +1,8 @@
 "use client";
 import { DiscretionaryBudget } from "@/utils/types";
 import { SYMBOLS, DECIMALS } from "@/utils/constants";
-import { FiEdit2 } from "react-icons/fi";
-import Button from "@/utils/components/Button";
 import TextSkeleton from "@/utils/components/TextSkeleton";
+import EditIcon from "@/utils/components/EditIcon";
 
 function formatAmount(amount: number, currency: string) {
   const sym = SYMBOLS[currency] ?? "";
@@ -22,14 +21,11 @@ export default function BudgetCard({
 }) {
   return (
     <>
-      <Button
+      <EditIcon
         className="absolute right-2 top-2 xs:top-3 xs:right-3"
-        variant="outline"
-        size="icon"
-        icon={<FiEdit2 className="text-sm desktop:text-xs linkGrayColor" />}
         onClick={() => setBudgetModal(true)}
-        aria-label="Edit discretionary budget"
-      ></Button>
+        ariaLabel="Edit discretionary budget"
+      />
       {/* 0 is falsy so need != null, which checks for null and undefined */}
       {discretionaryBudget && monthlySpent != null ? (
         <>

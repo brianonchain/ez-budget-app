@@ -3,7 +3,7 @@ import { ImSpinner2 } from "react-icons/im";
 type ButtonProps = {
   label?: string;
   variant?: "primary" | "outline" | "danger" | "dangerOutline" | "ghost" | "input";
-  size?: "xs" | "sm" | "base" | "pill" | "icon" | "hug";
+  size?: "xs" | "sm" | "base" | "pill" | "icon" | "hug" | "login";
   isLoading?: boolean;
   className?: string;
   icon?: React.ReactNode;
@@ -28,7 +28,7 @@ export default function Button({
     danger:
       "text-buttonPrimaryText bg-buttonDangerBg desktop:hover:bg-buttonDangerBgHover active:bg-buttonDangerBgHover [transition:background-color_200ms]",
     dangerOutline:
-      "text-textError hover:text-textErrorHover bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover border border-inputOutlineBorder [transition:background-color_200ms]",
+      "text-textDanger hover:text-textDangerHover bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover border border-inputOutlineBorder [transition:background-color_200ms]",
     ghost: "desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover",
     input: "text-left justify-start inputPrimaryColor !font-normal", // inputPrimaryColor includes focus ring, used in Selct Date button
   };
@@ -36,7 +36,8 @@ export default function Button({
   const sizes = {
     xs: "h-11 desktop:h-8 px-3 desktop:px-2.5 textSm rounded-lg font-medium", // used in DetailsModal.tsx
     sm: "h-12 desktop:h-9 px-3 desktop:px-2.5 textBase rounded-lg font-medium",
-    base: "h-14 desktop:h-10 px-4 desktop:px-3 textBase rounded-lg font-semibold",
+    base: "h-14 desktop:h-10 px-4 desktop:px-3 textBase rounded-lg font-medium",
+    login: "h-13 desktop:h-12 px-3.5 rounded-xl font-medium",
     // special sizes
     icon: "flex-none aspect-square w-9 desktop:w-8 rounded-lg",
     pill: "h-11 desktop:h-8 px-4 desktop:px-3.5 textXs rounded-full gap-2 font-normal",
