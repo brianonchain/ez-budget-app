@@ -149,7 +149,7 @@ export default function ShareWorkspaceModal({
         {/*--- SHARED WITH ---*/}
         <div className="py-6 border-t-[1.5px] border-borderFaint">
           <p className="font-medium">Shared With</p>
-          <div className="mt-4 flex flex-col gap-4 textSm portrait:sm:textBase landscape:lg:textBase">
+          <div className="mt-4 flex flex-col gap-4 textSm tablet:textBase">
             {isLoadingShared ? (
               <div className="w-full flex items-center justify-center py-8">
                 <Spinner />

@@ -53,13 +53,13 @@ export default function Modal({
               &#10005;
             </button>
             {/*--- title ---*/}
-            <h2 id={titleId} className="mx-[60px] py-6 text-center textXl font-semibold">
+            <h2 id={titleId} className="mx-[60px] py-4 tablet:py-6 text-center textXl font-semibold">
               {title}
             </h2>
           </div>
 
           {/*--- content (max-w-110 controls content width on tablets, desktop:max-w-104 above controls content width on desktops) ---*/}
-          <div className="flex-1 min-h-0 overflow-y-auto w-full flex flex-col items-center pb-6 px-4 portrait:sm:px-8 landscape:lg:px-8 desktop:!px-10 textBase thinScrollbar scrollbar-stable">
+          <div className="flex-1 min-h-0 overflow-y-auto w-full flex flex-col items-center pb-6 px-4 tablet:px-8 desktop:px-10 textBase thinScrollbar scrollbar-stable">
             {/*--- this inner div not needed if only mobile was full screen ---*/}
             <div className="w-full max-w-100">{children}</div>
           </div>

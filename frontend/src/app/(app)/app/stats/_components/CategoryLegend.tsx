@@ -68,7 +68,7 @@ export default function CategoryLegend({ items, currency, groupBy = "category" }
       </div>
 
       {/* pie chart */}
-      <div className="shrink-0 aspect-square w-[110px] portrait:sm:w-[140px] landscape:lg:w-[140px]">
+      <div className="shrink-0 aspect-square w-[110px] tablet:w-[140px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie

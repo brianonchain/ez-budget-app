@@ -48,7 +48,7 @@ export default function SaveAppToHome() {
       {/*---text---*/}
       <div className={`${browser && os ? "" : "invisible"} flex flex-col items-center`}>
         <div className="pt-[40px] pb-[30px] font-bold text2xl">Add To Home Screen</div>
-        <div className="w-[350px] portrait:sm:w-[460px] landscape:lg:w-[460px] flex flex-col gap-[8px] portrait:sm:gap-[16px] landscape:lg:gap-[16px] textBase">
+        <div className="w-[350px] tablet:w-[460px] flex flex-col gap-2 tablet:gap-4">
           <p>To use this App, you need to add this website to your home screen.</p>
           <p>
             In the {os === "ios" ? "bottom menu bar" : "top right corner"} of your browser, tap the share icon{" "}

@@ -1,10 +1,10 @@
-// portrait:sm and landscape:lg shows list container
+// tablet & desktop shows list container
 export default function ItemsShell({ children, footer }: { children: React.ReactNode; footer: React.ReactNode }) {
   return (
-    <div className="w-full pageContentMaxWidth portrait:sm:px-4 landscape:lg:px-4 portrait:sm:py-6 landscape:lg:py-6">
-      <div className="w-full portrait:sm:rounded-2xl landscape:lg:rounded-2xl overflow-hidden shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none">
+    <div className="w-full pageContentMaxWidth tablet:px-4 tablet:py-6">
+      <div className="w-full tablet:rounded-2xl overflow-hidden shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none">
         {/*--- header, scrollbar-stable also applied ---*/}
-        <div className="px-[3%] h-[var(--listHeaderHeight)] bg-bgPrimary portrait:sm:bg-card landscape:lg:bg-card flex items-center font-semibold text-textSecondary border-b border-borderFaint portrait:sm:overflow-y-auto landscape:lg:overflow-y-auto thinScrollbar scrollbar-stable">
+        <div className="px-[3%] h-[var(--listHeaderHeight)] bg-bgPrimary tablet:bg-card flex items-center font-semibold text-textSecondary border-b border-borderFaint tablet:overflow-y-auto thinScrollbar scrollbar-stable">
           <p className="w-[50%]">Item</p>
           <p className="w-[25%]">Cost</p>
           <p className="w-[25%] text-end">Category</p>
@@ -12,9 +12,7 @@ export default function ItemsShell({ children, footer }: { children: React.React
         {/*--- list container ---*/}
         <div className="relative w-full listTotalHeight bg-card">
           {/*--- list ---*/}
-          <div className="w-full h-full overscroll-none overflow-y-auto select-none portrait:sm:thinScrollbar landscape:lg:thinScrollbar scrollbar-stable">
-            {children}
-          </div>
+          <div className="w-full h-full overscroll-none overflow-y-auto select-none tablet:thinScrollbar scrollbar-stable">{children}</div>
           {/*--- fade overlay ---*/}
           <div className="absolute z-[2] left-0 bottom-0 w-full h-[calc(var(--listButtonContainerHeight)+1rem)] bg-gradient-to-b from-transparent via-white/60 dark:via-[#141542]/60 via-40% to-white dark:to-[#141542]" />
           {/*--- + item button ---*/}

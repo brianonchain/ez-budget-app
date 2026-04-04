@@ -1,6 +1,17 @@
 @import "tailwindcss";
-@config "../../tailwind.config.ts";
 @import "./animations.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant tablet {
+  @media (orientation: portrait) and (min-width: 600px), (orientation: landscape) and (min-width: 980px) {
+    @slot;
+  }
+}
+@custom-variant desktop {
+  @media (hover: hover) and (pointer: fine) {
+    @slot;
+  }
+}
 
 @theme {
   /* bg main */
@@ -328,7 +339,7 @@ button {
 }
 
 .pageContentMaxWidth {
-  @apply portrait:sm:max-w-150 landscape:lg:max-w-150 desktop:max-w-140;
+  @apply tablet:max-w-150 desktop:max-w-140;
 }
 
 /*--- app: items page ---*/
@@ -343,7 +354,7 @@ button {
 
 /*--- modal ---*/
 @utility modalColor {
-  @apply bg-cardSolid desktop:border border-inputOutlineBorder;
+  @apply bg-cardSolid dark:bg-bgPrimary desktop:border border-inputOutlineBorder;
 }
 
 /*--- links ---*/

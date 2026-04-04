@@ -10,7 +10,7 @@ export default function Menu() {
   const [path, setPath] = useState(pathname); // to create faster feel compared to pathname
 
   // if menuItems declared outside component, we get hydration warning
-  const menuIcon = "text-[1.375rem] portrait:sm:text-[2rem] landscape:lg:text-[2rem]";
+  const menuIcon = "text-[1.375rem] tablet:text-[2rem]";
   const menuItems = [
     { text: "Items", path: "/app/items", icon: <FaList className={menuIcon} /> },
     { text: "Stats", path: "/app/stats", icon: <FaChartSimple className={menuIcon} /> },
@@ -24,12 +24,12 @@ export default function Menu() {
           href={i.path}
           className={`${
             i.path === path ? "" : "text-textTertiary"
-          } desktop:hover:text-textPrimary w-20 portrait:sm:w-25 landscape:lg:w-25 rounded-lg flex flex-col items-center justify-center gap-0.5 portrait:sm:gap-1 landscape:lg:gap-1`}
+          } desktop:hover:text-textPrimary w-20 tablet:w-25 rounded-lg flex flex-col items-center justify-center gap-0.5 tablet:gap-1`}
           key={i.text}
           onClick={() => setPath(i.path)}
         >
           {i.icon}
-          <p className="text-xs portrait:sm:text-sm landscape:lg:text-sm select-none">{i.text}</p>
+          <p className="text-xs tablet:text-sm select-none">{i.text}</p>
         </Link>
       ))}
     </MenuContainer>
