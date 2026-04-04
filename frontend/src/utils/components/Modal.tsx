@@ -44,7 +44,7 @@ export default function Modal({
           <div className="relative w-full bg-bgPrimary desktop:bg-transparent dark:bg-transparent flex items-center justify-center">
             {/*--- desktop:close ---*/}
             <button
-              className="absolute right-0 right-4 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms]"
+              className="absolute right-4 tablet:right-6 desktop:right-0 desktop:top-0 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms]"
               onClick={() => setModal(false)}
               disabled={disableCloseButton}
               type="button"
