@@ -92,7 +92,7 @@ export default function EnterCost({
 
   return (
     <Modal title="Enter Cost" setModal={setCostModal} disableCloseButton={isPending}>
-      <div className="mx-auto w-full max-w-100 flex flex-col items-center">
+      <div className="flex flex-col items-center">
         {/*--- AMOUNT CONTAINER ---*/}
         <div className="relative w-full h-17 desktop:h-13 flex items-center">
           {/*--- currency ---*/}

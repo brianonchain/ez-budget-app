@@ -29,7 +29,7 @@ export default function EnterName({
 
   return (
     <Modal title="Enter Name" setModal={setNameModal}>
-      <form onSubmit={handleSubmit} className="mx-auto flex-none pt-10 desktop:pt-0 w-full max-w-100">
+      <form onSubmit={handleSubmit} className="pt-10 desktop:pt-0 w-full">
         <textarea
           value={description}
           onChange={(e) => setDescription(e.currentTarget.value)}

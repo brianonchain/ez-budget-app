@@ -41,10 +41,10 @@ export default function Modal({
           {/*--- glow ---*/}
           <div className="absolute w-[200dvw] desktop:w-[200%] h-[100dvh] left-1/2 -translate-x-1/2 z-[-1] modalGlow" />
 
-          <div className="relative w-full bg-bgPrimary desktop:bg-transparent dark:bg-transparent">
+          <div className="relative w-full bg-bgPrimary desktop:bg-transparent dark:bg-transparent flex items-center justify-center">
             {/*--- desktop:close ---*/}
             <button
-              className="absolute right-0 top-0 w-16 h-16 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms]"
+              className="absolute right-0 right-4 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms]"
               onClick={() => setModal(false)}
               disabled={disableCloseButton}
               type="button"
@@ -59,7 +59,7 @@ export default function Modal({
           </div>
 
           {/*--- content (max-w-110 controls content width on tablets, desktop:max-w-104 above controls content width on desktops) ---*/}
-          <div className="flex-1 min-h-0 overflow-y-auto w-full flex flex-col items-center pb-6 px-4 tablet:px-8 desktop:px-10 textBase thinScrollbar scrollbar-stable">
+          <div className="mt-6 desktop:mt-4 flex-1 min-h-0 overflow-y-auto w-full flex flex-col items-center pb-6 px-4 tablet:px-8 desktop:px-10 textBase thinScrollbar scrollbar-stable">
             {/*--- this inner div not needed if only mobile was full screen ---*/}
             <div className="w-full max-w-100">{children}</div>
           </div>

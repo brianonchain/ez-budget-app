@@ -115,7 +115,7 @@ export default function Details({
 
   return (
     <Modal title="Item Info" setModal={setDetailsModal}>
-      <div className="mt-4 w-full flex flex-col">
+      <div className="w-full flex flex-col">
         {/*--- date, name, cost ---*/}
         <div className="w-full grid grid-cols-[auto_1fr] gap-1.5 items-center">
           <label className="detailsLabel" htmlFor="details-date">
