@@ -100,7 +100,7 @@ export default function ExportModal({
 
   return (
     <Modal title="Export Items" setModal={setExportModal} disableCloseButton={isLoading}>
-      <div className="mt-4 w-full flex flex-col">
+      <div className="w-full flex flex-col">
         {/* --- dates --- */}
         <div className="relative w-full grid grid-cols-2 gap-x-3">
           <div className="inputLabel" id="label-start">

@@ -217,12 +217,8 @@ export default function AddCategoryModal({
   }
 
   return (
-    <Modal
-      title={isEdit ? "Edit Category" : "Add A Category With Subcategories"}
-      setModal={setAddCategoryModal}
-      disableCloseButton={isPending}
-    >
-      <form className="mt-4 w-full flex flex-col" onSubmit={onSubmit}>
+    <Modal title={isEdit ? "Edit Category" : "Add Category"} setModal={setAddCategoryModal} disableCloseButton={isPending}>
+      <form className="w-full flex flex-col" onSubmit={onSubmit}>
         {/*--- category ---*/}
         <label className="inputLabel">Category{isEdit ? "" : " (e.g., Food)"}</label>
         <Input

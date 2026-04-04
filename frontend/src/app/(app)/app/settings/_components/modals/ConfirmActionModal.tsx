@@ -54,7 +54,7 @@ export default function ConfirmActionModal({
   }
   return (
     <Modal title={title} setModal={setModal} disableCloseButton={isPending}>
-      <form className="mt-4 w-full flex flex-col" onSubmit={onSubmit}>
+      <form className="w-full flex flex-col" onSubmit={onSubmit}>
         <p>
           Type <span className="font-semibold">{textToMatch}</span> to confirm deletion.
         </p>

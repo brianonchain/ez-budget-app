@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import ItemsShell from "./ItemsShell";
 import AddItemButton from "./_components/AddItemButton";
 import ErrorModal from "@/utils/components/ErrorModal";
-import EnterCost from "./_components/EnterCost";
-import EnterName from "./_components/EnterName";
-import Details from "./_components/Details";
+import EnterCostModal from "./_components/EnterCostModal";
+import EnterNameModal from "./_components/EnterNameModal";
+import DetailsModal from "./_components/DetailsModal";
 import Loading from "./loading";
 import Spinner from "@/utils/components/Spinner";
 // constants
@@ -151,7 +151,7 @@ export default function Items() {
         )}
       </ItemsShell>
       {costModal && settingsData && (
-        <EnterCost
+        <EnterCostModal
           setCostModal={setCostModal}
           setNameModal={setNameModal}
           setDraftItem={setDraftItem}
@@ -159,9 +159,9 @@ export default function Items() {
           defaultCurrency={settingsData.workspace.defaultCurrency}
         />
       )}
-      {nameModal && <EnterName setNameModal={setNameModal} setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} />}
+      {nameModal && <EnterNameModal setNameModal={setNameModal} setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} />}
       {detailsModal && settingsData && (
-        <Details setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} draftItem={draftItem} settingsData={settingsData} />
+        <DetailsModal setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} draftItem={draftItem} settingsData={settingsData} />
       )}
       {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
