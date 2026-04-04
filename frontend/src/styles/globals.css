@@ -354,7 +354,7 @@ button {
 
 /*--- modal ---*/
 @utility modalColor {
-  @apply bg-cardSolid dark:bg-bgPrimary desktop:border border-inputOutlineBorder;
+  @apply bg-cardSolid dark:bg-bgPrimary dark:desktop:bg-surfaceSolid desktop:border border-inputOutlineBorder;
 }
 
 /*--- links ---*/
