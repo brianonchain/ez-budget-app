@@ -30,7 +30,7 @@ export default function Button({
     dangerOutline:
       "text-textDanger hover:text-textDangerHover bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover border border-inputOutlineBorder [transition:background-color_200ms]",
     ghost: "desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover",
-    input: "text-left justify-start inputPrimaryColor !font-normal", // inputPrimaryColor includes focus ring, used in Selct Date button
+    input: "text-left justify-start inputPrimaryColor !font-normal", // globals.css removes outline from inputPrimaryColor
   };
 
   const sizes = {

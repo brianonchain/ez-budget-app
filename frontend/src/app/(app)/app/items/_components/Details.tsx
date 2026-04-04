@@ -180,7 +180,7 @@ export default function Details({
         </div>
 
         {/*--- label options ---*/}
-        <div className="mt-6 w-full min-h-50 max-h-100 desktop:min-h-40 desktop:max-h-90 flex gap-1.5">
+        <div className="textSm mt-6 w-full min-h-50 max-h-100 desktop:min-h-40 desktop:max-h-90 flex gap-1.5">
           <DetailsList
             label="Category"
             items={settingsData.workspace.categoryObjects}

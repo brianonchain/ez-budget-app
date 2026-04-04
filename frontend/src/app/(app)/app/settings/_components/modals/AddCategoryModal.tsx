@@ -242,7 +242,7 @@ export default function AddCategoryModal({
           {subcategoriesWithId.map((i, index) => (
             <div key={index} className="w-full flex items-center">
               <Input
-                className="w-full"
+                className="flex-1"
                 inputSize="base"
                 variant="primary"
                 value={i.value}

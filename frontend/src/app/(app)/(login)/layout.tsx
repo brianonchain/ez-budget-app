@@ -9,7 +9,7 @@ export default function LoginLayout({ children }: { children: React.ReactNode })
         aria-hidden
       />
       {/*--- content ---*/}
-      <div className="relative z-[1] mx-auto pt-[100px] pb-[50px] px-3 desktop:px-0 w-full max-w-96 desktop:w-90 flex flex-col items-center">
+      <div className="relative z-[1] mx-auto pt-[100px] pb-[50px] px-3 desktop:px-0 w-full max-w-96 desktop:w-88 flex flex-col items-center">
         <LoginLogo />
         {children}
       </div>

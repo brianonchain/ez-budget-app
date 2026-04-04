@@ -8,6 +8,7 @@
   --color-surface: #f6f9fc;
   --color-card: #ffffff;
   /* bg custom */
+  --color-cardSolid: #ffffff;
   --color-surfaceSolid: #f6f9fc;
   --color-surface2Solid: #f6f9fc;
   --color-selected: #f7f3f9;
@@ -15,7 +16,7 @@
   --color-borderFaint: oklch(92.9% 0.013 255.508); /* slate-200 */
   /* text */
   --color-textPrimary: rgb(33 36 39);
-  --color-textSecondary: rgb(33 36 39 / 0.6);
+  --color-textSecondary: rgb(33 36 39 / 0.7);
   --color-textTertiary: rgb(33 36 39 / 0.4);
   --color-textDisabled: rgb(33 36 39 / 0.3);
   --color-link: #0084d1; /* sky-500 */
@@ -64,16 +65,17 @@
   --color-card: oklch(70.7% 0.165 254.624 / 7%); /* blue-400/7 */
   --color-surface: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
   /* bg custom */
+  --color-cardSolid: #11142f;
   --color-surfaceSolid: #141344; /* blue-400/14 overlaid on bgPrimary */
   --color-surface2Solid: #1d3169; /* blue-400/20 overlaid on bgPrimary */
   --color-selected: oklch(70.7% 0.165 254.624 / 22%); /* blue-400/22 */
   /* borders */
   --color-borderFaint: oklch(70.7% 0.165 254.624 / 8%); /* blue-400/8 */
   /* text */
-  --color-textPrimary: rgb(233 232 246);
-  --color-textSecondary: rgb(233 232 246 / 0.6);
-  --color-textTertiary: rgb(233 232 246 / 0.4);
-  --color-textDisabled: rgb(233 232 246 / 0.3);
+  --color-textPrimary: rgb(240 242 250);
+  --color-textSecondary: rgb(240 242 250 / 0.7);
+  --color-textTertiary: rgb(240 242 250 / 0.45);
+  --color-textDisabled: rgb(240 242 250 / 0.3);
   --color-link: #2374f6;
   --color-linkHover: #4286f3;
   --color-textDanger: #ff3a6a;
@@ -116,8 +118,9 @@ button {
   outline: 2px solid var(--color-buttonRing);
   outline-offset: 2px;
 }
-/*--- for buttons styled as inputs (e.g., select date) ---*/
-.inputPrimaryColor:focus-visible {
+/*--- for inputs, selects, and buttons styled as inputs (e.g., select date) ---*/
+.inputPrimaryColor:focus-visible,
+.inputOutlineColor:focus-visible {
   outline: none;
 }
 /* --- add this to buttons within scroll containers where outline overflow becomes clipped (e.g., item list or details list) ---*/
@@ -133,22 +136,23 @@ button {
   --font-lg: 1.25rem; /* 20px */
   --font-xl: 1.5rem; /* 24px */
   --font-2xl: 1.875rem; /* 30px */
-  --leading-xs: 1.45;
+  --leading-xs: 1.6;
   --leading-sm: 1.5;
   --leading-base: 1.5;
-  --leading-lg: 1.4;
-  --leading-xl: 1.3;
+  --leading-lg: 1.45;
+  --leading-xl: 1.4;
+  --leading-2xl: 1.3;
 }
 /* app mobile */
 .app {
   --font-xs: 0.9375rem; /* 15px */
   --font-sm: 1rem; /* 16px */
   --font-base: 1.0625rem; /* 17px */
-  --font-lg: 1.25rem; /* 20px */
-  --font-xl: 1.5rem; /* 24px */
-  --font-2xl: 1.875rem; /* 30px */
+  --font-lg: 1.1875rem; /* 19px */
+  --font-xl: 1.4375rem; /* 23px */
+  --font-2xl: 1.8125rem; /* 29px */
   --leading-xs: 1.5;
-  --leading-sm: 1.45;
+  --leading-sm: 1.4;
   --leading-base: 1.4;
   --leading-lg: 1.35;
   --leading-xl: 1.3;
@@ -163,19 +167,25 @@ button {
     --font-lg: 1rem; /* 16px */
     --font-xl: 1.125rem; /* 18px */
     --font-2xl: 1.5rem; /* 24px */
+    --leading-xs: 1.45;
+    --leading-sm: 1.35;
+    --leading-base: 1.35;
+    --leading-lg: 1.3;
+    --leading-xl: 1.25;
+    --leading-2xl: 1.15;
   }
 }
-/* app login (desktop) */
 @media (hover: hover) and (pointer: fine) {
   .login {
-    --font-xs: 0.8125rem; /* 13px */
+    --font-xs: 0.875rem; /* 14px */
     --font-sm: 0.9375rem; /* 15px */
     --font-base: 1rem; /* 16px */
     --font-lg: 1.125rem; /* 18px */
     --font-xl: 1.375rem; /* 22px */
-    --font-2xl: 1.75rem; /* 28px */
+    --font-2xl: 1.625rem; /* 26px */
   }
 }
+
 @utility textXs {
   font-size: var(--font-xs);
   line-height: var(--leading-xs);
@@ -214,7 +224,7 @@ button {
 /*--- login button ---*/
 
 @utility loginButtonBase {
-  @apply w-full h-16 desktop:h-15 px-8 desktop:px-7 flex items-center gap-4 font-medium select-none;
+  @apply w-full h-16 desktop:h-15 px-8 desktop:px-7 desktop:text-[16px] flex items-center gap-4 font-normal select-none;
 }
 
 @utility loginButtonColor {
@@ -236,7 +246,7 @@ button {
 }
 
 @utility inputPrimaryRing {
-  @apply ring-2 ring-transparent focus:ring-inputPrimaryRing;
+  @apply ring-2 ring-transparent focus:ring-inputPrimaryRing focus-visible:outline-none;
 }
 
 @utility inputPrimaryColor {
@@ -252,7 +262,7 @@ button {
 }
 
 @utility inputOutlineRing {
-  @apply ring-2 ring-transparent focus:ring-inputOutlineRing;
+  @apply ring-2 ring-transparent focus:ring-inputPrimaryRing focus-visible:outline-none;
 }
 
 @utility inputOutlineColor {
@@ -261,10 +271,10 @@ button {
 
 /*--- labels ---*/
 .inputLabel {
-  @apply pb-1.5 desktop:pb-1 font-medium;
+  @apply pb-2 desktop:pb-1.5 text-textSecondary;
 }
 .detailsLabel {
-  @apply textSm font-medium text-textSecondary;
+  @apply textSm text-textSecondary;
 }
 .settingsLabel {
   @apply font-medium;
@@ -333,7 +343,7 @@ button {
 
 /*--- modal ---*/
 @utility modalColor {
-  @apply bg-surfaceSolid desktop:border border-inputOutlineBorder;
+  @apply bg-cardSolid desktop:border border-inputOutlineBorder;
 }
 
 /*--- links ---*/

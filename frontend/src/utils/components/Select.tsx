@@ -36,10 +36,7 @@ export default function Select({
 
   return (
     <div className={`relative ${fullWidth ? "flex-1" : ""}`}>
-      <select
-        className={`appearance-none font-medium ${fullWidth ? "w-full" : ""} ${variants[variant]} ${sizes[selectSize]} ${className}`}
-        {...props}
-      >
+      <select className={`appearance-none ${fullWidth ? "w-full" : ""} ${variants[variant]} ${sizes[selectSize]} ${className}`} {...props}>
         {children}
       </select>
 

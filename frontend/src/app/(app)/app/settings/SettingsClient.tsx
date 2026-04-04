@@ -189,6 +189,7 @@ export default function Settings({ provider, email, userId }: { provider: string
           data.role === "owner" ? (
             <SettingsField label="Default Currency">
               <Select
+                className="font-medium" // use font-medium to match buttons
                 variant="outline"
                 selectSize="sm"
                 value={defaultCurrency}
