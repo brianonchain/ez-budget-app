@@ -21,7 +21,7 @@ export default function InputEmail({
 }: InputProps) {
   return (
     <div className="flex flex-col items-start">
-      <label className={`inputLabel ${inputSize === "login" ? "textSm" : ""}`} htmlFor={_id}>
+      <label className={`inputLabel ${inputSize === "login" ? "textSm text-textSecondary !pb-1.5" : ""}`} htmlFor={_id}>
         {label}
       </label>
       <Input

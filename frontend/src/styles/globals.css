@@ -282,7 +282,7 @@ button {
 
 /*--- labels ---*/
 .inputLabel {
-  @apply pb-2 desktop:pb-1.5 text-textSecondary;
+  @apply pb-2;
 }
 .detailsLabel {
   @apply textSm text-textSecondary;

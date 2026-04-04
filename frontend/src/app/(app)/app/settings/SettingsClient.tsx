@@ -48,6 +48,7 @@ export default function Settings({ provider, email, userId }: { provider: string
   const [clickedTag, setClickedTag] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [workspaceId, setWorkspaceId] = useState("");
+  const [isSigningOut, setIsSigningOut] = useState(false);
   // modal states (TODO: aggregate)
   const [passwordModal, setPasswordModal] = useState(false);
   const [emailModal, setEmailModal] = useState(false);
@@ -267,7 +268,18 @@ export default function Settings({ provider, email, userId }: { provider: string
       <SettingsCard title="Account">
         {/*--- Sign Out ---*/}
         <SettingsField label="Sign Out">
-          <Button label="Sign Out" variant="outline" size="sm" type="button" onClick={() => signOut({ callbackUrl: "/login" })} />
+          <Button
+            className="w-24 tablet:w-25 desktop:w-20.5"
+            label="Sign Out"
+            variant="outline"
+            size="sm"
+            isLoading={isSigningOut}
+            onClick={() => {
+              setIsSigningOut(true);
+              signOut({ callbackUrl: "/login" });
+            }}
+            type="button"
+          />
         </SettingsField>
         {/*--- Email ---*/}
         <SettingsField label="Email">

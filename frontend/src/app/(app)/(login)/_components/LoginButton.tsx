@@ -21,7 +21,7 @@ export default function LoginButton({
       </div>
       <div className="relative">{label}</div>
       {isLoading && (
-        <ImSpinner2 className="absolute right-7 desktop:right-6 top-1/2 -translate-y-1/2 animate-spin text-3xl desktop:text-2xl text-slate-400" />
+        <ImSpinner2 className="absolute right-7 desktop:right-6 top-1/2 -translate-y-1/2 animate-spin text-[32px] desktop:text-[24px] text-textSecondary" />
       )}
     </button>
   );
