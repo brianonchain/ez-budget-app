@@ -52,7 +52,7 @@ export default function Button({
       disabled={isLoading || props.disabled}
     >
       {isLoading ? (
-        <ImSpinner2 className="animate-spin text-[32px] desktop:text-[24px] text-textSecondary" />
+        <ImSpinner2 className={`animate-spin text-[32px] desktop:text-[24px] ${variant === "outline" ? "text-textSecondary" : ""}`} />
       ) : (
         <>
           {icon}

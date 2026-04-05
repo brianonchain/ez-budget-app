@@ -338,6 +338,10 @@ button {
   }
 }
 
+.appPageContainer {
+  @apply z-10 relative h-[calc(100dvh-var(--menuHeight))] portrait:w-full landscape:w-[calc(dvw-120px)] landscape:lg:w-[calc(dvw-160px)] landscape:ml-[120px] landscape:lg:ml-[160px] flex flex-col items-center overflow-y-auto scrollbar-stable;
+}
+
 .pageContentMaxWidth {
   @apply tablet:max-w-150 desktop:max-w-140;
 }
@@ -354,7 +358,7 @@ button {
 
 /*--- modal ---*/
 @utility modalColor {
-  @apply bg-cardSolid dark:bg-bgPrimary dark:desktop:bg-surfaceSolid desktop:border border-inputOutlineBorder;
+  @apply bg-bgPrimary desktop:bg-surfaceSolid desktop:border border-inputOutlineBorder;
 }
 
 /*--- links ---*/
@@ -384,11 +388,11 @@ button {
   background: radial-gradient(
     ellipse at center bottom,
     rgba(42, 84, 222, 0.5) 0%,
-    rgba(42, 84, 222, 0.42) 15%,
-    rgba(42, 84, 222, 0.32) 30%,
-    rgba(42, 84, 222, 0.25) 45%,
-    rgba(42, 84, 222, 0.15) 60%,
-    transparent 70%
+    rgba(42, 84, 222, 0.42) 13%,
+    rgba(42, 84, 222, 0.32) 26%,
+    rgba(42, 84, 222, 0.25) 40%,
+    rgba(42, 84, 222, 0.15) 55%,
+    transparent 68%
   );
 }
 
