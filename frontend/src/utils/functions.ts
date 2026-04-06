@@ -4,8 +4,12 @@ export function addId(arr: CategoryObject[]) {
   return arr.slice(1).map((i, index) => ({ id: (index + 1).toString(), ...i }));
 }
 
+export function normalizeEmail(email: string) {
+  return email.trim().toLowerCase();
+}
+
 export function checkEmail(rawEmail: string): boolean {
-  const email = rawEmail.trim();
+  const email = normalizeEmail(rawEmail);
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
@@ -63,10 +67,6 @@ export function capitalizeFirst(str: string): string {
 }
 
 // OTP functions
-
-export function normalizeEmail(email: string) {
-  return email.trim().toLowerCase();
-}
 
 export function isSixDigitOtp(otp: string) {
   return /^\d{6}$/.test(otp);

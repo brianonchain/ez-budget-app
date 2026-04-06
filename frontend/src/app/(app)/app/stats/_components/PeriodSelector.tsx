@@ -77,7 +77,13 @@ export default function PeriodSelector({
         </div>
         {/* --- category and tag selectors --- */}
         <div className="w-full max-w-88 flex items-center justify-center gap-3 lg:gap-2">
-          <Select fullWidth variant="outline" selectSize="xxs" value={selectedCategory} onChange={(e) => onSelectCategory(e.target.value)}>
+          <Select
+            className="flex-1"
+            variant="outline"
+            selectSize="xxs"
+            value={selectedCategory}
+            onChange={(e) => onSelectCategory(e.target.value)}
+          >
             <option value="all">All categories</option>
             {categoryObjects?.map((co) => (
               <option key={co.category} value={co.category}>
@@ -85,7 +91,7 @@ export default function PeriodSelector({
               </option>
             ))}
           </Select>
-          <Select fullWidth variant="outline" selectSize="xxs" value={selectedTag} onChange={(e) => onSelectTag(e.target.value)}>
+          <Select className="flex-1" variant="outline" selectSize="xxs" value={selectedTag} onChange={(e) => onSelectTag(e.target.value)}>
             <option value="all">All tags</option>
             {tags?.map((tag) => (
               <option key={tag} value={tag}>

@@ -6,17 +6,9 @@ type SelectProps = {
   variant: "primary" | "outline";
   selectSize: "xxs" | "xs" | "sm" | "base";
   className?: string;
-  fullWidth?: boolean;
 } & SelectHTMLAttributes<HTMLSelectElement>;
 
-export default function Select({
-  children,
-  variant = "primary",
-  selectSize = "base",
-  className = "",
-  fullWidth = false,
-  ...props
-}: SelectProps) {
+export default function Select({ children, variant = "primary", selectSize = "base", className = "", ...props }: SelectProps) {
   const variants = {
     primary: "inputPrimaryColor",
     outline: "inputOutlineColor",
@@ -35,11 +27,10 @@ export default function Select({
   };
 
   return (
-    <div className={`relative ${fullWidth ? "flex-1" : ""}`}>
-      <select className={`appearance-none ${fullWidth ? "w-full" : ""} ${variants[variant]} ${sizes[selectSize]} ${className}`} {...props}>
+    <div className={`relative ${className}`}>
+      <select className={`appearance-none w-full ${variants[variant]} ${sizes[selectSize]}`} {...props}>
         {children}
       </select>
-
       <FaChevronDown className={`absolute top-1/2 -translate-y-1/2 opacity-80 pointer-events-none ${iconSizes[selectSize]}`} />
     </div>
   );

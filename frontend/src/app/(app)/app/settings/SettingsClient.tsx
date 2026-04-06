@@ -116,9 +116,9 @@ export default function Settings({ provider, email, userId }: { provider: string
           <div className="settingsLabel">Active Sheet</div>
           {data ? (
             <Select
+              className="flex-1"
               variant="outline"
               selectSize="sm"
-              fullWidth={true}
               value={workspaceId}
               onChange={onChangeActiveSheet}
               disabled={isMutatingUser}

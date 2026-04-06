@@ -1,5 +1,3 @@
-import React from "react";
-
 type InputProps = {
   inputSize?: "xs" | "sm" | "base" | "login";
   variant?: "primary" | "transparent";

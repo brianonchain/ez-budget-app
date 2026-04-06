@@ -9,17 +9,16 @@ export default function Menu() {
   const pathname = usePathname();
   const [path, setPath] = useState(pathname); // to create faster feel compared to pathname
 
-  // if menuItems declared outside component, we get hydration warning
-  const menuIcon = "text-[1.375rem] tablet:text-[2rem]";
-  const menuItems = [
-    { text: "Items", path: "/app/items", icon: <FaList className={menuIcon} /> },
-    { text: "Stats", path: "/app/stats", icon: <FaChartSimple className={menuIcon} /> },
-    { text: "Settings", path: "/app/settings", icon: <FaGear className={menuIcon} /> },
+  // must declare menus inside component; or else, we get hydration warning
+  const menus = [
+    { text: "Items", path: "/app/items", icon: FaList },
+    { text: "Stats", path: "/app/stats", icon: FaChartSimple },
+    { text: "Settings", path: "/app/settings", icon: FaGear },
   ];
 
   return (
     <MenuContainer>
-      {menuItems.map((i) => (
+      {menus.map((i) => (
         <Link
           href={i.path}
           className={`${
@@ -28,7 +27,7 @@ export default function Menu() {
           key={i.text}
           onClick={() => setPath(i.path)}
         >
-          {i.icon}
+          <i.icon className="text-[1.375rem] tablet:text-[2rem]" />
           <p className="text-xs tablet:text-sm select-none">{i.text}</p>
         </Link>
       ))}
