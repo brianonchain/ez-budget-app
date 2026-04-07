@@ -21,7 +21,6 @@ export default function SignUpClient() {
   const [errors, setErrors] = useState({ email: false, password1: false, password2: false });
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [errorModal, setErrorModal] = useState(false);
 
   function validateEmail(email: string) {
     setErrors((prev) => ({ ...prev, email: !!email && !checkEmail(email) }));
@@ -61,12 +60,10 @@ export default function SignUpClient() {
         router.push(`/verify-user?email=${encodeURIComponent(_email)}`);
       } else {
         setErrorMessage(resJson.message || "Server error. Please try again.");
-        setErrorModal(true);
         setIsLoading(false);
       }
     } catch (e: any) {
       setErrorMessage(e?.message || "Server error. Please try again."); // optional chaining is needed
-      setErrorModal(true);
       setIsLoading(false);
     }
   }

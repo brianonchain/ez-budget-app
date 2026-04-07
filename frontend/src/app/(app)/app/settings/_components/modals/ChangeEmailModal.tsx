@@ -43,7 +43,12 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
     // call api
     try {
       const resJson = await fetchPost("/api/createPendingEmailChange", { newEmail: _newEmail });
-      setContent("verifyOtp");
+      if (resJson.status === "success") {
+        setContent("verifyOtp");
+      } else {
+        setErrorMessage(resJson.message || "Server error. Please try again.");
+        setContent("changeEmail");
+      }
     } catch (e: any) {
       setErrorMessage(e.message || "Server error. Please try again.");
       setContent("changeEmail");
@@ -64,12 +69,17 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
 
     try {
       const resJson = await fetchPost("/api/verifyPendingEmailChange", { newEmail, otp: joinedOtp });
-      setContent("changed");
-      setIsLoading(false);
+      if (resJson.status === "success") {
+        setContent("changed");
+      } else {
+        setErrorMessage(resJson.message || "Server error. Please try again.");
+        setOtp(Array(6).fill(""));
+      }
     } catch (e: any) {
       setErrorMessage(e.message || "Server error. Please try again.");
-      setIsLoading(false);
       setOtp(Array(6).fill(""));
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -132,12 +142,21 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
     if (isLoading) return; // avoid double sending
     setOtp(Array(6).fill(""));
     setResendStatus("sending");
+    setIsLoading(true);
     try {
       const resJson = await fetchPost("/api/resendVerificationCode", { type: "resendCodeForEmailChange", email: newEmail });
+      if (resJson.status === "success") {
+        setResendStatus("sent");
+      } else {
+        setErrorMessage(resJson.message || "Server error. Please try again.");
+        setResendStatus("initial");
+      }
       setResendStatus("sent");
     } catch (e: any) {
       setErrorMessage(e?.message || "Server error. Please try again.");
       setResendStatus("initial");
+    } finally {
+      setIsLoading(false);
     }
   }
 

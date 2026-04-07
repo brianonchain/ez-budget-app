@@ -103,6 +103,7 @@ export default function VerifyUserClient() {
         }
       } else {
         triggerError(resJson.message || "Server error. Please try again.");
+        setIsLoading(false);
       }
     } catch (e: any) {
       triggerError(e?.message || "Server error. Please try again."); // optional chaining is needed

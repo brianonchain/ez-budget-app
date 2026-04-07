@@ -16,8 +16,8 @@ export default function Select({ children, variant = "primary", selectSize = "ba
   const sizes = {
     xxs: "h-9 desktop:h-8 pl-3 desktop:pl-2.5 pr-6 desktop:pr-5 textXs rounded-lg",
     xs: "h-11 desktop:h-8 pl-3 desktop:pl-2.5 pr-8 desktop:pr-6.5 textSm rounded-lg", // used in DetailsModal.tsx
-    sm: "h-12 desktop:h-9 pl-3 desktop:pl-2.5 pr-8 desktop:pr-6.5 textBase rounded-lg",
-    base: "h-13 desktop:h-10 pl-3.5 desktop:pl-3 pr-9 desktop:pr-7.5 textBase rounded-lg",
+    sm: "h-12 desktop:h-9 pl-3 desktop:pl-2.5 pr-8 desktop:pr-6.5 rounded-lg",
+    base: "h-13 desktop:h-10 pl-3.5 desktop:pl-3 pr-9 desktop:pr-7.5 rounded-lg",
   };
   const iconSizes = {
     xxs: "right-3 desktop:right-2.5 text-xs desktop:text-[0.625rem]",
