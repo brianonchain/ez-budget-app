@@ -1,7 +1,9 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
+import { createPortal } from "react-dom";
 
 export default function Calendar({
+  // "selected" is like value, while "onSelect" is like onChange
   selected,
   onSelect,
   className,
@@ -15,14 +17,29 @@ export default function Calendar({
   onClose: () => void;
 }) {
   const defaultClassNames = getDefaultClassNames();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const positions = {
     right: "right-0 top-[calc(100%+0.5rem)]",
     center: "left-1/2 -translate-x-1/2 top-[calc(100%+0.5rem)]",
     left: "left-0 top-[calc(100%+0.5rem)]",
   };
+
   return (
     <>
-      <div className="z-10 fixed inset-0 bg-black/30" onClick={onClose} />
+      {/* --- use 2 overlays so clicking outside calendar will close it --- */}
+      {/* --- FocusTrap options allows outside clicks of elements with data-allow-click --- */}
+      {/* --- portaled overlay z-index is in between modal content (110) and modal backdrop (100) --- */}
+      {mounted &&
+        createPortal(
+          <div className="absolute top-0 left-0 w-dvw h-dvh z-[105]" onClick={onClose} aria-hidden="true" data-allow-click="true" />,
+          document.body,
+        )}
+      <div className="fixed inset-0 z-10 bg-black/30" onClick={onClose} aria-hidden="true" />
       <div
         className={`z-20 absolute p-2 rounded-xl bg-inputPrimaryBg border border-inputPrimaryBorderFocus ${positions[position]} ${className}`}
       >

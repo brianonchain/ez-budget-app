@@ -2,10 +2,10 @@
 import { useState } from "react";
 import Modal from "@/utils/components/Modal";
 import Button from "@/utils/components/Button";
+import { FaCalendar } from "react-icons/fa6";
 import { fetchGet } from "@/utils/functions";
 import { SYMBOLS, DECIMALS } from "@/utils/constants";
 import Calendar from "@/utils/components/Calendar";
-import SelectDateButton from "@/utils/components/SelectDateButton";
 import ErrorMessage from "@/utils/components/ErrorMessage";
 
 function toDateString(d: Date): string {
@@ -26,8 +26,6 @@ export default function ExportModal({
   const [error, setError] = useState("");
 
   function onSelectDate(selected: Date | undefined) {
-    console.log("selected", selected);
-    console.log("activeField", activeField);
     if (!selected) return;
     if (activeField === "start") {
       setStartDate(selected);
@@ -109,17 +107,33 @@ export default function ExportModal({
           <div className="inputLabel" id="label-end">
             End Date
           </div>
-          <SelectDateButton
-            isElevated={activeField === "start"}
+          <Button
+            className={activeField === "start" ? "z-20" : ""}
+            label={
+              <div className="w-full flex items-center justify-between">
+                {startDate ? startDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Select date"}{" "}
+                <FaCalendar className="inline-block text-textSecondary textSm" />
+              </div>
+            }
+            variant="input"
+            size="base"
             onClick={() => setActiveField("start")}
             aria-labelledby="label-start"
-            date={startDate}
+            aria-haspopup="dialog"
           />
-          <SelectDateButton
-            isElevated={activeField === "end"}
+          <Button
+            className={activeField === "end" ? "z-20" : ""}
+            label={
+              <div className="w-full flex items-center justify-between">
+                {endDate ? endDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Select date"}{" "}
+                <FaCalendar className="inline-block text-textSecondary textSm" />
+              </div>
+            }
+            variant="input"
+            size="base"
             onClick={() => setActiveField("end")}
             aria-labelledby="label-end"
-            date={endDate}
+            aria-haspopup="dialog"
           />
           {/* --- calendar --- */}
           {activeField && (

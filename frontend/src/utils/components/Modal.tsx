@@ -25,15 +25,19 @@ export default function Modal({
 
   const content = (
     <>
-      <div className="z-[99] fixed inset-0 bg-black/70" aria-hidden />
+      <div className="z-[100] fixed inset-0 bg-black/70" aria-hidden />
 
       <FocusTrap
         focusTrapOptions={{
           initialFocus: false,
+          allowOutsideClick: (e) => {
+            const target = e.target as HTMLElement | null;
+            return !!target?.closest("[data-allow-click='true']");
+          },
         }}
       >
         <div
-          className="app textBase z-[100] fixed inset-0 desktop:inset-auto desktop:w-104 desktop:max-h-[90dvh] desktop:pb-3 desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:rounded-2xl flex flex-col items-center overflow-hidden modalColor"
+          className="app textBase z-[110] fixed inset-0 desktop:inset-auto desktop:w-104 desktop:max-h-[90dvh] desktop:pb-3 desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:rounded-2xl flex flex-col items-center overflow-hidden modalColor"
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
@@ -42,7 +46,7 @@ export default function Modal({
           <div className="absolute w-[200dvw] desktop:w-[200%] h-[100dvh] left-1/2 -translate-x-1/2 z-[-1] modalGlow" />
 
           {/*--- modal header ---*/}
-          <div className="relative w-full bg-bgPrimary desktop:bg-transparent dark:bg-transparent flex items-center justify-center">
+          <div className="relative w-full flex items-center justify-center">
             {/*--- close ---*/}
             <button
               className="absolute right-4 tablet:right-6 desktop:right-0 desktop:top-0 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms]"
@@ -60,7 +64,7 @@ export default function Modal({
           </div>
 
           {/*--- content (max-w-110 controls content width on tablets, desktop:max-w-104 above controls content width on desktops) ---*/}
-          <div className="mt-6 desktop:mt-4 flex-1 min-h-0 overflow-y-auto w-full flex flex-col items-center pb-6 px-4 tablet:px-8 desktop:px-10 textBase thinScrollbar scrollbar-stable">
+          <div className="pt-6 desktop:pt-2 flex-1 min-h-0 overflow-y-auto w-full flex flex-col items-center pb-6 px-4 tablet:px-8 desktop:px-10 textBase thinScrollbar scrollbar-stable">
             {/*--- this inner div not needed if only mobile was full screen ---*/}
             <div className="w-full max-w-100">{children}</div>
           </div>

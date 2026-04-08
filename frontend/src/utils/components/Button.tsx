@@ -1,7 +1,7 @@
 import { ImSpinner2 } from "react-icons/im";
 
 type ButtonProps = {
-  label?: string;
+  label?: string | React.ReactNode;
   variant?: "primary" | "outline" | "danger" | "dangerOutline" | "ghost" | "input";
   size?: "xs" | "sm" | "base" | "pill" | "icon" | "hug" | "login";
   isLoading?: boolean;

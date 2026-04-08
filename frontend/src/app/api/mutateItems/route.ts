@@ -46,7 +46,7 @@ export const POST = async (request: Request) => {
                 tag: item.tag,
               },
             },
-            { runValidators: true }
+            { runValidators: true },
           );
           if (!result.matchedCount) return NextResponse.json({ status: "error", message: "Item not found" }, { status: 404 });
         } else {
