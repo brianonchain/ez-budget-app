@@ -135,7 +135,7 @@ button {
   outline: none;
 }
 /* --- add this to buttons within scroll containers where outline overflow becomes clipped (e.g., item list or details list) ---*/
-.outlineInside:focus-visible {
+.innerOutline:focus-visible {
   outline-offset: -2px;
 }
 

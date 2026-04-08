@@ -120,7 +120,7 @@ export default function Items() {
                 {group.items.map((item, i) => (
                   <button
                     key={item._id ?? `${group.date}-${i}`}
-                    className="outlineInside text-left px-[3%] w-full h-14 desktop:h-13 flex items-center gap-2 border-b border-borderFaint desktop:hover:bg-surface dark:desktop:hover:bg-card"
+                    className="innerOutline text-left px-[3%] w-full h-14 desktop:h-13 flex items-center gap-2 border-b border-borderFaint desktop:hover:bg-surface dark:desktop:hover:bg-card"
                     onClick={() => {
                       setDraftItem(item);
                       setDetailsModal(true);

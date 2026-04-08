@@ -5,5 +5,5 @@ function requiredPublicEnv(name: string): string {
 }
 
 export const publicEnv = {
-  NEXT_PUBLIC_BASE_URL: requiredPublicEnv("NEXT_PUBLIC_BASE_URL"),
+  // add public env vars here
 };

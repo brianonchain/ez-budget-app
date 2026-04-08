@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 // next-auth
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/utils/authOptions";
 import crypto from "crypto";
 // db
 import dbConnect from "@/db/dbConnect";
@@ -166,16 +164,18 @@ export const POST = async (request: Request) => {
         await PendingWorkspaceInviteModel.updateOne(
           { workspaceId, invitedEmail },
           { $set: { workspaceId, invitedEmail, invitedRole, invitedByUserId: userId, tokenHash, expiresAt } },
-          { upsert: true }
+          { upsert: true },
         );
 
+        const origin = request.headers.get("origin") || `http://${request.headers.get("host")}`;
+        const inviteUrl = `${origin}/invite?token=${rawToken}`;
         const html = `
           <div>
             <p>You have been invited to join the workspace <strong>${workspaceName}</strong> by ${userEmail}.</p>
             <p>Role: <strong>${invitedRole}</strong></p>
             <p style="margin: 24px 0;">
               <a
-                href="${publicEnv.NEXT_PUBLIC_BASE_URL}/invite?token=${rawToken}"
+                href="${inviteUrl}"
                 style="display:inline-block;padding:12px 20px;background:#2563eb;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:600;"
               >
                 Accept Invite

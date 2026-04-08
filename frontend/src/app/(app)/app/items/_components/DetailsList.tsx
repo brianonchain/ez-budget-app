@@ -19,7 +19,7 @@ export default function DetailsList<T extends string | CategoryObject>({ label, 
 
           return (
             <button
-              className={`outlineInside flex-none w-full px-2 h-10 desktop:h-7 flex items-center truncate select-none ${
+              className={`innerOutline flex-none w-full px-2 h-10 desktop:h-7 flex items-center truncate select-none ${
                 isSelected ? "bg-buttonPrimaryBg text-buttonPrimaryText" : "desktop:hover:bg-buttonOutlineBgHover"
               }`}
               onClick={() => onClick(i)} // 👈 pass item up

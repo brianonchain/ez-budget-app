@@ -1,7 +1,7 @@
 // tablet & desktop shows list container
 export default function ItemsShell({ children, footer }: { children: React.ReactNode; footer: React.ReactNode }) {
   return (
-    <div className="w-full pageContentMaxWidth tablet:px-4 tablet:py-6">
+    <div className="w-full pageContentMaxWidth tablet:py-6">
       <div className="w-full tablet:rounded-2xl overflow-hidden shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none">
         {/*--- header, scrollbar-stable also applied ---*/}
         <div className="px-[3%] h-[var(--listHeaderHeight)] bg-bgPrimary tablet:bg-card flex items-center font-semibold text-textSecondary border-b border-borderFaint tablet:overflow-y-auto thinScrollbar scrollbar-stable">
