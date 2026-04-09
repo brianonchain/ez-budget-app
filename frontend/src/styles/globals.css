@@ -129,7 +129,7 @@ button {
   outline: 2px solid var(--color-buttonRing);
   outline-offset: 2px;
 }
-/*--- for inputs, selects, and buttons styled as inputs (e.g., select date) ---*/
+/*--- override where outline is not desired (input, select, buttons styled as inputs); cannot use inline focus-visible:outline-none to override)---*/
 .inputPrimaryColor:focus-visible,
 .inputOutlineColor:focus-visible {
   outline: none;

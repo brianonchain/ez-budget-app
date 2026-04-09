@@ -12,7 +12,7 @@ import {
 } from "@/utils/types";
 import { fetchPost, fetchGet } from "./functions";
 
-export const useItemsQuery = () => {
+export function useItemsQuery() {
   return useInfiniteQuery<ItemsPage, Error>({
     queryKey: ["items"],
     queryFn: async ({ pageParam }): Promise<ItemsPage> => {
@@ -26,9 +26,9 @@ export const useItemsQuery = () => {
     staleTime: Infinity,
     gcTime: Infinity,
   });
-};
+}
 
-export const useSettingsQuery = (activeWorkspaceId: string | null) => {
+export function useSettingsQuery(activeWorkspaceId: string | null) {
   return useQuery<SettingsData, Error>({
     queryKey: ["settings", activeWorkspaceId],
     queryFn: async (): Promise<SettingsData> => {
@@ -41,9 +41,9 @@ export const useSettingsQuery = (activeWorkspaceId: string | null) => {
     staleTime: Infinity,
     gcTime: Infinity,
   });
-};
+}
 
-export const useSharedUsersQuery = (workspaceId: string | null | undefined) => {
+export function useSharedUsersQuery(workspaceId: string | null | undefined) {
   return useQuery<SharedUsersData, Error>({
     queryKey: ["sharedUsers", workspaceId],
     queryFn: async (): Promise<SharedUsersData> => {
@@ -55,9 +55,9 @@ export const useSharedUsersQuery = (workspaceId: string | null | undefined) => {
     staleTime: 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
-};
+}
 
-export const useStatsQuery = (email: string | null | undefined, period: StatsPeriod, date: string) => {
+export function useStatsQuery(email: string | null | undefined, period: StatsPeriod, date: string) {
   return useQuery<StatsData, Error>({
     queryKey: ["stats", period, date],
     queryFn: async (): Promise<StatsData> => {
@@ -69,24 +69,24 @@ export const useStatsQuery = (email: string | null | undefined, period: StatsPer
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   });
-};
+}
 
-export const useItemsMutation = () => {
+export function useItemsMutation() {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (payload: MutateItemsPayload) => {
+  return useMutation<void, Error, MutateItemsPayload>({
+    mutationFn: async (payload) => {
       const resJson = await fetchPost("/api/mutateItems", payload);
       if (resJson.status === "success") return;
       throw new Error(resJson?.message || "Failed to save item.");
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["items"] }),
   });
-};
+}
 
-export const useSettingsMutation = () => {
+export function useSettingsMutation() {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (payload: MutateSettingsPayload) => {
+  return useMutation<void, Error, MutateSettingsPayload>({
+    mutationFn: async (payload) => {
       const resJson = await fetchPost("/api/mutateSettings", payload);
       if (resJson.status === "success") return;
       throw new Error(resJson?.message || "Unknown error. Please try again.");
@@ -98,12 +98,12 @@ export const useSettingsMutation = () => {
       }
     },
   });
-};
+}
 
-export const useUserMutation = () => {
+export function useUserMutation() {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (payload: MutateUserPayload) => {
+  return useMutation<void, Error, MutateUserPayload>({
+    mutationFn: async (payload) => {
       const resJson = await fetchPost("/api/mutateUser", payload);
       if (resJson.status === "success") return;
       throw new Error(resJson?.message || "Unknown error. Please try again.");
@@ -114,7 +114,7 @@ export const useUserMutation = () => {
       queryClient.invalidateQueries({ queryKey: ["sharedUsers"] });
     },
   });
-};
+}
 
 export function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);

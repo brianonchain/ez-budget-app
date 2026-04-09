@@ -32,7 +32,7 @@ export default function Details({
   }, [settingsData.workspace.categoryObjects, draftItem.category]);
 
   // states
-  const { mutateAsync: mutateItemsAsync, isPending, isError, error } = useItemsMutation();
+  const { mutateAsync: mutateItemsAsync, isPending, isError, error, reset: resetItemsMutation } = useItemsMutation();
   const [showCalendar, setShowCalendar] = useState(false);
   const [costString, setCostString] = useState(draftItem.cost ? draftItem.cost.toString() : "");
   const [description, setDescription] = useState(draftItem.description);
@@ -93,7 +93,10 @@ export default function Details({
       return;
     }
 
+    setValidationError("");
+    resetItemsMutation();
     setStatus("addingOrEditing");
+
     try {
       await mutateItemsAsync({ type: "upsert", workspaceId: settingsData.workspace._id, item: draftItem });
       setDetailsModal(false);
@@ -104,7 +107,11 @@ export default function Details({
 
   async function onDelete() {
     if (!draftItem._id) return;
+
+    setValidationError("");
+    resetItemsMutation();
     setStatus("deleting");
+
     try {
       await mutateItemsAsync({ type: "delete", workspaceId: settingsData.workspace._id, itemId: String(draftItem._id) });
       setDetailsModal(false);
