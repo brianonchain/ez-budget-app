@@ -321,7 +321,7 @@ export default function Settings({ provider, email, userId }: { provider: string
             <Toggle
               onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
               checked={resolvedTheme === "dark"}
-              ariaLabel={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             />
           ) : (
             <SettingsSkeleton size="sm" />

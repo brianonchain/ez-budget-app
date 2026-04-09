@@ -26,7 +26,6 @@ export default function Modal({
   const content = (
     <>
       <div className="z-[100] fixed inset-0 bg-black/70" aria-hidden />
-
       <FocusTrap
         focusTrapOptions={{
           initialFocus: false,
@@ -64,7 +63,7 @@ export default function Modal({
           </div>
 
           {/*--- content (max-w-110 controls content width on tablets, desktop:max-w-104 above controls content width on desktops) ---*/}
-          <div className="pt-6 desktop:pt-2 flex-1 min-h-0 overflow-y-auto w-full flex flex-col items-center pb-6 px-4 tablet:px-8 desktop:px-10 textBase thinScrollbar scrollbar-stable">
+          <div className="pt-6 desktop:pt-2 flex-1 min-h-0 overflow-y-auto w-full flex flex-col items-center pb-6 px-4 tablet:px-8 desktop:px-10 thinScrollbar">
             {/*--- this inner div not needed if only mobile was full screen ---*/}
             <div className="w-full max-w-100">{children}</div>
           </div>

@@ -1,21 +1,18 @@
-export default function Toggle({ ariaLabel, checked, onClick }: { ariaLabel: string; checked: boolean | undefined; onClick?: any }) {
-  console.log("checked", checked);
+type ToggleProps = {
+  checked: boolean | undefined;
+  className?: string;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+export default function Toggle({ checked, className = "", ...props }: ToggleProps) {
   return (
     <button
       role="switch"
       aria-checked={checked}
-      aria-label={ariaLabel}
-      className={`relative w-[52px] h-[31px] desktop:w-[44px] desktop:h-[26px] rounded-full flex items-center ${
-        checked ? "bg-buttonPrimaryBg" : "bg-slate-300"
-      }`}
-      onClick={onClick}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onClick();
-        }
-      }}
       type="button"
+      className={`relative w-[52px] h-[31px] desktop:w-[44px] desktop:h-[26px] rounded-full flex items-center ${
+        checked ? "bg-buttonPrimaryBg" : "bg-textTertiary"
+      } ${className}`}
+      {...props}
     >
       <div
         className={`absolute left-[3px] aspect-square w-[25px] desktop:w-[20px] ${
