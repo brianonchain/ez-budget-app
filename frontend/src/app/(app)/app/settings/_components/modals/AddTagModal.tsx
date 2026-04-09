@@ -124,7 +124,6 @@ export default function AddTagModal({
             variant="danger"
             size="base"
             isLoading={status === "deleting"}
-            type="button"
             onClick={onDelete}
             disabled={status !== "initial" || isPending}
           ></Button>

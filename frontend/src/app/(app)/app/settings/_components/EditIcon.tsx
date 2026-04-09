@@ -7,7 +7,6 @@ export default function EditIcon({ onClick }: { onClick: () => void }) {
       className="h-12 desktop:h-9 flex items-center gap-2"
       variant="outline"
       size="sm"
-      type="button"
       icon={<FiEdit className="" />}
       onClick={onClick}
     />

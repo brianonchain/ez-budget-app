@@ -151,7 +151,6 @@ export default function ExportModal({
           label="Export"
           variant="primary"
           size="base"
-          type="button"
           onClick={onExport}
           isLoading={isLoading}
           disabled={!startDate || !endDate}

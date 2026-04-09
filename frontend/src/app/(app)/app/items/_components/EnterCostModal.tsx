@@ -152,15 +152,7 @@ export default function EnterCost({
         </div>
 
         {/* --- enter button --- */}
-        <Button
-          className="w-full mt-12 desktop:mt-6"
-          label="Enter"
-          variant="primary"
-          size="base"
-          type="button"
-          onClick={onEnter}
-          disabled={isPending}
-        />
+        <Button className="w-full mt-12 desktop:mt-6" label="Enter" variant="primary" size="base" onClick={onEnter} disabled={isPending} />
       </div>
     </Modal>
   );

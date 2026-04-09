@@ -211,27 +211,18 @@ export default function Settings({ provider, email, userId }: { provider: string
           </SettingsField>
         )}
         {/*--- Export Sheet ---*/}
-        {showData ? (
-          <SettingsField label="Export Sheet">
-            <Button label="Export" variant="outline" size="sm" type="button" onClick={() => setExportModal(true)} />
-          </SettingsField>
-        ) : (
-          <SettingsField label="Export Sheet">
+        <SettingsField label="Export Sheet">
+          {showData ? (
+            <Button label="Export" variant="outline" size="sm" onClick={() => setExportModal(true)} />
+          ) : (
             <SettingsSkeleton size="sm" />
-          </SettingsField>
-        )}
+          )}
+        </SettingsField>
         {/*--- Share Sheet ---*/}
         {showData ? (
           data.role === "owner" ? (
             <SettingsField label="Share This Sheet">
-              <Button
-                label="Share"
-                variant="outline"
-                size="sm"
-                type="button"
-                icon={<FiShare2 />}
-                onClick={() => setShareWorkspaceModal(true)}
-              />
+              <Button label="Share" variant="outline" size="sm" icon={<FiShare2 />} onClick={() => setShareWorkspaceModal(true)} />
             </SettingsField>
           ) : null
         ) : (
@@ -243,18 +234,11 @@ export default function Settings({ provider, email, userId }: { provider: string
         {showData ? (
           data.role === "owner" ? (
             <SettingsField label="Delete Sheet" className="border-none">
-              <Button label="Delete" variant="dangerOutline" size="sm" type="button" icon={<FiTrash2 />} onClick={onClickDeleteSheet} />
+              <Button label="Delete" variant="dangerOutline" size="sm" icon={<FiTrash2 />} onClick={onClickDeleteSheet} />
             </SettingsField>
           ) : (
             <SettingsField label="Leave Shared Sheet" className="border-none">
-              <Button
-                label="Leave"
-                variant="outline"
-                size="sm"
-                type="button"
-                icon={<FiUserMinus />}
-                onClick={() => setLeaveWorkspaceModal(true)}
-              />
+              <Button label="Leave" variant="outline" size="sm" icon={<FiUserMinus />} onClick={() => setLeaveWorkspaceModal(true)} />
             </SettingsField>
           )
         ) : (
@@ -278,7 +262,6 @@ export default function Settings({ provider, email, userId }: { provider: string
               setIsSigningOut(true);
               signOut({ callbackUrl: "/login" });
             }}
-            type="button"
           />
         </SettingsField>
         {/*--- Email ---*/}
@@ -303,14 +286,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         )}
         {/*--- Delete Account Button ---*/}
         <SettingsField label="Delete Account" className="border-none">
-          <Button
-            label="Delete"
-            variant="dangerOutline"
-            size="sm"
-            type="button"
-            icon={<FiTrash2 />}
-            onClick={() => setDeleteAccountModal(true)}
-          />
+          <Button label="Delete" variant="dangerOutline" size="sm" icon={<FiTrash2 />} onClick={() => setDeleteAccountModal(true)} />
         </SettingsField>
       </SettingsCard>
 

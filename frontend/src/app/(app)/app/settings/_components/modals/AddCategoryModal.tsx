@@ -281,7 +281,6 @@ export default function AddCategoryModal({
             label="Delete"
             variant="danger"
             size="base"
-            type="button"
             isLoading={status === "deleting"}
             onClick={deleteCategoryObject}
             disabled={isPending || status !== "initial"}

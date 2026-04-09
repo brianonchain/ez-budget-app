@@ -50,6 +50,7 @@ export default function Button({
       {...props}
       className={`flex items-center justify-center gap-1 disabled:cursor-default select-none ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={isLoading || props.disabled}
+      type={props.type ?? "button"}
     >
       {isLoading ? (
         <ImSpinner2 className={`animate-spin text-[32px] desktop:text-[24px] ${variant === "outline" ? "text-textSecondary" : ""}`} />

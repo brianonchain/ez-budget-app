@@ -127,7 +127,6 @@ export default function Details({
               label={new Date(draftItem.date).toLocaleString("en-US")}
               variant="input"
               size="xs"
-              type="button"
               onClick={() => setShowCalendar(true)}
             />
             {showCalendar && (
@@ -211,7 +210,6 @@ export default function Details({
             onClick={onUpsert}
             isLoading={status === "addingOrEditing"}
             disabled={status !== "initial" || isPending}
-            type="button"
           />
         )}
         {/*--- error message ---*/}
@@ -226,7 +224,6 @@ export default function Details({
             onClick={onDelete}
             isLoading={status === "deleting"}
             disabled={status !== "initial" || isPending}
-            type="button"
           />
         )}
       </div>
