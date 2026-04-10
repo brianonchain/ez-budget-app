@@ -8,7 +8,8 @@
   }
 }
 @custom-variant desktop {
-  @media (hover: hover) and (pointer: fine) {
+  @media (hover: hover) and (pointer: fine) and (orientation: landscape) and (min-width: 980px),
+    (hover: hover) and (pointer: fine) and (orientation: portrait) and (min-width: 600px) {
     @slot;
   }
 }

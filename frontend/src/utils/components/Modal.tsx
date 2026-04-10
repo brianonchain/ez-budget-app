@@ -27,8 +27,6 @@ export default function Modal({
     setMounted(true);
   }, []);
 
-  const modalSize = "";
-
   const content = (
     <>
       <div className="z-[100] fixed inset-0 bg-black/70" aria-hidden />
@@ -42,7 +40,7 @@ export default function Modal({
         }}
       >
         <div
-          className={`app textBase z-[110] fixed inset-0 desktop:inset-auto desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:pb-3 desktop:w-full desktop:max-w-[min(90%,21rem)] ${desktopWidth} desktop:max-h-[90dvh] desktop:rounded-2xl flex flex-col items-center overflow-hidden modalColor`}
+          className={`app textBase z-[110] fixed inset-0 desktop:inset-auto desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:pb-3 desktop:w-[90%] desktop:max-w-104 ${desktopWidth} desktop:max-h-[90dvh] desktop:rounded-2xl flex flex-col items-center overflow-hidden modalColor`}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
