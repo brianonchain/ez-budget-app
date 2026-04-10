@@ -6,15 +6,19 @@ import { FocusTrap } from "focus-trap-react";
 
 // mobile/tablet = FULL SCREEN, desktop = MODAL
 export default function Modal({
-  children,
-  disableCloseButton = false,
-  setModal,
   title,
+  onClose,
+  disableClose = false,
+  desktopWidth = "",
+  contentMaxWidth = "",
+  children,
 }: {
-  children: React.ReactNode;
-  disableCloseButton?: boolean;
-  setModal: React.Dispatch<React.SetStateAction<boolean>>;
   title: string;
+  onClose: () => void;
+  disableClose?: boolean;
+  desktopWidth?: string;
+  contentMaxWidth?: string;
+  children: React.ReactNode;
 }) {
   const titleId = useId();
   const [mounted, setMounted] = useState(false);
@@ -22,6 +26,8 @@ export default function Modal({
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const modalSize = "";
 
   const content = (
     <>
@@ -36,7 +42,7 @@ export default function Modal({
         }}
       >
         <div
-          className="app textBase z-[110] fixed inset-0 desktop:inset-auto desktop:w-104 desktop:max-h-[90dvh] desktop:pb-3 desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:rounded-2xl flex flex-col items-center overflow-hidden modalColor"
+          className={`app textBase z-[110] fixed inset-0 desktop:inset-auto desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2  desktop:pb-3 desktop:w-[min(90%,21rem)] ${desktopWidth} desktop:max-h-[90dvh] desktop:rounded-2xl flex flex-col items-center overflow-hidden modalColor`}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
@@ -49,8 +55,8 @@ export default function Modal({
             {/*--- close ---*/}
             <button
               className="absolute right-4 tablet:right-6 desktop:right-0 desktop:top-0 desktop:w-13 desktop:h-13 text-[2rem] desktop:text-[1.5rem] font-bold flex items-center justify-center desktop:rounded-bl-2xl desktop:rounded-tr-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms]"
-              onClick={() => setModal(false)}
-              disabled={disableCloseButton}
+              onClick={onClose}
+              disabled={disableClose}
               type="button"
               aria-label="Close"
             >
@@ -62,10 +68,10 @@ export default function Modal({
             </h2>
           </div>
 
-          {/*--- content (max-w-110 controls content width on tablets, desktop:max-w-104 above controls content width on desktops) ---*/}
-          <div className="pt-6 desktop:pt-2 flex-1 min-h-0 overflow-y-auto w-full flex flex-col items-center pb-6 px-4 tablet:px-8 desktop:px-10 thinScrollbar">
-            {/*--- this inner div not needed if only mobile was full screen ---*/}
-            <div className="w-full max-w-100">{children}</div>
+          {/*--- content ---*/}
+          <div className="flex-1 min-h-0 overflow-y-auto pt-6 desktop:pt-2 pb-12 desktop:pb-8 px-4 tablet:px-8 desktop:px-10 w-full thinScrollbar">
+            {/*--- this inner needed to limit content width in mobile/tablet (full screen mode), while desktop:max-w-104 (above) desktop content width  ---*/}
+            <div className="mx-auto w-full max-w-100 desktop:max-w-none flex flex-col">{children}</div>
           </div>
         </div>
       </FocusTrap>

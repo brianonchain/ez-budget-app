@@ -100,7 +100,7 @@ export default function AddTagModal({
   }
 
   return (
-    <Modal title={isEdit ? "Edit Tag" : "Add A Tag"} setModal={setAddTagModal} disableCloseButton={status !== "initial" || isPending}>
+    <Modal title={isEdit ? "Edit Tag" : "Add A Tag"} onClose={() => setAddTagModal(false)} disableClose={isPending}>
       <form className="w-full flex flex-col" onSubmit={onSubmit}>
         <label className="inputLabel">Tag{isEdit ? "" : " (e.g., Camping May 2025, Ava's birthday)"}</label>
         <Input

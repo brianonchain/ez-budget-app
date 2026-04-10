@@ -53,7 +53,7 @@ export default function ConfirmActionModal({
     setInputValue("");
   }
   return (
-    <Modal title={title} setModal={setModal} disableCloseButton={isPending}>
+    <Modal title={title} onClose={() => setModal(false)} disableClose={isPending}>
       <form className="w-full flex flex-col" onSubmit={onSubmit}>
         <p>
           Type <span className="font-semibold">{textToMatch}</span> to confirm deletion.

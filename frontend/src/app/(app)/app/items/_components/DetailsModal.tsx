@@ -121,7 +121,7 @@ export default function Details({
   }
 
   return (
-    <Modal title="Item Info" setModal={setDetailsModal}>
+    <Modal title="Item Info" onClose={() => setDetailsModal(false)} disableClose={isPending}>
       <div className="w-full flex flex-col">
         {/*--- date, name, cost ---*/}
         <div className="w-full grid grid-cols-[auto_1fr] gap-1.5 items-center">

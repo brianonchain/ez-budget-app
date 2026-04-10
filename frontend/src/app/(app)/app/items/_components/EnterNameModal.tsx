@@ -28,7 +28,7 @@ export default function EnterName({
   }
 
   return (
-    <Modal title="Enter Name" setModal={setNameModal}>
+    <Modal title="Enter Name" onClose={() => setNameModal(false)}>
       <form onSubmit={handleSubmit} className="pt-10 desktop:pt-0 w-full">
         <textarea
           value={description}

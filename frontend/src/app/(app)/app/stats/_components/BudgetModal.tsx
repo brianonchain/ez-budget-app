@@ -84,7 +84,7 @@ export default function BudgetModal({
   }
 
   return (
-    <Modal title="Discretionary Budget" setModal={setBudgetModal} disableCloseButton={isPending}>
+    <Modal title="Discretionary Budget" onClose={() => setBudgetModal(false)} disableClose={isPending}>
       <div className="w-full">
         {/* --- amount --- */}
         <div className="flex items-center gap-3 desktop:gap-4">

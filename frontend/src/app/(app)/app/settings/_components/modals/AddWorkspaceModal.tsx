@@ -36,7 +36,7 @@ export default function AddWorkspaceModal({
   }
 
   return (
-    <Modal title="Add New Sheet" setModal={setAddWorkspaceModal} disableCloseButton={isPending}>
+    <Modal title="Add New Sheet" onClose={() => setAddWorkspaceModal(false)} disableClose={isPending}>
       <form className="w-full flex flex-col" onSubmit={onSubmit}>
         <label className="inputLabel">Sheet Name</label>
         <Input
