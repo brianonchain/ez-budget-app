@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 // others
 import { useTheme } from "next-themes";
 import { signOut } from "next-auth/react";
+import { AnimatePresence } from "framer-motion";
 // images
 import { FiShare2, FiTrash2, FiLogOut, FiUserMinus, FiEdit } from "react-icons/fi";
 import { FaUserMinus, FaTrashCan, FaArrowRightFromBracket, FaShareNodes } from "react-icons/fa6";
@@ -253,7 +254,6 @@ export default function Settings({ provider, email, userId }: { provider: string
         {/*--- Sign Out ---*/}
         <SettingsField label="Sign Out">
           <Button
-            className="w-24 tablet:w-25 desktop:w-20.5"
             label="Sign Out"
             variant="outline"
             size="sm"
@@ -305,53 +305,68 @@ export default function Settings({ provider, email, userId }: { provider: string
         </SettingsField>
       </SettingsCard>
 
-      {passwordModal && <PasswordModal setPasswordModal={setPasswordModal} email={email} />}
-      {emailModal && <ChangeEmailModal setEmailModal={setEmailModal} />}
-      {addCategoryModal && data?.workspace && (
-        <AddCategoryModal
-          workspace={data.workspace}
-          setAddCategoryModal={setAddCategoryModal}
-          clickedCategory={clickedCategory}
-          setClickedCategory={setClickedCategory}
-        />
-      )}
-      {addTagModal && data?.workspace && <AddTagModal workspace={data.workspace} setAddTagModal={setAddTagModal} clickedTag={clickedTag} />}
-      {addWorkspaceModal && data?.workspace && <AddWorkspaceModal setAddWorkspaceModal={setAddWorkspaceModal} />}
-      {shareWorkspaceModal && data?.workspace && (
-        <ShareWorkspaceModal
-          workspaceId={data.workspace._id}
-          workspaceName={data.workspace.name}
-          setShareWorkspaceModal={setShareWorkspaceModal}
-        />
-      )}
-
-      {leaveWorkspaceModal && data?.workspace && (
-        <ConfirmActionModal
-          title="Leave Workspace"
-          setModal={setLeaveWorkspaceModal}
-          textToMatch={data.workspace.name}
-          userMutateAsyncPayload={{ type: "leaveWorkspace", workspaceId: data.workspace._id }}
-        />
-      )}
-      {deleteWorkspaceModal && data?.workspace && (
-        <ConfirmActionModal
-          title="Delete Workspace"
-          setModal={setDeleteWorkspaceModal}
-          textToMatch={data.workspace.name}
-          userMutateAsyncPayload={{ type: "deleteWorkspace", workspaceId: data.workspace._id }}
-        />
-      )}
-      {deleteAccountModal && (
-        <ConfirmActionModal
-          title="Delete Account"
-          setModal={setDeleteAccountModal}
-          textToMatch={email}
-          userMutateAsyncPayload={{ type: "deleteAccount", userId }}
-          onSuccess={() => signOut({ callbackUrl: "/accountDeleted" })}
-        />
-      )}
-      {exportModal && <ExportModal workspaceId={workspaceId} setExportModal={setExportModal} />}
-      {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
+      <AnimatePresence>{passwordModal && <PasswordModal setPasswordModal={setPasswordModal} email={email} />}</AnimatePresence>
+      <AnimatePresence>{emailModal && <ChangeEmailModal setEmailModal={setEmailModal} />}</AnimatePresence>
+      <AnimatePresence>
+        {addCategoryModal && data?.workspace && (
+          <AddCategoryModal
+            workspace={data.workspace}
+            setAddCategoryModal={setAddCategoryModal}
+            clickedCategory={clickedCategory}
+            setClickedCategory={setClickedCategory}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {addTagModal && data?.workspace && (
+          <AddTagModal workspace={data.workspace} setAddTagModal={setAddTagModal} clickedTag={clickedTag} />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {addWorkspaceModal && data?.workspace && <AddWorkspaceModal setAddWorkspaceModal={setAddWorkspaceModal} />}
+      </AnimatePresence>
+      <AnimatePresence>
+        {shareWorkspaceModal && data?.workspace && (
+          <ShareWorkspaceModal
+            workspaceId={data.workspace._id}
+            workspaceName={data.workspace.name}
+            setShareWorkspaceModal={setShareWorkspaceModal}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {leaveWorkspaceModal && data?.workspace && (
+          <ConfirmActionModal
+            title="Leave Workspace"
+            setModal={setLeaveWorkspaceModal}
+            textToMatch={data.workspace.name}
+            userMutateAsyncPayload={{ type: "leaveWorkspace", workspaceId: data.workspace._id }}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {deleteWorkspaceModal && data?.workspace && (
+          <ConfirmActionModal
+            title="Delete Workspace"
+            setModal={setDeleteWorkspaceModal}
+            textToMatch={data.workspace.name}
+            userMutateAsyncPayload={{ type: "deleteWorkspace", workspaceId: data.workspace._id }}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {deleteAccountModal && (
+          <ConfirmActionModal
+            title="Delete Account"
+            setModal={setDeleteAccountModal}
+            textToMatch={email}
+            userMutateAsyncPayload={{ type: "deleteAccount", userId }}
+            onSuccess={() => signOut({ callbackUrl: "/accountDeleted" })}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>{exportModal && <ExportModal workspaceId={workspaceId} setExportModal={setExportModal} />}</AnimatePresence>
+      <AnimatePresence>{errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}</AnimatePresence>
     </>
   );
 }

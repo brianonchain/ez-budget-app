@@ -19,6 +19,8 @@
   --color-bgPrimary: #f7f3f9;
   --color-surface: #f6f9fc;
   --color-card: #ffffff;
+  --color-toggleOn: #0084d1;
+  --color-toggleOff: oklch(86.9% 0.022 252.894) /* slate-300 */;
   /* bg custom */
   --color-cardSolid: #ffffff;
   --color-surfaceSolid: #f6f9fc;
@@ -41,7 +43,7 @@
   --color-buttonPrimaryBg: #0084d1; /* sky-600 */
   --color-buttonPrimaryBgHover: oklch(50% 0.134 242.749); /* sky-700 */
   --color-buttonOutlineBg: transparent;
-  --color-buttonOutlineBgHover: #f7f3f9;
+  --color-buttonOutlineBgHover: oklch(92.9% 0.013 255.508); /* slate-200 */
   --color-buttonDangerBg: #ff295d;
   --color-buttonDangerBgHover: #d91f4f;
   /* button focus ring */
@@ -52,7 +54,6 @@
   --color-inputPrimaryBorderHover: #77c7f0;
   --color-inputPrimaryBorderFocus: #0084d1; /* sky-600 */
   --color-inputPrimaryRing: #77c7f0;
-  --color-inputPrimaryRingOffset: #f7f3f9;
   --color-inputPrimaryPlaceholder: #90a1b9; /* slate-400 */
   /* input outline */
   --color-inputOutlineBg: transparent;
@@ -76,6 +77,8 @@
   --color-bgPrimary: #0a0826; /* was 0b0f37*/
   --color-card: oklch(70.7% 0.165 254.624 / 7%); /* blue-400/7 */
   --color-surface: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
+  --color-toggleOn: #0364ff;
+  --color-toggleOff: rgb(240 242 250 / 0.2);
   /* bg custom */
   --color-cardSolid: #11142f;
   --color-surfaceSolid: #141344; /* blue-400/14 overlaid on bgPrimary */
@@ -103,7 +106,7 @@
   /* button focus ring */
   --color-buttonRing: #546bb0;
   /* input primary */
-  --color-inputPrimaryBg: #07112e;
+  --color-inputPrimaryBg: #0a0826; /* 201d3c if bg is bgPrimary */
   --color-inputPrimaryBorder: #1f2c54;
   --color-inputPrimaryBorderHover: #2e417a;
   --color-inputPrimaryBorderFocus: #475da1;
@@ -298,7 +301,7 @@ button {
   @apply px-[16px] xs:px-[24px] lg:px-[100px] w-full max-w-[650px] lg:max-w-[calc(960px+200px)];
 }
 
-/*--- app ---*/
+/*--- APP ---*/
 
 /* --- mobile --- */
 @media (orientation: portrait) {
@@ -307,6 +310,7 @@ button {
     --listHeaderHeight: 3rem;
     --listButtonContainerHeight: 90px;
     --menuHeight: 80px;
+    --menuWidth: 0px;
     --numRows: 10;
   }
 }
@@ -316,6 +320,7 @@ button {
     --listHeaderHeight: 3rem;
     --listButtonContainerHeight: 90px;
     --menuHeight: 0px;
+    --menuWidth: 120px;
     --numRows: 10;
   }
 }
@@ -326,6 +331,7 @@ button {
     --listHeaderHeight: 3rem;
     --listButtonContainerHeight: 100px;
     --menuHeight: 120px;
+    --menuWidth: 0px;
     --numRows: 11;
   }
 }
@@ -335,21 +341,13 @@ button {
     --listHeaderHeight: 3rem;
     --listButtonContainerHeight: 100px;
     --menuHeight: 0px;
+    --menuWidth: 160px;
     --numRows: 10;
   }
 }
 
-.appPageContainer {
-  @apply z-10 relative h-[calc(100dvh-var(--menuHeight))] portrait:w-full landscape:w-[calc(dvw-120px)] landscape:lg:w-[calc(dvw-160px)] landscape:ml-[120px] landscape:lg:ml-[160px] flex flex-col items-center overflow-y-auto scrollbar-stable;
-}
-
 .pageContentMaxWidth {
   @apply tablet:max-w-150 desktop:max-w-140;
-}
-
-/*--- app: items page ---*/
-.listTotalHeight {
-  @apply h-[calc(100dvh-var(--menuHeight)-var(--listHeaderHeight)-var(--listPadding))];
 }
 
 /*--- app: settings page ---*/
@@ -359,7 +357,7 @@ button {
 
 /*--- modal ---*/
 @utility modalColor {
-  @apply bg-bgPrimary desktop:bg-surfaceSolid desktop:border border-inputOutlineBorder;
+  @apply bg-bgPrimary dark:desktop:bg-surfaceSolid desktop:border border-white/10;
 }
 
 /*--- links ---*/

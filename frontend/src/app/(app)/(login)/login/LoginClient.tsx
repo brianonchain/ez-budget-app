@@ -14,7 +14,6 @@ import InputEmail from "@/utils/components/InputEmail";
 import InputPassword from "@/utils/components/InputPassword";
 import ErrorModal from "@/utils/components/ErrorModal";
 import Accordion from "@/utils/components/Accordion";
-import Input from "@/utils/components/Input";
 // images
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 

@@ -10,7 +10,7 @@ export default function ItemsShell({ children, footer }: { children: React.React
           <p className="w-[25%] text-end">Category</p>
         </div>
         {/*--- list container ---*/}
-        <div className="relative w-full listTotalHeight bg-card">
+        <div className="relative w-full h-[calc(100dvh-var(--menuHeight)-var(--listHeaderHeight)-var(--listPadding))] bg-card">
           {/*--- list ---*/}
           <div className="w-full h-full overscroll-none overflow-y-auto select-none tablet:thinScrollbar scrollbar-stable">{children}</div>
           {/*--- fade overlay ---*/}

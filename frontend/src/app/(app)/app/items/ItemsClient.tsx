@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useItemsQuery, useSettingsQuery } from "@/utils/hooks";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
 // components
 import ItemsShell from "./ItemsShell";
 import AddItemButton from "./_components/AddItemButton";
@@ -17,6 +18,14 @@ import { SYMBOLS, DECIMALS } from "@/utils/constants";
 // types
 import { DraftItem } from "@/utils/types";
 import { emptyItem } from "@/utils/constants";
+
+function formatDateHeader(isoDate: string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(isoDate));
+}
 
 export default function Items() {
   const router = useRouter();
@@ -94,7 +103,7 @@ export default function Items() {
     if (!settingsData) return;
     setDraftItem({
       ...emptyItem,
-      date: new Date().toISOString(),
+      date: new Date().toISOString(), // UTC string format
       currency: settingsData.workspace.defaultCurrency,
       tag: localStorage.getItem(`lastTag:${settingsData.workspace._id}`) ?? "none",
     });
@@ -160,17 +169,12 @@ export default function Items() {
         />
       )}
       {nameModal && <EnterNameModal setNameModal={setNameModal} setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} />}
-      {detailsModal && settingsData && (
-        <DetailsModal setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} draftItem={draftItem} settingsData={settingsData} />
-      )}
+      <AnimatePresence>
+        {detailsModal && settingsData && (
+          <DetailsModal setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} draftItem={draftItem} settingsData={settingsData} />
+        )}
+      </AnimatePresence>
       {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
   );
-}
-
-const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-function formatDateHeader(isoDate: string): string {
-  const d = new Date(isoDate);
-  return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
 }

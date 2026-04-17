@@ -29,6 +29,7 @@ export default function InputPassword({
 }: InputProps) {
   const [show, setShow] = useState(false);
 
+  // TODO: remove items-start on top level?
   return (
     <div className="flex flex-col items-start">
       <label className={`inputLabel ${inputSize === "login" ? "textSm text-textSecondary !pb-1.5" : ""}`} htmlFor={_id}>
@@ -36,7 +37,7 @@ export default function InputPassword({
       </label>
       <div className="w-full relative">
         <Input
-          className={`!pr-[calc(1.2em+2rem)] desktop:!pr-[calc(1.2em+1.5rem)] ${
+          className={`w-full !pr-[calc(1.2em+2rem)] desktop:!pr-[calc(1.2em+1.5rem)] ${
             isError ? "!border-buttonDangerBg focus:!border-buttonDangerBg" : ""
           } peer`}
           variant="primary"

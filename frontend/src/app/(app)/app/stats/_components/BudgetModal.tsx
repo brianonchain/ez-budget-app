@@ -104,7 +104,7 @@ export default function BudgetModal({
             ))}
           </Select>
           <Input
-            className=""
+            className="w-full"
             inputSize="base"
             variant="primary"
             value={draftAmount}

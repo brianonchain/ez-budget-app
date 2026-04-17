@@ -8,7 +8,7 @@ export default async function AppLayout({ children }: Readonly<{ children: React
       <PageGlow />
       <Menu />
       <ContextProvider>
-        <main className="z-10 relative h-[calc(100dvh-var(--menuHeight))] portrait:w-full landscape:w-[calc(dvw-120px)] landscape:lg:w-[calc(dvw-160px)] landscape:ml-[120px] landscape:lg:ml-[160px] flex flex-col items-center overflow-y-auto scrollbar-stable">
+        <main className="z-10 relative h-[calc(100dvh-var(--menuHeight))] w-[calc(100%-var(--menuWidth))] ml-[var(--menuWidth)] flex flex-col items-center overflow-y-auto">
           {children}
         </main>
       </ContextProvider>

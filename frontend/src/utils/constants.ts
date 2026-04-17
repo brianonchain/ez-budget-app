@@ -22,3 +22,6 @@ export const emptyItem: DraftItem = {
   subcategory: "none",
   tag: "none",
 };
+
+export const DESKTOP_MQ =
+  "(hover: hover) and (pointer: fine) and (orientation: landscape) and (min-width: 980px), (hover: hover) and (pointer: fine) and (orientation: portrait) and (min-width: 600px)";

@@ -17,5 +17,5 @@ export default function Input({ inputSize = "base", variant = "primary", classNa
     login: "h-13 desktop:h-12 px-3.5 rounded-xl", // uses 16px text size
   };
 
-  return <input className={`w-full ${variants[variant]} ${sizes[inputSize]} ${className}`} {...props} />;
+  return <input className={`${variants[variant]} ${sizes[inputSize]} ${className}`} {...props} />;
 }

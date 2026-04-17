@@ -161,7 +161,7 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
   }
 
   return (
-    <Modal disableClose={isLoading} setModal={setEmailModal} title="Change Email">
+    <Modal disableClose={isLoading} onClose={() => setEmailModal(false)} title="Change Email">
       <form className="w-full" onSubmit={onSubmit}>
         {content === "changeEmail" && (
           <InputEmail

@@ -19,13 +19,14 @@ export default function InputEmail({
   inputSize = "base",
   ...props
 }: InputProps) {
+  // TODO: remove items-start on top level?
   return (
     <div className="flex flex-col items-start">
       <label className={`inputLabel ${inputSize === "login" ? "textSm text-textSecondary !pb-1.5" : ""}`} htmlFor={_id}>
         {label}
       </label>
       <Input
-        className={isError ? "!border-buttonDangerBg focus:!border-buttonDangerBg" : ""}
+        className={`w-full ${isError ? "!border-buttonDangerBg focus:!border-buttonDangerBg" : ""}`}
         variant="primary"
         inputSize={inputSize}
         // props specific for InputEmail
