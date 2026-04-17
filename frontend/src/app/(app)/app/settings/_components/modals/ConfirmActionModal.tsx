@@ -7,13 +7,13 @@ import Input from "@/utils/components/Input";
 import ErrorMessage from "@/utils/components/ErrorMessage";
 
 export default function ConfirmActionModal({
-  setModal,
+  onClose,
   title,
   textToMatch,
   userMutateAsyncPayload,
   onSuccess,
 }: {
-  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
   title: string;
   textToMatch: string;
   userMutateAsyncPayload: any;
@@ -46,14 +46,14 @@ export default function ConfirmActionModal({
     // mutation
     try {
       await userMutateAsync(userMutateAsyncPayload);
-      setModal(false);
+      onClose();
       onSuccess?.();
     } catch {} // error will show on UI
     // reset
     setInputValue("");
   }
   return (
-    <Modal title={title} onClose={() => setModal(false)} disableClose={isPending}>
+    <Modal title={title} onClose={onClose} disableClose={isPending}>
       <form className="w-full flex flex-col" onSubmit={onSubmit}>
         <p>
           Type <span className="font-semibold">{textToMatch}</span> to confirm deletion.

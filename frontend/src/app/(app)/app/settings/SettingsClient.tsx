@@ -338,7 +338,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         {leaveWorkspaceModal && data?.workspace && (
           <ConfirmActionModal
             title="Leave Workspace"
-            setModal={setLeaveWorkspaceModal}
+            onClose={() => setLeaveWorkspaceModal(false)}
             textToMatch={data.workspace.name}
             userMutateAsyncPayload={{ type: "leaveWorkspace", workspaceId: data.workspace._id }}
           />
@@ -348,7 +348,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         {deleteWorkspaceModal && data?.workspace && (
           <ConfirmActionModal
             title="Delete Workspace"
-            setModal={setDeleteWorkspaceModal}
+            onClose={() => setDeleteWorkspaceModal(false)}
             textToMatch={data.workspace.name}
             userMutateAsyncPayload={{ type: "deleteWorkspace", workspaceId: data.workspace._id }}
           />
@@ -358,7 +358,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         {deleteAccountModal && (
           <ConfirmActionModal
             title="Delete Account"
-            setModal={setDeleteAccountModal}
+            onClose={() => setDeleteAccountModal(false)}
             textToMatch={email}
             userMutateAsyncPayload={{ type: "deleteAccount", userId }}
             onSuccess={() => signOut({ callbackUrl: "/accountDeleted" })}
