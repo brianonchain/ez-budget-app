@@ -97,7 +97,7 @@ export default function ExportModal({
   }
 
   return (
-    <Modal title="Export Items" onClose={() => setExportModal(false)} disableClose={isLoading}>
+    <Modal title="Export Items" onClose={() => setExportModal(false)} disabled={isLoading}>
       <div className="w-full flex flex-col">
         {/* --- dates --- */}
         <div className="relative w-full grid grid-cols-2 gap-x-3">

@@ -95,7 +95,7 @@ export default function EnterCostModal({
   };
 
   return (
-    <Modal title="Enter Cost" onClose={onClose} disableClose={isPending} direction={direction}>
+    <Modal title="Enter Cost" onClose={onClose} disabled={isPending} direction={direction}>
       <div className="flex flex-col items-center">
         {/*--- AMOUNT CONTAINER ---*/}
         <div className="relative w-full h-18 desktop:h-13 flex items-center">

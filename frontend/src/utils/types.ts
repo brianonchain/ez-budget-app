@@ -107,6 +107,9 @@ export type MutateUserPayload =
 
 export type ResendCodePayload = { type: "resendCodeForNewUser"; email: string } | { type: "resendCodeForEmailChange" };
 
+// for modals
+export type Direction = 1 | 0 | -1;
+
 // useStatsQuery data
 export type StatsPeriod = "week" | "month" | "year";
 export type StatsRawItem = {

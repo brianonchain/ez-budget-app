@@ -217,7 +217,7 @@ export default function AddCategoryModal({
   }
 
   return (
-    <Modal title={isEdit ? "Edit Category" : "Add Category"} onClose={() => setAddCategoryModal(false)} disableClose={isPending}>
+    <Modal title={isEdit ? "Edit Category" : "Add Category"} onClose={() => setAddCategoryModal(false)} disabled={isPending}>
       <form className="w-full flex flex-col" onSubmit={onSubmit}>
         {/*--- category ---*/}
         <label className="inputLabel">Category{isEdit ? "" : " (e.g., Food)"}</label>

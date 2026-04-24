@@ -101,7 +101,7 @@ export default function ShareWorkspaceModal({
   }
 
   return (
-    <Modal title="Share Workspace" onClose={() => setShareWorkspaceModal(false)} disableClose={isPending}>
+    <Modal title="Share Workspace" onClose={() => setShareWorkspaceModal(false)} disabled={isPending}>
       <div className="w-full flex flex-col">
         {/*--- INVITE FORM ---*/}
         <form className="w-full" onSubmit={onSubmit} noValidate>

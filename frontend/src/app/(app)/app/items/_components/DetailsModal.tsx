@@ -128,7 +128,7 @@ export default function Details({
   }
 
   return (
-    <Modal title="Item Info" onClose={onClose} onBack={onBack} disableClose={isPending} direction={direction}>
+    <Modal title="Item Info" onClose={onClose} onBack={onBack} disabled={isPending} direction={direction}>
       <div className="w-full flex flex-col">
         {/*--- date, name, cost ---*/}
         <div className="w-full grid grid-cols-[auto_1fr] gap-1.5 items-center">

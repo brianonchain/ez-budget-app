@@ -16,7 +16,7 @@ import Spinner from "@/utils/components/Spinner";
 // constants
 import { SYMBOLS, DECIMALS } from "@/utils/constants";
 // types
-import { DraftItem } from "@/utils/types";
+import { DraftItem, Direction } from "@/utils/types";
 import { emptyItem } from "@/utils/constants";
 
 function formatDateHeader(isoDate: string): string {
@@ -28,7 +28,6 @@ function formatDateHeader(isoDate: string): string {
 }
 
 export type ModalName = "cost" | "name" | "details" | null;
-export type Direction = 1 | -1 | 0;
 
 export default function Items() {
   const router = useRouter();
