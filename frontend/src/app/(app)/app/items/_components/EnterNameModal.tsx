@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { DraftItem } from "@/utils/types";
 import Button from "@/utils/components/Button";
 import Modal from "@/utils/components/modal/Modal";
 import ErrorMessage from "@/utils/components/ErrorMessage";
 import type { Direction } from "@/utils/types";
+import { DESKTOP_MQ } from "@/utils/constants";
 
 export default function EnterNameModal({
   setDraftItem,
@@ -23,6 +24,17 @@ export default function EnterNameModal({
   const MAX_DESCRIPTION_LENGTH = 30;
   const [description, setDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  // useRef and useState used to create at delay for autoFocus
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    const isDesktop = window.matchMedia(DESKTOP_MQ).matches;
+    if (!isDesktop) return;
+    const timer = setTimeout(() => {
+      textAreaRef.current?.focus({ preventScroll: true });
+    }, 320);
+    return () => clearTimeout(timer);
+  }, []);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
