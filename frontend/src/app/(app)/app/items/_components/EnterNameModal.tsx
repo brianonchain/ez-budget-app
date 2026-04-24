@@ -29,7 +29,8 @@ export default function EnterNameModal({
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
     const isDesktop = window.matchMedia(DESKTOP_MQ).matches;
-    if (!isDesktop) return;
+    console.log("isDesktop", isDesktop);
+    if (isDesktop) return;
     const timer = setTimeout(() => {
       textAreaRef.current?.focus({ preventScroll: true });
     }, 320);
@@ -51,6 +52,7 @@ export default function EnterNameModal({
       <form onSubmit={handleSubmit} className="mt-6 desktop:pt-0 w-full">
         <div className="w-full">
           <textarea
+            ref={textAreaRef}
             value={description}
             maxLength={MAX_DESCRIPTION_LENGTH}
             onChange={(e) => setDescription(e.currentTarget.value.slice(0, MAX_DESCRIPTION_LENGTH))}
