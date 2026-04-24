@@ -3,7 +3,7 @@ import { DraftItem } from "@/utils/types";
 import Button from "@/utils/components/Button";
 import Modal from "@/utils/components/modal/Modal";
 import ErrorMessage from "@/utils/components/ErrorMessage";
-import type { Direction } from "../ItemsClient";
+import type { Direction } from "@/utils/types";
 
 export default function EnterNameModal({
   setDraftItem,

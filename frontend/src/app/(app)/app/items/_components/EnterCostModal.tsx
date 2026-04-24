@@ -5,7 +5,7 @@ import Modal from "@/utils/components/modal/Modal";
 import { useWorkspaceMutation } from "@/utils/hooks";
 import { CURRENCIES, DECIMALS, MULTIPLIER } from "@/utils/constants";
 import { DraftItem } from "@/utils/types";
-import type { Direction } from "../ItemsClient";
+import type { Direction } from "@/utils/types";
 
 const calc = ["7", "8", "9", "4", "5", "6", "1", "2", "3", ".", "0"] as const;
 

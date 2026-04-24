@@ -16,7 +16,7 @@ import Spinner from "@/utils/components/Spinner";
 // constants
 import { SYMBOLS, DECIMALS } from "@/utils/constants";
 // types
-import { DraftItem, Direction } from "@/utils/types";
+import type { DraftItem, Direction } from "@/utils/types";
 import { emptyItem } from "@/utils/constants";
 
 function formatDateHeader(isoDate: string): string {

@@ -1,16 +1,17 @@
 import { useState, useMemo } from "react";
 import { useItemsMutation } from "@/utils/hooks";
+// components
 import Modal from "@/utils/components/modal/Modal";
 import Button from "@/utils/components/Button";
-import { CategoryObject } from "@/db/WorkspaceModel";
-import { CURRENCIES, DECIMALS } from "@/utils/constants";
-import { DraftItem, WorkspaceData } from "@/utils/types";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
 import Calendar from "@/utils/components/Calendar";
 import ErrorMessage from "@/utils/components/ErrorMessage";
 import DetailsList from "./DetailsList";
-import type { Direction } from "../ItemsClient";
+// types and constants
+import { CategoryObject } from "@/db/WorkspaceModel";
+import { CURRENCIES, DECIMALS } from "@/utils/constants";
+import type { DraftItem, WorkspaceData, Direction } from "@/utils/types";
 
 export default function Details({
   workspaceData,
