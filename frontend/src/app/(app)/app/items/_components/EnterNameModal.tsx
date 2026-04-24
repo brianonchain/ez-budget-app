@@ -27,7 +27,7 @@ export default function EnterNameModal({
 
   // below hides cursor until animation finishes
   useEffect(() => {
-    const timer = setTimeout(() => setShowCursor(true), 340);
+    const timer = setTimeout(() => setShowCursor(true), 440);
     return () => clearTimeout(timer);
   }, []);
 
