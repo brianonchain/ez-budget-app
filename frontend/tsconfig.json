@@ -22,6 +22,13 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/next-auth.d.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/utils/next-auth.d.ts",
+    "src/app/(app)/app/items/_components/itemModal"
+  ],
   "exclude": ["node_modules", ".next", "dist", "build"]
 }

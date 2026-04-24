@@ -1,7 +1,7 @@
 import dbConnect from "@/db/dbConnect";
 import { NextResponse } from "next/server";
 import { Types } from "mongoose";
-import { MutateSettingsPayload, Role } from "@/utils/types";
+import { MutateWorkspacePayload, Role } from "@/utils/types";
 import { CURRENCIES } from "@/utils/constants";
 import MembershipModel from "@/db/MembershipModel";
 import WorkspaceModel from "@/db/WorkspaceModel";
@@ -12,7 +12,7 @@ import { getUserInfo } from "@/utils/serverFunctions";
 import { isStringArray, isCategoryObject, isDraftItem, isObjectIdString } from "@/utils/typeGuards";
 
 export const POST = async (request: Request) => {
-  const payload = (await request.json().catch(() => null)) as MutateSettingsPayload | null;
+  const payload = (await request.json().catch(() => null)) as MutateWorkspacePayload | null;
   if (!payload || !payload.type) return NextResponse.json({ status: "error", message: "Invalid payload" }, { status: 400 });
   // authentication
   const userInfo = await getUserInfo();
@@ -189,7 +189,7 @@ export const POST = async (request: Request) => {
         const result = await WorkspaceModel.updateOne(
           { _id: workspaceId },
           { $set: { "categoryObjects.$[c].category": to } },
-          { arrayFilters: [{ "c.category": from }] }
+          { arrayFilters: [{ "c.category": from }] },
         );
         if (result.modifiedCount === 0) return NextResponse.json({ status: "error", message: "Category not found." }, { status: 404 });
         await ItemModel.updateMany({ workspaceId, category: from }, { $set: { category: to } });
@@ -230,7 +230,7 @@ export const POST = async (request: Request) => {
         // check if subcategory exists
         const workspace = await WorkspaceModel.findOne(
           { _id: workspaceId, "categoryObjects.category": category },
-          { categoryObjects: { $elemMatch: { category } } }
+          { categoryObjects: { $elemMatch: { category } } },
         ).lean<{ categoryObjects: CategoryObject[] } | null>();
         const exists = workspace?.categoryObjects?.[0]?.subcategories?.some((s) => s.toLowerCase() === subcategory.toLowerCase());
         if (exists) return NextResponse.json({ status: "error", message: "Subcategory already exists." }, { status: 409 });
@@ -238,7 +238,7 @@ export const POST = async (request: Request) => {
         const result = await WorkspaceModel.updateOne(
           { _id: workspaceId },
           { $push: { "categoryObjects.$[c].subcategories": subcategory } },
-          { arrayFilters: [{ "c.category": category }] }
+          { arrayFilters: [{ "c.category": category }] },
         );
         if (result.modifiedCount === 0) {
           return NextResponse.json({ status: "error", message: "Category not found." }, { status: 404 });
@@ -263,7 +263,7 @@ export const POST = async (request: Request) => {
         // duplicates (allow food => Food)
         const workspace = await WorkspaceModel.findOne(
           { _id: workspaceId, "categoryObjects.category": category },
-          { categoryObjects: { $elemMatch: { category } } }
+          { categoryObjects: { $elemMatch: { category } } },
         ).lean<{ categoryObjects: CategoryObject[] } | null>();
         if (
           from.toLowerCase() !== to.toLowerCase() &&
@@ -275,7 +275,7 @@ export const POST = async (request: Request) => {
         const result = await WorkspaceModel.updateOne(
           { _id: workspaceId },
           { $set: { "categoryObjects.$[c].subcategories.$[s]": to } },
-          { arrayFilters: [{ "c.category": category }, { s: from }] }
+          { arrayFilters: [{ "c.category": category }, { s: from }] },
         );
         if (result.modifiedCount === 0)
           return NextResponse.json({ status: "error", message: "Category or subcategory not found." }, { status: 404 });
@@ -303,7 +303,7 @@ export const POST = async (request: Request) => {
         await WorkspaceModel.updateOne(
           { _id: workspaceId },
           { $pull: { "categoryObjects.$[c].subcategories": subcategory } },
-          { arrayFilters: [{ "c.category": category }] }
+          { arrayFilters: [{ "c.category": category }] },
         );
         break;
       }
@@ -323,7 +323,7 @@ export const POST = async (request: Request) => {
 
         const workspace = await WorkspaceModel.findOne(
           { _id: workspaceId, "categoryObjects.category": category },
-          { categoryObjects: { $elemMatch: { category } } }
+          { categoryObjects: { $elemMatch: { category } } },
         ).lean<{ categoryObjects: CategoryObject[] } | null>();
 
         if (!workspace?.categoryObjects?.[0]) {
@@ -347,7 +347,7 @@ export const POST = async (request: Request) => {
         const result = await WorkspaceModel.updateOne(
           { _id: workspaceId },
           { $set: { "categoryObjects.$[c].subcategories": next } },
-          { arrayFilters: [{ "c.category": category }] }
+          { arrayFilters: [{ "c.category": category }] },
         );
 
         if (result.modifiedCount === 0) {
@@ -373,7 +373,7 @@ export const POST = async (request: Request) => {
         // mutate
         await WorkspaceModel.updateOne(
           { _id: workspaceId },
-          { $set: { "discretionaryBudget.amount": amount, "discretionaryBudget.currency": currency } }
+          { $set: { "discretionaryBudget.amount": amount, "discretionaryBudget.currency": currency } },
         );
         break;
       }

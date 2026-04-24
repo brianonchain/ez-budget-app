@@ -1,9 +1,3 @@
-import React from "react";
-
-export default function ErrorMessage({ position = "left", message }: { position?: "left" | "center"; message: string }) {
-  const positions = {
-    left: "",
-    center: "justify-center",
-  };
-  return <p className={`py-2 min-h-22 desktop:min-h-19 w-full flex font-medium text-textDanger ${positions[position]}`}>{message}</p>;
+export default function ErrorMessage({ message }: { message: string }) {
+  return <p className={`py-2 min-h-16 desktop:min-h-14 w-full flex font-medium text-textDanger`}>{message}</p>;
 }

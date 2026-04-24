@@ -32,15 +32,15 @@ import EditIcon from "@/utils/components/EditIcon";
 
 // utils
 import { capitalizeFirst } from "@/utils/functions";
-import { useSettingsMutation, useSettingsQuery, useUserMutation, useItemsQuery } from "@/utils/hooks";
+import { useWorkspaceMutation, useWorkspaceQuery, useUserMutation, useItemsQuery } from "@/utils/hooks";
 import { CURRENCIES } from "@/utils/constants";
 
 export default function Settings({ provider, email, userId }: { provider: string; email: string; userId: string }) {
   // hooks
   const { resolvedTheme, setTheme } = useTheme();
   const { data: itemsData } = useItemsQuery();
-  const { data, isError, isFetching: isFetchingSettings } = useSettingsQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
-  const { mutateAsync: settingsMutateAsync, isPending: isMutatingSettings } = useSettingsMutation();
+  const { data, isError, isFetching: isFetchingSettings } = useWorkspaceQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
+  const { mutateAsync: mutateWorkspaceAsync, isPending: isMutatingSettings } = useWorkspaceMutation();
   const { mutateAsync: userMutateAsync, isPending: isMutatingUser } = useUserMutation();
 
   // draft states
@@ -94,7 +94,7 @@ export default function Settings({ provider, email, userId }: { provider: string
     const oldCurrency = defaultCurrency;
     setDefaultCurrency(e.currentTarget.value);
     try {
-      await settingsMutateAsync({ type: "changeCurrency", workspaceId, currency: e.currentTarget.value });
+      await mutateWorkspaceAsync({ type: "changeCurrency", workspaceId, currency: e.currentTarget.value });
     } catch {
       setDefaultCurrency(oldCurrency);
     }

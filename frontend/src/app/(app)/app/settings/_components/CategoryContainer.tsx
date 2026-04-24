@@ -5,7 +5,7 @@ import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from 
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import Category from "./Category";
 import { CategoryObject } from "@/db/WorkspaceModel";
-import { useSettingsMutation } from "@/utils/hooks";
+import { useWorkspaceMutation } from "@/utils/hooks";
 
 function addId(categoryObjects: CategoryObject[]) {
   return categoryObjects.slice(1).map((i, index) => ({ id: (index + 1).toString(), ...i }));
@@ -22,7 +22,7 @@ export default function CategoryContainer({
   setClickedCategory: React.Dispatch<React.SetStateAction<string | null>>;
   workspaceId: string;
 }) {
-  const { mutateAsync: settingsMutateAsync } = useSettingsMutation();
+  const { mutateAsync: mutateWorkspaceAsync } = useWorkspaceMutation();
 
   const [items, setItems] = useState(() => addId(categoryObjects));
 
@@ -53,7 +53,7 @@ export default function CategoryContainer({
     newItems.forEach((i) => newCategoryObjects.push({ category: i.category, subcategories: i.subcategories }));
 
     try {
-      await settingsMutateAsync({ type: "reorderCategoryObjects", workspaceId, categoryObjects: newCategoryObjects });
+      await mutateWorkspaceAsync({ type: "reorderCategoryObjects", workspaceId, categoryObjects: newCategoryObjects });
     } catch (e) {
       console.error("Failed to update category order");
       setItems(oldItems);

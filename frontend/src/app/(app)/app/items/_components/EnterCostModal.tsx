@@ -1,28 +1,33 @@
 import { useState } from "react";
 import { FaDeleteLeft, FaChevronDown } from "react-icons/fa6";
 import Button from "@/utils/components/Button";
-import Modal from "@/utils/components/Modal";
-import { useSettingsMutation } from "@/utils/hooks";
+import Modal from "@/utils/components/modal/Modal";
+import { useWorkspaceMutation } from "@/utils/hooks";
 import { CURRENCIES, DECIMALS, MULTIPLIER } from "@/utils/constants";
 import { DraftItem } from "@/utils/types";
+import type { Direction } from "../ItemsClient";
 
 const calc = ["7", "8", "9", "4", "5", "6", "1", "2", "3", ".", "0"] as const;
 
-export default function EnterCost({
-  setCostModal,
-  setNameModal,
+export default function EnterCostModal({
   setDraftItem,
   defaultCurrency,
   workspaceId,
+  onClose,
+  // multipage modal props
+  direction,
+  onForward,
 }: {
-  setCostModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setNameModal: React.Dispatch<React.SetStateAction<boolean>>;
   setDraftItem: React.Dispatch<React.SetStateAction<DraftItem>>;
   defaultCurrency: string;
   workspaceId: string;
+  onClose: () => void;
+  // multipage modal props
+  direction: Direction;
+  onForward: () => void;
 }) {
   // hooks
-  const { mutateAsync: settingsMutateAsync, isPending, error: currencyError } = useSettingsMutation();
+  const { mutateAsync: mutateWorkspaceAsync, isPending, error: currencyError } = useWorkspaceMutation();
   // states
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState(defaultCurrency);
@@ -71,8 +76,7 @@ export default function EnterCost({
     const cost = Number(normalizedAmount) * multiplier;
     if (!Number.isFinite(cost) || cost <= 0) return;
     setDraftItem((prev) => ({ ...prev, cost }));
-    setCostModal(false);
-    setNameModal(true);
+    onForward();
   }
 
   const onChangeCurrency = async (newCurrency: string) => {
@@ -82,7 +86,7 @@ export default function EnterCost({
     setDraftItem((prev) => ({ ...prev, currency: newCurrency }));
 
     try {
-      await settingsMutateAsync({ type: "changeCurrency", workspaceId, currency: newCurrency });
+      await mutateWorkspaceAsync({ type: "changeCurrency", workspaceId, currency: newCurrency });
     } catch {
       // revert UI if failed
       setCurrency(oldCurrency);
@@ -91,10 +95,10 @@ export default function EnterCost({
   };
 
   return (
-    <Modal title="Enter Cost" onClose={() => setCostModal(false)} disableClose={isPending}>
+    <Modal title="Enter Cost" onClose={onClose} disableClose={isPending} direction={direction}>
       <div className="flex flex-col items-center">
         {/*--- AMOUNT CONTAINER ---*/}
-        <div className="relative w-full h-17 desktop:h-13 flex items-center">
+        <div className="relative w-full h-18 desktop:h-13 flex items-center">
           {/*--- currency ---*/}
           <div className="relative flex-1 h-full flex items-center">
             <select
@@ -113,7 +117,7 @@ export default function EnterCost({
             <FaChevronDown className="absolute right-3 pointer-events-none text-sm desktop:text-[0.625rem] opacity-80" />
           </div>
           {/*--- amount ---*/}
-          <div className="flex-none px-2.5 desktop:px-2 w-[calc(12rem)] desktop:w-[calc(3rem*3+0.375rem*2)] h-full flex items-center justify-center border-2 border-blue-500/20 rounded-2xl desktop:rounded-xl text2xl font-semibold tabular-nums text-center">
+          <div className="flex-none px-2 w-48 h-full flex items-center justify-center border border-inputOutlineBorder rounded-2xl text2xl font-semibold tabular-nums text-center">
             {amount || (decimals === 0 ? "0" : `0.${"0".repeat(decimals)}`)}
           </div>
           {/*--- multiplier ---*/}

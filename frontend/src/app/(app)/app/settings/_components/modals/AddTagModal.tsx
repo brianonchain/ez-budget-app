@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useSettingsMutation } from "@/utils/hooks";
-import Modal from "@/utils/components/Modal";
+import { useWorkspaceMutation } from "@/utils/hooks";
+import Modal from "@/utils/components/modal/Modal";
 import { Workspace } from "@/utils/types";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
@@ -15,7 +15,7 @@ export default function AddTagModal({
   setAddTagModal: React.Dispatch<React.SetStateAction<boolean>>;
   clickedTag: string;
 }) {
-  const { mutateAsync: settingsMutateAsync, error, isError, isPending } = useSettingsMutation();
+  const { mutateAsync: mutateWorkspaceAsync, error, isError, isPending } = useWorkspaceMutation();
   const [validationError, setValidationError] = useState("");
   const [tag, setTag] = useState(clickedTag);
   const [status, setStatus] = useState<"initial" | "adding" | "editing" | "deleting">("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
@@ -47,7 +47,7 @@ export default function AddTagModal({
 
     // mutation
     try {
-      await settingsMutateAsync({ type: "addTag", workspaceId: workspace._id, tag: _tag });
+      await mutateWorkspaceAsync({ type: "addTag", workspaceId: workspace._id, tag: _tag });
       setAddTagModal(false);
     } catch {
       setStatus("initial"); // error will be shown on UI
@@ -77,7 +77,7 @@ export default function AddTagModal({
 
     // mutation
     try {
-      await settingsMutateAsync({ type: "renameTag", workspaceId: workspace._id, from: clickedTag, to: _tag });
+      await mutateWorkspaceAsync({ type: "renameTag", workspaceId: workspace._id, from: clickedTag, to: _tag });
     } catch {
       // error will show on UI
     }
@@ -92,7 +92,7 @@ export default function AddTagModal({
     setStatus("deleting");
 
     try {
-      await settingsMutateAsync({ type: "deleteTag", workspaceId: workspace._id, tag: clickedTag });
+      await mutateWorkspaceAsync({ type: "deleteTag", workspaceId: workspace._id, tag: clickedTag });
       setAddTagModal(false);
     } catch {
       setStatus("initial"); // error will show on UI

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useUserMutation } from "@/utils/hooks";
-import Modal from "@/utils/components/Modal";
+import Modal from "@/utils/components/modal/Modal";
 import { CURRENCIES } from "@/utils/constants";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";

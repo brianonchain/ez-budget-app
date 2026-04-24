@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa6";
-import Modal from "@/utils/components/Modal";
+import Modal from "@/utils/components/modal/Modal";
 import EditButtons from "./EditButtons";
-import { useSettingsMutation } from "@/utils/hooks";
+import { useWorkspaceMutation } from "@/utils/hooks";
 import { Workspace } from "@/utils/types";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
@@ -40,7 +40,7 @@ export default function AddCategoryModal({
     }
   });
 
-  const { mutateAsync: settingsMutateAsync, error, isError, isPending } = useSettingsMutation();
+  const { mutateAsync: mutateWorkspaceAsync, error, isError, isPending } = useWorkspaceMutation();
 
   // sync UI states with server state
   useEffect(() => {
@@ -91,7 +91,7 @@ export default function AddCategoryModal({
     const _subcategories = ["none", ...cleaned];
 
     try {
-      await settingsMutateAsync({
+      await mutateWorkspaceAsync({
         type: "addCategoryObject",
         workspaceId: workspace._id,
         categoryObject: { category: _category, subcategories: _subcategories },
@@ -126,7 +126,7 @@ export default function AddCategoryModal({
     setStatus("editing");
 
     try {
-      await settingsMutateAsync({ type: "renameCategory", workspaceId: workspace._id, from, to });
+      await mutateWorkspaceAsync({ type: "renameCategory", workspaceId: workspace._id, from, to });
       setClickedCategory(to); // update clickedCategory
     } catch {} // error will show on UI
     setStatus("initial");
@@ -139,7 +139,7 @@ export default function AddCategoryModal({
     setStatus("deleting");
 
     try {
-      await settingsMutateAsync({ type: "deleteCategoryObject", workspaceId: workspace._id, category: clickedCategory });
+      await mutateWorkspaceAsync({ type: "deleteCategoryObject", workspaceId: workspace._id, category: clickedCategory });
       setAddCategoryModal(false);
     } catch {
       setStatus("initial"); // error will show on UI
@@ -163,7 +163,7 @@ export default function AddCategoryModal({
     setStatus("adding");
 
     try {
-      await settingsMutateAsync({ type: "addSubcategory", workspaceId: workspace._id, category: clickedCategory, subcategory });
+      await mutateWorkspaceAsync({ type: "addSubcategory", workspaceId: workspace._id, category: clickedCategory, subcategory });
       setSubcategoriesWithId((prev) => prev.map((r, i) => (i === index ? { ...r, isNew: false, value: subcategory } : r))); // optimistic update
     } catch {} // error will show on UI
     setStatus("initial");
@@ -200,7 +200,7 @@ export default function AddCategoryModal({
     setStatus("editing");
 
     try {
-      await settingsMutateAsync({ type: "renameSubcategory", workspaceId: workspace._id, category: clickedCategory, from, to });
+      await mutateWorkspaceAsync({ type: "renameSubcategory", workspaceId: workspace._id, category: clickedCategory, from, to });
     } catch {} // error will show on UI
     setStatus("initial");
   }

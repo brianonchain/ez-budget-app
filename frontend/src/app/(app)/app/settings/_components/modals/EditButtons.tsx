@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { FaArrowUp, FaArrowDown, FaX, FaCircleNotch } from "react-icons/fa6";
-import { useSettingsMutation } from "@/utils/hooks";
+import { useWorkspaceMutation } from "@/utils/hooks";
 import { SubcategoryWithId, AddCategoryModalStatus } from "./AddCategoryModal";
 
 export default function EditButtons({
@@ -24,7 +24,7 @@ export default function EditButtons({
   clickedCategory: string;
   workspaceId: string;
 }) {
-  const { mutateAsync: settingsMutateAsync, error, isError, isPending } = useSettingsMutation();
+  const { mutateAsync: mutateWorkspaceAsync, error, isError, isPending } = useWorkspaceMutation();
 
   useEffect(() => {
     if (error) {
@@ -46,7 +46,7 @@ export default function EditButtons({
     moveRow(rowIndex, rowIndex - 1);
     setStatus("editing");
     try {
-      await settingsMutateAsync({
+      await mutateWorkspaceAsync({
         type: "reorderSubcategory",
         workspaceId,
         category: clickedCategory,
@@ -65,7 +65,7 @@ export default function EditButtons({
     setStatus("editing");
 
     try {
-      await settingsMutateAsync({
+      await mutateWorkspaceAsync({
         type: "reorderSubcategory",
         workspaceId,
         category: clickedCategory,
@@ -90,7 +90,7 @@ export default function EditButtons({
     // is-being-used validation done on backend
     setStatus(`deletingSubcategory${index}`);
     try {
-      await settingsMutateAsync({ type: "deleteSubcategory", workspaceId, category: clickedCategory, subcategory });
+      await mutateWorkspaceAsync({ type: "deleteSubcategory", workspaceId, category: clickedCategory, subcategory });
     } catch {
       // error will show on UI
     }

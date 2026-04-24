@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import Tags from "./Tags";
-import { useSettingsMutation } from "@/utils/hooks";
+import { useWorkspaceMutation } from "@/utils/hooks";
 
 function addId(_tags: string[]) {
   return _tags.slice(1).map((i, index) => ({ id: (index + 1).toString(), tag: i }));
@@ -22,7 +22,7 @@ export default function TagsContainer({
   workspaceId: string;
 }) {
   // hooks
-  const { mutateAsync: settingsMutateAsync } = useSettingsMutation();
+  const { mutateAsync: mutateWorkspaceAsync } = useWorkspaceMutation();
   // state
   const [items, setItems] = useState(() => addId(tags));
   // useEffects
@@ -51,7 +51,7 @@ export default function TagsContainer({
     const newTags = ["none", ...newItems.map((i) => i.tag)];
 
     try {
-      await settingsMutateAsync({ type: "reorderTags", workspaceId, tags: newTags });
+      await mutateWorkspaceAsync({ type: "reorderTags", workspaceId, tags: newTags });
     } catch (e) {
       console.error("Failed to update tag order");
       setItems(oldItems);

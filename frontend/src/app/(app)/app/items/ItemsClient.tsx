@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useItemsQuery, useSettingsQuery } from "@/utils/hooks";
+import { useItemsQuery, useWorkspaceQuery } from "@/utils/hooks";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
@@ -27,12 +27,15 @@ function formatDateHeader(isoDate: string): string {
   }).format(new Date(isoDate));
 }
 
+export type ModalName = "cost" | "name" | "details" | null;
+export type Direction = 1 | -1 | 0;
+
 export default function Items() {
   const router = useRouter();
   const session = useSession();
 
   const { data: itemsData, fetchNextPage, hasNextPage, isFetchingNextPage } = useItemsQuery(); // itemsData = { pages: [{items, defaultCurrency, hasMore},...], pageParams: [0,1,2,...] }
-  const { data: settingsData } = useSettingsQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
+  const { data: workspaceData } = useWorkspaceQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
 
   // measure performance
   const [itemsTime, setItemsTime] = useState<number | null>(null);
@@ -43,17 +46,17 @@ export default function Items() {
     }
   }, [itemsData, itemsTime]);
   useEffect(() => {
-    if (settingsData && settingsTime === null) {
+    if (workspaceData && settingsTime === null) {
       setSettingsTime(performance.now());
     }
-  }, [settingsData, settingsTime]);
+  }, [workspaceData, settingsTime]);
 
   // states
   const [errorMessage, setErrorMessage] = useState("");
-  const [costModal, setCostModal] = useState(false);
-  const [nameModal, setNameModal] = useState(false);
-  const [detailsModal, setDetailsModal] = useState(false);
   const [draftItem, setDraftItem] = useState<DraftItem>(emptyItem);
+  const [modalName, setModalName] = useState<"cost" | "name" | "details" | null>(null);
+  const [direction, setDirection] = useState<Direction>(1);
+  const [canDetailsGoBack, setCanDetailsGoBack] = useState(true);
 
   // flatten pages into a single items array, then group by date
   const allItems = useMemo(() => itemsData?.pages.flatMap((p) => p.items) ?? [], [itemsData]);
@@ -100,15 +103,31 @@ export default function Items() {
   }
 
   const addItemOnClick = () => {
-    if (!settingsData) return;
+    if (!workspaceData) return;
     setDraftItem({
       ...emptyItem,
       date: new Date().toISOString(), // UTC string format
-      currency: settingsData.workspace.defaultCurrency,
-      tag: localStorage.getItem(`lastTag:${settingsData.workspace._id}`) ?? "none",
+      currency: workspaceData.workspace.defaultCurrency,
+      tag: localStorage.getItem(`lastTag:${workspaceData.workspace._id}`) ?? "none",
     });
-    setCostModal(true);
+    setDirection(1);
+    setModalName("cost");
   };
+
+  function goForward(nextPage: ModalName) {
+    setDirection(1);
+    setModalName(nextPage);
+  }
+
+  function goBack(prevPage: ModalName) {
+    setDirection(-1);
+    setModalName(prevPage);
+  }
+
+  function onClose() {
+    setDirection(0);
+    setModalName(null);
+  }
 
   // better UI if button is shown on first paint (then remove button if user is not "owner" or "editor")
   const isItemsLoading = !itemsData;
@@ -132,7 +151,9 @@ export default function Items() {
                     className="innerOutline text-left px-[3%] w-full h-14 desktop:h-13 flex items-center gap-2 border-b border-borderFaint desktop:hover:bg-surface dark:desktop:hover:bg-card"
                     onClick={() => {
                       setDraftItem(item);
-                      setDetailsModal(true);
+                      setDirection(1);
+                      setCanDetailsGoBack(false);
+                      setModalName("details");
                     }}
                     type="button"
                   >
@@ -159,19 +180,44 @@ export default function Items() {
           </>
         )}
       </ItemsShell>
-      {costModal && settingsData && (
-        <EnterCostModal
-          setCostModal={setCostModal}
-          setNameModal={setNameModal}
-          setDraftItem={setDraftItem}
-          workspaceId={settingsData.workspace._id}
-          defaultCurrency={settingsData.workspace.defaultCurrency}
-        />
-      )}
-      {nameModal && <EnterNameModal setNameModal={setNameModal} setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} />}
-      <AnimatePresence>
-        {detailsModal && settingsData && (
-          <DetailsModal setDetailsModal={setDetailsModal} setDraftItem={setDraftItem} draftItem={draftItem} settingsData={settingsData} />
+
+      {/* --- MODALS --- */}
+      <AnimatePresence custom={direction}>
+        {modalName === "cost" && workspaceData && (
+          <EnterCostModal
+            setDraftItem={setDraftItem}
+            workspaceId={workspaceData.workspace._id}
+            defaultCurrency={workspaceData.workspace.defaultCurrency}
+            onClose={onClose}
+            direction={direction}
+            onForward={() => goForward("name")}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence custom={direction}>
+        {modalName === "name" && (
+          <EnterNameModal
+            setDraftItem={setDraftItem}
+            onClose={onClose}
+            direction={direction}
+            onBack={() => goBack("cost")}
+            onForward={() => {
+              setCanDetailsGoBack(true);
+              goForward("details");
+            }}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence custom={direction}>
+        {modalName === "details" && workspaceData && (
+          <DetailsModal
+            setDraftItem={setDraftItem}
+            draftItem={draftItem}
+            workspaceData={workspaceData}
+            onClose={onClose}
+            direction={direction}
+            onBack={canDetailsGoBack ? () => goBack("name") : undefined}
+          />
         )}
       </AnimatePresence>
       {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}

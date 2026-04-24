@@ -7,7 +7,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { signOut } from "next-auth/react";
 // components
 import Button from "@/utils/components/Button";
-import Modal from "@/utils/components/Modal";
+import Modal from "@/utils/components/modal/Modal";
 import ErrorMessage from "@/utils/components/ErrorMessage";
 const defaultErrors = { newPassword1: false, newPassword2: false, submit: "" };
 

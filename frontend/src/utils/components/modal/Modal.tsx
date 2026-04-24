@@ -1,26 +1,33 @@
 "use client";
-import { useId, useState, useEffect, useRef } from "react";
+import { useId, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+// modal components
+import ModalHeader from "./ModalHeader";
+import ModalGlow from "./ModalGlow";
+import ModalBody from "./ModalBody";
+import { DESKTOP_MQ } from "@/utils/constants";
 import { FocusTrap } from "focus-trap-react";
 import { motion } from "framer-motion";
-import { DESKTOP_MQ } from "../constants";
-import ModalHeader from "./ModalHeader";
 
 // mobile/tablet = FULL SCREEN, desktop = MODAL
 export default function Modal({
   title,
   onClose,
+  onBack,
   disableClose = false,
   desktopWidth = "",
   contentMaxWidth = "",
   children,
+  direction = 0,
 }: {
   title: string;
   onClose: () => void;
+  onBack?: (() => void) | undefined;
   disableClose?: boolean;
   desktopWidth?: string;
   contentMaxWidth?: string;
   children: React.ReactNode;
+  direction?: 1 | 0 | -1;
 }) {
   const titleId = useId();
   const [isDesktop, setIsDesktop] = useState(() => (typeof window !== "undefined" ? window.matchMedia(DESKTOP_MQ).matches : false));
@@ -39,7 +46,7 @@ export default function Modal({
   const content = (
     <>
       <motion.div
-        className="z-[100] fixed inset-0 bg-black/70 backdrop-blur-xs"
+        className="hidden desktop:block z-[100] fixed inset-0 bg-black/70 backdrop-blur-xs"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -57,10 +64,25 @@ export default function Modal({
         }}
       >
         <motion.div
-          className={`app textBase z-[110] fixed inset-0 desktop:inset-auto desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:pb-3 desktop:w-[90%] desktop:max-w-104 ${desktopWidth} desktop:max-h-[90dvh] desktop:rounded-2xl flex flex-col items-center overflow-hidden modalColor`}
-          initial={isDesktop ? { opacity: 0, scale: 0.98, y: 8 } : { x: "100%" }}
-          animate={isDesktop ? { opacity: 1, scale: 1, y: 0 } : { x: 0 }}
-          exit={isDesktop ? { opacity: 0, scale: 0.98, y: 8 } : { x: "100%" }}
+          className={`app textBase fixed z-[110] w-dvw h-dvh left-0 top-0 desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 desktop:pb-3 desktop:w-[90%] desktop:max-w-104 ${desktopWidth} desktop:h-auto desktop:max-h-[90dvh] desktop:rounded-2xl flex flex-col overflow-hidden modalColor`}
+          custom={direction}
+          variants={{
+            initial: (direction: 1 | 0 | -1) => ({
+              x: direction === 0 ? "100%" : direction === 1 ? "100%" : "-30%",
+              zIndex: direction === -1 ? 110 : 112,
+            }),
+            animate: (direction: 1 | 0 | -1) => ({
+              x: 0,
+              zIndex: direction === -1 ? 110 : 112,
+            }),
+            exit: (direction: 1 | 0 | -1) => ({
+              x: direction === 0 ? "100%" : direction === 1 ? "-30%" : "100%",
+              zIndex: direction === -1 ? 112 : 110,
+            }),
+          }}
+          initial={isDesktop ? { opacity: 0, scale: 0.98, y: 8 } : "initial"}
+          animate={isDesktop ? { opacity: 1, scale: 1, y: 0 } : "animate"}
+          exit={isDesktop ? { opacity: 0, scale: 0.98, y: 8 } : "exit"}
           transition={{
             duration: isDesktop ? 0.2 : 0.28,
             ease: "easeOut",
@@ -69,17 +91,9 @@ export default function Modal({
           aria-modal="true"
           aria-labelledby={titleId}
         >
-          {/*--- glow ---*/}
-          <div className="absolute w-[200dvw] desktop:w-[200%] h-[100dvh] left-1/2 -translate-x-1/2 z-[-1] modalGlow" />
-
-          {/*--- modal header ---*/}
-          <ModalHeader id={titleId} title={title} onClose={onClose} disabled={disableClose} />
-
-          {/*--- content ---*/}
-          <div className="flex-1 min-h-0 overflow-y-auto pt-6 desktop:pt-2 pb-12 desktop:pb-8 px-4 tablet:px-8 desktop:px-10 w-full thinScrollbar">
-            {/*--- max-w here mainly defines mobile/tablet content width  ---*/}
-            <div className={`mx-auto w-full max-w-100 ${contentMaxWidth} desktop:max-w-none flex flex-col`}>{children}</div>
-          </div>
+          <ModalGlow />
+          <ModalHeader id={titleId} title={title} onClose={onClose} onBack={onBack} disabled={disableClose} />
+          <ModalBody contentMaxWidth={contentMaxWidth}>{children}</ModalBody>
         </motion.div>
       </FocusTrap>
     </>

@@ -24,8 +24,8 @@ export type DraftItem = {
   };
 };
 
-// useSettingsQuery data
-export type SettingsData = {
+// useWorkspaceQuery data
+export type WorkspaceData = {
   workspace: Workspace;
   role: "owner" | "editor" | "viewer";
   workspaceOptions: WorkspaceOption[];
@@ -71,8 +71,8 @@ export type MutateItemsPayload =
   | { type: "upsert"; workspaceId: string; item: DraftItem }
   | { type: "delete"; workspaceId: string; itemId: string };
 
-// 1) owners and editors can mutate, 2) payload must have workspaceId, 3) invalidates "settings"
-export type MutateSettingsPayload =
+// 1) owners and editors can mutate, 2) payload must have workspaceId, 3) invalidates "workspace"
+export type MutateWorkspacePayload =
   // tags
   | { type: "addTag"; workspaceId: string; tag: string } // tag
   | { type: "renameTag"; workspaceId: string; from: string; to: string } // from, to
@@ -93,7 +93,7 @@ export type MutateSettingsPayload =
   | { type: "setDiscretionaryBudget"; workspaceId: string; amount: number; currency: string } // amount, currency
   | { type: "setDiscretionaryBudgetCategories"; workspaceId: string; categoryObjects: CategoryObject[] }; // categoryObjects
 
-// 1) various authorization gates, 2) invalidates "settings" and "items"
+// 1) various authorization gates, 2) invalidates "workspace" and "items"
 export type MutateUserPayload =
   | { type: "addWorkspace"; name: string; defaultCurrency: string }
   | { type: "setActiveWorkspace"; workspaceId: string }

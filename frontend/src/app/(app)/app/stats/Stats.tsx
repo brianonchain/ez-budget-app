@@ -1,7 +1,8 @@
 "use client";
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useStatsQuery, useSettingsQuery, useItemsQuery } from "@/utils/hooks";
+import { useStatsQuery, useWorkspaceQuery, useItemsQuery } from "@/utils/hooks";
+import { AnimatePresence } from "framer-motion";
 // components
 import BudgetCard from "./_components/BudgetCard";
 import PeriodSelector from "./_components/PeriodSelector";
@@ -35,13 +36,13 @@ export default function Stats() {
   const dateParam = anchorDate.toISOString();
   const { data: itemsData } = useItemsQuery();
   const { data: statsData, isLoading, isError } = useStatsQuery(email, period, dateParam);
-  const { data: settingsData } = useSettingsQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
+  const { data: workspaceData } = useWorkspaceQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
 
   // calculate sum of discretionary budget items
   const runCalculation = statsData?.period === "month" && getMonthKey(new Date(statsData.startDate)) === getMonthKey(new Date());
   useEffect(() => {
-    if (!runCalculation || !statsData || !settingsData) return;
-    const budget = settingsData.workspace.discretionaryBudget;
+    if (!runCalculation || !statsData || !workspaceData) return;
+    const budget = workspaceData.workspace.discretionaryBudget;
     const spent = statsData.items
       .filter((item) => {
         if (item.currency !== budget.currency) return false;
@@ -53,7 +54,7 @@ export default function Stats() {
       })
       .reduce((sum, item) => sum + item.cost, 0);
     setCurrentMonthSpent(spent);
-  }, [runCalculation, settingsData?.workspace.discretionaryBudget]);
+  }, [runCalculation, workspaceData?.workspace.discretionaryBudget]);
 
   const currencies = useMemo(() => {
     if (!statsData) return [];
@@ -101,7 +102,7 @@ export default function Stats() {
       <Card className="relative flex flex-col items-center">
         <div className="font-semibold text-textSecondary">Discretionary Budget</div>
         <BudgetCard
-          discretionaryBudget={settingsData?.workspace.discretionaryBudget}
+          discretionaryBudget={workspaceData?.workspace.discretionaryBudget}
           monthlySpent={currentMonthSpent}
           setBudgetModal={setBudgetModal}
         />
@@ -117,8 +118,8 @@ export default function Stats() {
           currencies={currencies}
           activeCurrency={activeCurrency}
           onSelectCurrency={setSelectedCurrency}
-          categoryObjects={settingsData?.workspace.categoryObjects}
-          tags={settingsData?.workspace.tags}
+          categoryObjects={workspaceData?.workspace.categoryObjects}
+          tags={workspaceData?.workspace.tags}
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
           selectedTag={selectedTag}
@@ -138,14 +139,16 @@ export default function Stats() {
         </div>
       </Card>
 
-      {budgetModal && settingsData && (
-        <BudgetModal
-          workspaceId={settingsData.workspace._id}
-          discretionaryBudget={settingsData.workspace.discretionaryBudget}
-          categoryObjects={settingsData.workspace.categoryObjects}
-          setBudgetModal={setBudgetModal}
-        />
-      )}
+      <AnimatePresence>
+        {budgetModal && workspaceData && (
+          <BudgetModal
+            workspaceId={workspaceData.workspace._id}
+            discretionaryBudget={workspaceData.workspace.discretionaryBudget}
+            categoryObjects={workspaceData.workspace.categoryObjects}
+            setBudgetModal={setBudgetModal}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

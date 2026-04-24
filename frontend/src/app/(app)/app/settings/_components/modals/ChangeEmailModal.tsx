@@ -5,7 +5,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 // utils
 import { fetchPost, checkEmail } from "@/utils/functions";
 import InputEmail from "@/utils/components/InputEmail";
-import Modal from "@/utils/components/Modal";
+import Modal from "@/utils/components/modal/Modal";
 import Button from "@/utils/components/Button";
 
 export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {

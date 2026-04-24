@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { useSettingsMutation } from "@/utils/hooks";
-import Modal from "@/utils/components/Modal";
+import { useWorkspaceMutation } from "@/utils/hooks";
+import Modal from "@/utils/components/modal/Modal";
 import { DiscretionaryBudget } from "@/utils/types";
 import { CategoryObject } from "@/db/WorkspaceModel";
 import Input from "@/utils/components/Input";
@@ -23,7 +23,7 @@ export default function BudgetModal({
   const [draftCurrency, setDraftCurrency] = useState(discretionaryBudget?.currency ?? "USD");
   const [validationError, setValidationError] = useState("");
   const [draftBudgetCategoryObjects, setDraftBudgetCategoryObjects] = useState<CategoryObject[]>(discretionaryBudget.categoryObjects ?? []);
-  const { mutateAsync, error, isError, isPending } = useSettingsMutation();
+  const { mutateAsync, error, isError, isPending } = useWorkspaceMutation();
 
   // update UI state with server state; but will not fire on mutation fire, so need rollback in update
   useEffect(() => {

@@ -1,35 +1,42 @@
 import { useState, useMemo } from "react";
 import { useItemsMutation } from "@/utils/hooks";
-import Modal from "@/utils/components/Modal";
+import Modal from "@/utils/components/modal/Modal";
 import Button from "@/utils/components/Button";
 import { CategoryObject } from "@/db/WorkspaceModel";
 import { CURRENCIES, DECIMALS } from "@/utils/constants";
-import { DraftItem, SettingsData } from "@/utils/types";
+import { DraftItem, WorkspaceData } from "@/utils/types";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
 import Calendar from "@/utils/components/Calendar";
 import ErrorMessage from "@/utils/components/ErrorMessage";
 import DetailsList from "./DetailsList";
+import type { Direction } from "../ItemsClient";
 
 export default function Details({
-  settingsData,
+  workspaceData,
   draftItem,
   setDraftItem,
-  setDetailsModal,
+  onClose,
+  // multipage modal props
+  direction,
+  onBack,
 }: {
-  settingsData: SettingsData;
+  workspaceData: WorkspaceData;
   draftItem: DraftItem;
   setDraftItem: React.Dispatch<React.SetStateAction<DraftItem>>;
-  setDetailsModal: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
+  // multipage modal props
+  direction: Direction;
+  onBack: (() => void) | undefined;
 }) {
   const isEdit = Boolean(draftItem._id);
   // store selected category object in memo
   const selectedCategoryObject = useMemo(() => {
     return (
-      settingsData.workspace.categoryObjects.find((i: CategoryObject) => i.category === draftItem.category) ??
-      settingsData.workspace.categoryObjects[0]
+      workspaceData.workspace.categoryObjects.find((i: CategoryObject) => i.category === draftItem.category) ??
+      workspaceData.workspace.categoryObjects[0]
     );
-  }, [settingsData.workspace.categoryObjects, draftItem.category]);
+  }, [workspaceData.workspace.categoryObjects, draftItem.category]);
 
   // states
   const { mutateAsync: mutateItemsAsync, isPending, isError, error, reset: resetItemsMutation } = useItemsMutation();
@@ -98,8 +105,8 @@ export default function Details({
     setStatus("addingOrEditing");
 
     try {
-      await mutateItemsAsync({ type: "upsert", workspaceId: settingsData.workspace._id, item: draftItem });
-      setDetailsModal(false);
+      await mutateItemsAsync({ type: "upsert", workspaceId: workspaceData.workspace._id, item: draftItem });
+      onClose();
     } catch {
       setStatus("initial");
     }
@@ -113,15 +120,15 @@ export default function Details({
     setStatus("deleting");
 
     try {
-      await mutateItemsAsync({ type: "delete", workspaceId: settingsData.workspace._id, itemId: String(draftItem._id) });
-      setDetailsModal(false);
+      await mutateItemsAsync({ type: "delete", workspaceId: workspaceData.workspace._id, itemId: String(draftItem._id) });
+      onClose();
     } catch {
       setStatus("initial");
     }
   }
 
   return (
-    <Modal title="Item Info" onClose={() => setDetailsModal(false)} disableClose={isPending}>
+    <Modal title="Item Info" onClose={onClose} onBack={onBack} disableClose={isPending} direction={direction}>
       <div className="w-full flex flex-col">
         {/*--- date, name, cost ---*/}
         <div className="w-full grid grid-cols-[auto_1fr] gap-1.5 items-center">
@@ -189,7 +196,7 @@ export default function Details({
         <div className="textSm mt-6 w-full min-h-50 max-h-100 desktop:min-h-40 desktop:max-h-90 flex gap-1.5">
           <DetailsList
             label="Category"
-            items={settingsData.workspace.categoryObjects}
+            items={workspaceData.workspace.categoryObjects}
             selectedItem={draftItem.category}
             onClick={(i) => setDraftItem((prev) => ({ ...prev, category: typeof i === "string" ? i : i.category, subcategory: "none" }))}
           />
@@ -201,14 +208,14 @@ export default function Details({
           />
           <DetailsList
             label="Tag"
-            items={settingsData.workspace.tags}
+            items={workspaceData.workspace.tags}
             selectedItem={draftItem.tag}
             onClick={(i) => setDraftItem((prev) => ({ ...prev, tag: i }))}
           />
         </div>
 
         {/*--- save/add button ---*/}
-        {["owner", "editor"].includes(settingsData.role) && (
+        {["owner", "editor"].includes(workspaceData.role) && (
           <Button
             className="mt-6 w-full"
             label={draftItem._id ? "Save Changes" : "Add Item"}
@@ -222,7 +229,7 @@ export default function Details({
         {/*--- error message ---*/}
         <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
         {/*--- delete button ---*/}
-        {draftItem._id && ["owner", "editor"].includes(settingsData.role) && (
+        {draftItem._id && ["owner", "editor"].includes(workspaceData.role) && (
           <Button
             className="w-full"
             label="Delete Item"

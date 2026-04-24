@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Modal from "@/utils/components/Modal";
+import Modal from "@/utils/components/modal/Modal";
 import Button from "@/utils/components/Button";
 import { FaCalendar } from "react-icons/fa6";
 import { fetchGet } from "@/utils/functions";

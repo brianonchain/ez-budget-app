@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 // components
 import Button from "@/utils/components/Button";
-import Modal from "@/utils/components/Modal";
+import Modal from "@/utils/components/modal/Modal";
 import { FaX } from "react-icons/fa6";
 // utils
 import { useUserMutation, useSharedUsersQuery } from "@/utils/hooks";
@@ -143,7 +143,7 @@ export default function ShareWorkspaceModal({
             type="submit"
           />
           {/*--- error message ---*/}
-          <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />{" "}
+          <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
         </form>
 
         {/*--- SHARED WITH ---*/}

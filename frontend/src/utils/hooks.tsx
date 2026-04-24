@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import {
   ItemsPage,
-  SettingsData,
+  WorkspaceData,
   SharedUsersData,
   StatsData,
   StatsPeriod,
   MutateUserPayload,
-  MutateSettingsPayload,
+  MutateWorkspacePayload,
   MutateItemsPayload,
 } from "@/utils/types";
 import { fetchPost, fetchGet } from "./functions";
@@ -28,12 +28,12 @@ export function useItemsQuery() {
   });
 }
 
-export function useSettingsQuery(activeWorkspaceId: string | null) {
-  return useQuery<SettingsData, Error>({
-    queryKey: ["settings", activeWorkspaceId],
-    queryFn: async (): Promise<SettingsData> => {
-      console.log("useSettingsQuery ran");
-      const resJson = await fetchGet(`/api/getSettings?activeWorkspaceId=${activeWorkspaceId}`);
+export function useWorkspaceQuery(activeWorkspaceId: string | null) {
+  return useQuery<WorkspaceData, Error>({
+    queryKey: ["workspace", activeWorkspaceId],
+    queryFn: async (): Promise<WorkspaceData> => {
+      console.log("useWorkspaceQuery ran");
+      const resJson = await fetchGet(`/api/getWorkspace?activeWorkspaceId=${activeWorkspaceId}`);
       if (resJson.status === "success") return resJson.data;
       throw new Error(resJson.message || "Failed to load settings.");
     },
@@ -83,16 +83,16 @@ export function useItemsMutation() {
   });
 }
 
-export function useSettingsMutation() {
+export function useWorkspaceMutation() {
   const queryClient = useQueryClient();
-  return useMutation<void, Error, MutateSettingsPayload>({
+  return useMutation<void, Error, MutateWorkspacePayload>({
     mutationFn: async (payload) => {
-      const resJson = await fetchPost("/api/mutateSettings", payload);
+      const resJson = await fetchPost("/api/mutateWorkspace", payload);
       if (resJson.status === "success") return;
       throw new Error(resJson?.message || "Unknown error. Please try again.");
     },
     onSuccess: (_data, payload) => {
-      queryClient.invalidateQueries({ queryKey: ["settings"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace"] });
       if (payload.type === "changeCurrency") {
         queryClient.invalidateQueries({ queryKey: ["items"] });
       }
@@ -109,7 +109,7 @@ export function useUserMutation() {
       throw new Error(resJson?.message || "Unknown error. Please try again.");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["settings"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace"] });
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["sharedUsers"] });
     },

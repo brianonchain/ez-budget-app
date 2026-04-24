@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSettingsMutation, useUserMutation } from "@/utils/hooks";
-import Modal from "@/utils/components/Modal";
+import { useWorkspaceMutation, useUserMutation } from "@/utils/hooks";
+import Modal from "@/utils/components/modal/Modal";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
 import ErrorMessage from "@/utils/components/ErrorMessage";
