@@ -98,7 +98,7 @@ export default function EnterCostModal({
     <Modal title="Enter Cost" onClose={onClose} disabled={isPending} direction={direction}>
       <div className="flex flex-col items-center">
         {/*--- AMOUNT CONTAINER ---*/}
-        <div className="relative w-full h-18 desktop:h-13 flex items-center">
+        <div className="relative w-full h-17 desktop:h-13 flex items-center">
           {/*--- currency ---*/}
           <div className="relative flex-1 h-full flex items-center">
             <select
