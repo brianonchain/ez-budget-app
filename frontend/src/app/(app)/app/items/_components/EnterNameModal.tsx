@@ -36,13 +36,13 @@ export default function EnterNameModal({
 
   return (
     <Modal title="Enter Name" onClose={onClose} direction={direction} onBack={onBack}>
-      <form onSubmit={handleSubmit} className="pt-10 desktop:pt-0 w-full">
+      <form onSubmit={handleSubmit} className="mt-6 desktop:pt-0 w-full">
         <div className="w-full">
           <textarea
             value={description}
             maxLength={MAX_DESCRIPTION_LENGTH}
             onChange={(e) => setDescription(e.currentTarget.value.slice(0, MAX_DESCRIPTION_LENGTH))}
-            className="p-4 desktop:p-4 w-full h-40 desktop:h-30 textXl rounded-2xl inputPrimaryColor"
+            className="p-4 desktop:p-4 w-full h-24 desktop:h-20 textXl rounded-2xl inputPrimaryColor"
             placeholder="Enter a short item description"
             autoFocus
           />

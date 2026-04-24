@@ -80,7 +80,7 @@ export default function Modal({
         }}
       >
         <motion.div
-          className={`app textBase fixed z-[110] inset-0 desktop:inset-auto desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 w-full h-[100svh] desktop:w-[90%] desktop:max-w-104 ${desktopWidth} desktop:pb-3 desktop:h-auto desktop:max-h-[90dvh] desktop:rounded-2xl flex flex-col overflow-hidden modalColor`}
+          className={`app textBase fixed z-[110] inset-0 desktop:inset-auto desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 w-full h-[100dvh] desktop:w-[90%] desktop:max-w-104 ${desktopWidth} desktop:pb-3 desktop:h-auto desktop:max-h-[90dvh] desktop:rounded-2xl flex flex-col overflow-hidden modalColor`}
           variants={isDesktop ? desktopVariants : mobileVariants}
           custom={direction}
           initial="initial"
