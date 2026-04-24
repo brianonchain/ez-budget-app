@@ -56,7 +56,6 @@ export default function EnterNameModal({
             onChange={(e) => setDescription(e.currentTarget.value.slice(0, MAX_DESCRIPTION_LENGTH))}
             className="p-4 desktop:p-4 w-full h-24 desktop:h-20 textXl rounded-2xl inputPrimaryColor"
             placeholder="Enter a short item description"
-            autoFocus
           />
           <div className="mt-1 flex justify-end text-textTertiary">
             {description.length}/{MAX_DESCRIPTION_LENGTH} characters
