@@ -88,7 +88,7 @@ export default function BudgetModal({
       <div className="w-full">
         {/* --- amount --- */}
         <div className="flex items-center gap-3 desktop:gap-4">
-          <label className="shrink-0 font-medium">Monthly Amount</label>
+          <label className="inputLabel">Monthly Amount</label>
           <Select
             variant="primary"
             selectSize="base"
@@ -104,7 +104,7 @@ export default function BudgetModal({
             ))}
           </Select>
           <Input
-            className="w-full"
+            className="min-w-0 flex-1"
             inputSize="base"
             variant="primary"
             value={draftAmount}
