@@ -18,6 +18,7 @@ import { SYMBOLS, DECIMALS } from "@/utils/constants";
 // types
 import type { DraftItem, Direction } from "@/utils/types";
 import { emptyItem } from "@/utils/constants";
+import Backdrop from "@/utils/components/modal/Backdrop";
 
 function formatDateHeader(isoDate: string): string {
   return new Intl.DateTimeFormat("en-US", {
@@ -54,8 +55,8 @@ export default function Items() {
   const [errorMessage, setErrorMessage] = useState("");
   const [draftItem, setDraftItem] = useState<DraftItem>(emptyItem);
   const [modalName, setModalName] = useState<"cost" | "name" | "details" | null>(null);
-  const [direction, setDirection] = useState<Direction>(1);
-  const [canDetailsGoBack, setCanDetailsGoBack] = useState(true);
+  const [direction, setDirection] = useState<Direction>(0);
+  const [canDetailsGoBack, setCanDetailsGoBack] = useState(false);
 
   // flatten pages into a single items array, then group by date
   const allItems = useMemo(() => itemsData?.pages.flatMap((p) => p.items) ?? [], [itemsData]);
@@ -109,7 +110,7 @@ export default function Items() {
       currency: workspaceData.workspace.defaultCurrency,
       tag: localStorage.getItem(`lastTag:${workspaceData.workspace._id}`) ?? "none",
     });
-    setDirection(1);
+    setCanDetailsGoBack(true);
     setModalName("cost");
   };
 
@@ -132,6 +133,8 @@ export default function Items() {
   const isItemsLoading = !itemsData;
   const canAddItem = ["owner", "editor"].includes(itemsData?.pages[0]?.role ?? "");
 
+  console.log("ItemsClient.tsx, direction", direction);
+
   return (
     <>
       <ItemsShell footer={isItemsLoading || canAddItem ? <AddItemButton onClick={addItemOnClick} disabled={isItemsLoading} /> : null}>
@@ -150,7 +153,6 @@ export default function Items() {
                     className="innerOutline text-left px-[3%] w-full h-14 desktop:h-13 flex items-center gap-2 border-b border-borderFaint desktop:hover:bg-surface dark:desktop:hover:bg-card"
                     onClick={() => {
                       setDraftItem(item);
-                      setDirection(1);
                       setCanDetailsGoBack(false);
                       setModalName("details");
                     }}
@@ -181,6 +183,7 @@ export default function Items() {
       </ItemsShell>
 
       {/* --- MODALS --- */}
+      <AnimatePresence> {modalName && canDetailsGoBack && <Backdrop />}</AnimatePresence>
       <AnimatePresence custom={direction}>
         {modalName === "cost" && workspaceData && (
           <EnterCostModal

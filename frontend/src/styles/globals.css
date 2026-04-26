@@ -357,7 +357,7 @@ button {
 
 /*--- modal ---*/
 @utility modalColor {
-  @apply bg-bgPrimary dark:desktop:bg-surfaceSolid desktop:border border-white/10;
+  @apply bg-bgPrimary dark:tablet:bg-surfaceSolid tablet:border border-white/10;
 }
 
 /*--- links ---*/
@@ -402,7 +402,7 @@ input:-webkit-autofill {
 }
 
 /*--- scrollbar ---*/
-@utility thinScrollbar {
+@utility thinScroll {
   --scrollbar-track: #f6f9fc;
   --scrollbar-thumb: #cbd5e1;
   .dark & {

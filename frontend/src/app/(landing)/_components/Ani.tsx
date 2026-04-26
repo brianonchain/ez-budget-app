@@ -110,7 +110,7 @@ export default function Ani() {
           <div className="absolute left-0 top-0 w-full h-full animate-page1">
             <div className="w-full bg-blue-400/6 border-white/10 overflow-hidden">
               {/*--- header, h=50px, use 2 divs to make scrollbar space aligned with list ---*/}
-              <div className="text-slate-400 bg-blue-400/14 thinScrollbar overflow-y-auto" style={{ scrollbarGutter: "stable" }}>
+              <div className="text-slate-400 bg-blue-400/14 thinScroll overflow-y-auto" style={{ scrollbarGutter: "stable" }}>
                 <div className="px-[3%] h-[50px] grid grid-cols-[50%_20%_30%] items-center font-bold">
                   <p>Item</p>
                   <p>Cost</p>
@@ -303,7 +303,7 @@ export default function Ani() {
           <div className="absolute left-0 top-0 w-full h-full animate-page5">
             <div className="w-full bg-blue-400/6 border-white/10 overflow-hidden">
               {/*--- header, h=50px, use 2 divs to make scrollbar space aligned with list ---*/}
-              <div className="text-slate-400 bg-blue-400/14 thinScrollbar overflow-y-auto" style={{ scrollbarGutter: "stable" }}>
+              <div className="text-slate-400 bg-blue-400/14 thinScroll overflow-y-auto" style={{ scrollbarGutter: "stable" }}>
                 <div className="px-[3%] h-[50px] grid grid-cols-[50%_20%_30%] items-center font-bold">
                   <p>Item</p>
                   <p>Cost</p>

@@ -25,3 +25,4 @@ export const emptyItem: DraftItem = {
 
 export const DESKTOP_MQ =
   "(hover: hover) and (pointer: fine) and (orientation: landscape) and (min-width: 980px), (hover: hover) and (pointer: fine) and (orientation: portrait) and (min-width: 600px)";
+export const TABLET_MQ = "(orientation: portrait) and (min-width: 600px), (orientation: landscape) and (min-width: 980px)";

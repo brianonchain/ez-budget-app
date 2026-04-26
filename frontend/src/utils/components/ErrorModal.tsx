@@ -45,7 +45,7 @@ export default function Modal({
           <div className="absolute w-[200dvw] desktop:w-[200%] h-[100dvh] left-1/2 -translate-x-1/2 z-[-1] modalGlow" />
 
           {/*--- content ---*/}
-          <div className="flex-1 min-h-0 pt-6 pb-8 px-6 tablet:px-8 desktop:px-10 flex flex-col items-center gap-12 overflow-y-auto tablet:thinScrollbar">
+          <div className="flex-1 min-h-0 pt-6 pb-8 px-6 tablet:px-8 desktop:px-10 flex flex-col items-center gap-12 overflow-y-auto tablet:thinScroll">
             <FaTriangleExclamation className="mx-auto text-5xl text-textDanger" />
             <p>{errorMessage}</p>
             <Button className="w-full" label="Close" variant="primary" size="base" onClick={() => setErrorMessage("")} />

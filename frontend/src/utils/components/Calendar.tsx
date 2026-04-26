@@ -31,9 +31,9 @@ export default function Calendar({
 
   return (
     <>
-      {/* --- use 2 overlays so clicking outside calendar will close it --- */}
+      {/* --- use 2 backdrops so clicking outside calendar will close it --- */}
       {/* --- FocusTrap options allows outside clicks of elements with data-allow-click --- */}
-      {/* --- portaled overlay z-index is in between modal content (110) and modal backdrop (100) --- */}
+      {/* --- portaled backdrop's z-index is in between modal content (110) and modal backdrop (100) --- */}
       {mounted &&
         createPortal(
           <div className="absolute top-0 left-0 w-dvw h-dvh z-[105]" onClick={onClose} aria-hidden="true" data-allow-click="true" />,

@@ -1,14 +1,16 @@
 "use client";
 import { useId, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { FiChevronLeft, FiX } from "react-icons/fi";
 import { FocusTrap } from "focus-trap-react";
 import { motion } from "framer-motion";
+// components
 import ModalGlow from "./ModalGlow";
-import { DESKTOP_MQ } from "@/utils/constants";
+import ModalHeader from "./ModalHeader";
+// constants and types
+import { TABLET_MQ } from "@/utils/constants";
 import type { Direction } from "@/utils/types";
 
-const desktopVariants = {
+const tabletOrDesktopVariants = {
   initial: { opacity: 0, scale: 0.98, y: 8 },
   animate: { opacity: 1, scale: 1, y: 0 },
   exit: { opacity: 0, scale: 0.98, y: 8 },
@@ -16,21 +18,18 @@ const desktopVariants = {
 const mobileVariants = {
   initial: (direction: Direction) => ({ x: direction === -1 ? "-30%" : "100%", zIndex: direction === -1 ? 110 : 112 }),
   animate: (direction: Direction) => ({ x: 0, zIndex: direction === -1 ? 110 : 112 }),
-  exit: (direction: Direction) => ({
-    x: direction === 0 ? "100%" : direction === 1 ? "-30%" : "100%",
-    zIndex: direction === -1 ? 112 : 110,
-  }),
+  exit: (direction: Direction) => ({ x: direction === 1 ? "-30%" : "100%", zIndex: direction === -1 ? 112 : 110 }),
 };
 
-// mobile/tablet = FULL SCREEN, desktop = MODAL
 export default function Modal({
   children,
   title,
   onClose,
   disabled = false,
-  desktopWidth = "",
+  maxWidth = "",
   contentMaxWidth = "",
   // multipage modal props
+  isMulti = false,
   direction = 0,
   onBack,
 }: {
@@ -38,21 +37,24 @@ export default function Modal({
   title: string;
   onClose: () => void;
   disabled?: boolean;
-  desktopWidth?: string;
+  maxWidth?: string;
   contentMaxWidth?: string;
   // multipage modal props
+  isMulti?: boolean;
   direction?: Direction;
   onBack?: (() => void) | undefined;
 }) {
   const titleId = useId();
-  const [isDesktop, setIsDesktop] = useState(() => (typeof window !== "undefined" ? window.matchMedia(DESKTOP_MQ).matches : false));
+  const [isTabletOrDesktop, setIsTabletOrDesktop] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia(TABLET_MQ).matches : false,
+  );
 
   // listen to changes in window size
   // only edge case I can think of: in desktop, user changes screen size between desktop and tablet breakpoint. Without this useEffect, exit animation would be weird.
   useEffect(() => {
-    const mediaQuery = window.matchMedia(DESKTOP_MQ);
+    const mediaQuery = window.matchMedia(TABLET_MQ);
     function handleChange(e: MediaQueryListEvent) {
-      setIsDesktop(e.matches);
+      setIsTabletOrDesktop(e.matches);
     }
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
@@ -60,15 +62,16 @@ export default function Modal({
 
   const content = (
     <>
-      {/*--- backdrop ---*/}
-      <motion.div
-        className="hidden desktop:block z-[100] fixed inset-0 bg-black/70 backdrop-blur-xs"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        aria-hidden
-      />
+      {!isMulti && (
+        <motion.div
+          className="hidden tablet:block z-[100] fixed inset-0 bg-black/70 backdrop-blur-xs"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          aria-hidden
+        />
+      )}
 
       <FocusTrap
         focusTrapOptions={{
@@ -79,70 +82,28 @@ export default function Modal({
           },
         }}
       >
+        {/*--- overflow-hidden needed to clip glow ---*/}
         <motion.div
-          className={`app textBase fixed z-[110] inset-0 desktop:inset-auto desktop:left-1/2 desktop:top-1/2 desktop:-translate-x-1/2 desktop:-translate-y-1/2 w-full h-[100dvh] desktop:w-[90%] desktop:max-w-104 ${desktopWidth} desktop:pb-3 desktop:h-auto desktop:max-h-[90dvh] desktop:rounded-2xl flex flex-col overflow-hidden modalColor`}
-          variants={isDesktop ? desktopVariants : mobileVariants}
+          className={`app textBase z-[110] fixed inset-0 tablet:inset-auto tablet:left-1/2 tablet:top-1/2 tablet:-translate-x-1/2 tablet:-translate-y-1/2 tablet:pb-3 tablet:w-[90%] tablet:max-w-144 desktop:max-w-110 ${maxWidth} tablet:max-h-[90dvh] flex flex-col tablet:rounded-2xl overflow-hidden modalColor`}
           custom={direction}
+          variants={isTabletOrDesktop ? tabletOrDesktopVariants : mobileVariants}
           initial="initial"
           animate="animate"
           exit="exit"
           transition={{
-            duration: isDesktop ? 0.2 : 0.42,
-            ease: isDesktop ? [0.22, 1, 0.36, 1] : [0.32, 0.72, 0, 1],
+            duration: isTabletOrDesktop ? 0.2 : 0.42,
+            ease: isTabletOrDesktop ? [0.22, 1, 0.36, 1] : [0.32, 0.72, 0, 1],
           }}
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
         >
           <ModalGlow />
-
-          {/*--- HEADER ---*/}
-          <h2 id={titleId} className="text-center textXl font-semibold mx-16 tablet:mx-21 desktop:mx-16 py-6 tablet:py-7 desktop:py-5">
-            {title}
-          </h2>
-          {/*--- mobile nav buttons (x button is optional) ---*/}
-          <button
-            className="absolute left-0 top-0 w-16 h-19 flex items-center justify-center tablet:hidden"
-            onClick={onBack ?? onClose}
-            type="button"
-            disabled={disabled}
-          >
-            <FiChevronLeft className="text-[2.2rem]" />
-          </button>
-          {onBack && (
-            <button
-              className="absolute right-0 top-0 w-16 h-19 flex items-center justify-center tablet:hidden"
-              onClick={onClose}
-              type="button"
-              disabled={disabled}
-            >
-              <FiX className="text-[2.2rem]" />
-            </button>
-          )}
-          {/*--- tablet/desktop nav buttons (back button is optional) ---*/}
-          {onBack && (
-            <button
-              className={`absolute left-0 top-0 aspect-square w-16 desktop:w-13 hidden tablet:flex items-center justify-center rounded-br-2xl rounded-tl-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover text-[2rem] desktop:text-[1.5rem] font-medium`}
-              onClick={onBack}
-              type="button"
-              disabled={disabled}
-            >
-              <FiChevronLeft className="text-[1.7rem]" />
-            </button>
-          )}
-          <button
-            className={`absolute right-0 top-0 aspect-square w-16 desktop:w-13 hidden tablet:flex items-center justify-center rounded-bl-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover text-[2rem] desktop:text-[1.5rem] font-medium`}
-            onClick={onClose}
-            type="button"
-            disabled={disabled}
-          >
-            <FiX className="text-[1.7rem]" />
-          </button>
-
-          {/*--- CONTENT ---*/}
-          <div className="flex-1 min-h-0 overflow-y-auto pt-6 desktop:pt-2 pb-12 desktop:pb-8 px-4 tablet:px-8 desktop:px-10 w-full thinScrollbar">
+          <ModalHeader id={titleId} title={title} onClose={onClose} disabled={disabled} onBack={onBack} />
+          {/*--- content, note pb-3 in main div ---*/}
+          <div className="flex-1 min-h-0 overflow-y-auto pt-6 tablet:pt-0 pb-12 tablet:pb-9 desktop:pb-7 px-4 tablet:px-12 desktop:px-10 w-full tablet:thinScroll">
             {/*--- max-w here mainly defines mobile/tablet content width  ---*/}
-            <div className={`mx-auto w-full max-w-100 ${contentMaxWidth} desktop:max-w-none flex flex-col`}>{children}</div>
+            <div className={`mx-auto w-full max-w-100 ${contentMaxWidth} tablet:max-w-none flex flex-col`}>{children}</div>
           </div>
         </motion.div>
       </FocusTrap>

@@ -13,17 +13,13 @@ export default function EnterCostModal({
   setDraftItem,
   defaultCurrency,
   workspaceId,
-  onClose,
   // multipage modal props
-  direction,
   onForward,
 }: {
   setDraftItem: React.Dispatch<React.SetStateAction<DraftItem>>;
   defaultCurrency: string;
   workspaceId: string;
-  onClose: () => void;
   // multipage modal props
-  direction: Direction;
   onForward: () => void;
 }) {
   // hooks
@@ -95,69 +91,67 @@ export default function EnterCostModal({
   };
 
   return (
-    <Modal title="Enter Cost" onClose={onClose} disabled={isPending} direction={direction} isMulti={true}>
-      <div className="flex flex-col items-center">
-        {/*--- AMOUNT CONTAINER ---*/}
-        <div className="relative w-full h-17 desktop:h-13 flex items-center">
-          {/*--- currency ---*/}
-          <div className="relative flex-1 h-full flex items-center">
-            <select
-              className="pl-3 w-full h-full font-medium appearance-none"
-              value={currency}
-              onChange={(e) => onChangeCurrency(e.currentTarget.value)}
-              disabled={isPending}
-              aria-label="Currency"
-            >
-              {CURRENCIES.map((i) => (
-                <option key={i} value={i}>
-                  {i}
-                </option>
-              ))}
-            </select>
-            <FaChevronDown className="absolute right-3 pointer-events-none text-sm desktop:text-[0.625rem] opacity-80" />
-          </div>
-          {/*--- amount ---*/}
-          <div className="flex-none px-2 w-48 h-full flex items-center justify-center border border-inputOutlineBorder rounded-2xl text2xl font-semibold tabular-nums text-center">
-            {amount || (decimals === 0 ? "0" : `0.${"0".repeat(decimals)}`)}
-          </div>
-          {/*--- multiplier ---*/}
-          <div className="flex-1">
-            <div className="pl-2 font-medium">{multiplier > 1 ? `x${multiplier}` : ""}</div>
-          </div>
+    <div className="flex flex-col items-center">
+      {/*--- AMOUNT CONTAINER ---*/}
+      <div className="relative w-full h-17 desktop:h-13 flex items-center">
+        {/*--- currency ---*/}
+        <div className="relative flex-1 h-full flex items-center">
+          <select
+            className="pl-3 w-full h-full font-medium appearance-none"
+            value={currency}
+            onChange={(e) => onChangeCurrency(e.currentTarget.value)}
+            disabled={isPending}
+            aria-label="Currency"
+          >
+            {CURRENCIES.map((i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
+          <FaChevronDown className="absolute right-3 pointer-events-none text-sm desktop:text-[0.625rem] opacity-80" />
         </div>
-        {/*--- keypad ---*/}
-        <div className="mt-8 desktop:mt-4 grid grid-cols-3 gap-2 desktop:gap-1">
-          {calc.map((i, index) => (
-            <button
-              key={index}
-              type="button"
-              className={`w-20 h-20 desktop:w-12 desktop:h-12 flex items-center justify-center textXl font-semibold bg-slate-200 dark:bg-blue-500/30 rounded-full select-none
+        {/*--- amount ---*/}
+        <div className="flex-none px-2 w-48 h-full flex items-center justify-center border border-inputOutlineBorder rounded-2xl text2xl font-semibold tabular-nums text-center">
+          {amount || (decimals === 0 ? "0" : `0.${"0".repeat(decimals)}`)}
+        </div>
+        {/*--- multiplier ---*/}
+        <div className="flex-1">
+          <div className="pl-2 font-medium">{multiplier > 1 ? `x${multiplier}` : ""}</div>
+        </div>
+      </div>
+      {/*--- keypad ---*/}
+      <div className="mt-8 desktop:mt-4 grid grid-cols-3 gap-2 desktop:gap-1">
+        {calc.map((i, index) => (
+          <button
+            key={index}
+            type="button"
+            className={`w-20 h-20 desktop:w-12 desktop:h-12 flex items-center justify-center textXl font-semibold bg-slate-200 dark:bg-blue-500/30 rounded-full select-none
                   ${
                     maxFractionDigits === 0 && i === "."
                       ? "opacity-40 cursor-not-allowed"
                       : "hover:bg-slate-300 dark:desktop:hover:bg-blue-500/40 active:scale-95 active:opacity-90"
                   }`}
-              onClick={() => onClickNumber(i)}
-              disabled={maxFractionDigits === 0 && i === "."}
-              aria-label={i}
-            >
-              {i}
-            </button>
-          ))}
-
-          <button
-            className="w-20 h-20 desktop:w-12 desktop:h-12 flex items-center justify-center textXl font-semibold bg-slate-200 hover:bg-slate-300 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-full select-none active:scale-95 active:opacity-90"
-            onClick={onBackspace}
-            type="button"
-            aria-label="Backspace"
+            onClick={() => onClickNumber(i)}
+            disabled={maxFractionDigits === 0 && i === "."}
+            aria-label={i}
           >
-            <FaDeleteLeft />
+            {i}
           </button>
-        </div>
+        ))}
 
-        {/* --- enter button --- */}
-        <Button className="w-full mt-12 desktop:mt-6" label="Enter" variant="primary" size="base" onClick={onEnter} disabled={isPending} />
+        <button
+          className="w-20 h-20 desktop:w-12 desktop:h-12 flex items-center justify-center textXl font-semibold bg-slate-200 hover:bg-slate-300 dark:bg-blue-500/30 dark:desktop:hover:bg-blue-500/40 rounded-full select-none active:scale-95 active:opacity-90"
+          onClick={onBackspace}
+          type="button"
+          aria-label="Backspace"
+        >
+          <FaDeleteLeft />
+        </button>
       </div>
-    </Modal>
+
+      {/* --- enter button --- */}
+      <Button className="w-full mt-12 desktop:mt-6" label="Enter" variant="primary" size="base" onClick={onEnter} disabled={isPending} />
+    </div>
   );
 }

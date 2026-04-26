@@ -13,7 +13,7 @@ import { CategoryObject } from "@/db/WorkspaceModel";
 import { CURRENCIES, DECIMALS } from "@/utils/constants";
 import type { DraftItem, WorkspaceData, Direction } from "@/utils/types";
 
-export default function Details({
+export default function DetailsModal({
   workspaceData,
   draftItem,
   setDraftItem,
@@ -129,7 +129,7 @@ export default function Details({
   }
 
   return (
-    <Modal title="Item Info" onClose={onClose} onBack={onBack} disabled={isPending} direction={direction}>
+    <Modal title="Item Info" onClose={onClose} onBack={onBack} disabled={isPending} direction={direction} isMulti={onBack ? true : false}>
       <div className="w-full flex flex-col">
         {/*--- date, name, cost ---*/}
         <div className="w-full grid grid-cols-[auto_1fr] gap-1.5 items-center">
