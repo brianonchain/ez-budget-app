@@ -6,7 +6,7 @@ import SplashScreen from "./_components/SplashScreen";
 export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="relative">
-      <SplashScreen />
+      {/* <SplashScreen /> */}
       <PageGlow />
       <Menu />
       <ContextProvider>

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { signOut } from "next-auth/react";
 import { AnimatePresence } from "framer-motion";
+import { useQueryClient } from "@tanstack/react-query";
 // images
 import { FiShare2, FiTrash2, FiLogOut, FiUserMinus, FiEdit } from "react-icons/fi";
 import { FaUserMinus, FaTrashCan, FaArrowRightFromBracket, FaShareNodes } from "react-icons/fa6";
@@ -37,6 +38,7 @@ import { CURRENCIES } from "@/utils/constants";
 
 export default function Settings({ provider, email, userId }: { provider: string; email: string; userId: string }) {
   // hooks
+  const queryClient = useQueryClient();
   const { resolvedTheme, setTheme } = useTheme();
   const { data: itemsData } = useItemsQuery();
   const { data, isError, isFetching: isFetchingSettings } = useWorkspaceQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
@@ -260,6 +262,10 @@ export default function Settings({ provider, email, userId }: { provider: string
             isLoading={isSigningOut}
             onClick={() => {
               setIsSigningOut(true);
+              queryClient.clear(); // clears query cache, I believe
+              for (const key of Object.keys(localStorage)) {
+                if (key.startsWith("ezb:")) localStorage.removeItem(key);
+              }
               signOut({ callbackUrl: "/login" });
             }}
           />

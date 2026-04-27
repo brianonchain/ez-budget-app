@@ -23,8 +23,8 @@ export function useItemsQuery() {
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => (lastPage.hasMore ? allPages.length : undefined), // lastPage = { items, defaultCurrency, hasMore }, allPages = [[items, defaultCurrency, hasMore]]
-    staleTime: Infinity,
-    gcTime: Infinity,
+    staleTime: 30 * 1000, // why use short stale time?
+    gcTime: 1000 * 60 * 60 * 24, // 1 day
   });
 }
 
