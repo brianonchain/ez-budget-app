@@ -511,3 +511,64 @@ input:-webkit-autofill {
 .recharts-tooltip-wrapper:focus {
   outline: none !important;
 }
+
+/*--- splash screen ---*/
+.splashScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 501;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  width: 100%;
+  background: #000;
+  animation: splashExit 0.45s cubic-bezier(0.22, 1, 0.36, 1) 1.4s forwards;
+}
+
+.splashLogoWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splashGlow {
+  position: absolute;
+  width: 12rem;
+  height: 12rem;
+  border-radius: 9999px;
+  background: rgb(22 129 241 / 0.2);
+  filter: blur(48px);
+  opacity: 0;
+  transform: scale(0.75);
+  animation: splashGlowIn 0.7s ease-out forwards;
+}
+
+.splashLogo {
+  position: relative;
+  opacity: 0;
+  transform: translateY(8px) scale(0.92);
+  animation: splashLogoIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes splashLogoIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes splashGlowIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes splashExit {
+  to {
+    transform: translateY(-100%);
+    visibility: hidden;
+  }
+}

@@ -1,10 +1,12 @@
 import Menu from "./_components/Menu";
 import ContextProvider from "./_components/ContextProvider";
 import PageGlow from "./_components/PageGlow";
+import SplashScreen from "./_components/SplashScreen";
 
 export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="relative">
+      <SplashScreen />
       <PageGlow />
       <Menu />
       <ContextProvider>

@@ -1,0 +1,42 @@
+export default function SplashScreen() {
+  return (
+    <div className="splashScreen">
+      <div className="splashLogoWrap">
+        <div className="splashGlow" />
+        <svg className="splashLogo" width="148" height="136" viewBox="0 0 667 611" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clipPath="url(#clip0_86_39)">
+            <path
+              d="M564.5 114.5H50L469.011 3.33382C517.237 -9.46083 564.5 26.8981 564.5 76.7925V114.5Z"
+              fill="url(#paint0_linear_86_39)"
+            />
+            <path
+              d="M452 375C452 336.892 482.892 306 521 306H647C658.046 306 667 314.954 667 326V424C667 435.046 658.046 444 647 444H521C482.892 444 452 413.108 452 375Z"
+              fill="url(#paint1_linear_86_39)"
+            />
+            <path
+              d="M577 143C615.66 143 647 174.34 647 213V276H518C463.876 276 420 319.876 420 374C420 428.124 463.876 472 518 472H647V541C647 579.66 615.66 611 577 611H50C22.3858 611 0 588.614 0 561V193C0 165.386 22.3858 143 50 143H577Z"
+              fill="url(#paint2_linear_86_39)"
+            />
+          </g>
+          <defs>
+            <linearGradient id="paint0_linear_86_39" x1="50" y1="46.25" x2="564.5" y2="46.25" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#1C55CD" />
+              <stop offset="1" stopColor="#1681F1" />
+            </linearGradient>
+            <linearGradient id="paint1_linear_86_39" x1="452" y1="375" x2="667" y2="375" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#1778E9" />
+              <stop offset="1" stopColor="#1486F4" />
+            </linearGradient>
+            <linearGradient id="paint2_linear_86_39" x1="0" y1="377" x2="647" y2="377" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#1E52CB" />
+              <stop offset="1" stopColor="#1588F6" />
+            </linearGradient>
+            <clipPath id="clip0_86_39">
+              <rect width="667" height="611" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  );
+}

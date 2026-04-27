@@ -102,11 +102,12 @@ export default function DetailsModal({
     }
 
     setValidationError("");
-    resetItemsMutation();
+    resetItemsMutation(); // resets error/isError state
     setStatus("addingOrEditing");
 
     try {
       await mutateItemsAsync({ type: "upsert", workspaceId: workspaceData.workspace._id, item: draftItem });
+      localStorage.setItem("ezb:lastTag", draftItem.tag);
       onClose();
     } catch {
       setStatus("initial");
@@ -117,7 +118,7 @@ export default function DetailsModal({
     if (!draftItem._id) return;
 
     setValidationError("");
-    resetItemsMutation();
+    resetItemsMutation(); // resets error/isError state
     setStatus("deleting");
 
     try {

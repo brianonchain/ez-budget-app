@@ -3,22 +3,17 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useItemsQuery, useWorkspaceQuery } from "@/utils/hooks";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
 // components
 import ItemsShell from "./ItemsShell";
 import AddItemButton from "./_components/AddItemButton";
-import ErrorModal from "@/utils/components/ErrorModal";
-import EnterCostModal from "./_components/EnterCostModal";
-import EnterNameModal from "./_components/EnterNameModal";
-import DetailsModal from "./_components/DetailsModal";
-import Loading from "./loading";
 import Spinner from "@/utils/components/Spinner";
-// constants
-import { SYMBOLS, DECIMALS } from "@/utils/constants";
-// types
+const ItemsModals = dynamic(() => import("./_components/ItemsModals"), { ssr: false });
+const ErrorModal = dynamic(() => import("@/utils/components/ErrorModal"), { ssr: false });
+
+// constants and types
+import { SYMBOLS, DECIMALS, emptyItem } from "@/utils/constants";
 import type { DraftItem, Direction } from "@/utils/types";
-import { emptyItem } from "@/utils/constants";
-import Backdrop from "@/utils/components/modal/Backdrop";
 
 function formatDateHeader(isoDate: string): string {
   return new Intl.DateTimeFormat("en-US", {
@@ -36,20 +31,6 @@ export default function Items() {
 
   const { data: itemsData, fetchNextPage, hasNextPage, isFetchingNextPage } = useItemsQuery(); // itemsData = { pages: [{items, defaultCurrency, hasMore},...], pageParams: [0,1,2,...] }
   const { data: workspaceData } = useWorkspaceQuery(itemsData?.pages[0]?.activeWorkspaceId ?? null);
-
-  // measure performance
-  const [itemsTime, setItemsTime] = useState<number | null>(null);
-  const [settingsTime, setSettingsTime] = useState<number | null>(null);
-  useEffect(() => {
-    if (itemsData && itemsTime === null) {
-      setItemsTime(performance.now());
-    }
-  }, [itemsData, itemsTime]);
-  useEffect(() => {
-    if (workspaceData && settingsTime === null) {
-      setSettingsTime(performance.now());
-    }
-  }, [workspaceData, settingsTime]);
 
   // states
   const [errorMessage, setErrorMessage] = useState("");
@@ -73,8 +54,14 @@ export default function Items() {
     return groups;
   }, [allItems]);
 
-  // if user is not authenticated, redirect to login
-  // only needed for Items.tsx, as this is start_url for PWA and you want to redirect in the client (not the server); other pages can redirect in server (i.e., in page.tsx)
+  // store defaultCurrency in localStorage (will run if data is mutated)
+  useEffect(() => {
+    if (!workspaceData) return;
+    const currency = workspaceData.workspace.defaultCurrency;
+    localStorage.setItem("ezb:currency", currency);
+  }, [workspaceData?.workspace.defaultCurrency]);
+
+  // Because this is PWA start_url, must do unauthenticated redirects on client (not the server); other pages can redirect in server (i.e., in page.tsx)
   useEffect(() => {
     if (session.status === "unauthenticated") {
       router.replace("/login"); // use router.replace for auth redirect
@@ -98,17 +85,14 @@ export default function Items() {
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  if (!itemsData) {
-    return <Loading />;
-  }
-
-  const addItemOnClick = () => {
-    if (!workspaceData) return;
+  const onAddItem = () => {
+    const currency = localStorage.getItem("ezb:currency");
+    if (!currency) return;
     setDraftItem({
       ...emptyItem,
       date: new Date().toISOString(), // UTC string format
-      currency: workspaceData.workspace.defaultCurrency,
-      tag: localStorage.getItem(`lastTag:${workspaceData.workspace._id}`) ?? "none",
+      currency,
+      tag: localStorage.getItem("ezb:lastTag") ?? "none",
     });
     setCanDetailsGoBack(true);
     setModalName("cost");
@@ -133,12 +117,28 @@ export default function Items() {
   const isItemsLoading = !itemsData;
   const canAddItem = ["owner", "editor"].includes(itemsData?.pages[0]?.role ?? "");
 
-  console.log("ItemsClient.tsx, direction", direction);
+  // measure performance
+  const [itemsTime, setItemsTime] = useState<number | null>(null);
+  const [settingsTime, setSettingsTime] = useState<number | null>(null);
+  useEffect(() => {
+    if (itemsData && itemsTime === null) {
+      setItemsTime(performance.now());
+    }
+  }, [itemsData, itemsTime]);
+  useEffect(() => {
+    if (workspaceData && settingsTime === null) {
+      setSettingsTime(performance.now());
+    }
+  }, [workspaceData, settingsTime]);
 
   return (
     <>
-      <ItemsShell footer={isItemsLoading || canAddItem ? <AddItemButton onClick={addItemOnClick} disabled={isItemsLoading} /> : null}>
-        {dateGroups.length === 0 ? (
+      <ItemsShell footer={isItemsLoading || canAddItem ? <AddItemButton onClick={onAddItem} /> : null}>
+        {!itemsData ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <Spinner />
+          </div>
+        ) : dateGroups.length === 0 ? (
           <div className="w-full h-full flex items-center justify-center">No items yet</div>
         ) : (
           <>
@@ -183,45 +183,20 @@ export default function Items() {
       </ItemsShell>
 
       {/* --- MODALS --- */}
-      <AnimatePresence> {modalName && canDetailsGoBack && <Backdrop />}</AnimatePresence>
-      <AnimatePresence custom={direction}>
-        {modalName === "cost" && workspaceData && (
-          <EnterCostModal
-            setDraftItem={setDraftItem}
-            workspaceId={workspaceData.workspace._id}
-            defaultCurrency={workspaceData.workspace.defaultCurrency}
-            onClose={onClose}
-            direction={direction}
-            onForward={() => goForward("name")}
-          />
-        )}
-      </AnimatePresence>
-      <AnimatePresence custom={direction}>
-        {modalName === "name" && (
-          <EnterNameModal
-            setDraftItem={setDraftItem}
-            onClose={onClose}
-            direction={direction}
-            onBack={() => goBack("cost")}
-            onForward={() => {
-              setCanDetailsGoBack(true);
-              goForward("details");
-            }}
-          />
-        )}
-      </AnimatePresence>
-      <AnimatePresence custom={direction}>
-        {modalName === "details" && workspaceData && (
-          <DetailsModal
-            setDraftItem={setDraftItem}
-            draftItem={draftItem}
-            workspaceData={workspaceData}
-            onClose={onClose}
-            direction={direction}
-            onBack={canDetailsGoBack ? () => goBack("name") : undefined}
-          />
-        )}
-      </AnimatePresence>
+      {modalName && workspaceData && (
+        <ItemsModals
+          modalName={modalName}
+          canDetailsGoBack={canDetailsGoBack}
+          workspaceData={workspaceData}
+          draftItem={draftItem}
+          setDraftItem={setDraftItem}
+          direction={direction}
+          onClose={onClose}
+          goBack={goBack}
+          goForward={goForward}
+          setCanDetailsGoBack={setCanDetailsGoBack}
+        />
+      )}
       {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
   );
