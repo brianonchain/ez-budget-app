@@ -5,5 +5,5 @@ function requiredPublicEnv(name: string): string {
 }
 
 export const publicEnv = {
-  // add public env vars here
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: requiredPublicEnv("NEXT_PUBLIC_VAPID_PUBLIC_KEY"),
 };

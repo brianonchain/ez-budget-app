@@ -8,12 +8,10 @@ import { getUserInfo } from "@/utils/serverFunctions";
 import { isDraftItem, isObjectIdString } from "@/utils/typeGuards";
 import PushSubscriptionModel from "@/db/PushSubscriptionModel";
 import webpush from "web-push";
+import { serverEnv } from "@/utils/serverEnv";
+import { publicEnv } from "@/utils/publicEnv";
 
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT || "mailto:your@email.com",
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!,
-);
+webpush.setVapidDetails(serverEnv.VAPID_SUBJECT, publicEnv.NEXT_PUBLIC_VAPID_PUBLIC_KEY, serverEnv.VAPID_PRIVATE_KEY);
 
 export const POST = async (request: Request) => {
   const payload = (await request.json().catch(() => null)) as MutateItemsPayload | null;

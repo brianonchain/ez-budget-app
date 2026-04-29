@@ -20,4 +20,7 @@ export const serverEnv = {
 
   UPSTASH_REDIS_REST_URL: requiredEnv("UPSTASH_REDIS_REST_URL"),
   UPSTASH_REDIS_REST_TOKEN: requiredEnv("UPSTASH_REDIS_REST_TOKEN"),
+
+  VAPID_SUBJECT: requiredEnv("VAPID_SUBJECT"),
+  VAPID_PRIVATE_KEY: requiredEnv("VAPID_PRIVATE_KEY"),
 };
