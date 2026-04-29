@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "EZ Budget App",
     short_name: "EZ Budget",
-    description: "Track your expenses with fewer clicks",
+    description: "Track expenses with fewer clicks",
     display: "standalone",
     start_url: "/app/items",
     scope: "/",

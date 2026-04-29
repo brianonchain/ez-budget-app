@@ -11,11 +11,11 @@ export default function PWAGate({ children }: { children: React.ReactNode }) {
     const token = searchParams.get("token");
     const isDesktop = window.matchMedia("(hover: hover) and (pointer:fine)").matches;
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
-    const allowInviteFlow = token && (pathname === "/invite" || pathname === "/login");
+    const allowInviteFlow = token && (pathname === "/invite" || pathname === "/login"); // allow non-standalone login page for invited users
     if (!allowInviteFlow && !isDesktop && !isStandalone && process.env.NODE_ENV !== "development") {
       router.replace("/saveAppToHome");
     }
-  }, []); // empty dependency array because we only want to run this effect once on mount
+  }, []);
 
   return <>{children}</>;
 }

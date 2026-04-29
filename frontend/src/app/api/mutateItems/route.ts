@@ -6,6 +6,14 @@ import MembershipModel from "@/db/MembershipModel";
 import ItemModel from "@/db/ItemModel";
 import { getUserInfo } from "@/utils/serverFunctions";
 import { isDraftItem, isObjectIdString } from "@/utils/typeGuards";
+import PushSubscriptionModel from "@/db/PushSubscriptionModel";
+import webpush from "web-push";
+
+webpush.setVapidDetails(
+  process.env.VAPID_SUBJECT || "mailto:your@email.com",
+  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+  process.env.VAPID_PRIVATE_KEY!,
+);
 
 export const POST = async (request: Request) => {
   const payload = (await request.json().catch(() => null)) as MutateItemsPayload | null;
@@ -22,18 +30,23 @@ export const POST = async (request: Request) => {
   try {
     await dbConnect();
     // security: verify membership
-    const membership = await MembershipModel.findOne({ userId, workspaceId }).select("role").lean<{ role: Role } | null>();
-    if (!membership || membership.role === "viewer") {
+    const memberships = await MembershipModel.find({ workspaceId }).select("userId role").lean<{ userId: Types.ObjectId; role: Role }[]>();
+    const actorMembership = memberships.find((i) => i.userId.toString() === userId.toString());
+    if (!actorMembership || actorMembership.role === "viewer") {
       return NextResponse.json({ status: "error", message: "Forbidden" }, { status: 403 });
     }
+    // const membership = await MembershipModel.findOne({ userId, workspaceId }).select("role").lean<{ role: Role } | null>();
+    // if (!membership || membership.role === "viewer") {
+    //   return NextResponse.json({ status: "error", message: "Forbidden" }, { status: 403 });
+    // }
 
     switch (payload.type) {
       case "upsert": {
         const item = payload.item;
         if (!isDraftItem(item)) return NextResponse.json({ status: "error", message: "Invalid payload" }, { status: 400 });
-        // update or add item
-        if (payload.item._id) {
-          const result = await ItemModel.updateOne(
+        if (item._id) {
+          // update item
+          const updatedItem = await ItemModel.findOneAndUpdate(
             { _id: item._id, workspaceId },
             {
               $set: {
@@ -46,11 +59,20 @@ export const POST = async (request: Request) => {
                 tag: item.tag,
               },
             },
-            { runValidators: true },
-          );
-          if (!result.matchedCount) return NextResponse.json({ status: "error", message: "Item not found" }, { status: 404 });
+            { new: true, runValidators: true },
+          ).lean<{ _id: Types.ObjectId; description?: string }>();
+          if (!updatedItem) return NextResponse.json({ status: "error", message: "Item not found" }, { status: 404 });
+          // send push notification
+          await sendWorkspacePush({
+            itemId: updatedItem._id.toString(),
+            actorUserId: userId.toString(),
+            memberships,
+            title: "Item Updated",
+            body: `${userEmail} updated "${updatedItem.description || "an item"}"`,
+          });
         } else {
-          await ItemModel.create({
+          // add item
+          const createdItem = await ItemModel.create({
             workspaceId,
             date: new Date(item.date),
             cost: item.cost,
@@ -61,6 +83,14 @@ export const POST = async (request: Request) => {
             tag: item.tag,
             createdBy: userId,
           });
+          // create push notification
+          await sendWorkspacePush({
+            itemId: createdItem._id.toString(),
+            actorUserId: userId.toString(),
+            memberships,
+            title: "Item Added",
+            body: `${userEmail} added "${createdItem.description || "an item"}"`,
+          });
         }
         break;
       }
@@ -68,8 +98,19 @@ export const POST = async (request: Request) => {
       case "delete": {
         if (typeof payload.itemId !== "string" || !Types.ObjectId.isValid(payload.itemId))
           return NextResponse.json({ status: "error", message: "Invalid payload" }, { status: 400 });
-        const result = await ItemModel.deleteOne({ _id: payload.itemId, workspaceId });
-        if (!result.deletedCount) return NextResponse.json({ status: "error", message: "Item not found" }, { status: 404 });
+        const deletedItem = await ItemModel.findOneAndDelete({ _id: payload.itemId, workspaceId }).lean<{
+          _id: Types.ObjectId;
+          description?: string;
+        }>();
+        if (!deletedItem) return NextResponse.json({ status: "error", message: "Item not found" }, { status: 404 });
+        // send push notification
+        await sendWorkspacePush({
+          itemId: deletedItem._id.toString(),
+          actorUserId: userId.toString(),
+          memberships,
+          title: "Item Deleted",
+          body: `${userEmail} deleted "${deletedItem.description || "an item"}"`,
+        });
         break;
       }
 
@@ -78,8 +119,42 @@ export const POST = async (request: Request) => {
         return NextResponse.json({ status: "error", message: "Invalid operation type." }, { status: 400 });
       }
     }
+
+    // const recipientUserIds = memberships.filter((m) => m.userId.toString() !== userId.toString()).map((m) => m.userId);
+    // const subscriptions = await PushSubscriptionModel.find({
+    //   userId: { $in: recipientUserIds },
+    // }).lean();
+
     return NextResponse.json({ status: "success" }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ status: "error", message: "Database error" }, { status: 500 });
   }
 };
+
+async function sendWorkspacePush({
+  itemId,
+  actorUserId,
+  memberships,
+  title,
+  body,
+}: {
+  itemId: string;
+  actorUserId: string;
+  memberships: { userId: Types.ObjectId; role: Role }[];
+  title: string;
+  body: string;
+}) {
+  // const memberUserIds = memberships.filter((m) => m.userId.toString() !== actorUserId).map((m) => m.userId);
+  const memberUserIds = memberships.map((m) => m.userId);
+  if (!memberUserIds.length) return;
+
+  const subscriptions = await PushSubscriptionModel.find({
+    userId: { $in: memberUserIds },
+  }).lean<{ endpoint: string; keys: { p256dh: string; auth: string } }[]>();
+
+  await Promise.allSettled(
+    subscriptions.map(async (sub) => {
+      const res = await webpush.sendNotification({ endpoint: sub.endpoint, keys: sub.keys }, JSON.stringify({ title, body, itemId }));
+    }),
+  );
+}
