@@ -53,7 +53,11 @@ export default function Button({
       type={props.type ?? "button"}
     >
       {isLoading ? (
-        <ImSpinner2 className={`animate-spin text-[32px] desktop:text-[24px] ${variant === "outline" ? "text-textSecondary" : ""}`} />
+        <ImSpinner2
+          className={`animate-spin text-[32px] desktop:text-[24px] ${
+            variant === "primary" ? "text-buttonPrimaryText" : "text-textTertiary"
+          }`}
+        />
       ) : (
         <>
           {icon}

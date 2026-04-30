@@ -256,6 +256,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         {/*--- Sign Out ---*/}
         <SettingsField label="Sign Out">
           <Button
+            className="w-24 desktop:w-20"
             label="Sign Out"
             variant="outline"
             size="sm"

@@ -7,7 +7,9 @@ export default async function Layout({ children }: { children: React.ReactNode }
     <div className="app textBase">
       <InitSWAndNotifications />
       <PWAGate>
-        <ThemeProvider attribute="class">{children}</ThemeProvider>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          {children}
+        </ThemeProvider>
       </PWAGate>
     </div>
   );

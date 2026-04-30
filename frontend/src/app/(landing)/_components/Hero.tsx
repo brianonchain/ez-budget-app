@@ -2,14 +2,12 @@ import Link from "next/link";
 import Ani from "./Ani";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
-import NoScrollPageGlow from "@/utils/components/NoScrollPageGlow";
 
 export default async function Hero() {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="relative isolate homeSectionSize min-h-[max(100vh,700px)] grid grid-cols-1 lg:grid-cols-[55%_45%] gap-[12px] lg:gap-0 relative">
-      <NoScrollPageGlow />
+    <div className="homeSectionSize min-h-[max(100vh,700px)] grid grid-cols-1 lg:grid-cols-[55%_45%] gap-3 lg:gap-0">
       {/*--- text ---*/}
       <div className="mt-[60px] lg:mt-0 w-full flex flex-col items-start lg:justify-center gap-[20px] text-center lg:text-start">
         <div className="text-[58px] leading-[1.2] font-bold">
