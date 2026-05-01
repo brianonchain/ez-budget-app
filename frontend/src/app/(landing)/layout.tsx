@@ -10,7 +10,7 @@ export const viewport = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative dark bg-bgPrimary text-textPrimary">
+    <div className="relative">
       {/*--- glow ---*/}
       <div className="fixed z-0 top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_calc(100%+200px),#0444B7,transparent_70%)] pointer-events-none overflow-hidden" />
       <div className="relative z-10">{children}</div>

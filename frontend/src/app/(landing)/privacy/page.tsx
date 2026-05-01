@@ -22,34 +22,34 @@ export default function PrivacyPage() {
   const supportEmail = "support@ezbudgetapp.com";
 
   return (
-    <>
-      <div className="bg-bgPrimary text-textPrimary min-h-screen flex flex-col gap-[12px] mx-auto p-8">
-        <h1 className="font-bold">Privacy Policy</h1>
-        <p>Effective Date: April 26, 2025</p>
+    <div className="mx-auto p-8 min-h-screen flex flex-col gap-4">
+      {/*--- privacy policy ---*/}
+      <h1 className="font-bold">Privacy Policy</h1>
+      <p>Effective Date: April 26, 2025</p>
 
-        <h2 className="font-bold">Information We Collect</h2>
-        <p>
-          When you sign in with Google, we collect your basic profile information. Specifically, we collect your name, your email address,
-          and your profile picture.
-        </p>
+      <h2 className="font-bold">Information We Collect</h2>
+      <p>
+        When you sign in with Google, we collect your basic profile information. Specifically, we collect your name, your email address, and
+        your profile picture.
+      </p>
 
-        <h2 className="font-bold">How We Use Your Information</h2>
-        <p>We use your information to authenticate your account. We do not share your information with any third parties.</p>
+      <h2 className="font-bold">How We Use Your Information</h2>
+      <p>We use your information to authenticate your account. We do not share your information with any third parties.</p>
 
-        <h2 className="font-bold">Data Retention</h2>
-        <p>We retain your basic profile information only while your account is active.</p>
+      <h2 className="font-bold">Data Retention</h2>
+      <p>We retain your basic profile information only while your account is active.</p>
 
-        <h2 className="font-bold">Contact Us</h2>
-        <p>EZ Budget App is an offshoot project of Nulla Pay.</p>
+      <h2 className="font-bold">Contact Us</h2>
+      <p>EZ Budget App is an offshoot project of Nulla Pay.</p>
 
-        <p>
-          Email: support@nullapay.com
-          <br />
-          Website: https://www.nullapay.com
-        </p>
-      </div>
+      <p>
+        Email: support@nullapay.com
+        <br />
+        Website: https://www.nullapay.com
+      </p>
 
-      <div className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-950">
+      {/*--- privacy policy ---*/}
+      <div className="p-8 rounded-2xl border border-borderFaint bg-card">
         <h2 className="text-2xl font-semibold tracking-tight">Terms of Service</h2>
         <p className="mt-2 text-sm leading-6 text-neutral-700 dark:text-neutral-300">
           By accessing or using {appName}, you agree to these Terms of Service.
@@ -123,6 +123,6 @@ export default function PrivacyPage() {
           </Section>
         </div>
       </div>
-    </>
+    </div>
   );
 }
