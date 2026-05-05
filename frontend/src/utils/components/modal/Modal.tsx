@@ -68,7 +68,7 @@ export default function Modal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           aria-hidden
         />
       )}
@@ -91,7 +91,7 @@ export default function Modal({
           animate="animate"
           exit="exit"
           transition={{
-            duration: isTabletOrDesktop ? 0.2 : 0.42,
+            duration: isTabletOrDesktop ? 0.28 : 0.52,
             ease: isTabletOrDesktop ? [0.22, 1, 0.36, 1] : [0.32, 0.72, 0, 1],
           }}
           role="dialog"

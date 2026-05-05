@@ -32,7 +32,7 @@ import Toggle from "@/utils/components/Toggle";
 import EditIcon from "@/utils/components/EditIcon";
 
 // utils
-import { capitalizeFirst } from "@/utils/functions";
+import { capitalizeFirst, fetchPost } from "@/utils/functions";
 import { useWorkspaceMutation, useWorkspaceQuery, useUserMutation, useItemsQuery } from "@/utils/hooks";
 import { CURRENCIES } from "@/utils/constants";
 
@@ -52,6 +52,9 @@ export default function Settings({ provider, email, userId }: { provider: string
   const [errorMessage, setErrorMessage] = useState("");
   const [workspaceId, setWorkspaceId] = useState("");
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [notificationsPending, setNotificationsPending] = useState(false);
+  const [pushSupported, setPushSupported] = useState<boolean | null>(null);
   // modal states (TODO: aggregate)
   const [passwordModal, setPasswordModal] = useState(false);
   const [emailModal, setEmailModal] = useState(false);
@@ -75,6 +78,33 @@ export default function Settings({ provider, email, userId }: { provider: string
   useEffect(() => {
     if (data?.workspace._id) setWorkspaceId(data.workspace._id);
   }, [data?.workspace._id]);
+
+  // push + permission support (client only)
+  useEffect(() => {
+    setPushSupported(typeof window !== "undefined" && "serviceWorker" in navigator && "PushManager" in window && "Notification" in window);
+  }, []);
+
+  // sync notifications toggle from browser (permission + active subscription)
+  useEffect(() => {
+    if (pushSupported !== true) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        const on = Notification.permission === "granted" && subscription !== null;
+        console.log("Notification.permission", Notification.permission);
+        console.log("subscription", subscription);
+        console.log("on", on);
+        if (!cancelled) setNotificationsEnabled(on);
+      } catch {
+        if (!cancelled) setNotificationsEnabled(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [pushSupported]);
 
   async function onChangeActiveSheet(e: React.ChangeEvent<HTMLSelectElement>) {
     // add new workspace
@@ -110,6 +140,86 @@ export default function Settings({ provider, email, userId }: { provider: string
     }
     setDeleteWorkspaceModal(true);
   }
+
+  async function onToggleNotifications() {
+    if (pushSupported !== true || notificationsPending) return;
+
+    // subscribe
+    if (!notificationsEnabled) {
+      setNotificationsPending(true);
+      try {
+        console.log("asking for permission");
+        console.log("secure context:", window.isSecureContext);
+        console.log("permission:", Notification.permission);
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          setErrorMessage("Notifications are blocked or denied. Allow them in your browser settings and try again.");
+          setNotificationsEnabled(false);
+          return;
+        }
+
+        const registration = await navigator.serviceWorker.ready;
+        let subscription = await registration.pushManager.getSubscription();
+        const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+        if (!subscription) {
+          if (!vapidKey) throw new Error("Missing NEXT_PUBLIC_VAPID_PUBLIC_KEY");
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(vapidKey),
+          });
+        }
+
+        const subJson = subscription.toJSON();
+        await fetchPost("/api/subscribe", {
+          type: "subscribe",
+          endpoint: subJson.endpoint,
+          keys: subJson.keys,
+          expirationTime: subJson.expirationTime ?? null,
+        });
+        setNotificationsEnabled(true);
+      } catch (e) {
+        console.error("Enable notifications failed:", e);
+        try {
+          const reg = await navigator.serviceWorker.ready;
+          const sub = await reg.pushManager.getSubscription();
+          await sub?.unsubscribe();
+        } catch {
+          /* ignore */
+        }
+        setErrorMessage(e instanceof Error ? e.message : "Could not enable notifications. Please try again.");
+        setNotificationsEnabled(false);
+      } finally {
+        setNotificationsPending(false);
+      }
+      return;
+    }
+
+    // unsubscribe
+    setNotificationsPending(true);
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.getSubscription();
+      if (subscription) {
+        const endpoint = subscription.endpoint;
+        await subscription.unsubscribe();
+        await fetchPost("/api/subscribe", { type: "unsubscribe", endpoint });
+      }
+      setNotificationsEnabled(false);
+    } catch (e) {
+      console.error("Disable notifications failed:", e);
+      setErrorMessage("Could not turn off notifications completely. Try again.");
+    } finally {
+      setNotificationsPending(false);
+    }
+  }
+
+  function urlBase64ToUint8Array(base64String: string) {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+    const rawData = window.atob(base64);
+    return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+  }
+
   return (
     <>
       {/*--- BUDGET SHEET SETTINGS ---*/}
@@ -213,6 +323,15 @@ export default function Settings({ provider, email, userId }: { provider: string
             <SettingsSkeleton size="sm" />
           </SettingsField>
         )}
+        {/*--- Notifications ---*/}
+        <SettingsField label="Notifications">
+          <Toggle
+            checked={notificationsEnabled}
+            disabled={pushSupported !== true || notificationsPending}
+            onClick={onToggleNotifications}
+            aria-label={notificationsEnabled ? "Turn off push notifications" : "Turn on push notifications"}
+          />
+        </SettingsField>
         {/*--- Export Sheet ---*/}
         <SettingsField label="Export Sheet">
           {showData ? (

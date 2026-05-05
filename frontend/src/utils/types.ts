@@ -107,6 +107,10 @@ export type MutateUserPayload =
 
 export type ResendCodePayload = { type: "resendCodeForNewUser"; email: string } | { type: "resendCodeForEmailChange" };
 
+export type MutateSubscribePayload =
+  | { type: "subscribe"; endpoint: string; keys: { p256dh: string; auth: string }; expirationTime?: number | null }
+  | { type: "unsubscribe"; endpoint: string };
+
 // for modals
 export type Direction = 1 | 0 | -1;
 

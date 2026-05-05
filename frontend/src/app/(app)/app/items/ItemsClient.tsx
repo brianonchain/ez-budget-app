@@ -8,8 +8,15 @@ import dynamic from "next/dynamic";
 import ItemsShell from "./ItemsShell";
 import AddItemButton from "./_components/AddItemButton";
 import Spinner from "@/utils/components/Spinner";
-const ItemsModals = dynamic(() => import("./_components/ItemsModals"), { ssr: false });
-const ErrorModal = dynamic(() => import("@/utils/components/ErrorModal"), { ssr: false });
+// modals
+import ErrorModal from "@/utils/components/ErrorModal";
+import { AnimatePresence } from "framer-motion";
+import Backdrop from "@/utils/components/modal/Backdrop";
+import EnterCostModal from "./_components/EnterCostModal";
+import EnterNameModal from "./_components/EnterNameModal";
+import DetailsModal from "./_components/DetailsModal";
+// const ItemsModals = dynamic(() => import("./_components/ItemsModals"), { ssr: false });
+// const ErrorModal = dynamic(() => import("@/utils/components/ErrorModal"), { ssr: false });
 
 // constants and types
 import { SYMBOLS, DECIMALS, emptyItem } from "@/utils/constants";
@@ -37,7 +44,7 @@ export default function Items() {
   const [draftItem, setDraftItem] = useState<DraftItem>(emptyItem);
   const [modalName, setModalName] = useState<"cost" | "name" | "details" | null>(null);
   const [direction, setDirection] = useState<Direction>(0);
-  const [canDetailsGoBack, setCanDetailsGoBack] = useState(false);
+  const [isMultiPageModal, setIsMultiPageModal] = useState(false);
 
   // flatten pages into a single items array, then group by date
   const allItems = useMemo(() => itemsData?.pages.flatMap((p) => p.items) ?? [], [itemsData]);
@@ -57,9 +64,9 @@ export default function Items() {
   // store defaultCurrency in localStorage (will run if data is mutated)
   useEffect(() => {
     if (!workspaceData) return;
-    const currency = workspaceData.workspace.defaultCurrency;
-    localStorage.setItem("ezb:currency", currency);
-  }, [workspaceData?.workspace.defaultCurrency]);
+    localStorage.setItem("ezb:workspaceId", workspaceData.workspace._id);
+    localStorage.setItem("ezb:currency", workspaceData.workspace.defaultCurrency);
+  }, [workspaceData?.workspace._id, workspaceData?.workspace.defaultCurrency]);
 
   // Because this is PWA start_url, must do unauthenticated redirects on client (not the server); other pages can redirect in server (i.e., in page.tsx)
   useEffect(() => {
@@ -94,7 +101,7 @@ export default function Items() {
       currency,
       tag: localStorage.getItem("ezb:lastTag") ?? "none",
     });
-    setCanDetailsGoBack(true);
+    setIsMultiPageModal(true);
     setModalName("cost");
   };
 
@@ -153,7 +160,7 @@ export default function Items() {
                     className="innerOutline text-left px-[3%] w-full h-14 desktop:h-13 flex items-center gap-2 border-b border-borderFaint desktop:hover:bg-surface dark:desktop:hover:bg-card"
                     onClick={() => {
                       setDraftItem(item);
-                      setCanDetailsGoBack(false);
+                      setIsMultiPageModal(false);
                       setModalName("details");
                     }}
                     type="button"
@@ -182,21 +189,44 @@ export default function Items() {
         )}
       </ItemsShell>
 
+      {/* --- backdrop for multi-modal flow --- */}
+      <AnimatePresence>{modalName && isMultiPageModal && <Backdrop />}</AnimatePresence>
       {/* --- MODALS --- */}
-      {modalName && workspaceData && (
-        <ItemsModals
-          modalName={modalName}
-          canDetailsGoBack={canDetailsGoBack}
-          workspaceData={workspaceData}
-          draftItem={draftItem}
-          setDraftItem={setDraftItem}
-          direction={direction}
-          onClose={onClose}
-          goBack={goBack}
-          goForward={goForward}
-          setCanDetailsGoBack={setCanDetailsGoBack}
-        />
-      )}
+      <AnimatePresence custom={direction}>
+        {modalName === "cost" && workspaceData && (
+          <EnterCostModal
+            setDraftItem={setDraftItem}
+            workspaceId={workspaceData.workspace._id}
+            defaultCurrency={workspaceData.workspace.defaultCurrency}
+            onClose={onClose}
+            direction={direction}
+            onForward={() => goForward("name")}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence custom={direction}>
+        {modalName === "name" && (
+          <EnterNameModal
+            setDraftItem={setDraftItem}
+            onClose={onClose}
+            direction={direction}
+            onBack={() => goBack("cost")}
+            onForward={() => goForward("details")}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence custom={direction}>
+        {modalName === "details" && workspaceData && (
+          <DetailsModal
+            setDraftItem={setDraftItem}
+            draftItem={draftItem}
+            workspaceData={workspaceData}
+            onClose={onClose}
+            direction={direction}
+            onBack={isMultiPageModal ? () => goBack("name") : undefined}
+          />
+        )}
+      </AnimatePresence>
       {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
   );

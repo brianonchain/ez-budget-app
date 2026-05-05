@@ -33,9 +33,9 @@ export default function ItemsModals({
 }) {
   return (
     <>
-      <AnimatePresence> {modalName && canDetailsGoBack && <Backdrop />}</AnimatePresence>
+      <AnimatePresence>{modalName && canDetailsGoBack && <Backdrop />}</AnimatePresence>
       <AnimatePresence custom={direction}>
-        {modalName === "cost" && workspaceData && (
+        {modalName === "cost" && (
           <EnterCostModal
             setDraftItem={setDraftItem}
             workspaceId={workspaceData.workspace._id}
@@ -61,7 +61,7 @@ export default function ItemsModals({
         )}
       </AnimatePresence>
       <AnimatePresence custom={direction}>
-        {modalName === "details" && workspaceData && (
+        {modalName === "details" && (
           <DetailsModal
             setDraftItem={setDraftItem}
             draftItem={draftItem}
