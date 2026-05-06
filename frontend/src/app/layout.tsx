@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import SessionProvider from "./SessionProvider";
 import "react-day-picker/style.css";
 import "@/styles/globals.css";
+import { authOptions } from "@/utils/authOptions";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,7 +26,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   return (
     <html className="dark bg-bgPrimary" suppressHydrationWarning lang="en">
       <body className={`${inter.className} bg-bgPrimary text-textPrimary textBase antialiased`}>
