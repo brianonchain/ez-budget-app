@@ -1,21 +1,21 @@
 "use client";
 // nextjs
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useSearchParams, usePathname } from "next/navigation";
+// auth
+import { signIn } from "next-auth/react";
 // components
-import LoginButton from "../_components/LoginButton";
-import Button from "@/utils/components/Button";
-// utils
-import { checkEmail, checkPassword } from "@/utils/functions";
+import LoginButton from "./_components/LoginButton";
 import InputEmail from "@/utils/components/InputEmail";
 import InputPassword from "@/utils/components/InputPassword";
 import ErrorModal from "@/utils/components/ErrorModal";
 import Accordion from "@/utils/components/Accordion";
+import Button from "@/utils/components/Button";
 // images
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+// utils
+import { checkEmail, checkPassword } from "@/utils/functions";
 
 const errorMap: Record<string, string> = {
   OAuthSignin: "Could not start sign-in.",
@@ -37,11 +37,10 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: false, password: false });
   const [isLoading, setIsLoading] = useState<null | "google" | "credentials">(null);
-  const [errorModal, setErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [showEmailPassword, setShowEmailPassword] = useState(false);
+  const [expandCredentials, setExpandCredentials] = useState(false);
 
-  // show error modal if error param is present
+  // show error modal if error searchParam is present
   useEffect(() => {
     const error = searchParams.get("error");
     if (!error) return; // if no error, then exit
@@ -49,7 +48,6 @@ export default function Login() {
 
     errorRef.current = error;
     setErrorMessage(errorMap[error] ?? "Login failed. Please try again.");
-    setErrorModal(true);
     router.replace(pathname); // URL will just show /login
   }, [searchParams, pathname]);
 
@@ -67,8 +65,7 @@ export default function Login() {
 
     // if email/password fields blank, then show error modal
     if (!email || !password) {
-      setErrorMessage("Invalid email or password");
-      setErrorModal(true);
+      setErrorMessage("Missing field");
       return;
     }
 
@@ -79,7 +76,6 @@ export default function Login() {
     setErrors({ email: !isEmailValid, password: !isPasswordValid });
     if (!isEmailValid || !isPasswordValid) {
       setErrorMessage("Invalid email or password");
-      setErrorModal(true);
       return;
     }
 
@@ -94,7 +90,6 @@ export default function Login() {
       // if sign in error or success
       if (res?.error) {
         setErrorMessage("Invalid email or password");
-        setErrorModal(true);
         setPassword("");
         setIsLoading(null);
       } else {
@@ -103,7 +98,6 @@ export default function Login() {
       }
     } catch {
       setErrorMessage("Something went wrong. Please try again.");
-      setErrorModal(true);
       setIsLoading(null);
     }
   }
@@ -127,30 +121,29 @@ export default function Login() {
         />
         {/*--- Credentials ---*/}
         <div
-          className={`w-full loginButtonRoundness ${
-            showEmailPassword
-              ? "bg-white dark:bg-transparent border border-slate-200 dark:border-slate-400 dark:hover:border-slate-400"
-              : "loginButtonColor cursor-pointer"
+          className={`w-full loginButtonRoundness loginButtonColor ${
+            expandCredentials ? "desktop:hover:!bg-loginButtonBg" : "cursor-pointer"
           }`}
         >
           <button
             className="relative loginButtonBase loginButtonRoundness"
-            onClick={() => setShowEmailPassword(!showEmailPassword)}
+            onClick={() => setExpandCredentials(!expandCredentials)}
             type="button"
           >
-            <p>Continue with Email/Password</p>
-            {showEmailPassword ? <FaAngleUp className="absolute right-6 w-4 h-4" /> : <FaAngleDown className="absolute right-6 w-4 h-4" />}
+            Continue with Email/Password
+            {expandCredentials ? <FaAngleUp className="absolute right-6 w-4 h-4" /> : <FaAngleDown className="absolute right-6 w-4 h-4" />}
           </button>
-          <Accordion isOpen={showEmailPassword}>
-            <form className="mt-1 xs:mt-2 px-3 xs:px-5 pb-7 w-full flex flex-col gap-5" onSubmit={onSubmitCredentials}>
+          <Accordion isOpen={expandCredentials}>
+            <form className="mt-2 xs:mt-4 px-3 xs:px-5 pb-7 w-full flex flex-col gap-6" onSubmit={onSubmitCredentials} noValidate>
               <InputEmail
                 // for InputEmail
                 _id="loginEmail"
-                label="Email"
+                placeholder="Enter email"
                 isSignIn={true}
                 isError={errors.email}
                 errorMsg="Invalid email"
                 // for Input
+                inputVariant={errors.email ? "danger" : "login"}
                 inputSize="login"
                 // for <input>
                 onBlur={(e) => validateEmail(e.target.value)}
@@ -159,21 +152,19 @@ export default function Login() {
               />
               <InputPassword
                 // for InputPassword
-                _id="password"
-                label="Password"
+                isLogin={true}
+                placeholder="Enter password"
                 isCurrentPassword={true}
                 name="password"
                 isError={errors.password}
                 errorMsg="Password should contain a lowercase letter, an uppercase letter, and a number"
-                // for Input
-                inputSize="login"
                 // for <input>
                 onBlur={(e) => validatePassword(e.target.value)}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
               <Button
-                className="mt-3"
+                className="mt-2"
                 label="Sign In"
                 variant="primary"
                 size="login"

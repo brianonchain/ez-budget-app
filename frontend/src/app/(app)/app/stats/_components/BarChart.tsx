@@ -14,7 +14,7 @@ function CustomTooltip({ active, payload, currency }: any) {
   const tooltipLabel = payload[0]?.payload?.tooltipLabel ?? "";
 
   return (
-    <div className="rounded-lg border border-borderFaint bg-card dark:bg-[#0B0F37] px-3 py-2 shadow-lg">
+    <div className="roundedButton border border-borderFaint bg-card dark:bg-[#0B0F37] px-3 py-2 shadow-lg">
       <p className="font-medium text-sm mb-1">{tooltipLabel}</p>
       {payload
         .filter((entry: any) => entry.value > 0)

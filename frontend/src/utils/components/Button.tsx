@@ -1,11 +1,33 @@
-import { ImSpinner2 } from "react-icons/im";
+import Spinner from "./Spinner";
+
+const variants = {
+  primary: "buttonPrimaryColorGlass",
+  outline:
+    "desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover border border-buttonOutlineBorder [transition:background-color_300ms]",
+  danger: "buttonDangerColorGlass",
+  dangerOutline:
+    "text-textDanger desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover border border-buttonOutlineBorder [transition:background-color_300ms]",
+  input: "justify-start inputPrimaryColor font-normal",
+  // custom variants
+  keypad: "keypadColor",
+} as const;
+
+const sizes = {
+  xs: "h-11 desktop:h-8 px-3 desktop:px-2.5 textSm roundedSmallButton font-medium",
+  sm: "h-12 desktop:h-9 px-3 desktop:px-2.5 roundedSmallButton font-medium",
+  base: "h-13 desktop:h-10 px-4 desktop:px-3 roundedButton font-medium",
+  login: "h-13 desktop:h-12 px-4 desktop:px-3.5 roundedButton font-medium",
+  // custom sizes
+  icon: "flex-none size-9 desktop:size-8 roundedSmallButton",
+  pill: "h-11 desktop:h-8 px-4 desktop:px-3.5 textXs rounded-full gap-2 font-normal",
+  keypad: "w-20 h-20 desktop:w-12 desktop:h-12 textXl font-semibold rounded-full",
+} as const;
 
 type ButtonProps = {
-  label?: string | React.ReactNode;
-  variant?: "primary" | "outline" | "danger" | "dangerOutline" | "ghost" | "input";
-  size?: "xs" | "sm" | "base" | "pill" | "icon" | "hug" | "login";
+  label?: React.ReactNode;
+  variant?: keyof typeof variants;
+  size?: keyof typeof sizes;
   isLoading?: boolean;
-  className?: string;
   icon?: React.ReactNode;
   iconRight?: React.ReactNode;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
@@ -15,49 +37,23 @@ export default function Button({
   variant = "primary",
   size = "base",
   isLoading = false,
-  className = "",
   icon,
   iconRight,
+  // destructured button props
+  className = "",
+  disabled,
+  type = "button",
   ...props
 }: ButtonProps) {
-  const variants = {
-    primary:
-      "text-buttonPrimaryText bg-buttonPrimaryBg desktop:hover:bg-buttonPrimaryBgHover active:bg-buttonPrimaryBgHover [transition:background-color_200ms]",
-    outline:
-      "text-button2Text bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover border border-inputOutlineBorder [transition:background-color_200ms]",
-    danger:
-      "text-buttonPrimaryText bg-buttonDangerBg desktop:hover:bg-buttonDangerBgHover active:bg-buttonDangerBgHover [transition:background-color_200ms]",
-    dangerOutline:
-      "text-textDanger hover:text-textDangerHover bg-transparent desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover border border-inputOutlineBorder [transition:background-color_200ms]",
-    ghost: "desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover",
-    input: "text-left justify-start inputPrimaryColor !font-normal", // globals.css removes outline from inputPrimaryColor
-  };
-
-  const sizes = {
-    xs: "h-11 desktop:h-8 px-3 desktop:px-2.5 textSm rounded-lg font-medium", // used in DetailsModal.tsx
-    sm: "h-12 desktop:h-9 px-3 desktop:px-2.5 rounded-lg font-medium",
-    base: "h-13 desktop:h-10 px-4 desktop:px-3 rounded-lg font-medium",
-    login: "h-13 desktop:h-12 px-3.5 rounded-xl font-medium",
-    // special sizes
-    icon: "flex-none aspect-square w-9 desktop:w-8 rounded-lg",
-    pill: "h-11 desktop:h-8 px-4 desktop:px-3.5 textXs rounded-full gap-2 font-normal",
-    hug: "",
-  };
-
-  // consider adding "inline-flex" to base className
   return (
     <button
       {...props}
       className={`flex items-center justify-center gap-1 disabled:cursor-default select-none ${variants[variant]} ${sizes[size]} ${className}`}
-      disabled={isLoading || props.disabled}
-      type={props.type ?? "button"}
+      disabled={isLoading || disabled}
+      type={type}
     >
       {isLoading ? (
-        <ImSpinner2
-          className={`animate-spin text-[32px] desktop:text-[24px] ${
-            variant === "primary" ? "text-buttonPrimaryText" : "text-textTertiary"
-          }`}
-        />
+        <Spinner buttonVariant={variant} />
       ) : (
         <>
           {icon}

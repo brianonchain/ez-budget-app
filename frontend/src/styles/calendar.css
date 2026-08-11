@@ -1,0 +1,57 @@
+/*--- import default styles (very important!) ---*/
+@import "react-day-picker/style.css";
+
+/*--- custom styles, <DayPicker /> must have className="myCalendar" ---*/
+.myCalendar {
+  /* accent color */
+  --rdp-accent-color: var(--color-buttonPrimaryBg);
+  --calendar-cell-size: 2.75rem;
+  /* nav */
+  --rdp-nav-height: var(--calendar-cell-size); /* The height of the navigation bar. */
+  --rdp-nav_button-height: var(--calendar-cell-size); /* The height of the navigation buttons. */
+  --rdp-nav_button-width: var(--calendar-cell-size); /* The width of the navigation buttons. */
+  /* weekday */
+  --rdp-weekday-padding: 0.2rem 0rem; /* The padding of the weekday. */
+  /* day size & radius */
+  --rdp-day-width: var(--calendar-cell-size);
+  --rdp-day-height: var(--calendar-cell-size);
+  --rdp-day_button-width: var(--calendar-cell-size);
+  --rdp-day_button-height: var(--calendar-cell-size);
+  --rdp-day_button-border-radius: 8px; /* The radius of the day cells. */
+  /* today */
+  --rdp-today-color: var(--color-textPrimary); /* The color of the today's date. */
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .myCalendar {
+    --calendar-cell-size: 2rem;
+  }
+}
+
+.myCalendar .rdp-month_caption {
+  @apply textLg font-medium;
+}
+
+.myCalendar .rdp-button_next:not([aria-disabled="true"]),
+.myCalendar .rdp-button_previous:not([aria-disabled="true"]) {
+  @apply rounded-lg desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms];
+}
+
+.myCalendar .rdp-chevron {
+  @apply size-7 desktop:size-5;
+}
+
+.myCalendar .rdp-weekday {
+  @apply textBase text-textSecondary;
+}
+
+.myCalendar .rdp-day_button {
+  @apply textBase border-none select-none desktop:hover:bg-buttonOutlineBgHover [transition:background-color_300ms];
+}
+
+.myCalendar .rdp-selected {
+  @apply font-medium border-none;
+}
+.myCalendar .rdp-selected .rdp-day_button {
+  @apply bg-buttonPrimaryBg text-buttonPrimaryText;
+}

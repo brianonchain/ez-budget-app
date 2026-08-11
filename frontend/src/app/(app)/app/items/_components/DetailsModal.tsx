@@ -1,7 +1,9 @@
 import { useState, useMemo } from "react";
 import { useItemsMutation } from "@/utils/hooks";
+import { AnimatePresence } from "framer-motion";
 // components
 import Modal from "@/utils/components/modal/Modal";
+import DeleteModal from "@/utils/components/modal/DeleteModal";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
@@ -47,6 +49,7 @@ export default function DetailsModal({
   const [currency, setCurrency] = useState(draftItem.currency ?? "USD");
   const [status, setStatus] = useState<"initial" | "addingOrEditing" | "deleting">("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
   const [validationError, setValidationError] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const decimals = DECIMALS[currency];
 
@@ -126,12 +129,13 @@ export default function DetailsModal({
       onClose();
     } catch {
       setStatus("initial");
+      setShowDeleteModal(false);
     }
   }
 
   return (
     <Modal title="Item Info" onClose={onClose} onBack={onBack} disabled={isPending} direction={direction} isMulti={onBack ? true : false}>
-      <div className="w-full flex flex-col">
+      <div className="mt-0.5 w-full flex flex-col">
         {/*--- date, name, cost ---*/}
         <div className="w-full grid grid-cols-[auto_1fr] gap-1.5 items-center">
           <label className="detailsLabel" htmlFor="details-date">
@@ -139,7 +143,7 @@ export default function DetailsModal({
           </label>
           <div className="relative">
             <Button
-              className="relative z-20 w-full"
+              className={`relative w-full ${showDeleteModal ? "" : "z-20"}`}
               label={new Date(draftItem.date).toLocaleString("en-US")}
               variant="input"
               size="xs"
@@ -237,11 +241,22 @@ export default function DetailsModal({
             label="Delete Item"
             variant="danger"
             size="base"
-            onClick={onDelete}
+            onClick={() => setShowDeleteModal(true)}
             isLoading={status === "deleting"}
             disabled={status !== "initial" || isPending}
           />
         )}
+        <AnimatePresence>
+          {showDeleteModal && (
+            <DeleteModal
+              message="Do you want to delete this item?"
+              onClose={() => setShowDeleteModal(false)}
+              onDelete={onDelete}
+              disabled={status !== "initial" || isPending}
+              isLoading={status === "deleting"}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </Modal>
   );

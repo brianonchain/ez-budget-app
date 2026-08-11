@@ -147,7 +147,7 @@ export default function ExportModal({
         </div>
         <ErrorMessage message={error} />
         <Button
-          className="mt-16 desktop:mt-36 w-full"
+          className="mt-16 tablet:mt-50 desktop:mt-40 w-full"
           label="Export"
           variant="primary"
           size="base"

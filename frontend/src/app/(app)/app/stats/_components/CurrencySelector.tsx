@@ -14,10 +14,8 @@ export default function CurrencySelector({ currencies, selected, onSelect }: Cur
       {currencies.map((i) => (
         <button
           key={i}
-          className={`px-3 py-1.5 desktop:py-1 rounded-full text-sm desktop:text-xs font-medium transition-colors duration-200 border ${
-            selected === i
-              ? "bg-buttonPrimaryBg text-buttonPrimaryText border-buttonPrimaryBg"
-              : "bg-transparent text-textSecondary border-borderFaint desktop:hover:bg-buttonOutlineBgHover"
+          className={`px-3 h-9 desktop:h-8 rounded-full textSm border border-buttonOutlineBorder ${
+            selected === i ? "bg-buttonOutlineBgHover" : "desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover"
           }`}
           onClick={() => onSelect(i)}
           type="button"

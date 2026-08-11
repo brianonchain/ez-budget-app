@@ -15,7 +15,7 @@ function PieTooltip({ active, payload, symbol, decimals }: any) {
   if (!active || !payload?.length) return null;
   const { name, value } = payload[0].payload;
   return (
-    <div className="rounded-lg border border-borderFaint bg-card dark:bg-[#0B0F37] px-3 py-2 shadow-lg text-xs">
+    <div className="roundedButton border border-borderFaint bg-card dark:bg-[#0B0F37] px-3 py-2 shadow-lg text-xs">
       <p className="font-medium mb-0.5">{name}</p>
       <p>{symbol + value.toFixed(decimals)}</p>
     </div>
@@ -68,7 +68,7 @@ export default function CategoryLegend({ items, currency, groupBy = "category" }
       </div>
 
       {/* pie chart */}
-      <div className="shrink-0 aspect-square w-[110px] tablet:w-[140px]">
+      <div className="shrink-0 size-[110px] tablet:size-[140px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie

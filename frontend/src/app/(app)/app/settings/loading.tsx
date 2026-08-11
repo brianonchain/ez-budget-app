@@ -13,15 +13,18 @@ export default function Loading() {
           <div className="settingsLabel">Active Sheet</div>
           <SettingsSkeleton size="lg" className="sm:flex-1" />
         </div>
-        <div className="my-3 px-6 pt-4 pb-6 flex flex-col gap-6 rounded-3xl border border-inputOutlineBorder">
-          <SettingsCategoryContainer label="Categories" addButtonLabel="Category">
+        <div className="settingsOutlineContainer">
+          <SettingsCategoryContainer label="Categories & Subcategories">
             <SettingsSkeleton size="lg" />
           </SettingsCategoryContainer>
-          <SettingsCategoryContainer label="Tags" addButtonLabel="Tag">
+          <SettingsCategoryContainer label="Tags">
             <SettingsSkeleton size="lg" />
           </SettingsCategoryContainer>
         </div>
         <SettingsField label="Default Currency">
+          <SettingsSkeleton size="sm" />
+        </SettingsField>
+        <SettingsField label="Notifications">
           <SettingsSkeleton size="sm" />
         </SettingsField>
         <SettingsField label="Export Sheet">

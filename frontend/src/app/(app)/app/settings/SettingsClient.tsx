@@ -7,8 +7,8 @@ import { signOut } from "next-auth/react";
 import { AnimatePresence } from "framer-motion";
 import { useQueryClient } from "@tanstack/react-query";
 // images
-import { FiShare2, FiTrash2, FiLogOut, FiUserMinus, FiEdit } from "react-icons/fi";
-import { FaUserMinus, FaTrashCan, FaArrowRightFromBracket, FaShareNodes } from "react-icons/fa6";
+import { FiShare2, FiTrash2, FiUserMinus } from "react-icons/fi";
+import { LuGripVertical } from "react-icons/lu";
 // components (modals)
 import PasswordModal from "./_components/modals/PasswordModal";
 import ChangeEmailModal from "./_components/modals/ChangeEmailModal";
@@ -30,7 +30,6 @@ import Button from "@/utils/components/Button";
 import Select from "@/utils/components/Select";
 import Toggle from "@/utils/components/Toggle";
 import EditIcon from "@/utils/components/EditIcon";
-
 // utils
 import { capitalizeFirst, fetchPost } from "@/utils/functions";
 import { useWorkspaceMutation, useWorkspaceQuery, useUserMutation, useItemsQuery } from "@/utils/hooks";
@@ -45,7 +44,7 @@ export default function Settings({ provider, email, userId }: { provider: string
   const { mutateAsync: mutateWorkspaceAsync, isPending: isMutatingSettings } = useWorkspaceMutation();
   const { mutateAsync: userMutateAsync, isPending: isMutatingUser } = useUserMutation();
 
-  // draft states
+  // states
   const [defaultCurrency, setDefaultCurrency] = useState("USD");
   const [clickedCategory, setClickedCategory] = useState<string | null>(null);
   const [clickedTag, setClickedTag] = useState("");
@@ -93,9 +92,6 @@ export default function Settings({ provider, email, userId }: { provider: string
         const registration = await navigator.serviceWorker.ready;
         const subscription = await registration.pushManager.getSubscription();
         const on = Notification.permission === "granted" && subscription !== null;
-        console.log("Notification.permission", Notification.permission);
-        console.log("subscription", subscription);
-        console.log("on", on);
         if (!cancelled) setNotificationsEnabled(on);
       } catch {
         if (!cancelled) setNotificationsEnabled(false);
@@ -231,7 +227,7 @@ export default function Settings({ provider, email, userId }: { provider: string
             <Select
               className="flex-1"
               variant="outline"
-              selectSize="sm"
+              selectSize="base"
               value={workspaceId}
               onChange={onChangeActiveSheet}
               disabled={isMutatingUser}
@@ -249,55 +245,51 @@ export default function Settings({ provider, email, userId }: { provider: string
         </div>
 
         {/*--- Categories & Tags ---*/}
-        <div className="my-3 px-4 xs:px-6 py-5 flex flex-col gap-6 rounded-3xl border border-inputOutlineBorder">
-          <SettingsCategoryContainer
-            label="Categories"
-            addButtonLabel="Category"
-            onClickAdd={() => {
-              setClickedCategory(null);
-              setAddCategoryModal(true);
-            }}
-          >
-            {showData ? (
-              data.workspace.categoryObjects.length > 1 ? (
-                <CategoryContainer
-                  categoryObjects={data.workspace.categoryObjects}
-                  setAddCategoryModal={setAddCategoryModal}
-                  setClickedCategory={setClickedCategory}
-                  workspaceId={data.workspace._id}
-                />
-              ) : (
-                <div className="text-center text-textSecondary italic">No categories</div>
-              )
+        <SettingsCategoryContainer
+          label="Categories & Subcategories"
+          onClickAdd={() => {
+            setClickedCategory(null);
+            setAddCategoryModal(true);
+          }}
+        >
+          {showData ? (
+            data.workspace.categoryObjects.length > 1 ? (
+              <CategoryContainer
+                categoryObjects={data.workspace.categoryObjects}
+                setAddCategoryModal={setAddCategoryModal}
+                setClickedCategory={setClickedCategory}
+                workspaceId={data.workspace._id}
+              />
             ) : (
-              <SettingsSkeleton size="lg" />
-            )}
-          </SettingsCategoryContainer>
-          <SettingsCategoryContainer
-            label="Tags"
-            addButtonLabel="Tag"
-            onClickAdd={() => {
-              setClickedTag("");
-              setAddTagModal(true);
-            }}
-          >
-            {showData ? (
-              data.workspace.tags.length > 1 ? (
-                <TagsContainer
-                  workspaceId={data.workspace._id}
-                  tags={data?.workspace.tags}
-                  key={JSON.stringify(data?.workspace.tags)}
-                  setAddTagModal={setAddTagModal}
-                  setClickedTag={setClickedTag}
-                />
-              ) : (
-                <div className="text-center text-textSecondary italic">No tags</div>
-              )
+              <div className="text-center text-textSecondary italic">No categories</div>
+            )
+          ) : (
+            <SettingsSkeleton size="lg" />
+          )}
+        </SettingsCategoryContainer>
+        <SettingsCategoryContainer
+          label="Tags"
+          onClickAdd={() => {
+            setClickedTag("");
+            setAddTagModal(true);
+          }}
+        >
+          {showData ? (
+            data.workspace.tags.length > 1 ? (
+              <TagsContainer
+                workspaceId={data.workspace._id}
+                tags={data?.workspace.tags}
+                key={JSON.stringify(data?.workspace.tags)}
+                setAddTagModal={setAddTagModal}
+                setClickedTag={setClickedTag}
+              />
             ) : (
-              <SettingsSkeleton size="lg" />
-            )}
-          </SettingsCategoryContainer>
-        </div>
+              <div className="text-center text-textSecondary italic">No tags</div>
+            )
+          ) : (
+            <SettingsSkeleton size="lg" />
+          )}
+        </SettingsCategoryContainer>
         {/*--- Default Currency ---*/}
         {showData ? (
           data.role === "owner" ? (
@@ -305,7 +297,7 @@ export default function Settings({ provider, email, userId }: { provider: string
               <Select
                 className="font-medium" // use font-medium to match buttons
                 variant="outline"
-                selectSize="sm"
+                selectSize="base"
                 value={defaultCurrency}
                 onChange={(e) => onChangeDefaultCurrency(e, data.workspace._id)}
                 disabled={isMutatingSettings}
@@ -335,7 +327,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         {/*--- Export Sheet ---*/}
         <SettingsField label="Export Sheet">
           {showData ? (
-            <Button label="Export" variant="outline" size="sm" onClick={() => setExportModal(true)} />
+            <Button label="Export" variant="outline" size="base" onClick={() => setExportModal(true)} />
           ) : (
             <SettingsSkeleton size="sm" />
           )}
@@ -344,7 +336,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         {showData ? (
           data.role === "owner" ? (
             <SettingsField label="Share This Sheet">
-              <Button label="Share" variant="outline" size="sm" icon={<FiShare2 />} onClick={() => setShareWorkspaceModal(true)} />
+              <Button label="Share" variant="outline" size="base" icon={<FiShare2 />} onClick={() => setShareWorkspaceModal(true)} />
             </SettingsField>
           ) : null
         ) : (
@@ -356,11 +348,11 @@ export default function Settings({ provider, email, userId }: { provider: string
         {showData ? (
           data.role === "owner" ? (
             <SettingsField label="Delete Sheet" className="border-none">
-              <Button label="Delete" variant="dangerOutline" size="sm" icon={<FiTrash2 />} onClick={onClickDeleteSheet} />
+              <Button label="Delete" variant="dangerOutline" size="base" icon={<FiTrash2 />} onClick={onClickDeleteSheet} />
             </SettingsField>
           ) : (
             <SettingsField label="Leave Shared Sheet" className="border-none">
-              <Button label="Leave" variant="outline" size="sm" icon={<FiUserMinus />} onClick={() => setLeaveWorkspaceModal(true)} />
+              <Button label="Leave" variant="outline" size="base" icon={<FiUserMinus />} onClick={() => setLeaveWorkspaceModal(true)} />
             </SettingsField>
           )
         ) : (
@@ -375,10 +367,10 @@ export default function Settings({ provider, email, userId }: { provider: string
         {/*--- Sign Out ---*/}
         <SettingsField label="Sign Out">
           <Button
-            className="w-24 desktop:w-20"
+            className="w-26 desktop:w-21"
             label="Sign Out"
             variant="outline"
-            size="sm"
+            size="base"
             isLoading={isSigningOut}
             onClick={() => {
               setIsSigningOut(true);
@@ -412,7 +404,7 @@ export default function Settings({ provider, email, userId }: { provider: string
         )}
         {/*--- Delete Account Button ---*/}
         <SettingsField label="Delete Account" className="border-none">
-          <Button label="Delete" variant="dangerOutline" size="sm" icon={<FiTrash2 />} onClick={() => setDeleteAccountModal(true)} />
+          <Button label="Delete" variant="dangerOutline" size="base" icon={<FiTrash2 />} onClick={() => setDeleteAccountModal(true)} />
         </SettingsField>
       </SettingsCard>
 

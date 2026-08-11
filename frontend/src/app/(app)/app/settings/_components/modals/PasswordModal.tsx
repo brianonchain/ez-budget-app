@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { ImSpinner2 } from "react-icons/im";
 // utils
 import { checkPassword, fetchPost } from "@/utils/functions";
 import InputPassword from "@/utils/components/InputPassword";
 import { FaCircleCheck } from "react-icons/fa6";
-import { signOut } from "next-auth/react";
 // components
 import Button from "@/utils/components/Button";
 import Modal from "@/utils/components/modal/Modal";
@@ -16,9 +14,7 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
   const [newPassword1, setNewPassword1] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
   const [errors, setErrors] = useState(defaultErrors);
-  const [isSamePassword, setIsSamePassword] = useState(false);
   const [status, setStatus] = useState("initial"); // "initial" | "pending" | "success"
-  const [isLoading, setIsLoading] = useState(false);
 
   function validatePassword1(fieldValue: string) {
     setErrors((prev) => ({
@@ -69,14 +65,12 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
             <div className="space-y-4">
               <InputPassword
                 // for InputPassword
-                _id="oldPassword"
+                isLogin={false}
                 label="Old Password"
                 isCurrentPassword={true}
                 name="currentPassword"
                 // isError={false} // no error for this field
                 // errorMsg="Invalid password" // no error message for this field
-                // for Input
-                inputSize="base"
                 // for <input>
                 onChange={(e) => setOldPassword(e.target.value)}
                 value={oldPassword}
@@ -84,20 +78,18 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
               <div className="group relative">
                 <InputPassword
                   // for InputPassword
-                  _id="newPassword1"
+                  isLogin={false}
                   label="New Password"
                   isCurrentPassword={false}
                   name="newPassword"
                   isError={errors.newPassword1}
                   errorMsg="Must be at least 8 characters and contain a lowercase letter, an uppercase letter, and a number"
-                  // for Input
-                  inputSize="base"
                   // for <input>
                   onBlur={(e) => validatePassword1(e.target.value)}
                   onChange={(e) => setNewPassword1(e.target.value)}
                   value={newPassword1}
                 />
-                <div className="absolute right-0 bottom-[calc(100%-16px)] pointer-events-none p-3 bg-slate-800 text-white text-base desktop:text-xs space-y-[8px] rounded-lg opacity-0 group-focus-within:opacity-100 [transition:opacity_300ms]">
+                <div className="absolute right-0 bottom-[calc(100%-16px)] pointer-events-none p-3 bg-slate-800 text-white text-base desktop:text-xs space-y-[8px] roundedButton opacity-0 group-focus-within:opacity-100 [transition:opacity_300ms]">
                   <p>&bull;&nbsp; at least 8 characters</p>
                   <p>&bull;&nbsp; have a lowercase letter</p>
                   <p>&bull;&nbsp; have an uppercase letter</p>
@@ -106,14 +98,11 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
               </div>
               <InputPassword
                 // for InputPassword
-                _id="newPassword2"
                 label="Re-enter New Password"
                 isCurrentPassword={false}
                 name="confirmNewPassword"
                 isError={errors.newPassword2}
                 errorMsg="Password does not match"
-                // for Input
-                inputSize="base"
                 // for <input>
                 onBlur={(e) => validatePassword2(e.target.value)}
                 onChange={(e) => setNewPassword2(e.target.value)}

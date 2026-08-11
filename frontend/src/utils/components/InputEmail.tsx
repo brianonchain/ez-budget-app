@@ -8,26 +8,30 @@ type InputProps = {
   isError?: boolean;
   errorMsg?: string;
   inputSize?: "xs" | "sm" | "base" | "login";
+  inputVariant?: "primary" | "danger" | "login";
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 export default function InputEmail({
   _id,
   isSignIn = false,
-  label = "Email",
+  label,
   isError = false,
   errorMsg = "Invalid email",
   inputSize = "base",
+  inputVariant = "primary",
   ...props
 }: InputProps) {
   // TODO: remove items-start on top level?
   return (
     <div className="flex flex-col items-start">
-      <label className={`inputLabel ${inputSize === "login" ? "textSm text-textSecondary !pb-1.5" : ""}`} htmlFor={_id}>
-        {label}
-      </label>
+      {label && (
+        <label className={`inputLabel ${inputSize === "login" ? "textSm !pb-1 font-medium text-textSecondary" : ""}`} htmlFor={_id}>
+          {label}
+        </label>
+      )}
       <Input
-        className={`w-full ${isError ? "!border-buttonDangerBg focus:!border-buttonDangerBg" : ""}`}
-        variant="primary"
+        className="w-full"
+        variant={inputVariant}
         inputSize={inputSize}
         // props specific for InputEmail
         id={_id}

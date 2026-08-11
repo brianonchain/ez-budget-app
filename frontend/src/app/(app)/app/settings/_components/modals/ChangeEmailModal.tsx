@@ -199,7 +199,7 @@ export default function EmailModal({ setEmailModal }: { setEmailModal: any }) {
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   onChange={(e) => handleChange(e, index)}
                   onPaste={index === 0 ? handlePaste : undefined}
-                  className="aspect-square w-[52px] desktop:w-[51px] textXl text-center border-2 rounded-lg inputPrimaryColor"
+                  className="size-[52px] desktop:size-[51px] textXl text-center border-2 roundedButton inputPrimaryColor"
                   disabled={isLoading}
                 />
               ))}

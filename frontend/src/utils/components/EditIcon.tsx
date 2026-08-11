@@ -8,7 +8,7 @@ export default function EditIcon({ onClick, ariaLabel, className = "" }: { onCli
       className={className}
       variant="outline"
       size="icon"
-      icon={<FiEdit2 className="text-sm desktop:text-xs linkGrayColor" />}
+      icon={<FiEdit2 className="textXs text-textTertiary" />}
       onClick={onClick}
       aria-label={ariaLabel}
     />

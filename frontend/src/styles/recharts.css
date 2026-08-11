@@ -1,0 +1,16 @@
+/*--- RECHARTS ---*/
+.recharts-surface {
+  outline: none;
+}
+.recharts-surface:focus {
+  outline: none;
+}
+.recharts-surface:focus-visible {
+  outline: none;
+}
+.recharts-sector:focus {
+  outline: none;
+}
+.recharts-tooltip-wrapper:focus {
+  outline: none !important;
+}

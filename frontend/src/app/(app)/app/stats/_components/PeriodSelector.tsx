@@ -59,23 +59,23 @@ export default function PeriodSelector({
         </button>
       </div>
 
-      {/* --- week / month / year + category and tag selectors --- */}
+      {/* --- FILTERS --- */}
       <div className="w-full flex flex-col lg:flex-row items-center gap-3 lg:gap-2">
-        {/* --- week / month / year (can't have overflow-hidden on container or outline will be cut off) --- */}
-        <div className="shrink-0 h-9 desktop:h-8 grid grid-cols-3 border border-inputOutlineBorder rounded-lg divide-x divide-inputOutlineBorder">
+        {/* --- period filter (can't have overflow-hidden on container or outline will be cut off) --- */}
+        <div className="shrink-0 h-9 desktop:h-8 grid grid-cols-3 border border-buttonOutlineBorder roundedSmallButton divide-x divide-buttonOutlineBorder">
           {PERIODS.map((p, index) => (
             <button
               key={p.value}
               onClick={() => setPeriod(p.value)}
-              className={`px-2 h-full textXs font-medium [transition:background-color_200ms] ${
-                period === p.value ? "bg-selected" : "desktop:hover:bg-selected"
+              className={`px-2 h-full textXs [transition:background-color_300ms] ${
+                period === p.value ? "bg-buttonOutlineBgHover" : "desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover"
               } ${index === 0 ? "rounded-l-lg" : index === 2 ? "rounded-r-lg" : ""}`}
             >
               {p.label}
             </button>
           ))}
         </div>
-        {/* --- category and tag selectors --- */}
+        {/* --- category and tag filters --- */}
         <div className="w-full max-w-88 flex items-center justify-center gap-3 lg:gap-2">
           <Select
             className="flex-1"

@@ -100,7 +100,7 @@ export default function ModalFlow({
 
           {onBack && (
             <button
-              className="absolute left-0 top-0 aspect-square w-16 desktop:w-13 hidden tablet:flex items-center justify-center rounded-br-2xl rounded-tl-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover"
+              className="absolute left-0 top-0 size-16 desktop:size-13 hidden tablet:flex items-center justify-center rounded-br-2xl rounded-tl-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover"
               onClick={onBack}
               type="button"
               disabled={disabled}
@@ -110,7 +110,7 @@ export default function ModalFlow({
           )}
 
           <button
-            className="absolute right-0 top-0 aspect-square w-16 desktop:w-13 hidden tablet:flex items-center justify-center rounded-bl-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover"
+            className="absolute right-0 top-0 size-16 desktop:size-13 hidden tablet:flex items-center justify-center rounded-bl-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover"
             onClick={onClose}
             type="button"
             disabled={disabled}

@@ -3,7 +3,6 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useItemsQuery, useWorkspaceQuery } from "@/utils/hooks";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
 // components
 import ItemsShell from "./ItemsShell";
 import AddItemButton from "./_components/AddItemButton";
@@ -15,11 +14,10 @@ import Backdrop from "@/utils/components/modal/Backdrop";
 import EnterCostModal from "./_components/EnterCostModal";
 import EnterNameModal from "./_components/EnterNameModal";
 import DetailsModal from "./_components/DetailsModal";
-// const ItemsModals = dynamic(() => import("./_components/ItemsModals"), { ssr: false });
-// const ErrorModal = dynamic(() => import("@/utils/components/ErrorModal"), { ssr: false });
 
 // constants and types
 import { SYMBOLS, DECIMALS, emptyItem } from "@/utils/constants";
+import { getLocalDateKey } from "@/utils/functions";
 import type { DraftItem, Direction } from "@/utils/types";
 
 function formatDateHeader(isoDate: string): string {
@@ -51,7 +49,7 @@ export default function Items() {
   const dateGroups = useMemo(() => {
     const groups: { date: string; items: DraftItem[] }[] = [];
     for (const item of allItems) {
-      const d = item.date.slice(0, 10);
+      const d = getLocalDateKey(item.date);
       if (groups.length === 0 || groups[groups.length - 1].date !== d) {
         groups.push({ date: d, items: [item] });
       } else {
@@ -151,13 +149,13 @@ export default function Items() {
           <>
             {dateGroups.map((group) => (
               <div key={group.date}>
-                <div className="sticky top-0 z-[1] backdrop-blur-md px-[3%] h-8 desktop:h-7 flex items-center textXs font-semibold text-textSecondary bg-surface dark:bg-card border-b border-borderFaint">
+                <div className="sticky top-0 z-[1] backdrop-blur-md px-[3%] h-8 desktop:h-7 flex items-center textXs font-semibold text-textSecondary bg-buttonOutlineBgHoverSubtle border-b border-borderFaint">
                   {formatDateHeader(group.items[0].date)}
                 </div>
                 {group.items.map((item, i) => (
                   <button
                     key={item._id ?? `${group.date}-${i}`}
-                    className="innerOutline text-left px-[3%] w-full h-14 desktop:h-13 flex items-center gap-2 border-b border-borderFaint desktop:hover:bg-surface dark:desktop:hover:bg-card"
+                    className="innerOutline text-left px-[3%] w-full h-14 desktop:h-13 flex items-center gap-2 border-b border-borderFaint desktop:hover:bg-buttonOutlineBgHoverSubtle"
                     onClick={() => {
                       setDraftItem(item);
                       setIsMultiPageModal(false);
@@ -181,7 +179,7 @@ export default function Items() {
               {isFetchingNextPage && <Spinner />}
             </div>
             {/* --- performance metrics --- */}
-            <div className="fixed bottom-50 right-3 z-50 rounded-lg bg-black/70 px-3 py-2 text-xs text-white backdrop-blur-sm space-y-1">
+            <div className="fixed bottom-50 right-3 z-50 roundedButton bg-black/70 px-3 py-2 text-xs text-white backdrop-blur-sm space-y-1">
               <div>Items: {itemsTime?.toFixed(0) ?? "NA"} ms</div>
               <div>Settings: {settingsTime?.toFixed(0) ?? "NA"} ms</div>
             </div>

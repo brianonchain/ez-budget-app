@@ -18,7 +18,7 @@ export default function Toggle({ checked, className = "", ...props }: ToggleProp
       {...props}
     >
       <div
-        className={`absolute left-[3px] aspect-square w-[25px] desktop:w-[20px] ${
+        className={`absolute left-[3px] size-[25px] desktop:size-[20px] ${
           checked ? "translate-x-[21px] desktop:translate-x-[18px]" : ""
         } rounded-full bg-white transition-transform duration-200 ease-out will-change-transform pointer-events-none`}
         aria-hidden="true"

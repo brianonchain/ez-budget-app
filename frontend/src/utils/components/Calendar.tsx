@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DayPicker, getDefaultClassNames } from "react-day-picker";
+import { DayPicker } from "react-day-picker";
 import { createPortal } from "react-dom";
 
 export default function Calendar({
@@ -16,7 +16,6 @@ export default function Calendar({
   position?: "right" | "left" | "center";
   onClose: () => void;
 }) {
-  const defaultClassNames = getDefaultClassNames();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -39,29 +38,12 @@ export default function Calendar({
           <div className="absolute top-0 left-0 w-dvw h-dvh z-[105]" onClick={onClose} aria-hidden="true" data-allow-click="true" />,
           document.body,
         )}
-      <div className="fixed inset-0 z-10 bg-black/30" onClick={onClose} aria-hidden="true" />
+      <div className="fixed inset-0 z-10 bg-black/50" onClick={onClose} aria-hidden="true" />
       <div
-        className={`z-20 absolute p-2 rounded-xl bg-inputPrimaryBg border border-inputPrimaryBorderFocus ${positions[position]} ${className}`}
+        className={`z-20 absolute p-2 rounded-xl bg-inputPrimaryBg border border-inputPrimaryBorderHover ${positions[position]} ${className}`}
       >
         <DayPicker
           className="myCalendar"
-          classNames={{
-            // month and nav buttons
-            month_caption: `${defaultClassNames.month_caption}`,
-            caption_label: `${defaultClassNames.caption_label} textLg font-semibold`,
-            nav: `${defaultClassNames.nav}`,
-            button_previous: `${defaultClassNames.button_previous}`,
-            button_next: `${defaultClassNames.button_next}`,
-            chevron: `${defaultClassNames.chevron} w-7 h-7 desktop:w-5 desktop:h-5 !fill-textPrimary desktop:hover:!fill-textSecondary`,
-            // day of week label
-            weekday: `${defaultClassNames.weekday} !textBase !font-medium`,
-            // days
-            day: `${defaultClassNames.day} rounded-lg hover:!bg-buttonOutlineBgHover [.rdp-selected]:hover:!bg-buttonPrimaryBg [transition:background-color_0.3s_ease]`,
-            day_button: `${defaultClassNames.day_button} !textBase select-none`,
-            // selected
-            selected: `${defaultClassNames.selected} !font-semibold bg-buttonPrimaryBg !text-buttonPrimaryText`,
-            // today: `${defaultClassNames.today} [&:not(.rdp-selected)]:bg-transparent dark:[&:not(.rdp-selected)]:bg-transparent`,
-          }}
           navLayout="around"
           mode="single"
           required // so when user clicks the selected date, onSelect won't return undefined

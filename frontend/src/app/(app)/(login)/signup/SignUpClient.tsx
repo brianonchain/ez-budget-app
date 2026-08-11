@@ -89,20 +89,17 @@ export default function SignUpClient() {
         <div className="group relative">
           <InputPassword
             // for InputPassword
-            _id="password1"
             label="Password"
             isCurrentPassword={false}
             name="password"
             isError={errors.password1}
             errorMsg="Must be &ge; 8 characters and contain a lowercase letter, an uppercase letter, and a number"
-            // for Input
-            inputSize="login"
             // for <input>
             onBlur={(e) => validatePassword1(e.target.value)}
             onChange={(e) => setPassword1(e.target.value)}
             value={password1}
           />
-          <div className="absolute right-0 bottom-[calc(100%-1rem)] pointer-events-none p-3 bg-slate-800 textXs space-y-2 rounded-lg opacity-0 group-focus-within:opacity-100 [transition:opacity_300ms]">
+          <div className="absolute right-0 bottom-[calc(100%-1rem)] pointer-events-none p-3 bg-slate-800 textXs space-y-2 roundedButton opacity-0 group-focus-within:opacity-100 [transition:opacity_300ms]">
             <p>&bull;&nbsp; at least 8 characters</p>
             <p>&bull;&nbsp; have a lowercase letter</p>
             <p>&bull;&nbsp; have an uppercase letter</p>
@@ -111,14 +108,11 @@ export default function SignUpClient() {
         </div>
         <InputPassword
           // for InputPassword
-          _id="password2"
           label="Re-enter Password"
           isCurrentPassword={false}
           name="confirmPassword"
           isError={errors.password2}
           errorMsg="Password does not match"
-          // for Input
-          inputSize="login"
           // for <input>
           onBlur={(e) => validatePassword2(e.target.value)}
           onChange={(e) => setPassword2(e.target.value)}

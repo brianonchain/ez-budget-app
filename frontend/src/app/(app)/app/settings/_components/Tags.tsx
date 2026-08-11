@@ -2,7 +2,7 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { SlMenu } from "react-icons/sl";
+import { LuGripVertical } from "react-icons/lu";
 
 export default function Tags({
   id,
@@ -39,7 +39,7 @@ export default function Tags({
       <div>
         <p className="font-medium leading-tight line-clamp-1">{tag}</p>
       </div>
-      <SlMenu className="text-lg desktop:text-sm" />
+      <LuGripVertical className="text-lg desktop:text-sm" />
     </button>
   );
 }

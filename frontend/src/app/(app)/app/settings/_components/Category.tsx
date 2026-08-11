@@ -2,7 +2,7 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { SlMenu } from "react-icons/sl";
+import { LuGripVertical } from "react-icons/lu";
 
 export default function Category({
   id,
@@ -42,7 +42,7 @@ export default function Category({
         <p className="font-medium leading-tight truncate">{category}</p>
         <p className="italic leading-tight truncate">{subcategories.slice(1).join(", ")}</p>
       </div>
-      <SlMenu className="flex-none text-lg desktop:text-sm" />
+      <LuGripVertical className="flex-none text-lg desktop:text-sm" />
     </button>
   );
 }

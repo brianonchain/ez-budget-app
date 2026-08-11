@@ -1,10 +1,6 @@
-// public/sw.js
-
 const CACHE_VERSION = "v1";
-
 const PRECACHE = `ez-budget-precache-${CACHE_VERSION}`;
 const RUNTIME = `ez-budget-runtime-${CACHE_VERSION}`;
-
 const PRECACHE_URLS = [
   "/offline",
   "/manifest.webmanifest", // or "/manifest.json" depending on your generated URL
@@ -62,9 +58,9 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Network-first for pages/navigation
+  // Network-only for pages; fall back to precached /offline when offline
   if (request.mode === "navigate") {
-    event.respondWith(networkFirst(request));
+    event.respondWith(navigateWithOfflineFallback(request));
     return;
   }
 });
@@ -123,22 +119,10 @@ async function cacheFirst(request) {
   return response;
 }
 
-async function networkFirst(request) {
-  const cache = await caches.open(RUNTIME);
-
+async function navigateWithOfflineFallback(request) {
   try {
-    const response = await fetch(request);
-
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-
-    return response;
+    return await fetch(request);
   } catch {
-    const cached = await cache.match(request);
-
-    if (cached) return cached;
-
     return caches.match("/offline");
   }
 }

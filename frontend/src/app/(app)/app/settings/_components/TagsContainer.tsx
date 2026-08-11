@@ -61,7 +61,7 @@ export default function TagsContainer({
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        <div className="w-full flex flex-col textXs border-y border-dashed border-borderFaint">
+        <div className="w-full flex flex-col textXs">
           {items.map((item) => (
             <Tags key={item.id} id={item.id} tag={item.tag} setAddTagModal={setAddTagModal} setClickedTag={setClickedTag} />
           ))}

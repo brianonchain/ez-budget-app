@@ -2,9 +2,9 @@
 export default function ItemsShell({ children, footer }: { children: React.ReactNode; footer: React.ReactNode }) {
   return (
     <div className="w-full pageContentMaxWidth tablet:py-6">
-      <div className="w-full tablet:rounded-2xl overflow-hidden shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none">
+      <div className="w-full tablet:roundedModal overflow-hidden border-none border-blue-100/16 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none">
         {/*--- header, scrollbar-stable also applied ---*/}
-        <div className="px-[3%] h-[var(--listHeaderHeight)] bg-bgPrimary tablet:bg-card flex items-center font-semibold text-textSecondary border-b border-borderFaint tablet:overflow-y-auto thinScroll scrollbar-stable">
+        <div className="px-[3%] h-[var(--listHeaderHeight)] bg-bgPrimary tablet:bg-card text-buttonPrimaryBg dark:text-textPrimary flex items-center font-semibold border-b border-borderFaint tablet:overflow-y-auto thinScroll scrollbar-stable">
           <p className="w-[50%]">Item</p>
           <p className="w-[25%]">Cost</p>
           <p className="w-[25%] text-end">Category</p>

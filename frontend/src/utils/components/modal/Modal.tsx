@@ -84,7 +84,7 @@ export default function Modal({
       >
         {/*--- overflow-hidden needed to clip glow ---*/}
         <motion.div
-          className={`app textBase z-[110] fixed inset-0 tablet:inset-auto tablet:left-1/2 tablet:top-1/2 tablet:-translate-x-1/2 tablet:-translate-y-1/2 tablet:pb-3 tablet:w-[90%] tablet:max-w-144 desktop:max-w-110 ${maxWidth} tablet:max-h-[90dvh] flex flex-col tablet:rounded-2xl overflow-hidden modalColor`}
+          className={`app textBase z-[110] fixed inset-0 tablet:inset-auto tablet:left-1/2 tablet:top-1/2 tablet:-translate-x-1/2 tablet:-translate-y-1/2 tablet:pb-3 tablet:w-[90%] tablet:max-w-140 desktop:max-w-110 ${maxWidth} tablet:max-h-[90dvh] flex flex-col tablet:roundedModal overflow-hidden modalColor`}
           custom={direction}
           variants={isTabletOrDesktop ? tabletOrDesktopVariants : mobileVariants}
           initial="initial"
@@ -101,7 +101,7 @@ export default function Modal({
           <ModalGlow />
           <ModalHeader id={titleId} title={title} onClose={onClose} disabled={disabled} onBack={onBack} />
           {/*--- content, note pb-3 in main div ---*/}
-          <div className="flex-1 min-h-0 overflow-y-auto pt-6 tablet:pt-0 pb-12 tablet:pb-9 desktop:pb-7 px-4 tablet:px-12 desktop:px-10 w-full tablet:thinScroll">
+          <div className="flex-1 min-h-0 overflow-y-auto pt-6 tablet:pt-2 pb-12 tablet:pb-9 desktop:pb-7 px-4 tablet:px-12 desktop:px-10 w-full tablet:thinScroll">
             {/*--- max-w here mainly defines mobile/tablet content width  ---*/}
             <div className={`mx-auto w-full max-w-100 ${contentMaxWidth} tablet:max-w-none flex flex-col`}>{children}</div>
           </div>
