@@ -18,7 +18,7 @@ import { publicEnv } from "@/utils/publicEnv";
 import { getUserInfo } from "@/utils/serverFunctions";
 import { isObjectIdString } from "@/utils/typeGuards";
 
-export async function isOwner(userId: Types.ObjectId, workspaceId: Types.ObjectId): Promise<boolean> {
+async function isOwner(userId: Types.ObjectId, workspaceId: Types.ObjectId): Promise<boolean> {
   const exists = await MembershipModel.exists({ userId, workspaceId, role: "owner" }); // returns { _id: ... } | null so need !! to convert to boolean
   return !!exists;
 }
