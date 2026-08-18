@@ -48,7 +48,7 @@ export default function Button({
   return (
     <button
       {...props}
-      className={`flex items-center justify-center gap-1 disabled:cursor-default select-none ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`flex items-center justify-center gap-1 select-none ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={isLoading || disabled}
       type={type}
     >

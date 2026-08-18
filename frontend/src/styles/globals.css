@@ -347,8 +347,9 @@ button:not(:disabled),
     --menuWidth: 0px;
   }
   @media (orientation: landscape) {
+    --menuContentWidth: 120px;
     --menuHeight: 0px;
-    --menuWidth: 120px;
+    --menuWidth: calc(var(--menuContentWidth) + env(safe-area-inset-left));
   }
   /* --- tablet --- */
   @variant tablet {
@@ -361,8 +362,9 @@ button:not(:disabled),
       --menuWidth: 0px;
     }
     @media (orientation: landscape) {
+      --menuContentWidth: 160px;
       --menuHeight: 0px;
-      --menuWidth: 160px;
+      --menuWidth: calc(var(--menuContentWidth) + env(safe-area-inset-left));
     }
   }
   /* --- desktop --- */
