@@ -34,7 +34,7 @@
 
 .myCalendar .rdp-button_next:not([aria-disabled="true"]),
 .myCalendar .rdp-button_previous:not([aria-disabled="true"]) {
-  @apply rounded-lg desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms];
+  @apply rounded-lg hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms];
 }
 
 .myCalendar .rdp-chevron {
@@ -46,7 +46,7 @@
 }
 
 .myCalendar .rdp-day_button {
-  @apply textBase border-none select-none desktop:hover:bg-buttonOutlineBgHover [transition:background-color_300ms];
+  @apply textBase border-none select-none hover:bg-buttonOutlineBgHover [transition:background-color_300ms];
 }
 
 .myCalendar .rdp-selected {

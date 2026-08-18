@@ -155,7 +155,7 @@ export default function Items() {
                 {group.items.map((item, i) => (
                   <button
                     key={item._id ?? `${group.date}-${i}`}
-                    className="innerOutline text-left px-[3%] w-full h-14 desktop:h-13 flex items-center gap-2 border-b border-borderFaint desktop:hover:bg-buttonOutlineBgHoverSubtle"
+                    className="innerOutline text-left px-[3%] w-full h-14 desktop:h-13 flex items-center gap-2 border-b border-borderFaint hover:bg-buttonOutlineBgHoverSubtle"
                     onClick={() => {
                       setDraftItem(item);
                       setIsMultiPageModal(false);

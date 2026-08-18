@@ -262,7 +262,7 @@ button:not(:disabled),
   @apply shadow-[0px_2px_8px_0px_rgba(0,0,0,0.06)] dark:shadow-none;
 }
 @utility cardShadowWithHover {
-  @apply shadow-[0px_2px_10px_0px_rgba(20,38,52,0.05)] desktop:hover:shadow-[0px_6px_16px_0px_rgba(20,38,52,0.1)] dark:shadow-none;
+  @apply shadow-[0px_2px_10px_0px_rgba(20,38,52,0.05)] hover:shadow-[0px_6px_16px_0px_rgba(20,38,52,0.1)] dark:shadow-none;
 }
 
 /*--- buttons ---*/
@@ -272,16 +272,16 @@ button:not(:disabled),
 }
 
 @utility buttonPrimaryColor {
-  @apply text-buttonPrimaryText bg-buttonPrimaryBg desktop:hover:bg-buttonPrimaryBgHover active:bg-buttonPrimaryBgHover [transition:background-color_300ms];
+  @apply text-buttonPrimaryText bg-buttonPrimaryBg hover:bg-buttonPrimaryBgHover active:bg-buttonPrimaryBgHover [transition:background-color_300ms];
 }
 .buttonPrimaryColorGlass {
-  @apply text-buttonPrimaryText bg-buttonPrimaryGlassBg desktop:hover:bg-buttonPrimaryGlassBgHover active:bg-buttonPrimaryGlassBgHover backdrop-blur-sm active:scale-107 dark:border border-buttonPrimaryGlassBorder [transition:background-color_300ms,scale_200ms] dark:buttonWhiteGradient;
+  @apply text-buttonPrimaryText bg-buttonPrimaryGlassBg hover:bg-buttonPrimaryGlassBgHover active:bg-buttonPrimaryGlassBgHover backdrop-blur-sm active:scale-107 dark:border border-buttonPrimaryGlassBorder [transition:background-color_300ms,scale_200ms] dark:buttonWhiteGradient;
 }
 .buttonDangerColor {
-  @apply text-buttonPrimaryText bg-buttonDangerBg desktop:hover:bg-buttonDangerBgHover active:bg-buttonDangerBgHover [transition:background-color_300ms];
+  @apply text-buttonPrimaryText bg-buttonDangerBg hover:bg-buttonDangerBgHover active:bg-buttonDangerBgHover [transition:background-color_300ms];
 }
 .buttonDangerColorGlass {
-  @apply text-buttonPrimaryText bg-buttonDangerGlassBg desktop:hover:bg-buttonDangerGlassBgHover active:bg-buttonDangerGlassBgHover backdrop-blur-sm active:scale-107 dark:border border-buttonDangerGlassBorder [transition:background-color_300ms,scale_200ms] dark:buttonWhiteGradient;
+  @apply text-buttonPrimaryText bg-buttonDangerGlassBg hover:bg-buttonDangerGlassBgHover active:bg-buttonDangerGlassBgHover backdrop-blur-sm active:scale-107 dark:border border-buttonDangerGlassBorder [transition:background-color_300ms,scale_200ms] dark:buttonWhiteGradient;
 }
 .keypadColor {
   @apply bg-[#D6DEE9] dark:bg-buttonPrimaryBg/40 active:bg-slate-300 dark:active:bg-buttonPrimaryBg/80 transition-all duration-150;
@@ -292,7 +292,7 @@ button:not(:disabled),
   @apply w-full h-16 desktop:h-15 px-8 tablet:px-9 flex items-center gap-4 select-none font-medium;
 }
 .loginButtonColor {
-  @apply bg-loginButtonBg desktop:hover:bg-loginButtonBgHover border border-loginButtonBorder desktop:hover:border-loginButtonBorderHover cardShadowWithHover transition-all duration-300;
+  @apply bg-loginButtonBg hover:bg-loginButtonBgHover border border-loginButtonBorder hover:border-loginButtonBorderHover cardShadowWithHover transition-all duration-300;
 }
 .loginButtonRoundness {
   @apply rounded-[33px] desktop:rounded-[1.9rem];
@@ -306,16 +306,16 @@ button:not(:disabled),
   @apply ring-2 ring-transparent focus:ring-inputDangerRing;
 }
 .inputPrimaryColor {
-  @apply bg-inputPrimaryBg placeholder:text-inputPrimaryPlaceholder border border-inputPrimaryBorder desktop:hover:border-inputPrimaryBorderHover focus:border-inputPrimaryBorderHover inputPrimaryRing transition-all duration-300;
+  @apply bg-inputPrimaryBg placeholder:text-inputPrimaryPlaceholder border border-inputPrimaryBorder hover:border-inputPrimaryBorderHover focus:border-inputPrimaryBorderHover inputPrimaryRing transition-all duration-300;
 }
 .inputLoginColor {
-  @apply bg-inputPrimaryBg placeholder:text-inputPrimaryPlaceholder border border-inputLoginBorder desktop:hover:border-inputPrimaryBorderHover focus:border-inputPrimaryBorderHover inputPrimaryRing transition-all duration-300;
+  @apply bg-inputPrimaryBg placeholder:text-inputPrimaryPlaceholder border border-inputLoginBorder hover:border-inputPrimaryBorderHover focus:border-inputPrimaryBorderHover inputPrimaryRing transition-all duration-300;
 }
 .inputDangerColor {
-  @apply bg-inputPrimaryBg placeholder:text-inputPrimaryPlaceholder border border-textDanger desktop:hover:border-textDanger focus:border-textDanger inputDangerRing transition-all duration-300;
+  @apply bg-inputPrimaryBg placeholder:text-inputPrimaryPlaceholder border border-textDanger hover:border-textDanger focus:border-textDanger inputDangerRing transition-all duration-300;
 }
 .selectOutlineColor {
-  @apply border border-buttonOutlineBorder desktop:hover:border-inputPrimaryBorderHover focus:border-inputPrimaryBorderHover inputPrimaryRing transition-all duration-300;
+  @apply border border-buttonOutlineBorder hover:border-inputPrimaryBorderHover focus:border-inputPrimaryBorderHover inputPrimaryRing transition-all duration-300;
 }
 
 /*--- labels ---*/
@@ -389,7 +389,7 @@ button:not(:disabled),
 
 /*--- app: settings page ---*/
 .settingsDraggableElement {
-  @apply p-1 h-13 desktop:h-10 flex items-center justify-between border-t border-b border-dashed border-borderFaint desktop:hover:text-textSecondary;
+  @apply px-3.5 h-13 desktop:h-11 flex items-center justify-between hover:bg-buttonOutlineBgHover;
 }
 
 .settingsOutlineContainer {
@@ -407,13 +407,13 @@ button:not(:disabled),
 
 /*--- links ---*/
 @utility linkRedColor {
-  @apply text-textDanger desktop:hover:text-textDangerHover active:text-textDangerHover;
+  @apply text-textDanger hover:text-textDangerHover active:text-textDangerHover;
 }
 @utility linkGrayColor {
-  @apply text-textTertiary desktop:hover:text-textSecondary active:text-textSecondary;
+  @apply text-textTertiary hover:text-textSecondary active:text-textSecondary;
 }
 @utility linkColor {
-  @apply text-link desktop:hover:text-linkHover active:text-linkHover;
+  @apply text-link hover:text-linkHover active:text-linkHover;
 }
 
 /*--- background glows ---*/

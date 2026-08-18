@@ -125,7 +125,7 @@ export default function Ani() {
                 {data.map((item: DraftItem, index: number) => (
                   <div
                     key={index}
-                    className="px-[3%] w-full h-[calc((844px-80px-80px-50px)/10)] grid grid-cols-[50%_20%_30%] items-center border-b-[1.5px] border-borderFaint cursor-pointer desktop:hover:bg-blue-500/10"
+                    className="px-[3%] w-full h-[calc((844px-80px-80px-50px)/10)] grid grid-cols-[50%_20%_30%] items-center border-b-[1.5px] border-borderFaint cursor-pointer hover:bg-blue-500/10"
                   >
                     <div className="">{item.description}</div>
                     <div className="">{item.cost.toFixed(2)}</div>
@@ -214,7 +214,7 @@ export default function Ani() {
             <div className="w-[360px] grid grid-cols-3 gap-[4px]">
               {/*--- Category ---*/}
               <div
-                className={`animate-labelTypeprimaryBg text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkbuttonPrimaryBg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkbuttonPrimaryBg desktop:hover:text-white`}
+                className={`animate-labelTypeprimaryBg text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkbuttonPrimaryBg rounded-lg relative desktop:cursor-pointer hover:bg-darkbuttonPrimaryBg hover:text-white`}
               >
                 <p className="text-base font-medium tracking-tighter text-center">Category</p>
                 <div className="w-full  flex justify-center relative">
@@ -227,7 +227,7 @@ export default function Ani() {
               </div>
               {/*--- Subcategory ---*/}
               <div
-                className={`animate-labelTypesurface text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkbuttonPrimaryBg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkbuttonPrimaryBg desktop:hover:text-white`}
+                className={`animate-labelTypesurface text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkbuttonPrimaryBg rounded-lg relative desktop:cursor-pointer hover:bg-darkbuttonPrimaryBg hover:text-white`}
               >
                 <p className="text-base font-medium tracking-tighter text-center">Subcategory</p>
                 <div className="w-full text-sm text-center tracking-tighter flex justify-center relative">
@@ -240,7 +240,7 @@ export default function Ani() {
               </div>
               {/*--- Tags ---*/}
               <div
-                className={`animate-labelTypeBg3 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkbuttonPrimaryBg rounded-lg relative desktop:cursor-pointer desktop:hover:bg-darkbuttonPrimaryBg desktop:hover:text-white`}
+                className={`animate-labelTypeBg3 text-white p-[8px] h-[64px] flex flex-col items-center border-2 border-darkbuttonPrimaryBg rounded-lg relative desktop:cursor-pointer hover:bg-darkbuttonPrimaryBg hover:text-white`}
               >
                 <p className="text-base font-medium tracking-tighter text-center">Tags</p>
                 <div className="w-full text-sm text-center tracking-tighter flex justify-center relative">none</div>
@@ -329,7 +329,7 @@ export default function Ani() {
                 ].map((item: DraftItem, index: number) => (
                   <div
                     key={index}
-                    className="px-[3%] w-full h-[calc((844px-80px-80px-50px)/10)] grid grid-cols-[50%_20%_30%] items-center border-b-[1.5px] border-borderFaint cursor-pointer desktop:hover:bg-blue-500/10"
+                    className="px-[3%] w-full h-[calc((844px-80px-80px-50px)/10)] grid grid-cols-[50%_20%_30%] items-center border-b-[1.5px] border-borderFaint cursor-pointer hover:bg-blue-500/10"
                   >
                     <div className="">{item.description}</div>
                     <div className="">{item.cost.toFixed(2)}</div>
@@ -358,7 +358,7 @@ export default function Ani() {
               <div
                 className={`${
                   i.route === menu ? "text-slate-300" : "text-slate-600"
-                } desktop:hover:text-slate-300 w-[90px] flex flex-col items-center justify-center gap-[0px] cursor-pointer`}
+                } hover:text-slate-300 w-[90px] flex flex-col items-center justify-center gap-[0px] cursor-pointer`}
                 key={i.text}
               >
                 {i.icon}

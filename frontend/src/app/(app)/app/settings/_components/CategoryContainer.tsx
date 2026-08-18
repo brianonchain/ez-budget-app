@@ -1,9 +1,10 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
+// components
 import Category from "./Category";
+// utils
 import { CategoryObject } from "@/db/WorkspaceModel";
 import { useWorkspaceMutation } from "@/utils/hooks";
 
@@ -63,7 +64,7 @@ export default function CategoryContainer({
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        <div className="w-full flex flex-col textXs">
+        <div className="w-full flex flex-col textXs divide-y divide-dashed divide-borderFaint">
           {items.map((item, index) => (
             <Category
               key={item.id}

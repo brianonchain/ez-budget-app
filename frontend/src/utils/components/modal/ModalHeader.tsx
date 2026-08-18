@@ -41,7 +41,7 @@ export default function ModalHeader({
       {/*--- tablet/desktop nav buttons (back button only shown for multipage modals) ---*/}
       {onBack && (
         <button
-          className={`absolute left-0 top-0 size-16 desktop:size-13 hidden tablet:flex items-center justify-center rounded-br-2xl rounded-tl-2xl desktop:hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover`}
+          className={`absolute left-0 top-0 size-16 desktop:size-13 hidden tablet:flex items-center justify-center rounded-br-2xl rounded-tl-2xl hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover`}
           onClick={onBack}
           type="button"
           disabled={disabled}
@@ -50,7 +50,7 @@ export default function ModalHeader({
         </button>
       )}
       <button
-        className={`absolute right-1.5 top-1.5 size-15 desktop:size-11 hidden tablet:flex items-center justify-center rounded-full desktop:hover:bg-closeButtonBgHover active:bg-closeButtonBgHover transition-all duration-300`}
+        className={`absolute right-1.5 top-1.5 size-15 desktop:size-11 hidden tablet:flex items-center justify-center rounded-full hover:bg-closeButtonBgHover active:bg-closeButtonBgHover transition-all duration-300`}
         onClick={onClose}
         type="button"
         disabled={disabled}

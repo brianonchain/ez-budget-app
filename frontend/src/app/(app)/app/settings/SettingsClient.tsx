@@ -221,7 +221,7 @@ export default function Settings({ provider, email, userId }: { provider: string
       {/*--- BUDGET SHEET SETTINGS ---*/}
       <SettingsCard title="Active Sheet Settings">
         {/*--- Select Active Sheet ---*/}
-        <div className="flex-none w-full py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+        <div className="flex-none w-full py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 border-b border-borderFaint">
           <div className="settingsLabel">Active Sheet</div>
           {data ? (
             <Select

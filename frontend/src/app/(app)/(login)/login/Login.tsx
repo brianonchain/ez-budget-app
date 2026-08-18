@@ -120,11 +120,7 @@ export default function Login() {
           }}
         />
         {/*--- Credentials ---*/}
-        <div
-          className={`w-full loginButtonRoundness loginButtonColor ${
-            expandCredentials ? "desktop:hover:!bg-loginButtonBg" : "cursor-pointer"
-          }`}
-        >
+        <div className={`w-full loginButtonRoundness loginButtonColor ${expandCredentials ? "hover:!bg-loginButtonBg" : "cursor-pointer"}`}>
           <button
             className="relative loginButtonBase loginButtonRoundness"
             onClick={() => setExpandCredentials(!expandCredentials)}
