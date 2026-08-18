@@ -69,7 +69,7 @@ export default function Stats() {
   useEffect(() => {
     if (!statsData) return;
     if (selectedCurrency && currencies.includes(selectedCurrency)) return;
-    setSelectedCurrency(currencies.includes(statsData.defaultCurrency) ? statsData.defaultCurrency : currencies[0] ?? null);
+    setSelectedCurrency(currencies.includes(statsData.defaultCurrency) ? statsData.defaultCurrency : (currencies[0] ?? null));
   }, [statsData, currencies]);
 
   const activeCurrency = selectedCurrency ?? statsData?.defaultCurrency ?? "USD";

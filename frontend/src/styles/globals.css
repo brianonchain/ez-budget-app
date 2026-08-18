@@ -336,7 +336,7 @@ button:not(:disabled),
 
 /*--- APP ---*/
 
-:root {
+.app {
   /* --- mobile --- */
   --listPadding: 0px;
   --listHeaderHeight: 3rem;
