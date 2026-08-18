@@ -26,7 +26,7 @@ export default function ModalHeader({
         type="button"
         disabled={disabled}
       >
-        <FiChevronLeft className="text-[2rem]" />
+        <FiChevronLeft className="size-[2rem]" />
       </button>
       {onBack && (
         <button
@@ -35,7 +35,7 @@ export default function ModalHeader({
           type="button"
           disabled={disabled}
         >
-          <FiX className="text-[2rem]" />
+          <FiX className="size-[2rem]" />
         </button>
       )}
       {/*--- tablet/desktop nav buttons (back button only shown for multipage modals) ---*/}
@@ -46,7 +46,7 @@ export default function ModalHeader({
           type="button"
           disabled={disabled}
         >
-          <FiChevronLeft className="text-[2rem] desktop:text-[1.7rem]" />
+          <FiChevronLeft className="size-[2rem] desktop:size-[1.7rem]" />
         </button>
       )}
       <button
@@ -55,7 +55,7 @@ export default function ModalHeader({
         type="button"
         disabled={disabled}
       >
-        <FiX className="tablet:text-[2rem] desktop:text-[1.6rem]" />
+        <FiX className="tablet:size-[2rem] desktop:size-[1.6rem]" />
       </button>
     </>
   );

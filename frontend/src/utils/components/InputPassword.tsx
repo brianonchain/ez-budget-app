@@ -63,9 +63,9 @@ export default function InputPassword({
           aria-label={show ? "Hide password" : "Show password"}
         >
           {show ? (
-            <PiEyeLight className="text-[2rem] desktop:text-[1.5rem]" />
+            <PiEyeLight className="size-[2rem] desktop:size-[1.5rem]" />
           ) : (
-            <PiEyeSlashLight className="text-[2rem] desktop:text-[1.5rem]" />
+            <PiEyeSlashLight className="size-[2rem] desktop:size-[1.5rem]" />
           )}
         </button>
       </div>

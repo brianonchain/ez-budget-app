@@ -121,7 +121,7 @@ export default function PasswordModal({ setPasswordModal, email }: { setPassword
           </form>
         ) : (
           <div className="w-full h-[300px] desktop:h-[240px] flex flex-col items-center justify-center gap-[32px] font-medium text-center">
-            <FaCircleCheck className="text-[40px] desktop:text-[40px] text-green-500" />
+            <FaCircleCheck className="size-[40px] desktop:size-[40px] text-green-500" />
             <p>Password successfully changed!</p>
             <p>You may close this window.</p>
           </div>

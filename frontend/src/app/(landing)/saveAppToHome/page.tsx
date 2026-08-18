@@ -53,7 +53,7 @@ export default function SaveAppToHome() {
           <p>
             In the {os === "ios" ? "bottom menu bar" : "top right corner"} of your browser, tap the share icon{" "}
             <span className="whitespace-nowrap">
-              (<BsBoxArrowUp className="inline-block mx-[2px] text-[20px]" />)
+              (<BsBoxArrowUp className="inline-block mx-[2px] size-[20px]" />)
             </span>{" "}
             and choose <span className="font-bold">Add to Home Screen</span>. Then, from your home screen, open the saved website.
           </p>

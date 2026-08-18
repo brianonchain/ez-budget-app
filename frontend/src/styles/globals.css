@@ -4,19 +4,22 @@
 @import "./recharts.css";
 @import "./calendar.css";
 
+/*--- custom variants ---*/
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant tablet {
-  @media (orientation: portrait) and (min-width: 600px), (orientation: landscape) and (min-width: 980px) {
+  @media (orientation: landscape) and (min-height: 600px), (orientation: portrait) and (min-width: 600px) {
     @slot;
   }
 }
 @custom-variant desktop {
-  @media (hover: hover) and (pointer: fine) and (orientation: landscape) and (min-width: 980px),
-    (hover: hover) and (pointer: fine) and (orientation: portrait) and (min-width: 600px) {
-    @slot;
+  @media (hover: hover) and (pointer: fine) {
+    @media (orientation: landscape) and (min-height: 600px), (orientation: portrait) and (min-width: 600px) {
+      @slot;
+    }
   }
 }
 
+/*--- theme ---*/
 @theme {
   /* bg main */
   --color-bgPrimary: #f7f3f9;
@@ -74,10 +77,9 @@
   --breakpoint-xl: 1250px;
   --breakpoint-2xl: 1440px;
 }
-
 .dark {
   /* bg main */
-  --color-bgPrimary: #0a0826; /* was 0b0f37*/
+  --color-bgPrimary: #0a051f; /* was 0b0f37*/
   --color-card: oklch(70.7% 0.165 254.624 / 7%); /* blue-400/7 */
   --color-modal: #141344; /* blue-400/14 overlaid on bgPrimary */
   /* borders */
@@ -126,27 +128,22 @@
 }
 
 /*--- important base styles ---*/
-button {
+button:not(:disabled),
+[role="button"]:not(:disabled) {
   cursor: pointer;
 }
-@utility scrollbar-stable {
-  scrollbar-gutter: stable;
-}
-:focus-visible {
+/* adds outline for keyboard users (input, select, textarea uses ring) */
+:focus-visible:not(input, select, textarea) {
   outline: 2px solid var(--color-buttonRing);
   outline-offset: 2px;
 }
-/* Inputs/selects use ring/border instead of global outline */
-:where(input, select, textarea):focus-visible {
-  outline: none;
-}
-/* --- add this to buttons within scroll containers where outline overflows and becomes clipped (e.g., item list or details list) ---*/
+/* add this to <button> elements where outline overflows and becomes clipped (e.g., clickable items in a list, segmented control) */
 .innerOutline:focus-visible {
   outline-offset: -2px;
 }
 
-/*--- TEXT SIZES (must reapply text size after using "landing", "app", and "login" classes)---*/
-/* LANDING mobile, tablet, & desktop */
+/*--- text sizes (must reapply text size (e.g., textBase, textSm) after using "app", and "login" classes) ---*/
+/* for landing page */
 :root {
   --font-xs: 0.875rem; /* 14px */
   --font-sm: 1rem; /* 16px */
@@ -165,9 +162,10 @@ button {
   --radius-largeButton: 0.75rem;
   --radius-modal: 1rem;
 }
-/* LOGIN desktop (LOGIN mobile/tablet same as APP mobile/tablet) */
-@media (hover: hover) and (pointer: fine) {
-  .login {
+/* for login page */
+.login {
+  /* desktop (LOGIN mobile/tablet is the same as APP mobile/tablet */
+  @variant desktop {
     --font-xs: 0.875rem; /* 14px */
     --font-sm: 0.9375rem; /* 15px */
     --font-base: 1rem; /* 16px */
@@ -180,8 +178,9 @@ button {
     --radius-modal: 1.375rem; /* 22px */
   }
 }
-/* APP mobile & tablet */
+/* for app pages */
 .app {
+  /* mobile/tablet */
   --font-xs: 0.9375rem; /* 15px */
   --font-sm: 1rem; /* 16px */
   --font-base: 1.0625rem; /* 17px */
@@ -198,10 +197,8 @@ button {
   --radius-button: 1rem; /* 16px */
   --radius-largeButton: 1.25rem; /* 20px */
   --radius-modal: 1.5rem; /* 24px */
-}
-/* APP desktop */
-@media (hover: hover) and (pointer: fine) {
-  .app {
+  /* desktop */
+  @variant desktop {
     --font-xs: 0.75rem; /* 12px */
     --font-sm: 0.8125rem; /* 13px */
     --font-base: 0.875rem; /* 14px */
@@ -217,7 +214,7 @@ button {
     --radius-smallButton: 0.625rem; /* 10px */
     --radius-button: 0.75rem; /* 12px */
     --radius-largeButton: 1rem; /* 16px */
-    --radius-modal: 1.5rem; /* 20px */
+    --radius-modal: 1.5rem; /* 24px */
   }
 }
 
@@ -247,13 +244,13 @@ button {
 }
 
 /*--- radius ---*/
-@utility roundedSmallButton {
+@utility roundedButtonSm {
   border-radius: var(--radius-smallButton);
 }
 @utility roundedButton {
   border-radius: var(--radius-button);
 }
-@utility roundedLargeButton {
+@utility roundedButtonLg {
   border-radius: var(--radius-largeButton);
 }
 @utility roundedModal {
@@ -278,13 +275,13 @@ button {
   @apply text-buttonPrimaryText bg-buttonPrimaryBg desktop:hover:bg-buttonPrimaryBgHover active:bg-buttonPrimaryBgHover [transition:background-color_300ms];
 }
 .buttonPrimaryColorGlass {
-  @apply text-buttonPrimaryText bg-buttonPrimaryGlassBg desktop:hover:bg-buttonPrimaryGlassBgHover active:bg-buttonPrimaryGlassBgHover backdrop-blur-sm active:scale-107  dark:border border-buttonPrimaryGlassBorder [transition:background-color_300ms,scale_200ms] dark:buttonWhiteGradient;
+  @apply text-buttonPrimaryText bg-buttonPrimaryGlassBg desktop:hover:bg-buttonPrimaryGlassBgHover active:bg-buttonPrimaryGlassBgHover backdrop-blur-sm active:scale-107 dark:border border-buttonPrimaryGlassBorder [transition:background-color_300ms,scale_200ms] dark:buttonWhiteGradient;
 }
 .buttonDangerColor {
   @apply text-buttonPrimaryText bg-buttonDangerBg desktop:hover:bg-buttonDangerBgHover active:bg-buttonDangerBgHover [transition:background-color_300ms];
 }
 .buttonDangerColorGlass {
-  @apply text-buttonPrimaryText bg-buttonDangerGlassBg desktop:hover:bg-buttonDangerGlassBgHover active:bg-buttonDangerGlassBgHover backdrop-blur-sm active:scale-107  dark:border border-buttonDangerGlassBorder [transition:background-color_300ms,scale_200ms] dark:buttonWhiteGradient;
+  @apply text-buttonPrimaryText bg-buttonDangerGlassBg desktop:hover:bg-buttonDangerGlassBgHover active:bg-buttonDangerGlassBgHover backdrop-blur-sm active:scale-107 dark:border border-buttonDangerGlassBorder [transition:background-color_300ms,scale_200ms] dark:buttonWhiteGradient;
 }
 .keypadColor {
   @apply bg-[#D6DEE9] dark:bg-buttonPrimaryBg/40 active:bg-slate-300 dark:active:bg-buttonPrimaryBg/80 transition-all duration-150;
@@ -333,53 +330,54 @@ button {
 }
 
 /*--- landing ---*/
-
 .homeSectionSize {
   @apply px-[16px] xs:px-[24px] lg:px-[100px] w-full max-w-[650px] lg:max-w-[calc(960px+200px)];
 }
 
 /*--- APP ---*/
 
-/* --- mobile --- */
-@media (orientation: portrait) {
-  :root {
-    --listPadding: 0px;
-    --listHeaderHeight: 3rem;
-    --listButtonContainerHeight: 90px;
-    --menuHeight: 80px;
+:root {
+  /* --- mobile --- */
+  --listPadding: 0px;
+  --listHeaderHeight: 3rem;
+  --listFadeHeight: 90px;
+  @media (orientation: portrait) {
+    --menuContentHeight: 80px;
+    --menuHeight: calc(var(--menuContentHeight) + env(safe-area-inset-bottom));
     --menuWidth: 0px;
-    --numRows: 10;
   }
-}
-@media (orientation: landscape) {
-  :root {
-    --listPadding: 0px;
-    --listHeaderHeight: 3rem;
-    --listButtonContainerHeight: 90px;
+  @media (orientation: landscape) {
     --menuHeight: 0px;
     --menuWidth: 120px;
-    --numRows: 10;
   }
-}
-/* --- tablet --- */
-@media (orientation: portrait) and (min-width: 600px) {
-  :root {
+  /* --- tablet --- */
+  @variant tablet {
+    --listPadding: 3rem;
+    --listHeaderHeight: 3.5rem;
+    --listFadeHeight: 100px;
+    @media (orientation: portrait) {
+      --menuContentHeight: 100px;
+      --menuHeight: calc(var(--menuContentHeight) + env(safe-area-inset-bottom));
+      --menuWidth: 0px;
+    }
+    @media (orientation: landscape) {
+      --menuHeight: 0px;
+      --menuWidth: 160px;
+    }
+  }
+  /* --- desktop --- */
+  @variant desktop {
     --listPadding: 3rem;
     --listHeaderHeight: 3rem;
-    --listButtonContainerHeight: 100px;
-    --menuHeight: 120px;
-    --menuWidth: 0px;
-    --numRows: 11;
-  }
-}
-@media (orientation: landscape) and (min-width: 980px) {
-  :root {
-    --listPadding: 3rem;
-    --listHeaderHeight: 3rem;
-    --listButtonContainerHeight: 100px;
-    --menuHeight: 0px;
-    --menuWidth: 160px;
-    --numRows: 10;
+    --listFadeHeight: 100px;
+    @media (orientation: portrait) {
+      --menuHeight: 100px;
+      --menuWidth: 0px;
+    }
+    @media (orientation: landscape) {
+      --menuHeight: 0px;
+      --menuWidth: 160px;
+    }
   }
 }
 
@@ -428,7 +426,6 @@ button {
     transparent 50%
   );
 }
-/* mobile modal glow */
 .dark .modalGlow {
   background: radial-gradient(
     circle at center bottom,
@@ -439,6 +436,17 @@ button {
     rgba(42, 84, 222, 0.2) 70%,
     transparent 90%
   );
+  @variant tablet {
+    background: radial-gradient(
+      circle at center bottom,
+      rgba(57, 91, 255, 0.5) 0%,
+      rgba(57, 91, 255, 0.38) 12%,
+      rgba(57, 91, 255, 0.24) 24%,
+      rgba(57, 91, 255, 0.13) 38%,
+      rgba(57, 91, 255, 0.055) 54%,
+      transparent 82%
+    );
+  }
 }
 .dark .noHeaderModalGlow {
   background: radial-gradient(
@@ -450,21 +458,7 @@ button {
     rgba(42, 84, 222, 0.26) 76%,
     rgba(42, 84, 222, 0.14) 100%
   );
-}
-/* tablet/desktop modal glow */
-@media (orientation: portrait) and (min-width: 600px), (orientation: landscape) and (min-width: 980px) {
-  .dark .modalGlow {
-    background: radial-gradient(
-      circle at center bottom,
-      rgba(57, 91, 255, 0.5) 0%,
-      rgba(57, 91, 255, 0.38) 12%,
-      rgba(57, 91, 255, 0.24) 24%,
-      rgba(57, 91, 255, 0.13) 38%,
-      rgba(57, 91, 255, 0.055) 54%,
-      transparent 82%
-    );
-  }
-  .dark .noHeaderModalGlow {
+  @variant tablet {
     background: radial-gradient(
       ellipse at center bottom,
       rgba(57, 91, 255, 0.5) 0%,

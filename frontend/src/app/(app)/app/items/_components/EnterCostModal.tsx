@@ -114,7 +114,7 @@ export default function EnterCostModal({
                 </option>
               ))}
             </select>
-            <FaChevronDown className="absolute right-3 pointer-events-none text-sm desktop:text-[0.625rem] opacity-80" />
+            <FaChevronDown className="absolute right-3 pointer-events-none size-[0.875rem] desktop:size-[0.625rem] opacity-80" />
           </div>
           {/*--- amount ---*/}
           <div className="flex-none px-2 w-48 h-full flex items-center justify-center border-none border-slate-200 dark:border-blue-400/14 rounded-2xl text2xl font-semibold tabular-nums text-center">

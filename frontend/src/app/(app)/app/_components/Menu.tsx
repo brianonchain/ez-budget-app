@@ -23,12 +23,12 @@ export default function Menu() {
           href={i.path}
           className={`${
             i.path === path ? "" : "text-textTertiary"
-          } desktop:hover:text-textPrimary w-20 tablet:w-25 roundedButton flex flex-col items-center justify-center gap-0.5 tablet:gap-1`}
+          } desktop:hover:text-textPrimary w-20 tablet:w-25 roundedButton flex flex-col items-center justify-center gap-0.5 tablet:gap-1 desktop:gap-1.5`}
           key={i.text}
           onClick={() => setPath(i.path)}
         >
-          <i.icon className="text-[1.375rem] tablet:text-[2rem]" />
-          <p className="text-xs tablet:text-sm select-none">{i.text}</p>
+          <i.icon className="size-[1.5rem] tablet:size-[2.125rem] desktop:size-[1.875rem]" />
+          <p className="textSm tablet:textBase select-none">{i.text}</p>
         </Link>
       ))}
     </MenuContainer>

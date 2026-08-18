@@ -10,7 +10,7 @@ export default async function AppLayout({ children }: Readonly<{ children: React
       <PageGlow />
       <Menu />
       <ContextProvider>
-        <main className="z-10 relative h-[calc(100dvh-var(--menuHeight))] w-[calc(100%-var(--menuWidth))] ml-[var(--menuWidth)] flex flex-col items-center overflow-y-auto overscroll-contain">
+        <main className="z-10 relative h-[calc(100dvh-var(--menuHeight))] w-[calc(100%-var(--menuWidth))] ml-(--menuWidth) flex flex-col items-center overflow-y-auto overscroll-contain">
           {children}
         </main>
       </ContextProvider>

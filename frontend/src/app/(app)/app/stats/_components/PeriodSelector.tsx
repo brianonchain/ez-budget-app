@@ -51,18 +51,18 @@ export default function PeriodSelector({
       {/* --- nav arrows + period label --- */}
       <div className="flex items-center justify-center">
         <button onClick={onPrev} className="flex items-center justify-center" type="button" aria-label="Previous period">
-          <FaChevronLeft className="text-lg desktop:text-[0.9375rem] text-textSecondary" />
+          <FaChevronLeft className="size-[1.125rem] desktop:size-[0.9375rem] text-textSecondary" />
         </button>
         <span className="w-65 desktop:w-50 textXl font-semibold text-center">{formatPeriodLabel(period, anchorDate)}</span>
         <button onClick={onNext} className="flex items-center justify-center" type="button" aria-label="Next period">
-          <FaChevronRight className="text-lg desktop:text-[0.9375rem] text-textSecondary" />
+          <FaChevronRight className="size-[1.125rem] desktop:size-[0.9375rem] text-textSecondary" />
         </button>
       </div>
 
       {/* --- FILTERS --- */}
-      <div className="w-full flex flex-col lg:flex-row items-center gap-3 lg:gap-2">
+      <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-2">
         {/* --- period filter (can't have overflow-hidden on container or outline will be cut off) --- */}
-        <div className="shrink-0 h-9 desktop:h-8 grid grid-cols-3 border border-buttonOutlineBorder roundedSmallButton divide-x divide-buttonOutlineBorder">
+        <div className="shrink-0 h-9 desktop:h-8 grid grid-cols-3 border border-buttonOutlineBorder roundedButtonSm divide-x divide-buttonOutlineBorder">
           {PERIODS.map((p, index) => (
             <button
               key={p.value}

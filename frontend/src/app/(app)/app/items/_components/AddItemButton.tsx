@@ -7,7 +7,7 @@ export default function AddItemButton({ ...props }: React.ButtonHTMLAttributes<H
       aria-label="Add item"
       {...props}
     >
-      <FaPlus className="text-[1.25rem] desktop:text-[1rem]" aria-hidden="true" />
+      <FaPlus className="size-[1.25rem] desktop:size-[1rem]" aria-hidden="true" />
       <p className="textLg font-medium">Item</p>
     </button>
   );

@@ -12,7 +12,7 @@ export default function DetailsList<T extends string | CategoryObject>({ label, 
     <div className="flex-1 flex flex-col">
       <p className="detailsLabel pb-1.5 desktop:pb-1 text-center">{label}</p>
 
-      <div className="grid grid-cols-1 roundedSmallButton border bg-inputPrimaryBg border-inputPrimaryBorder divide-y-1 divide-borderFaint overflow-y-auto thinScroll">
+      <div className="grid grid-cols-1 roundedButtonSm border bg-inputPrimaryBg border-inputPrimaryBorder divide-y-1 divide-borderFaint overflow-y-auto thinScroll">
         {items.map((i, index) => {
           const item = typeof i === "string" ? i : i.category;
           const isSelected = selectedItem === item;

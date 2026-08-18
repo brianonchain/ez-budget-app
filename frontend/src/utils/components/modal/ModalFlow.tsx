@@ -84,7 +84,7 @@ export default function ModalFlow({
             type="button"
             disabled={disabled}
           >
-            <FiChevronLeft className="text-[2.2rem]" />
+            <FiChevronLeft className="size-[2.2rem]" />
           </button>
 
           {onBack && (
@@ -94,7 +94,7 @@ export default function ModalFlow({
               type="button"
               disabled={disabled}
             >
-              <FiX className="text-[2.2rem]" />
+              <FiX className="size-[2.2rem]" />
             </button>
           )}
 
@@ -105,7 +105,7 @@ export default function ModalFlow({
               type="button"
               disabled={disabled}
             >
-              <FiChevronLeft className="text-[1.7rem]" />
+              <FiChevronLeft className="size-[1.7rem]" />
             </button>
           )}
 
@@ -115,7 +115,7 @@ export default function ModalFlow({
             type="button"
             disabled={disabled}
           >
-            <FiX className="text-[1.7rem]" />
+            <FiX className="size-[1.7rem]" />
           </button>
 
           <div className="flex-1 min-h-0 overflow-hidden pt-6 desktop:pt-2 pb-12 desktop:pb-8 px-4 tablet:px-8 desktop:px-10 w-full">
