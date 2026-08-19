@@ -23,7 +23,7 @@ export default function Menu() {
           href={i.path}
           className={`${
             i.path === path ? "" : "text-textTertiary"
-          } hover:text-textPrimary py-2 w-20 tablet:w-22 roundedButton flex flex-col items-center justify-center gap-0.5 tablet:gap-1 desktop:gap-1.5`}
+          } hover:text-textPrimary desktop:py-2 w-18 tablet:w-22 desktop:roundedButton flex flex-col items-center justify-center gap-0.5 tablet:gap-1 desktop:gap-1.5`}
           key={i.text}
           onClick={() => setPath(i.path)}
         >
