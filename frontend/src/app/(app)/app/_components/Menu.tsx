@@ -28,7 +28,7 @@ export default function Menu() {
           onClick={() => setPath(i.path)}
         >
           <i.icon className="size-[1.375rem] tablet:size-[2.125rem] desktop:size-[1.875rem]" />
-          <p className="textXs tablet:textBase select-none">{i.text}</p>
+          <p className="text-[0.8125rem] tablet:textBase select-none">{i.text}</p>
         </Link>
       ))}
     </MenuContainer>

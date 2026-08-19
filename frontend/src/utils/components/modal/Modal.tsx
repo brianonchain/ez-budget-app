@@ -64,7 +64,7 @@ export default function Modal({
     <>
       {!isMulti && (
         <motion.div
-          className="hidden tablet:block z-[100] fixed inset-0 bg-black/70 backdrop-blur-xs"
+          className="hidden tablet:block z-[100] fixed inset-0 bg-black/50 backdrop-blur-xs"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
