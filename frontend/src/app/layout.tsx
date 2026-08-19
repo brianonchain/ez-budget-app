@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 // auth
@@ -18,6 +18,12 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent", // or "black-translucent"
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 // contains font color
