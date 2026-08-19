@@ -342,14 +342,12 @@ button:not(:disabled),
   --listHeaderHeight: 3rem;
   --listFadeHeight: 90px;
   @media (orientation: portrait) {
-    --menuContentHeight: 80px;
-    --menuHeight: calc(var(--menuContentHeight) + env(safe-area-inset-bottom));
+    --menuHeight: 80px;
     --menuWidth: 0px;
   }
   @media (orientation: landscape) {
-    --menuContentWidth: 120px;
     --menuHeight: 0px;
-    --menuWidth: calc(var(--menuContentWidth) + env(safe-area-inset-left));
+    --menuWidth: 120px;
   }
   /* --- tablet --- */
   @variant tablet {
@@ -357,14 +355,12 @@ button:not(:disabled),
     --listHeaderHeight: 3.5rem;
     --listFadeHeight: 100px;
     @media (orientation: portrait) {
-      --menuContentHeight: 100px;
-      --menuHeight: calc(var(--menuContentHeight) + env(safe-area-inset-bottom));
+      --menuHeight: 100px;
       --menuWidth: 0px;
     }
     @media (orientation: landscape) {
-      --menuContentWidth: 160px;
       --menuHeight: 0px;
-      --menuWidth: calc(var(--menuContentWidth) + env(safe-area-inset-left));
+      --menuWidth: 160px;
     }
   }
   /* --- desktop --- */

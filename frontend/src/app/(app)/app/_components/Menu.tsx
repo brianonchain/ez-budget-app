@@ -23,11 +23,11 @@ export default function Menu() {
           href={i.path}
           className={`${
             i.path === path ? "" : "text-textTertiary"
-          } hover:text-textPrimary desktop:py-2 w-18 tablet:w-22 desktop:roundedButton flex flex-col items-center justify-center gap-0.5 tablet:gap-1 desktop:gap-1.5`}
+          } hover:text-textPrimary desktop:py-2 w-18 tablet:w-22 desktop:roundedButton flex flex-col items-center justify-center gap-[0.0625rem] tablet:gap-0.5 desktop:gap-1`}
           key={i.text}
           onClick={() => setPath(i.path)}
         >
-          <i.icon className="size-[1.375rem] tablet:size-[2.125rem] desktop:size-[1.875rem]" />
+          <i.icon className="size-[1.5rem] tablet:size-[2.125rem] desktop:size-[1.875rem]" />
           <p className="text-[0.8125rem] tablet:textBase select-none">{i.text}</p>
         </Link>
       ))}
