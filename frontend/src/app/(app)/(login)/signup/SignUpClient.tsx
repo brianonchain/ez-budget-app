@@ -125,7 +125,7 @@ export default function SignUpClient() {
       <Link className="mt-14 desktop:mt-12 linkColor underline-animate" href="/login">
         Have an account? Sign in
       </Link>
-      {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
+      {errorMessage && <ErrorModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />}
     </>
   );
 }

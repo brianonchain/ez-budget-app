@@ -182,7 +182,7 @@ export default function VerifyUserClient() {
         </div>
       )}
 
-      {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
+      {errorMessage && <ErrorModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />}
     </>
   );
 }

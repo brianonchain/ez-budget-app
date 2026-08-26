@@ -180,7 +180,7 @@ export default function Login() {
         </div>
       </div>
 
-      {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
+      {errorMessage && <ErrorModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />}
     </>
   );
 }
