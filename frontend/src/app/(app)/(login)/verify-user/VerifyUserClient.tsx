@@ -3,7 +3,7 @@
 import { useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Button from "@/utils/components/Button";
-import ErrorModal from "@/utils/components/ErrorModal";
+import ErrorModal from "@/utils/components/simpleModal/ErrorModal";
 import { signIn } from "next-auth/react";
 import { fetchPost, normalizeEmail } from "@/utils/functions";
 

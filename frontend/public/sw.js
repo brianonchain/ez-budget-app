@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const PRECACHE = `ez-budget-precache-${CACHE_VERSION}`;
 const RUNTIME = `ez-budget-runtime-${CACHE_VERSION}`;
 const PRECACHE_URLS = [
@@ -9,6 +9,8 @@ const PRECACHE_URLS = [
   //   "/icon-maskable-192.png",
   //   "/icon-maskable-512.png",
 ];
+
+const IS_DEV = self.location.hostname !== "ezbudgetapp.com";
 
 // Install: cache important shell/public assets
 self.addEventListener("install", (event) => {
@@ -48,11 +50,12 @@ self.addEventListener("fetch", (event) => {
 
   // Cache-first for static assets
   if (
-    url.pathname.startsWith("/_next/static") ||
-    request.destination === "image" ||
-    request.destination === "font" ||
-    request.destination === "style" ||
-    request.destination === "script"
+    !IS_DEV &&
+    (url.pathname.startsWith("/_next/static") ||
+      request.destination === "image" ||
+      request.destination === "font" ||
+      request.destination === "style" ||
+      request.destination === "script")
   ) {
     event.respondWith(cacheFirst(request));
     return;

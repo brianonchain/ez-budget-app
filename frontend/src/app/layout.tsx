@@ -20,6 +20,13 @@ export const metadata: Metadata = {
   },
 };
 
+// needed for env(safe-area-inset-bottom) to work
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 // contains font color
 export default async function RootLayout({
   children,

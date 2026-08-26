@@ -9,7 +9,7 @@ import { signIn } from "next-auth/react";
 import LoginButton from "./_components/LoginButton";
 import InputEmail from "@/utils/components/InputEmail";
 import InputPassword from "@/utils/components/InputPassword";
-import ErrorModal from "@/utils/components/ErrorModal";
+import ErrorModal from "@/utils/components/simpleModal/ErrorModal";
 import Accordion from "@/utils/components/Accordion";
 import Button from "@/utils/components/Button";
 // images

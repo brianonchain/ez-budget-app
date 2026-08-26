@@ -139,7 +139,7 @@ export default function ShareWorkspaceModal({
             variant="primary"
             size="base"
             isLoading={status === "sharing"}
-            disabled={isPending || status !== "initial" || !inviteEmail.trim()}
+            disabled={isPending || status !== "initial"}
             type="submit"
           />
           {/*--- error message ---*/}

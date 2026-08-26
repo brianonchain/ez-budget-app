@@ -116,11 +116,32 @@ export function useUserMutation() {
   });
 }
 
-export function useIsDesktop() {
-  const [isDesktop, setIsDesktop] = useState(false);
+export function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() => (typeof window !== "undefined" ? window.matchMedia(query).matches : false));
+
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
-    setIsDesktop(mediaQuery.matches);
-  }, []);
-  return isDesktop;
+    const mediaQuery = window.matchMedia(query);
+    setMatches(mediaQuery.matches);
+    function handleChange(e: MediaQueryListEvent) {
+      setMatches(e.matches);
+    }
+    mediaQuery.addEventListener("change", handleChange);
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange);
+    };
+  }, [query]);
+
+  return matches;
+}
+
+export function useLoadTime(isDataLoaded: boolean) {
+  const [time, setTime] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (isDataLoaded && time === null) {
+      setTime(performance.now());
+    }
+  }, [isDataLoaded, time]);
+
+  return time;
 }

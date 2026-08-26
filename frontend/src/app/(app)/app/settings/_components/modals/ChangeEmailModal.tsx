@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { signOut } from "next-auth/react";
-import { ImSpinner2 } from "react-icons/im";
 import { FaCircleCheck } from "react-icons/fa6";
 // utils
 import { fetchPost, checkEmail } from "@/utils/functions";

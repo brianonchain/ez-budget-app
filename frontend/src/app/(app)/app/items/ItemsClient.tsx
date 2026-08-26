@@ -3,34 +3,25 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useItemsQuery, useWorkspaceQuery } from "@/utils/hooks";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
 // components
 import ItemsShell from "./ItemsShell";
 import AddItemButton from "./_components/AddItemButton";
 import Spinner from "@/utils/components/Spinner";
-// modals
-import ErrorModal from "@/utils/components/ErrorModal";
-import { AnimatePresence } from "framer-motion";
-import Backdrop from "@/utils/components/modal/Backdrop";
-import EnterCostModal from "./_components/EnterCostModal";
-import EnterNameModal from "./_components/EnterNameModal";
+import ErrorModal from "@/utils/components/simpleModal/ErrorModal";
+import AddItemModal from "./_components/AddItemModal";
 import DetailsModal from "./_components/DetailsModal";
-
-// constants and types
+import PerformanceStats from "@/utils/components/PerformanceStats";
+// utils
 import { SYMBOLS, DECIMALS, emptyItem } from "@/utils/constants";
 import { getLocalDateKey } from "@/utils/functions";
-import type { DraftItem, Direction } from "@/utils/types";
+import type { DraftItem } from "@/utils/types";
 
 function formatDateHeader(isoDate: string): string {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  }).format(new Date(isoDate));
+  return new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(isoDate));
 }
 
-export type ModalName = "cost" | "name" | "details" | null;
-
-export default function Items() {
+export default function ItemsClient() {
   const router = useRouter();
   const session = useSession();
 
@@ -40,9 +31,7 @@ export default function Items() {
   // states
   const [errorMessage, setErrorMessage] = useState("");
   const [draftItem, setDraftItem] = useState<DraftItem>(emptyItem);
-  const [modalName, setModalName] = useState<"cost" | "name" | "details" | null>(null);
-  const [direction, setDirection] = useState<Direction>(0);
-  const [isMultiPageModal, setIsMultiPageModal] = useState(false);
+  const [modalName, setModalName] = useState<"details" | "addItem" | null>(null);
 
   // flatten pages into a single items array, then group by date
   const allItems = useMemo(() => itemsData?.pages.flatMap((p) => p.items) ?? [], [itemsData]);
@@ -99,46 +88,20 @@ export default function Items() {
       currency,
       tag: localStorage.getItem("ezb:lastTag") ?? "none",
     });
-    setIsMultiPageModal(true);
-    setModalName("cost");
+    // setIsMultiPageModal(true);
+    setModalName("addItem");
   };
 
-  function goForward(nextPage: ModalName) {
-    setDirection(1);
-    setModalName(nextPage);
-  }
-
-  function goBack(prevPage: ModalName) {
-    setDirection(-1);
-    setModalName(prevPage);
-  }
-
   function onClose() {
-    setDirection(0);
     setModalName(null);
   }
 
-  // better UI if button is shown on first paint (then remove button if user is not "owner" or "editor")
-  const isItemsLoading = !itemsData;
+  // add item data only shows when itemsData loaded and role is appropriate
   const canAddItem = ["owner", "editor"].includes(itemsData?.pages[0]?.role ?? "");
-
-  // measure performance
-  const [itemsTime, setItemsTime] = useState<number | null>(null);
-  const [settingsTime, setSettingsTime] = useState<number | null>(null);
-  useEffect(() => {
-    if (itemsData && itemsTime === null) {
-      setItemsTime(performance.now());
-    }
-  }, [itemsData, itemsTime]);
-  useEffect(() => {
-    if (workspaceData && settingsTime === null) {
-      setSettingsTime(performance.now());
-    }
-  }, [workspaceData, settingsTime]);
 
   return (
     <>
-      <ItemsShell footer={isItemsLoading || canAddItem ? <AddItemButton onClick={onAddItem} /> : null}>
+      <ItemsShell addItemButton={itemsData && canAddItem ? <AddItemButton onClick={onAddItem} /> : null}>
         {!itemsData ? (
           <div className="w-full h-full flex items-center justify-center">
             <Spinner />
@@ -147,18 +110,21 @@ export default function Items() {
           <div className="w-full h-full flex items-center justify-center">No items yet</div>
         ) : (
           <>
+            {/* --- backdrop blur bar (need sticky instead of absolute for backdrop blur to work) --- */}
+            <div className="sticky top-0 h-8 desktop:h-7 -mb-8 desktop:-mb-7 w-full backdrop-blur-md pointer-events-none" />
             {dateGroups.map((group) => (
               <div key={group.date}>
-                <div className="sticky top-0 z-[1] backdrop-blur-md px-[3%] h-8 desktop:h-7 flex items-center textXs font-semibold text-textSecondary bg-buttonOutlineBgHoverSubtle border-b border-borderFaint">
+                {/* --- date header --- */}
+                <div className="sticky top-0 z-[1] px-[3%] h-8 desktop:h-7 flex items-center textXs font-semibold text-textSecondary bg-buttonOutlineBgHoverSubtle border-b border-borderFaint">
                   {formatDateHeader(group.items[0].date)}
                 </div>
+                {/* --- items --- */}
                 {group.items.map((item, i) => (
                   <button
                     key={item._id ?? `${group.date}-${i}`}
                     className="innerOutline text-left px-[3%] w-full h-14 desktop:h-13 flex items-center gap-2 border-b border-borderFaint hover:bg-buttonOutlineBgHoverSubtle"
                     onClick={() => {
                       setDraftItem(item);
-                      setIsMultiPageModal(false);
                       setModalName("details");
                     }}
                     type="button"
@@ -179,53 +145,21 @@ export default function Items() {
               {isFetchingNextPage && <Spinner />}
             </div>
             {/* --- performance metrics --- */}
-            <div className="fixed bottom-50 right-3 z-50 roundedButton bg-black/70 px-3 py-2 text-xs text-white backdrop-blur-sm space-y-1">
-              <div>Items: {itemsTime?.toFixed(0) ?? "NA"} ms</div>
-              <div>Settings: {settingsTime?.toFixed(0) ?? "NA"} ms</div>
-            </div>
+            {/* {workspaceData && <PerformanceStats isItemsData={!!itemsData} isWorkspaceData={!!workspaceData} />} */}
           </>
         )}
       </ItemsShell>
 
-      {/* --- backdrop for multi-modal flow --- */}
-      <AnimatePresence>{modalName && isMultiPageModal && <Backdrop />}</AnimatePresence>
       {/* --- MODALS --- */}
-      <AnimatePresence custom={direction}>
-        {modalName === "cost" && workspaceData && (
-          <EnterCostModal
-            setDraftItem={setDraftItem}
-            workspaceId={workspaceData.workspace._id}
-            defaultCurrency={workspaceData.workspace.defaultCurrency}
-            onClose={onClose}
-            direction={direction}
-            onForward={() => goForward("name")}
-          />
+      <AnimatePresence>
+        {modalName === "addItem" && workspaceData && (
+          <AddItemModal setDraftItem={setDraftItem} draftItem={draftItem} workspaceData={workspaceData} onClose={onClose} />
         )}
-      </AnimatePresence>
-      <AnimatePresence custom={direction}>
-        {modalName === "name" && (
-          <EnterNameModal
-            setDraftItem={setDraftItem}
-            onClose={onClose}
-            direction={direction}
-            onBack={() => goBack("cost")}
-            onForward={() => goForward("details")}
-          />
-        )}
-      </AnimatePresence>
-      <AnimatePresence custom={direction}>
         {modalName === "details" && workspaceData && (
-          <DetailsModal
-            setDraftItem={setDraftItem}
-            draftItem={draftItem}
-            workspaceData={workspaceData}
-            onClose={onClose}
-            direction={direction}
-            onBack={isMultiPageModal ? () => goBack("name") : undefined}
-          />
+          <DetailsModal setDraftItem={setDraftItem} draftItem={draftItem} workspaceData={workspaceData} onClose={onClose} />
         )}
+        {errorMessage && <ErrorModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />}
       </AnimatePresence>
-      {errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}
     </>
   );
 }

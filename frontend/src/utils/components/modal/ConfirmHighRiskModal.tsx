@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useWorkspaceMutation, useUserMutation } from "@/utils/hooks";
+import { useUserMutation } from "@/utils/hooks";
 import Modal from "@/utils/components/modal/Modal";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
 import ErrorMessage from "@/utils/components/ErrorMessage";
 
-export default function ConfirmActionModal({
+export default function ConfirmHighRiskModal({
   onClose,
   title,
   textToMatch,
@@ -83,7 +82,7 @@ export default function ConfirmActionModal({
         <Button
           className="w-full"
           label="Delete"
-          variant="danger"
+          variant="dangerOutline2"
           size="base"
           type="submit"
           isLoading={isPending}

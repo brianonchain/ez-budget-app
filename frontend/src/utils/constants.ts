@@ -24,9 +24,6 @@ export const emptyItem: DraftItem = {
 };
 
 export const TABLET_MQ = "(orientation: landscape) and (min-height: 600px), " + "(orientation: portrait) and (min-width: 600px)";
-
 export const DESKTOP_MQ =
-  "(hover: hover) and (pointer: fine) and (orientation: landscape) and (min-width: 1000px), " +
   "(hover: hover) and (pointer: fine) and (orientation: landscape) and (min-height: 600px), " +
-  "(hover: hover) and (pointer: fine) and (orientation: portrait) and (min-width: 600px), " +
-  "(hover: hover) and (pointer: fine) and (orientation: portrait) and (min-height: 1000px)";
+  "(hover: hover) and (pointer: fine) and (orientation: portrait) and (min-width: 600px)";

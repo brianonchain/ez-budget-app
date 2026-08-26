@@ -100,7 +100,7 @@ export default function AddTagModal({
   }
 
   return (
-    <Modal title={isEdit ? "Edit Tag" : "Add a New Tag"} onClose={() => setAddTagModal(false)} disabled={isPending}>
+    <Modal title={isEdit ? "Edit Tag" : "New Tag"} onClose={() => setAddTagModal(false)} disabled={isPending}>
       <form className="mt-2 w-full flex flex-col" onSubmit={onSubmit}>
         <label className="inputLabel">Tag{isEdit ? "" : " (e.g., Camping May 2025, Ava's birthday)"}</label>
         <Input
@@ -121,7 +121,7 @@ export default function AddTagModal({
           <Button
             className="w-full"
             label="Delete Tag"
-            variant="danger"
+            variant="dangerOutline2"
             size="base"
             isLoading={status === "deleting"}
             onClick={onDelete}

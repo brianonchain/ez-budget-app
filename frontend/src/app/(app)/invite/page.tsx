@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import NoScrollPageGlow from "@/utils/components/NoScrollPageGlow";
+import BottomGlow from "@/utils/components/glows/BottomGlow";
 import LargeSpinnerAndText from "@/utils/components/LargeSpinnerAndText";
 
 type InviteStatus = "accepting" | "accepted" | "error";
@@ -57,7 +57,7 @@ export default function InvitePage() {
 
   return (
     <div className="relative px-6 w-full min-h-screen flex flex-col items-center justify-center text-center">
-      <NoScrollPageGlow />
+      <BottomGlow />
       {inviteStatus === "accepting" && <LargeSpinnerAndText />}
       {inviteStatus === "accepted" && (
         <>

@@ -13,6 +13,7 @@ export default function PWAGate({ children }: { children: React.ReactNode }) {
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
     const allowInviteFlow = token && (pathname === "/invite" || pathname === "/login"); // allow non-standalone login page for invited users
     if (!allowInviteFlow && !isDesktop && !isStandalone && process.env.NODE_ENV !== "development") {
+      // if (!allowInviteFlow && !isDesktop && !isStandalone) {
       router.replace("/saveAppToHome");
     }
   }, []);

@@ -4,7 +4,7 @@
 /*--- custom styles, <DayPicker /> must have className="myCalendar" ---*/
 .myCalendar {
   /* accent color */
-  --rdp-accent-color: var(--color-buttonPrimaryBg);
+  --rdp-accent-color: var(--color-textPrimary);
   --calendar-cell-size: 2.75rem;
   /* nav */
   --rdp-nav-height: var(--calendar-cell-size); /* The height of the navigation bar. */
@@ -17,14 +17,19 @@
   --rdp-day-height: var(--calendar-cell-size);
   --rdp-day_button-width: var(--calendar-cell-size);
   --rdp-day_button-height: var(--calendar-cell-size);
-  --rdp-day_button-border-radius: 8px; /* The radius of the day cells. */
+  --rdp-day_button-border-radius: 12px; /* The radius of the day cells. */
   /* today */
   --rdp-today-color: var(--color-textPrimary); /* The color of the today's date. */
-}
+  /* disabled days */
+  --rdp-disabled-opacity: 0.1;
 
-@media (hover: hover) and (pointer: fine) {
-  .myCalendar {
-    --calendar-cell-size: 2rem;
+  @variant tablet {
+    --calendar-cell-size: 3rem;
+    --rdp-day_button-border-radius: 16px;
+  }
+  @variant desktop {
+    --calendar-cell-size: 2.75rem;
+    --rdp-day_button-border-radius: 12px;
   }
 }
 
@@ -32,9 +37,10 @@
   @apply textLg font-medium;
 }
 
-.myCalendar .rdp-button_next:not([aria-disabled="true"]),
-.myCalendar .rdp-button_previous:not([aria-disabled="true"]) {
-  @apply rounded-lg hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover [transition:background-color_300ms];
+.myCalendar .rdp-button_next:not(:disabled),
+.myCalendar .rdp-button_previous:not(:disabled) {
+  border-radius: var(--rdp-day_button-border-radius);
+  @apply hover:bg-buttonOutlineBgHover [transition:background-color_200ms];
 }
 
 .myCalendar .rdp-chevron {
@@ -46,12 +52,53 @@
 }
 
 .myCalendar .rdp-day_button {
-  @apply textBase border-none select-none hover:bg-buttonOutlineBgHover [transition:background-color_300ms];
+  @apply textBase border-none select-none;
+}
+
+.myCalendar .rdp-day_button:not(:disabled) {
+  @apply hover:bg-buttonOutlineBgHover [transition:background-color_200ms];
 }
 
 .myCalendar .rdp-selected {
   @apply font-medium border-none;
 }
+
 .myCalendar .rdp-selected .rdp-day_button {
   @apply bg-buttonPrimaryBg text-buttonPrimaryText;
+}
+
+.timeSlider {
+  display: block;
+  width: 100%;
+  height: 1.25rem;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.timeSlider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-textTertiary);
+}
+.timeSlider::-webkit-slider-thumb {
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: -7px;
+  border-radius: 999px;
+  border: none;
+  background: var(--color-buttonPrimaryBg);
+}
+.timeSlider::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-textTertiary);
+}
+.timeSlider::-moz-range-thumb {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  border: none;
+  background: var(--color-buttonPrimaryBg);
 }

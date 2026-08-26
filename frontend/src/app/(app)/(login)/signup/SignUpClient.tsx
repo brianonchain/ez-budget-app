@@ -7,7 +7,7 @@ import Link from "next/link";
 import { checkEmail, checkPassword, fetchPost } from "@/utils/functions";
 import InputEmail from "@/utils/components/InputEmail";
 import InputPassword from "@/utils/components/InputPassword";
-import ErrorModal from "@/utils/components/ErrorModal";
+import ErrorModal from "@/utils/components/simpleModal/ErrorModal";
 import Button from "@/utils/components/Button";
 
 export default function SignUpClient() {

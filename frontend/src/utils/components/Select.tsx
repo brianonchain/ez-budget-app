@@ -28,7 +28,7 @@ type SelectProps = {
 export default function Select({ children, variant = "primary", selectSize = "base", className = "", ...props }: SelectProps) {
   return (
     <div className={`relative ${className}`}>
-      <select className={`appearance-none w-full ${variants[variant]} ${sizes[selectSize]}`} {...props}>
+      <select className={`appearance-none w-full select-none ${variants[variant]} ${sizes[selectSize]}`} {...props}>
         {children}
       </select>
       <FaChevronDown className={`absolute top-1/2 -translate-y-1/2 opacity-80 pointer-events-none ${iconSizes[selectSize]}`} />

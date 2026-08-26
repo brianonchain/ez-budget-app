@@ -61,7 +61,7 @@ export default function PeriodSelector({
       </div>
 
       {/* --- FILTERS --- */}
-      <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-2">
+      <div className="flex flex-col lg:flex-row items-center gap-3 lg:gap-2 select-none">
         {/* --- period filter (can't have overflow-hidden on container or outline will be cut off) --- */}
         <div
           className="h-10 desktop:h-8 grid grid-cols-3 border border-buttonOutlineBorder rounded-full divide-x divide-buttonOutlineBorder"

@@ -1,35 +1,39 @@
 "use client";
-import { useId, useState, useEffect } from "react";
+import { useState, useContext, createContext, type Dispatch, type SetStateAction } from "react";
 import { createPortal } from "react-dom";
-import { FocusTrap } from "focus-trap-react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 // components
 import ModalGlow from "./ModalGlow";
-import ModalHeader from "./ModalHeader";
-// constants and types
+import NavButtons from "./NavButtons";
+import Backdrop from "./Backdrop";
+import InnerBackdrop from "./InnerBackdrop";
+import FocusTrap from "./FocusTrap";
+import TopBlur from "@/utils/components/TopBlur";
+// utils
+import { useMediaQuery } from "@/utils/hooks";
 import { TABLET_MQ } from "@/utils/constants";
 import type { Direction } from "@/utils/types";
+import { desktopModalTransition, mobileModalTransition } from "@/utils/motions";
 
-const tabletOrDesktopVariants = {
-  initial: { opacity: 0, scale: 0.98, y: 8 },
-  animate: { opacity: 1, scale: 1, y: 0 },
-  exit: { opacity: 0, scale: 0.98, y: 8 },
-};
-const mobileVariants = {
-  initial: (direction: Direction) => ({ x: direction === -1 ? "-30%" : "100%", zIndex: direction === -1 ? 110 : 112 }),
-  animate: (direction: Direction) => ({ x: 0, zIndex: direction === -1 ? 110 : 112 }),
-  exit: (direction: Direction) => ({ x: direction === 1 ? "-30%" : "100%", zIndex: direction === -1 ? 112 : 110 }),
-};
+// React context for innerBackdrop state
+const InnerBackdropContext = createContext<Dispatch<SetStateAction<boolean>> | null>(null);
+export function useInnerBackdrop() {
+  const setInnerBackdrop = useContext(InnerBackdropContext);
+  if (!setInnerBackdrop) throw new Error("useInnerBackdrop must be used inside Modal");
+  return setInnerBackdrop;
+}
 
-export default function Modal({
+const modalWidth = "tablet:w-[90%] tablet:max-w-130 desktop:max-w-110";
+const modalHeight = "tablet:max-h-[90dvh]";
+const modalPadding = "px-4 tablet:px-12 desktop:px-10 pt-[calc(env(safe-area-inset-top)+5rem)] pb-12 tablet:pb-9 desktop:pb-7"; // container has tablet:pb-3
+
+export default function ModalNew({
   children,
   title,
   onClose,
   disabled = false,
-  maxWidth = "",
-  contentMaxWidth = "",
-  // multipage modal props
-  isMulti = false,
+  // multipage modal
+  pageKey,
   direction = 0,
   onBack,
 }: {
@@ -37,75 +41,97 @@ export default function Modal({
   title: string;
   onClose: () => void;
   disabled?: boolean;
-  maxWidth?: string;
-  contentMaxWidth?: string;
-  // multipage modal props
-  isMulti?: boolean;
+  // multipage modal
+  pageKey?: string;
   direction?: Direction;
-  onBack?: (() => void) | undefined;
+  onBack?: () => void;
 }) {
-  const titleId = useId();
-  const [isTabletOrDesktop, setIsTabletOrDesktop] = useState(() =>
-    typeof window !== "undefined" ? window.matchMedia(TABLET_MQ).matches : false,
-  );
+  const [innerBackdrop, setInnerBackdrop] = useState(false);
+  const isTablet = useMediaQuery(TABLET_MQ);
 
-  // listen to changes in window size
-  // only edge case I can think of: in desktop, user changes screen size between desktop and tablet breakpoint. Without this useEffect, exit animation would be weird.
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(TABLET_MQ);
-    function handleChange(e: MediaQueryListEvent) {
-      setIsTabletOrDesktop(e.matches);
-    }
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
+  // modal shell: mobile - animates on open/close, no animation on changing content; tablet/desktop - animates on open/close & changing content
+  // content shell: mobile - no animate on open/close, animates on changing content; 2) tablet/desktop - no animation
+  // nav buttons: mobile - animates on open/close, no animation on changin content; 2) tablet/desktop - no animation
+  // any key change will cause element to remount and, thus, reanimate
 
   const content = (
     <>
-      {!isMulti && (
-        <motion.div
-          className="hidden tablet:block z-[100] fixed inset-0 bg-black/50 backdrop-blur-xs"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-          aria-hidden
-        />
-      )}
-
-      <FocusTrap
-        focusTrapOptions={{
-          initialFocus: false,
-          allowOutsideClick: (e) => {
-            const target = e.target as HTMLElement | null;
-            return !!target?.closest("[data-allow-click='true']");
-          },
-        }}
-      >
-        {/*--- overflow-hidden needed to clip glow ---*/}
-        <motion.div
-          className={`app textBase z-[110] fixed inset-0 tablet:inset-auto tablet:left-1/2 tablet:top-1/2 tablet:-translate-x-1/2 tablet:-translate-y-1/2 tablet:pb-3 tablet:w-[90%] tablet:max-w-140 desktop:max-w-110 ${maxWidth} tablet:max-h-[90dvh] flex flex-col tablet:roundedModal overflow-hidden modalColor`}
-          custom={direction}
-          variants={isTabletOrDesktop ? tabletOrDesktopVariants : mobileVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={{
-            duration: isTabletOrDesktop ? 0.28 : 0.52,
-            ease: isTabletOrDesktop ? [0.22, 1, 0.36, 1] : [0.32, 0.72, 0, 1],
-          }}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={titleId}
-        >
-          <ModalGlow />
-          <ModalHeader id={titleId} title={title} onClose={onClose} disabled={disabled} onBack={onBack} />
-          {/*--- content, note pb-3 in main div ---*/}
-          <div className="flex-1 min-h-0 overflow-y-auto pt-6 tablet:pt-2 pb-12 tablet:pb-9 desktop:pb-7 px-4 tablet:px-12 desktop:px-10 w-full tablet:thinScroll">
-            {/*--- max-w here mainly defines mobile/tablet content width  ---*/}
-            <div className={`mx-auto w-full max-w-100 ${contentMaxWidth} tablet:max-w-none flex flex-col`}>{children}</div>
-          </div>
-        </motion.div>
+      {/*--- backdrop, body z-100 ---*/}
+      <Backdrop />
+      <FocusTrap>
+        {/*--- modal shell, body z-110 ---*/}
+        <AnimatePresence propagate>
+          <motion.div
+            key={isTablet ? pageKey : undefined}
+            className={`app textBase z-[110] fixed inset-0 tablet:inset-auto tablet:left-1/2 tablet:top-1/2 tablet:-translate-x-1/2 tablet:-translate-y-1/2 ${modalWidth} ${modalHeight} flex flex-col tablet:roundedModal overflow-hidden`}
+            role="dialog"
+            aria-modal="true"
+            // animations
+            variants={
+              isTablet
+                ? {
+                    initial: { opacity: 0, scale: 0.95 },
+                    animate: { opacity: 1, scale: 1 },
+                    exit: { opacity: 0, scale: 0.95 },
+                  }
+                : { initial: { x: "100%" }, animate: { x: 0 }, exit: { x: "100%" } }
+            }
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={isTablet ? desktopModalTransition : mobileModalTransition}
+          >
+            {/*--- MODAL CONTENT, z: 110-0, mode="sync" beacuse you want old/new content to slide simultaneously ---*/}
+            <AnimatePresence initial={false} custom={direction} mode="sync">
+              <motion.div
+                key={isTablet ? undefined : pageKey}
+                className={`${isTablet ? "relative min-h-0" : "absolute inset-0"} z-[0] tablet:py-3 flex flex-col w-full overflow-hidden modalColor tablet:roundedModal`}
+                // animations
+                // <AnimatePresence custom={direction}> => provides latest direction to exiting page
+                // <motion.div custom={direction}> => provides direction to current/entering page
+                custom={direction}
+                inherit={false}
+                variants={
+                  isTablet
+                    ? undefined
+                    : {
+                        initial: (direction: Direction) => ({
+                          x: direction === -1 ? "-30%" : "100%",
+                          zIndex: direction === -1 ? 0 : 1,
+                        }),
+                        animate: (direction: Direction) => ({ x: 0, zIndex: direction === -1 ? 0 : 1 }),
+                        exit: (direction: Direction) => ({ x: direction === 1 ? "-30%" : "100%", zIndex: direction === -1 ? 1 : 0 }),
+                      }
+                }
+                initial={isTablet ? false : "initial"}
+                animate={isTablet ? undefined : "animate"}
+                exit={isTablet ? undefined : "exit"}
+                transition={isTablet ? undefined : mobileModalTransition}
+              >
+                {/*--- glow, z: 110-0-0 ---*/}
+                <ModalGlow />
+                {/*--- content, z: 110-0-10 ---*/}
+                <div
+                  className={`relative z-[10] flex-1 min-h-0 overflow-y-auto overscroll-contain ${modalPadding} w-full tablet:thinScroll topFade modalScroll`}
+                >
+                  <div className={`mx-auto w-full max-w-100 tablet:max-w-none flex flex-col`}>
+                    <InnerBackdropContext.Provider value={setInnerBackdrop}>{children}</InnerBackdropContext.Provider>
+                  </div>
+                </div>
+                {/*--- top blur, z: 110-0-50 ---*/}
+                {/* <TopBlur /> */}
+                {/*--- header, z: 110-0-60 ---*/}
+                <h2 className="absolute z-[60] top-[calc(env(safe-area-inset-top)+0.75rem)] inset-x-0 mx-16 tablet:mx-21 desktop:mx-16 h-11 tablet:h-12 desktop:h-11 flex items-center justify-center text-center textXl font-semibold pointer-events-none">
+                  {title}
+                </h2>
+              </motion.div>
+            </AnimatePresence>
+            {/*--- NAV BUTTONS, z: 110-10 ---*/}
+            <NavButtons onClose={onClose} disabled={disabled} onBack={onBack} />
+            {/*--- inner backdrop, z: 110-20 ---*/}
+            <AnimatePresence>{innerBackdrop && <InnerBackdrop />}</AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
       </FocusTrap>
     </>
   );

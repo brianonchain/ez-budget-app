@@ -15,10 +15,11 @@ import ChangeEmailModal from "./_components/modals/ChangeEmailModal";
 import AddCategoryModal from "./_components/modals/AddCategoryModal";
 import AddTagModal from "./_components/modals/AddTagModal";
 import ShareWorkspaceModal from "./_components/modals/ShareWorkspaceModal";
-import ConfirmActionModal from "./_components/modals/ConfirmActionModal";
+import ConfirmHighRiskModal from "@/utils/components/modal/ConfirmHighRiskModal";
 import AddWorkspaceModal from "./_components/modals/AddWorkspaceModal";
 import ExportModal from "./_components/modals/ExportModal";
-import ErrorModal from "@/utils/components/ErrorModal";
+import ErrorModal from "@/utils/components/simpleModal/ErrorModal";
+import SignOutModal from "./_components/modals/SignOutModal";
 // components
 import CategoryContainer from "./_components/CategoryContainer";
 import TagsContainer from "./_components/TagsContainer";
@@ -65,6 +66,7 @@ export default function Settings({ provider, email, userId }: { provider: string
   const [leaveWorkspaceModal, setLeaveWorkspaceModal] = useState(false);
   const [deleteAccountModal, setDeleteAccountModal] = useState(false);
   const [exportModal, setExportModal] = useState(false);
+  const [signOutModal, setSignOutModal] = useState(false);
 
   const showData = !!data && data.workspace._id === workspaceId;
 
@@ -214,6 +216,15 @@ export default function Settings({ provider, email, userId }: { provider: string
     const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
     const rawData = window.atob(base64);
     return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+  }
+
+  async function onSignOut() {
+    setIsSigningOut(true);
+    queryClient.clear(); // clears query cache, I believe
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith("ezb:")) localStorage.removeItem(key);
+    }
+    signOut({ callbackUrl: "/login" });
   }
 
   return (
@@ -366,21 +377,7 @@ export default function Settings({ provider, email, userId }: { provider: string
       <SettingsCard title="Account">
         {/*--- Sign Out ---*/}
         <SettingsField label="Sign Out">
-          <Button
-            className="w-26 desktop:w-21"
-            label="Sign Out"
-            variant="outline"
-            size="base"
-            isLoading={isSigningOut}
-            onClick={() => {
-              setIsSigningOut(true);
-              queryClient.clear(); // clears query cache, I believe
-              for (const key of Object.keys(localStorage)) {
-                if (key.startsWith("ezb:")) localStorage.removeItem(key);
-              }
-              signOut({ callbackUrl: "/login" });
-            }}
-          />
+          <Button className="w-26 desktop:w-21" label="Sign Out" variant="outline" size="base" onClick={() => setSignOutModal(true)} />
         </SettingsField>
         {/*--- Email ---*/}
         <SettingsField label="Email">
@@ -454,7 +451,7 @@ export default function Settings({ provider, email, userId }: { provider: string
       </AnimatePresence>
       <AnimatePresence>
         {leaveWorkspaceModal && data?.workspace && (
-          <ConfirmActionModal
+          <ConfirmHighRiskModal
             title="Leave Workspace"
             onClose={() => setLeaveWorkspaceModal(false)}
             textToMatch={data.workspace.name}
@@ -464,7 +461,7 @@ export default function Settings({ provider, email, userId }: { provider: string
       </AnimatePresence>
       <AnimatePresence>
         {deleteWorkspaceModal && data?.workspace && (
-          <ConfirmActionModal
+          <ConfirmHighRiskModal
             title="Delete Workspace"
             onClose={() => setDeleteWorkspaceModal(false)}
             textToMatch={data.workspace.name}
@@ -474,7 +471,7 @@ export default function Settings({ provider, email, userId }: { provider: string
       </AnimatePresence>
       <AnimatePresence>
         {deleteAccountModal && (
-          <ConfirmActionModal
+          <ConfirmHighRiskModal
             title="Delete Account"
             onClose={() => setDeleteAccountModal(false)}
             textToMatch={email}
@@ -484,7 +481,10 @@ export default function Settings({ provider, email, userId }: { provider: string
         )}
       </AnimatePresence>
       <AnimatePresence>{exportModal && <ExportModal workspaceId={workspaceId} setExportModal={setExportModal} />}</AnimatePresence>
-      <AnimatePresence>{errorMessage && <ErrorModal errorMessage={errorMessage} setErrorMessage={setErrorMessage} />}</AnimatePresence>
+      <AnimatePresence>{errorMessage && <ErrorModal errorMessage={errorMessage} onClose={() => setErrorMessage("")} />}</AnimatePresence>
+      <AnimatePresence>
+        {signOutModal && <SignOutModal onClose={() => setSignOutModal(false)} onSignOut={onSignOut} isSigningOut={isSigningOut} />}
+      </AnimatePresence>
     </>
   );
 }

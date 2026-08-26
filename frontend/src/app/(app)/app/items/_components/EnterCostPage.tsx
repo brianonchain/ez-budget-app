@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FaDeleteLeft, FaChevronDown } from "react-icons/fa6";
 import Button from "@/utils/components/Button";
-import Modal from "@/utils/components/modal/Modal";
 import { useWorkspaceMutation } from "@/utils/hooks";
 import { CURRENCIES, DECIMALS, MULTIPLIER } from "@/utils/constants";
 import { DraftItem } from "@/utils/types";
@@ -11,20 +10,14 @@ const calc = ["7", "8", "9", "4", "5", "6", "1", "2", "3", ".", "0"] as const;
 
 export default function EnterCostModal({
   setDraftItem,
-  defaultCurrency,
-  workspaceId,
-  onClose,
-  // multipage modal props
-  direction,
-  onForward,
+  defaultCurrency, // needed to show default currency
+  workspaceId, // needed to set default currency
+  onNext,
 }: {
   setDraftItem: React.Dispatch<React.SetStateAction<DraftItem>>;
   defaultCurrency: string;
   workspaceId: string;
-  onClose: () => void;
-  // multipage modal props
-  direction: Direction;
-  onForward: () => void;
+  onNext: () => void;
 }) {
   // hooks
   const { mutateAsync: mutateWorkspaceAsync, isPending, error: currencyError } = useWorkspaceMutation();
@@ -76,7 +69,7 @@ export default function EnterCostModal({
     const cost = Number(normalizedAmount) * multiplier;
     if (!Number.isFinite(cost) || cost <= 0) return;
     setDraftItem((prev) => ({ ...prev, cost }));
-    onForward();
+    onNext();
   }
 
   const onChangeCurrency = async (newCurrency: string) => {
@@ -95,56 +88,54 @@ export default function EnterCostModal({
   };
 
   return (
-    <Modal title="Enter Cost" onClose={onClose} disabled={isPending} direction={direction} isMulti={true}>
-      <div className="flex flex-col items-center">
-        {/*--- AMOUNT CONTAINER ---*/}
-        <div className="relative w-full h-17 desktop:h-13 flex items-center">
-          {/*--- currency ---*/}
-          <div className="relative flex-1 h-full flex items-center">
-            <select
-              className="pl-3 w-full h-full font-medium appearance-none"
-              value={currency}
-              onChange={(e) => onChangeCurrency(e.currentTarget.value)}
-              disabled={isPending}
-              aria-label="Currency"
-            >
-              {CURRENCIES.map((i) => (
-                <option key={i} value={i}>
-                  {i}
-                </option>
-              ))}
-            </select>
-            <FaChevronDown className="absolute right-3 pointer-events-none size-[0.875rem] desktop:size-[0.625rem] opacity-80" />
-          </div>
-          {/*--- amount ---*/}
-          <div className="flex-none px-2 w-48 h-full flex items-center justify-center border-none border-slate-200 dark:border-blue-400/14 rounded-2xl text2xl font-semibold tabular-nums text-center">
-            {amount || (decimals === 0 ? "0" : `0.${"0".repeat(decimals)}`)}
-          </div>
-          {/*--- multiplier ---*/}
-          <div className="flex-1">
-            <div className="pl-2 font-medium">{multiplier > 1 ? `x${multiplier}` : ""}</div>
-          </div>
+    <div className="flex flex-col items-center">
+      {/*--- AMOUNT CONTAINER ---*/}
+      <div className="relative w-full h-17 desktop:h-13 flex items-center">
+        {/*--- currency ---*/}
+        <div className="relative flex-1 h-full flex items-center">
+          <select
+            className="pl-3 w-full h-full font-medium appearance-none"
+            value={currency}
+            onChange={(e) => onChangeCurrency(e.currentTarget.value)}
+            disabled={isPending}
+            aria-label="Currency"
+          >
+            {CURRENCIES.map((i) => (
+              <option key={i} value={i}>
+                {i}
+              </option>
+            ))}
+          </select>
+          <FaChevronDown className="absolute right-3 pointer-events-none size-[0.875rem] desktop:size-[0.625rem] opacity-80" />
         </div>
-        {/*--- keypad ---*/}
-        <div className="mt-8 desktop:mt-4 grid grid-cols-3 gap-2 desktop:gap-1">
-          {calc.map((i, index) => (
-            <Button
-              key={index}
-              label={i}
-              variant="keypad"
-              size="keypad"
-              className={maxFractionDigits === 0 && i === "." ? "opacity-30 cursor-not-allowed pointer-events-none" : ""}
-              onClick={() => onClickNumber(i)}
-              disabled={maxFractionDigits === 0 && i === "."}
-              aria-label={i}
-            />
-          ))}
-          <Button label={<FaDeleteLeft />} variant="keypad" size="keypad" onClick={onBackspace} aria-label="Backspace" />
+        {/*--- amount ---*/}
+        <div className="flex-none px-2 w-48 h-full flex items-center justify-center border-none border-slate-200 dark:border-blue-400/14 rounded-2xl text2xl font-semibold tabular-nums text-center">
+          {amount || (decimals === 0 ? "0" : `0.${"0".repeat(decimals)}`)}
         </div>
-
-        {/* --- enter button --- */}
-        <Button className="w-full mt-12 desktop:mt-6" label="Enter" variant="primary" size="base" onClick={onEnter} disabled={isPending} />
+        {/*--- multiplier ---*/}
+        <div className="flex-1">
+          <div className="pl-2 font-medium">{multiplier > 1 ? `x${multiplier}` : ""}</div>
+        </div>
       </div>
-    </Modal>
+      {/*--- keypad ---*/}
+      <div className="mt-8 desktop:mt-4 grid grid-cols-3 gap-2 desktop:gap-1">
+        {calc.map((i, index) => (
+          <Button
+            key={index}
+            label={i}
+            variant="keypad"
+            size="keypad"
+            className={maxFractionDigits === 0 && i === "." ? "opacity-30 cursor-not-allowed pointer-events-none" : ""}
+            onClick={() => onClickNumber(i)}
+            disabled={maxFractionDigits === 0 && i === "."}
+            aria-label={i}
+          />
+        ))}
+        <Button label={<FaDeleteLeft />} variant="keypad" size="keypad" onClick={onBackspace} aria-label="Backspace" />
+      </div>
+
+      {/* --- enter button --- */}
+      <Button className="w-full mt-12 desktop:mt-6" label="Enter" variant="primary" size="base" onClick={onEnter} disabled={isPending} />
+    </div>
   );
 }

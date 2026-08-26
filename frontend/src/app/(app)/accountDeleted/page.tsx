@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
-import NoScrollPageGlow from "@/utils/components/NoScrollPageGlow";
+import BottomGlow from "@/utils/components/glows/BottomGlow";
 
 export default function AccountDeletedPage() {
   return (
     <div className="relative px-6 w-full min-h-screen flex flex-col items-center justify-center text-center">
-      <NoScrollPageGlow />
+      <BottomGlow />
 
       <h1 className="textXl font-semibold">Account deleted</h1>
 

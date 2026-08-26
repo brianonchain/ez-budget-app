@@ -1,3 +1,6 @@
 export default function ModalGlow() {
-  return <div className="absolute w-[200dvw] tablet:w-[200%] h-[100dvh] tablet:h-full left-1/2 -translate-x-1/2 z-[-1] modalGlow" />;
+  // no need to center width as it's 100%
+  return (
+    <div className="hidden dark:block absolute z-0 top-1/2 -translate-y-1/2 w-[100%] h-[200%] modalGlow pointer-events-none" aria-hidden />
+  );
 }

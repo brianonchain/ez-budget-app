@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import Modal from "@/utils/components/modal/Modal";
 import Button from "@/utils/components/Button";
 import { FaCalendar } from "react-icons/fa6";
@@ -117,7 +118,8 @@ export default function ExportModal({
             }
             variant="input"
             size="base"
-            onClick={() => setActiveField("start")}
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={() => setActiveField((field) => (field === "start" ? null : "start"))}
             aria-labelledby="label-start"
             aria-haspopup="dialog"
           />
@@ -131,23 +133,27 @@ export default function ExportModal({
             }
             variant="input"
             size="base"
-            onClick={() => setActiveField("end")}
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={() => setActiveField((field) => (field === "end" ? null : "end"))}
             aria-labelledby="label-end"
             aria-haspopup="dialog"
           />
           {/* --- calendar --- */}
-          {activeField && (
-            <Calendar
-              position="center"
-              selected={activeField === "start" ? startDate : endDate}
-              onSelect={onSelectDate}
-              onClose={() => setActiveField(null)}
-            />
-          )}
+          <AnimatePresence>
+            {activeField && (
+              <Calendar
+                position="left"
+                selected={activeField === "start" ? startDate : endDate}
+                onSelect={onSelectDate}
+                onClose={() => setActiveField(null)}
+                showTime={false}
+              />
+            )}
+          </AnimatePresence>
         </div>
         <ErrorMessage message={error} />
         <Button
-          className="mt-16 tablet:mt-50 desktop:mt-40 w-full"
+          className="mt-16 tablet:mt-50 desktop:mt-70 w-full"
           label="Export"
           variant="primary"
           size="base"

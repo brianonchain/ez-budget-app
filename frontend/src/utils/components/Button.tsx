@@ -7,6 +7,8 @@ const variants = {
   danger: "buttonDangerColorGlass",
   dangerOutline:
     "text-textDanger hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover border border-buttonOutlineBorder [transition:background-color_300ms]",
+  dangerOutline2:
+    "text-textDanger hover:bg-buttonOutlineBgHover active:bg-buttonOutlineBgHover border border-buttonDangerBg [transition:background-color_300ms]",
   input: "justify-start inputPrimaryColor font-normal",
   // custom variants
   keypad: "keypadColor",

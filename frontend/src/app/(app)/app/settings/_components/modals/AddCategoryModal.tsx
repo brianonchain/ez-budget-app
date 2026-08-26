@@ -217,7 +217,7 @@ export default function AddCategoryModal({
   }
 
   return (
-    <Modal title={isEdit ? "Edit Category" : "Add a New Category"} onClose={() => setAddCategoryModal(false)} disabled={isPending}>
+    <Modal title={isEdit ? "Edit Category" : "New Category"} onClose={() => setAddCategoryModal(false)} disabled={isPending}>
       <form className="mt-2 w-full flex flex-col" onSubmit={onSubmit}>
         {/*--- category ---*/}
         <label className="inputLabel">Category{isEdit ? "" : " (e.g., Food)"}</label>
@@ -279,7 +279,7 @@ export default function AddCategoryModal({
           <Button
             className="w-full"
             label="Delete"
-            variant="danger"
+            variant="dangerOutline2"
             size="base"
             isLoading={status === "deleting"}
             onClick={deleteCategoryObject}

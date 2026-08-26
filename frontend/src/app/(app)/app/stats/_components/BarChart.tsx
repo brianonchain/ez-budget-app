@@ -4,7 +4,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLin
 import { StatsData } from "@/utils/types";
 import { SYMBOLS, DECIMALS, CURRENCY_NAMES } from "@/utils/constants";
 import { buildChartData, getCategoryColor } from "./chartHelpers";
-import { useIsDesktop } from "@/utils/hooks";
+import { useMediaQuery } from "@/utils/hooks";
+import { DESKTOP_MQ } from "@/utils/constants";
 
 function CustomTooltip({ active, payload, currency }: any) {
   if (!active || !payload?.length) return null;
@@ -69,7 +70,7 @@ export default function StatsChart({
   currency: string;
   groupBy?: "category" | "subcategory";
 }) {
-  const isDesktop = useIsDesktop();
+  const isDesktop = useMediaQuery(DESKTOP_MQ);
   const { bars, categories } = useMemo(() => buildChartData(data.items, data.period, data.startDate, groupBy), [data, groupBy]);
 
   const containerRef = useRef<HTMLDivElement>(null);
