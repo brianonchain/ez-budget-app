@@ -1,19 +1,20 @@
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { useUserMutation } from "@/utils/hooks";
 import Modal from "@/utils/components/modal/Modal";
 import { CURRENCIES } from "@/utils/constants";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
-import ErrorMessage from "@/utils/components/ErrorMessage";
+import InnerErrorModal from "@/utils/components/simpleModal/InnerErrorModal";
 
 export default function AddWorkspaceModal({
   setAddWorkspaceModal,
 }: {
   setAddWorkspaceModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { mutateAsync: userMutateAsync, error, isError, isPending } = useUserMutation();
-  const [validationError, setValidationError] = useState("");
+  const { mutateAsync: userMutateAsync, error, isError, isPending, reset: resetUserMutation } = useUserMutation();
+  const [errorMessage, setErrorMessage] = useState("");
   const [name, setName] = useState("");
   const [defaultCurrency, setDefaultCurrency] = useState("USD");
 
@@ -24,11 +25,11 @@ export default function AddWorkspaceModal({
     // validation
     const _name = name.trim();
     if (!_name) {
-      setValidationError("Please enter a name for your workspace.");
+      setErrorMessage("Please enter a name for your workspace.");
       return;
     }
     // mutation
-    setValidationError("");
+    setErrorMessage("");
     try {
       await userMutateAsync({ type: "addWorkspace", name: _name, defaultCurrency: defaultCurrency });
       setAddWorkspaceModal(false);
@@ -36,7 +37,7 @@ export default function AddWorkspaceModal({
   }
 
   return (
-    <Modal title="Add New Sheet" onClose={() => setAddWorkspaceModal(false)} disabled={isPending}>
+    <Modal title="Create New Sheet" onClose={() => setAddWorkspaceModal(false)} disabled={isPending}>
       <form className="w-full flex flex-col" onSubmit={onSubmit}>
         <label className="inputLabel">Sheet Name</label>
         <Input
@@ -46,10 +47,10 @@ export default function AddWorkspaceModal({
           value={name}
           onChange={(e) => {
             setName(e.target.value);
-            if (validationError) setValidationError("");
+            if (errorMessage) setErrorMessage("");
           }}
         />
-        <label className="mt-[16px] inputLabel">Default Currency</label>
+        <label className="mt-4 inputLabel">Default Currency</label>
         <Select
           className="w-full"
           selectSize="base"
@@ -57,7 +58,7 @@ export default function AddWorkspaceModal({
           value={defaultCurrency}
           onChange={(e) => {
             setDefaultCurrency(e.target.value);
-            if (validationError) setValidationError("");
+            if (errorMessage) setErrorMessage("");
           }}
         >
           {CURRENCIES.map((i) => (
@@ -66,11 +67,9 @@ export default function AddWorkspaceModal({
             </option>
           ))}
         </Select>
-        {/*--- error message ---*/}
-        <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
         {/*--- button ---*/}
         <Button
-          className="w-full"
+          className="mt-10 w-full"
           label="Create New Sheet"
           variant="primary"
           size="base"
@@ -79,6 +78,19 @@ export default function AddWorkspaceModal({
           disabled={isPending}
         />
       </form>
+
+      {/*--- error modal ---*/}
+      <AnimatePresence>
+        {(errorMessage || isError) && (
+          <InnerErrorModal
+            errorMessage={errorMessage || error?.message || "Unknown error"}
+            onClose={() => {
+              setErrorMessage("");
+              resetUserMutation();
+            }}
+          />
+        )}
+      </AnimatePresence>
     </Modal>
   );
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaPlus } from "react-icons/fa6";
+import { AnimatePresence } from "framer-motion";
 import Modal from "@/utils/components/modal/Modal";
 import EditButtons from "./EditButtons";
 import { useWorkspaceMutation } from "@/utils/hooks";
@@ -7,7 +7,7 @@ import { Workspace } from "@/utils/types";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
 import SettingsAddButton from "../SettingsAddButton";
-import ErrorMessage from "@/utils/components/ErrorMessage";
+import InnerErrorModal from "@/utils/components/simpleModal/InnerErrorModal";
 
 export type SubcategoryWithId = { value: string; isNew: boolean };
 export type AddCategoryModalStatus = "initial" | "adding" | "editing" | "deleting" | `deletingSubcategory${number}`;
@@ -26,7 +26,7 @@ export default function AddCategoryModal({
   const isEdit = !!clickedCategory;
 
   const [draftCategory, setDraftCategory] = useState(clickedCategory ?? "");
-  const [validationError, setValidationError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [status, setStatus] = useState<AddCategoryModalStatus>("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
   const [subcategoriesWithId, setSubcategoriesWithId] = useState<SubcategoryWithId[]>(() => {
     if (isEdit) {
@@ -40,7 +40,7 @@ export default function AddCategoryModal({
     }
   });
 
-  const { mutateAsync: mutateWorkspaceAsync, error, isError, isPending } = useWorkspaceMutation();
+  const { mutateAsync: mutateWorkspaceAsync, error, isError, isPending, reset: resetWorkspaceMutation } = useWorkspaceMutation();
 
   // sync UI states with server state
   useEffect(() => {
@@ -59,24 +59,24 @@ export default function AddCategoryModal({
     if (!workspace || status !== "initial" || isPending || isEdit) return;
     const _category = draftCategory.trim();
     if (!_category) {
-      setValidationError("Please enter a category");
+      setErrorMessage("Please enter a category");
       return;
     }
     if (workspace.categoryObjects.some((i) => i.category.toLowerCase() === _category.toLowerCase())) {
-      setValidationError("Category already exists.");
+      setErrorMessage("Category already exists");
       return;
     }
     if (_category.toLowerCase() === "none" || subcategoriesWithId.some((i) => i.value.trim().toLowerCase() === "none")) {
-      setValidationError(`Cannot use "none" as a category or subcategory.`);
+      setErrorMessage(`Cannot use "none" as a category or subcategory`);
       return;
     }
     const normalizedSubs = subcategoriesWithId.map((i) => i.value.trim().toLowerCase()).filter((i) => i !== "");
     if (new Set(normalizedSubs).size !== normalizedSubs.length) {
-      setValidationError("Subcategories cannot contain duplicates.");
+      setErrorMessage("Subcategories cannot contain duplicates");
       return;
     }
 
-    setValidationError("");
+    setErrorMessage("");
     setStatus("adding");
 
     // dedupe subcategories and remove "none"
@@ -109,20 +109,20 @@ export default function AddCategoryModal({
     const to = draftCategory.trim();
     if (!to) {
       setDraftCategory(from);
-      if (validationError) setValidationError("");
+      if (errorMessage) setErrorMessage("");
       return;
     }
     if (to.toLowerCase() === "none") {
-      setValidationError(`Cannot use "none" as a category.`);
+      setErrorMessage(`Cannot use "none" as a category`);
       return;
     }
     if (from === to) return;
     if (from.toLowerCase() !== to.toLowerCase() && workspace.categoryObjects.some((i) => i.category.toLowerCase() === to.toLowerCase())) {
-      setValidationError("Category already exists."); // allows food => Food
+      setErrorMessage("Category already exists"); // allows food => Food
       return;
     }
 
-    setValidationError("");
+    setErrorMessage("");
     setStatus("editing");
 
     try {
@@ -135,7 +135,7 @@ export default function AddCategoryModal({
   // not optimistic
   async function deleteCategoryObject() {
     if (!workspace || status !== "initial" || isPending || !isEdit) return;
-    setValidationError(""); // is-being-used validation done on backend
+    setErrorMessage(""); // is-being-used validation done on backend
     setStatus("deleting");
 
     try {
@@ -151,15 +151,15 @@ export default function AddCategoryModal({
     const subcategory = subcategoriesWithId[index].value.trim();
     if (!subcategory) return;
     if (subcategory.toLowerCase() === "none") {
-      setValidationError(`Cannot use "none" as a subcategory.`);
+      setErrorMessage(`Cannot use "none" as a subcategory`);
       return;
     }
     if (subcategoriesWithId.some((j, index2) => index !== index2 && j.value.toLowerCase() === subcategory.toLowerCase())) {
-      setValidationError("Subcategory already exists.");
+      setErrorMessage("Subcategory already exists");
       return;
     }
 
-    setValidationError("");
+    setErrorMessage("");
     setStatus("adding");
 
     try {
@@ -174,17 +174,17 @@ export default function AddCategoryModal({
     const from = workspace.categoryObjects.find((i) => i.category === clickedCategory)?.subcategories[index + 1];
     const to = subcategoriesWithId[index].value.trim();
     if (!from) {
-      setValidationError("Unknown error.");
+      setErrorMessage("Unknown error");
       return;
     }
     if (!to) {
       setSubcategoriesWithId((prev) => prev.map((j, index2) => (index2 === index ? { ...j, value: from } : j)));
-      if (validationError) setValidationError("");
+      if (errorMessage) setErrorMessage("");
       return;
     }
     if (to.toLowerCase() === "none") {
       setSubcategoriesWithId((prev) => prev.map((j, index2) => (index2 === index ? { ...j, value: from } : j)));
-      setValidationError(`Cannot use "none" as a subcategory.`);
+      setErrorMessage(`Cannot use "none" as a subcategory`);
       return;
     }
     if (from === to) return;
@@ -192,11 +192,11 @@ export default function AddCategoryModal({
       from.toLowerCase() !== to.toLowerCase() &&
       subcategoriesWithId.some((j, index2) => index2 !== index && j.value.trim().toLowerCase() === to.toLowerCase())
     ) {
-      setValidationError("Subcategories contain duplicates.");
+      setErrorMessage("Subcategories contain duplicates.");
       return;
     } // allows groceries => Groceries
 
-    setValidationError("");
+    setErrorMessage("");
     setStatus("editing");
 
     try {
@@ -209,16 +209,16 @@ export default function AddCategoryModal({
     if (status !== "initial" || isPending) return;
     // in editing mode, can only add 1 subcategory at a time
     if (isEdit && subcategoriesWithId.some((r) => r.isNew && r.value.trim() === "")) {
-      setValidationError("Please first add a subcategory above.");
+      setErrorMessage("Please first add a subcategory above");
       return;
     }
-    setValidationError("");
+    setErrorMessage("");
     setSubcategoriesWithId((prev) => [...prev, { value: "", isNew: true }]);
   }
 
   return (
     <Modal title={isEdit ? "Edit Category" : "New Category"} onClose={() => setAddCategoryModal(false)} disabled={isPending}>
-      <form className="mt-2 w-full flex flex-col" onSubmit={onSubmit}>
+      <form className="w-full flex flex-col" onSubmit={onSubmit}>
         {/*--- category ---*/}
         <label className="inputLabel">Category{isEdit ? "" : " (e.g., Food)"}</label>
         <Input
@@ -228,7 +228,7 @@ export default function AddCategoryModal({
           value={draftCategory}
           onChange={(e) => {
             setDraftCategory(e.target.value);
-            if (validationError) setValidationError("");
+            if (errorMessage) setErrorMessage("");
           }}
           onBlur={isEdit ? renameCategory : undefined}
         />
@@ -244,7 +244,7 @@ export default function AddCategoryModal({
                 value={i.value}
                 onChange={(e) => {
                   setSubcategoriesWithId((prev) => prev.map((j, index2) => (index2 === index ? { ...j, value: e.target.value } : j))); // or use id
-                  if (validationError) setValidationError("");
+                  if (errorMessage) setErrorMessage("");
                 }}
                 onBlur={isEdit ? (i.isNew ? () => addSubcategory(index) : () => renameSubcategory(index)) : undefined}
                 disabled={status !== "initial" || isPending}
@@ -253,8 +253,8 @@ export default function AddCategoryModal({
                 <EditButtons
                   workspaceId={workspace._id}
                   setSubcategoriesWithId={setSubcategoriesWithId}
-                  validationError={validationError}
-                  setValidationError={setValidationError}
+                  errorMessage={errorMessage}
+                  setErrorMessage={setErrorMessage}
                   status={status}
                   setStatus={setStatus}
                   subcategoriesWithId={subcategoriesWithId}
@@ -272,12 +272,11 @@ export default function AddCategoryModal({
           disabled={isPending || status !== "initial"}
           label="Subcategory Field"
         />
-        {/*--- validation error ---*/}
-        <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
+
         {/*--- button ---*/}
         {isEdit ? (
           <Button
-            className="w-full"
+            className="mt-20 w-full"
             label="Delete"
             variant="dangerOutline2"
             size="base"
@@ -287,7 +286,7 @@ export default function AddCategoryModal({
           />
         ) : (
           <Button
-            className="w-full"
+            className="mt-12 w-full"
             label={isEdit ? "Save" : "Add"}
             isLoading={isPending}
             variant="primary"
@@ -297,6 +296,19 @@ export default function AddCategoryModal({
           />
         )}
       </form>
+
+      {/*--- error modal ---*/}
+      <AnimatePresence>
+        {(errorMessage || isError) && (
+          <InnerErrorModal
+            errorMessage={errorMessage || error?.message || "Unknown error"}
+            onClose={() => {
+              setErrorMessage("");
+              resetWorkspaceMutation();
+            }}
+          />
+        )}
+      </AnimatePresence>
     </Modal>
   );
 }

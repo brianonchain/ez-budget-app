@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useStatsQuery, useWorkspaceQuery, useItemsQuery } from "@/utils/hooks";
 import { AnimatePresence } from "framer-motion";
 // components
+import PageShell from "../_components/PageShell";
 import BudgetCard from "./_components/BudgetCard";
 import PeriodSelector from "./_components/PeriodSelector";
 import CategoryLegend from "./_components/CategoryLegend";
@@ -98,7 +99,7 @@ export default function Stats() {
   }, []);
 
   return (
-    <div className="w-full pageContentMaxWidth px-4 py-(--pageYPadding) flex flex-col items-center gap-4">
+    <PageShell>
       <Card className="relative flex flex-col items-center">
         <div className="font-semibold text-textSecondary">Discretionary Budget</div>
         <BudgetCard
@@ -149,6 +150,6 @@ export default function Stats() {
           />
         )}
       </AnimatePresence>
-    </div>
+    </PageShell>
   );
 }

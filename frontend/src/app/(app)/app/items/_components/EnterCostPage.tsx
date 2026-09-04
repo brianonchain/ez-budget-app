@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { FaDeleteLeft, FaChevronDown } from "react-icons/fa6";
+import { AnimatePresence } from "framer-motion";
+// components
 import Button from "@/utils/components/Button";
+import InnerErrorModal from "@/utils/components/simpleModal/InnerErrorModal";
+// utils
 import { useWorkspaceMutation } from "@/utils/hooks";
 import { CURRENCIES, DECIMALS, MULTIPLIER } from "@/utils/constants";
 import { DraftItem } from "@/utils/types";
-import type { Direction } from "@/utils/types";
 
 const calc = ["7", "8", "9", "4", "5", "6", "1", "2", "3", ".", "0"] as const;
 
@@ -24,6 +27,7 @@ export default function EnterCostModal({
   // states
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState(defaultCurrency);
+  const [errorMessage, setErrorMessage] = useState("");
   // constants
   const decimals = DECIMALS[currency];
   const multiplier = MULTIPLIER[currency];
@@ -67,7 +71,10 @@ export default function EnterCostModal({
   function onEnter() {
     const normalizedAmount = amount.endsWith(".") ? amount.slice(0, -1) : amount;
     const cost = Number(normalizedAmount) * multiplier;
-    if (!Number.isFinite(cost) || cost <= 0) return;
+    if (!Number.isFinite(cost) || cost <= 0) {
+      setErrorMessage("Please enter a valid cost");
+      return;
+    }
     setDraftItem((prev) => ({ ...prev, cost }));
     onNext();
   }
@@ -136,6 +143,11 @@ export default function EnterCostModal({
 
       {/* --- enter button --- */}
       <Button className="w-full mt-12 desktop:mt-6" label="Enter" variant="primary" size="base" onClick={onEnter} disabled={isPending} />
+
+      {/*--- error modal ---*/}
+      <AnimatePresence>
+        {errorMessage && <InnerErrorModal errorMessage={errorMessage || "Unknown error"} onClose={() => setErrorMessage("")} />}
+      </AnimatePresence>
     </div>
   );
 }

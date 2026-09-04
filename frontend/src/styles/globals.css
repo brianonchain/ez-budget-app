@@ -52,7 +52,7 @@
   --color-inputPrimaryBg: #ffffff;
   --color-inputPrimaryBorder: oklch(92.9% 0.013 255.508); /* slate-200, 4% darker than bgPrimary */
   --color-inputPrimaryBorderHover: rgb(0 132 209 / 70%);
-  --color-inputPrimaryRing: rgb(0 132 209 / 40%);
+  --color-inputPrimaryRing: rgb(0 132 209 / 30%);
   --color-inputPrimaryPlaceholder: var(--color-textTertiary);
   --color-inputLoginBorder: #adbcce; /* slate-350 */
   --color-inputDangerRing: rgb(240 68 111 / 50%);
@@ -106,13 +106,13 @@
   --color-buttonOutlineBgHover: oklch(70.7% 0.165 254.624 / 14%); /* blue-400/14 */
   --color-buttonDangerBg: #ff3a6a;
   --color-buttonDangerBgHover: #ff507a; /* 6% brighter than buttonDangerBg */
-  --color-buttonRing: #546bb0;
+  --color-buttonRing: oklch(70.7% 0.165 254.624 / 60%);
   --color-activeBackBg: rgb(255 255 255 / 0.4);
   /* inputs */
   --color-inputPrimaryBg: #0a0826; /* bgPrimary */
   --color-inputPrimaryBorder: #131f40;
-  --color-inputPrimaryBorderHover: #314278;
-  --color-inputPrimaryRing: #263a78;
+  --color-inputPrimaryBorderHover: oklch(70.7% 0.165 254.624 / 50%);
+  --color-inputPrimaryRing: oklch(70.7% 0.165 254.624 / 21%);
   --color-inputLoginBorder: var(--color-inputPrimaryBorder);
   --color-inputDangerRing: rgb(255 80 122 / 60%);
   /* toggle */
@@ -202,10 +202,10 @@ button:not(:disabled),
   --leading-lg: 1.35;
   --leading-xl: 1.3;
   --leading-2xl: 1.2;
-  --radius-buttonSm: 0.875rem; /* 14px */
-  --radius-button: 1rem; /* 16px */
-  --radius-buttonLg: 1.25rem; /* 20px */
-  --radius-modal: 1.5rem; /* 24px */
+  --radius-buttonSm: 0.75rem; /* 12px */
+  --radius-button: 0.875rem; /* 14px */
+  --radius-buttonLg: 1.125rem; /* 18px */
+  --radius-modal: 1.75rem; /* 28px */
   /* desktop */
   @variant desktop {
     --font-xs: 0.75rem; /* 12px */
@@ -264,10 +264,6 @@ button:not(:disabled),
 }
 @utility roundedModal {
   border-radius: var(--radius-modal);
-}
-
-@utility topFade {
-  @apply [mask-image:linear-gradient(to_bottom,transparent_0%,black_calc(env(safe-area-inset-top)+5.5rem))] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_calc(env(safe-area-inset-top)+5.5rem))];
 }
 
 /*--- card shadows ---*/
@@ -351,8 +347,11 @@ button:not(:disabled),
 
 /*--- app design tokens ---*/
 .app {
-  --pageYPadding: 1rem;
   /* --- mobile --- */
+  --modalHeaderHeight: 4rem;
+  --modalNavButtonSize: 2.75rem;
+  --modalNavIconSize: 2.2rem;
+  --modalFadeExtension: 1rem;
   @media (orientation: portrait) {
     --menuHeight: 80px;
     --menuWidth: 0px;
@@ -363,7 +362,10 @@ button:not(:disabled),
   }
   /* --- tablet --- */
   @variant tablet {
-    --pageYPadding: 1.5rem;
+    --modalHeaderHeight: 4.5rem;
+    --modalNavButtonSize: 3rem;
+    --modalNavIconSize: 2rem;
+    --modalFadeExtension: 0.75rem;
     @media (orientation: portrait) {
       --menuHeight: 100px;
       --menuWidth: 0px;
@@ -375,7 +377,10 @@ button:not(:disabled),
   }
   /* --- desktop --- */
   @variant desktop {
-    --pageYPadding: 1.5rem;
+    --modalHeaderHeight: 4rem;
+    --modalNavButtonSize: 2.75rem;
+    --modalNavIconSize: 1.6rem;
+    --modalFadeExtension: 0.75rem;
     @media (orientation: portrait) {
       --menuHeight: 100px;
       --menuWidth: 0px;
@@ -385,6 +390,31 @@ button:not(:disabled),
       --menuWidth: 160px;
     }
   }
+
+  /* --- derived --- */
+  --modalNavButtonOffset: calc(var(--modalHeaderHeight) / 2 - var(--modalNavButtonSize) / 2);
+  --modalFadeHeight: calc(env(safe-area-inset-top) + var(--modalHeaderHeight) + var(--modalFadeExtension));
+}
+
+@utility topFade {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 1%,
+    rgba(0, 0, 0, 0.2) calc(var(--modalFadeHeight) * 0.6),
+    rgba(0, 0, 0, 0.5) calc(var(--modalFadeHeight) * 0.76),
+    rgba(0, 0, 0, 0.65) calc(var(--modalFadeHeight) * 0.84),
+    black var(--modalFadeHeight),
+    black 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) calc(var(--modalFadeHeight) * 0.3),
+    rgba(0, 0, 0, 0.3) calc(var(--modalFadeHeight) * 0.5),
+    rgba(0, 0, 0, 0.5) calc(var(--modalFadeHeight) * 0.7),
+    black var(--modalFadeHeight),
+    black 100%
+  );
 }
 
 .pageContentMaxWidth {
@@ -514,7 +544,11 @@ input:-webkit-autofill {
 /*--- only applicable for tablet (as it's a custom scrollbar) ---*/
 .modalScroll::-webkit-scrollbar-button:vertical:start:decrement {
   display: block;
-  height: 4rem;
+  height: var(--modalHeaderHeight);
+}
+.modalScroll::-webkit-scrollbar-button:vertical:end:increment {
+  display: block;
+  height: 1.25rem;
 }
 
 /*--- underline animate ---*/

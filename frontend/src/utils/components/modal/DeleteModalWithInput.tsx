@@ -1,9 +1,11 @@
+"use client";
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { useUserMutation } from "@/utils/hooks";
 import Modal from "@/utils/components/modal/Modal";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
-import ErrorMessage from "@/utils/components/ErrorMessage";
+import InnerErrorModal from "@/utils/components/simpleModal/InnerErrorModal";
 
 export default function ConfirmHighRiskModal({
   onClose,
@@ -19,10 +21,10 @@ export default function ConfirmHighRiskModal({
   onSuccess?: () => void;
 }) {
   // hooks
-  const { mutateAsync: userMutateAsync, error, isError, isPending } = useUserMutation();
+  const { mutateAsync: userMutateAsync, error, isError, isPending, reset: resetUserMutation } = useUserMutation();
   // states
   const [inputValue, setInputValue] = useState("");
-  const [validationError, setValidationError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   // updated on every render
   const isMatch = inputValue.trim() === textToMatch;
@@ -34,12 +36,12 @@ export default function ConfirmHighRiskModal({
     const _inputValue = inputValue.trim();
     // exists
     if (!_inputValue) {
-      setValidationError("Please enter the bolded text.");
+      setErrorMessage("Please enter the bolded text");
       return;
     }
     // matches
     if (_inputValue !== textToMatch) {
-      setValidationError("Input does not match the bolded text.");
+      setErrorMessage("Input does not match the bolded text");
       return;
     }
     // mutation
@@ -65,30 +67,42 @@ export default function ConfirmHighRiskModal({
           value={inputValue}
           onChange={(e) => {
             setInputValue(e.currentTarget.value);
-            if (validationError) setValidationError("");
+            if (errorMessage) setErrorMessage("");
           }}
           onBlur={(e) => {
             if (inputValue.trim() && e.currentTarget.value !== textToMatch) {
-              setValidationError("Input does not match the bolded text.");
+              setErrorMessage("Input does not match the bolded text.");
             }
           }}
           type="text"
           disabled={isPending}
           autoFocus
         />
-        {/*--- error message ---*/}
-        <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
+
         {/*--- button ---*/}
         <Button
-          className="w-full"
+          className="mt-16 tablet:mt-12 desktop:mt-10 w-full"
           label="Delete"
           variant="dangerOutline2"
           size="base"
           type="submit"
           isLoading={isPending}
-          disabled={!isMatch || isPending}
+          disabled={isPending}
         />
       </form>
+
+      {/*--- error modal ---*/}
+      <AnimatePresence>
+        {(errorMessage || isError) && (
+          <InnerErrorModal
+            errorMessage={errorMessage || error?.message || "Unknown error"}
+            onClose={() => {
+              setErrorMessage("");
+              resetUserMutation();
+            }}
+          />
+        )}
+      </AnimatePresence>
     </Modal>
   );
 }

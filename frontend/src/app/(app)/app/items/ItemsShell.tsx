@@ -1,9 +1,11 @@
+import PageShell from "../_components/PageShell";
+
 // tablet & desktop shows list container
 export default function ItemsShell({ children, addItemButton }: { children: React.ReactNode; addItemButton: React.ReactNode }) {
   return (
-    <div className="w-full h-full pageContentMaxWidth tablet:py-(--pageYPadding) select-none">
+    <PageShell className="h-full p-0 tablet:p-6">
       {/*--- ITEMS CARD ---*/}
-      <div className="relative isolate w-full h-full flex flex-col tablet:roundedModal overflow-hidden shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none">
+      <div className="relative isolate w-full h-full flex flex-col tablet:roundedModal overflow-hidden shadow-[0px_0px_12px_0px_rgba(0,0,0,0.0.08)] dark:shadow-none select-none">
         {/*--- header ---*/}
         <div className="shrink-0 px-[3%] h-12 tablet:h-14 tablet:bg-card text-buttonPrimaryBg dark:text-textPrimary flex items-center font-semibold border-b border-borderFaint tablet:overflow-y-auto thinScroll scrollbar-gutter-stable">
           <span className="w-1/2">Item</span>
@@ -19,6 +21,6 @@ export default function ItemsShell({ children, addItemButton }: { children: Reac
         {/*--- add items button (z-3) ---*/}
         {addItemButton}
       </div>
-    </div>
+    </PageShell>
   );
 }

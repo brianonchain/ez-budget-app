@@ -1,19 +1,19 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useItemsMutation } from "@/utils/hooks";
 import { AnimatePresence } from "framer-motion";
 // components
-import DeleteModal from "@/utils/components/simpleModal/InnerDeleteModal";
+import InnerDeleteModal from "@/utils/components/simpleModal/InnerDeleteModal";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
 import Calendar from "@/utils/components/Calendar";
-import ErrorMessage from "@/utils/components/ErrorMessage";
 import DetailsList from "./DetailsList";
 // types and constants
 import { CategoryObject } from "@/db/WorkspaceModel";
 import { CURRENCIES, DECIMALS } from "@/utils/constants";
-import type { DraftItem, WorkspaceData, Direction } from "@/utils/types";
+import type { DraftItem, WorkspaceData } from "@/utils/types";
 import { useInnerBackdrop } from "@/utils/components/modal/Modal";
+import InnerErrorModal from "@/utils/components/simpleModal/InnerErrorModal";
 
 export default function DetailsPage({
   workspaceData,
@@ -44,15 +44,10 @@ export default function DetailsPage({
   const [description, setDescription] = useState(draftItem.description);
   const [currency, setCurrency] = useState(draftItem.currency ?? "USD");
   const [status, setStatus] = useState<"initial" | "addingOrEditing" | "deleting">("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
-  const [validationError, setValidationError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const decimals = DECIMALS[currency];
-
-  useEffect(() => {
-    setInnerBackdrop(showDeleteModal);
-    return () => setInnerBackdrop(false);
-  }, [showDeleteModal, showCalendar, setInnerBackdrop]);
 
   function onChangeCostString(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.currentTarget.value;
@@ -97,15 +92,15 @@ export default function DetailsPage({
 
   async function onUpsert() {
     if (!Number.isFinite(draftItem.cost) || draftItem.cost <= 0) {
-      setValidationError("Please enter a cost");
+      setErrorMessage("Please enter a cost");
       return;
     }
     if (!draftItem.description.trim()) {
-      setValidationError("Please enter an item description");
+      setErrorMessage("Please enter an item description");
       return;
     }
 
-    setValidationError("");
+    setErrorMessage("");
     resetItemsMutation(); // resets error/isError state
     setStatus("addingOrEditing");
 
@@ -121,7 +116,7 @@ export default function DetailsPage({
   async function onDelete() {
     if (!draftItem._id) return;
 
-    setValidationError("");
+    setErrorMessage("");
     resetItemsMutation(); // resets error/isError state
     setStatus("deleting");
 
@@ -137,42 +132,40 @@ export default function DetailsPage({
   return (
     <div className="w-full flex flex-col">
       {/*--- date, name, cost ---*/}
-      <div className="w-full grid grid-cols-[2.75rem_1fr] desktop:grid-cols-[2.1rem_1fr] gap-1.5 items-center">
-        <div className="col-span-2 relative w-full grid grid-cols-[2.75rem_1fr] desktop:grid-cols-[2.1rem_1fr] gap-1.5 items-center">
-          <label className="detailsLabel" htmlFor="details-date">
-            Date
-          </label>
-          <div className={showDeleteModal ? "" : "z-30"}>
-            <Button
-              className="w-full"
-              label={new Date(draftItem.date).toLocaleString("en-US", {
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-                hour: "numeric",
-                minute: "2-digit",
-              })}
-              variant="input"
-              size="xs"
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={() => setShowCalendar((open) => !open)}
-            />
-          </div>
-          <AnimatePresence>
-            {showCalendar && (
-              <Calendar
-                className="row-start-1 col-span-2"
-                position="right"
-                onClose={() => setShowCalendar(false)}
-                selected={new Date(draftItem?.date)}
-                onSelect={(selected) => {
-                  if (!selected) return;
-                  setDraftItem((prev) => ({ ...prev, date: selected.toISOString() }));
-                }}
-              />
-            )}
-          </AnimatePresence>
+      <div className="relative w-full grid grid-cols-[2.75rem_1fr] desktop:grid-cols-[2.1rem_1fr] gap-1.5 items-center">
+        <label className="detailsLabel" htmlFor="details-date">
+          Date
+        </label>
+        <div className={showDeleteModal ? "" : "z-[110]"}>
+          <Button
+            className="w-full"
+            label={new Date(draftItem.date).toLocaleString("en-US", {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+            })}
+            variant="input"
+            size="xs"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={() => setShowCalendar((prev) => !prev)}
+          />
         </div>
+        <AnimatePresence>
+          {showCalendar && (
+            <Calendar
+              className="col-start-1 col-end-3 row-start-1 row-end-2"
+              position="right"
+              onClose={() => setShowCalendar(false)}
+              selected={new Date(draftItem?.date)}
+              onSelect={(selected) => {
+                if (!selected) return;
+                setDraftItem((prev) => ({ ...prev, date: selected.toISOString() }));
+              }}
+            />
+          )}
+        </AnimatePresence>
 
         <label className="detailsLabel" htmlFor="details-desc">
           Item
@@ -235,7 +228,7 @@ export default function DetailsPage({
       {/*--- save/add button ---*/}
       {["owner", "editor"].includes(workspaceData.role) && (
         <Button
-          className="mt-6 w-full"
+          className="mt-8 tablet:mt-8 desktop:mt-6 w-full"
           label={draftItem._id ? "Save Changes" : "Add Item"}
           variant="primary"
           size="base"
@@ -244,13 +237,11 @@ export default function DetailsPage({
           disabled={status !== "initial" || isPending}
         />
       )}
-      {/*--- error message ---*/}
-      <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
 
       {/*--- delete button ---*/}
       {draftItem._id && ["owner", "editor"].includes(workspaceData.role) && (
         <Button
-          className="w-full"
+          className="mt-24 tablet:mt-16 desktop:mt-16 w-full"
           label="Delete Item"
           variant="dangerOutline2"
           size="base"
@@ -260,8 +251,19 @@ export default function DetailsPage({
         />
       )}
       <AnimatePresence>
+        {/*--- error modal ---*/}
+        {(errorMessage || isError) && (
+          <InnerErrorModal
+            errorMessage={errorMessage || error?.message || "Unknown error"}
+            onClose={() => {
+              setErrorMessage("");
+              resetItemsMutation();
+            }}
+          />
+        )}
+        {/*--- delete modal ---*/}
         {showDeleteModal && (
-          <DeleteModal
+          <InnerDeleteModal
             message="Delete this item?"
             onClose={() => setShowDeleteModal(false)}
             onDelete={onDelete}

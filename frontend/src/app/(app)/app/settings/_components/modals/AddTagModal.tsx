@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { useWorkspaceMutation } from "@/utils/hooks";
 import Modal from "@/utils/components/modal/Modal";
 import { Workspace } from "@/utils/types";
 import Button from "@/utils/components/Button";
 import Input from "@/utils/components/Input";
-import ErrorMessage from "@/utils/components/ErrorMessage";
+import InnerErrorModal from "@/utils/components/simpleModal/InnerErrorModal";
 
 export default function AddTagModal({
   workspace,
@@ -15,8 +16,8 @@ export default function AddTagModal({
   setAddTagModal: React.Dispatch<React.SetStateAction<boolean>>;
   clickedTag: string;
 }) {
-  const { mutateAsync: mutateWorkspaceAsync, error, isError, isPending } = useWorkspaceMutation();
-  const [validationError, setValidationError] = useState("");
+  const { mutateAsync: mutateWorkspaceAsync, error, isError, isPending, reset: resetWorkspaceMutation } = useWorkspaceMutation();
+  const [errorMessage, setErrorMessage] = useState("");
   const [tag, setTag] = useState(clickedTag);
   const [status, setStatus] = useState<"initial" | "adding" | "editing" | "deleting">("initial"); // need status because we have 2 buttons; tanstack query isPending not enough
 
@@ -30,19 +31,19 @@ export default function AddTagModal({
     // validation
     if (!workspace || status !== "initial" || isPending || isEdit) return;
     if (!_tag) {
-      setValidationError("Please enter a tag.");
+      setErrorMessage("Please enter a tag");
       return;
     }
     if (workspace.tags.some((i) => i.toLowerCase() === _tag.toLowerCase())) {
-      setValidationError("Tag already exists.");
+      setErrorMessage("Tag already exists");
       return;
     }
     if (_tag === "none") {
-      setValidationError(`Cannot use "none" as a tag.`);
+      setErrorMessage(`Cannot use "none" as a tag`);
       return;
     }
 
-    setValidationError("");
+    setErrorMessage("");
     setStatus("adding");
 
     // mutation
@@ -59,20 +60,20 @@ export default function AddTagModal({
     // validation
     if (!workspace || !clickedTag || status !== "initial" || isPending) return;
     if (!_tag) {
-      setValidationError("Please enter a tag.");
+      setErrorMessage("Please enter a tag");
       return;
     }
     if (_tag === clickedTag) return;
     if (_tag.toLowerCase() !== clickedTag.toLowerCase() && workspace.tags.some((i) => i.toLowerCase() === _tag.toLowerCase())) {
-      setValidationError("Tag already exists.");
+      setErrorMessage("Tag already exists.");
       return;
     } // allows food => Food
     if (_tag === "none") {
-      setValidationError(`Cannot use "none" as a tag.`);
+      setErrorMessage(`Cannot use "none" as a tag`);
       return;
     }
 
-    setValidationError("");
+    setErrorMessage("");
     setStatus("editing");
 
     // mutation
@@ -88,7 +89,7 @@ export default function AddTagModal({
     if (!workspace || !clickedTag || status !== "initial" || isPending) return;
 
     // is-being-used validation done on backend
-    setValidationError("");
+    setErrorMessage("");
     setStatus("deleting");
 
     try {
@@ -110,16 +111,14 @@ export default function AddTagModal({
           value={tag}
           onChange={(e) => {
             setTag(e.target.value);
-            if (validationError) setValidationError("");
+            if (errorMessage) setErrorMessage("");
           }}
           onBlur={isEdit ? onRename : undefined}
         />
-        {/*--- validation error ---*/}
-        <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
         {/*--- button ---*/}
         {isEdit ? (
           <Button
-            className="w-full"
+            className="mt-16 w-full"
             label="Delete Tag"
             variant="dangerOutline2"
             size="base"
@@ -129,7 +128,7 @@ export default function AddTagModal({
           ></Button>
         ) : (
           <Button
-            className="w-full"
+            className="mt-8 w-full"
             label="Add Tag"
             variant="primary"
             size="base"
@@ -139,6 +138,19 @@ export default function AddTagModal({
           />
         )}
       </form>
+
+      {/*--- error modal ---*/}
+      <AnimatePresence>
+        {(errorMessage || isError) && (
+          <InnerErrorModal
+            errorMessage={errorMessage || error?.message || "Unknown error"}
+            onClose={() => {
+              setErrorMessage("");
+              resetWorkspaceMutation();
+            }}
+          />
+        )}
+      </AnimatePresence>
     </Modal>
   );
 }

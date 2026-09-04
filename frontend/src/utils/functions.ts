@@ -1,5 +1,10 @@
-import { CategoryObject } from "@/db/WorkspaceModel";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
+import { CategoryObject } from "@/db/WorkspaceModel";
 export function addId(arr: CategoryObject[]) {
   return arr.slice(1).map((i, index) => ({ id: (index + 1).toString(), ...i }));
 }

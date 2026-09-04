@@ -1,8 +1,10 @@
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
-import { DraftItem } from "@/utils/types";
+import { AnimatePresence } from "framer-motion";
 import Button from "@/utils/components/Button";
-import ErrorMessage from "@/utils/components/ErrorMessage";
-import type { Direction } from "@/utils/types";
+import InnerErrorModal from "@/utils/components/simpleModal/InnerErrorModal";
+import { DraftItem } from "@/utils/types";
+
+const MAX_DESCRIPTION_LENGTH = 30;
 
 export default function EnterNameModal({
   setDraftItem,
@@ -11,7 +13,6 @@ export default function EnterNameModal({
   setDraftItem: React.Dispatch<React.SetStateAction<DraftItem>>;
   onNext: () => void;
 }) {
-  const MAX_DESCRIPTION_LENGTH = 30;
   const [description, setDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [showCursor, setShowCursor] = useState(false);
@@ -55,8 +56,12 @@ export default function EnterNameModal({
           {description.length}/{MAX_DESCRIPTION_LENGTH} characters
         </div>
       </div>
-      <ErrorMessage message={errorMessage} />
-      <Button className="w-full" label="Enter" variant="primary" size="base" type="submit" />
+      <Button className="mt-12 desktop:mt-8 w-full" label="Enter" variant="primary" size="base" type="submit" />
+
+      {/*--- error modal ---*/}
+      <AnimatePresence>
+        {errorMessage && <InnerErrorModal errorMessage={errorMessage || "Unknown error"} onClose={() => setErrorMessage("")} />}
+      </AnimatePresence>
     </form>
   );
 }

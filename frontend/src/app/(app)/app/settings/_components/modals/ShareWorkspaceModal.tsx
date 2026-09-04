@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { AnimatePresence } from "framer-motion";
 // components
 import Button from "@/utils/components/Button";
 import Modal from "@/utils/components/modal/Modal";
@@ -11,7 +12,7 @@ import { checkEmail } from "@/utils/functions";
 import { Role, PendingSharedUser } from "@/utils/types";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
-import ErrorMessage from "@/utils/components/ErrorMessage";
+import InnerErrorModal from "@/utils/components/simpleModal/InnerErrorModal";
 
 export default function ShareWorkspaceModal({
   workspaceId,
@@ -29,10 +30,10 @@ export default function ShareWorkspaceModal({
   const sharedUsers = sharedData?.sharedUsers ?? [];
   const pendingSharedUsers = sharedData?.pendingSharedUsers ?? [];
   // states
-  const { mutateAsync: userMutateAsync, error, isError, isPending } = useUserMutation();
+  const { mutateAsync: userMutateAsync, error, isError, isPending, reset: resetUserMutation } = useUserMutation();
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<Role>("viewer");
-  const [validationError, setValidationError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [status, setStatus] = useState("initial"); // "initial", "sharing", "deletingSharedUser{id}", "deletingPendingSharedUser{id}"
 
   async function onSubmit(e: React.FormEvent) {
@@ -41,22 +42,22 @@ export default function ShareWorkspaceModal({
     // exists
     const email = inviteEmail.trim().toLowerCase();
     if (!email) {
-      setValidationError("Please enter an email.");
+      setErrorMessage("Please enter an email.");
       return;
     }
     // validate email
     if (!checkEmail(email)) {
-      setValidationError("Invalid email.");
+      setErrorMessage("Invalid email.");
       return;
     }
     // cannot invite self
     if (email === userEmail) {
-      setValidationError("Cannot invite yourself.");
+      setErrorMessage("Cannot invite yourself.");
       return;
     }
     // mutation
     setStatus("sharing");
-    setValidationError("");
+    setErrorMessage("");
     try {
       await userMutateAsync({
         type: "shareWorkspace",
@@ -74,7 +75,7 @@ export default function ShareWorkspaceModal({
 
   async function updateRole(sharedUserId: string, role: "editor" | "viewer") {
     if (!workspaceId || isPending) return;
-    setValidationError("");
+    setErrorMessage("");
     try {
       await userMutateAsync({ type: "updateSharedUser", workspaceId, sharedUserId, role });
     } catch {} // error will show on UI
@@ -82,7 +83,7 @@ export default function ShareWorkspaceModal({
 
   async function deleteSharedUser(sharedUserId: string) {
     if (!workspaceId || isPending) return;
-    setValidationError("");
+    setErrorMessage("");
     setStatus(`deletingSharedUser${sharedUserId}`);
     try {
       await userMutateAsync({ type: "deleteSharedUser", workspaceId, sharedUserId });
@@ -92,7 +93,7 @@ export default function ShareWorkspaceModal({
 
   async function deletePendingSharedUser(user: PendingSharedUser) {
     if (!workspaceId || isPending) return;
-    setValidationError("");
+    setErrorMessage("");
     setStatus(`deletingPendingSharedUser${user._id}`);
     try {
       await userMutateAsync({ type: "deletePendingSharedUser", workspaceId, invitedEmail: user.invitedEmail });
@@ -116,7 +117,7 @@ export default function ShareWorkspaceModal({
               value={inviteEmail}
               onChange={(e) => {
                 setInviteEmail(e.currentTarget.value);
-                setValidationError("");
+                setErrorMessage("");
               }}
               disabled={isPending}
             />
@@ -143,65 +144,77 @@ export default function ShareWorkspaceModal({
             type="submit"
           />
           {/*--- error message ---*/}
-          <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
         </form>
 
+        <div className="w-full my-8 border-t border-borderFaint" />
+
         {/*--- SHARED WITH ---*/}
-        <div className="py-6 border-t-[1.5px] border-borderFaint">
-          <p className="font-medium">Shared With</p>
-          <div className="mt-4 flex flex-col gap-4 textSm tablet:textBase">
-            {isLoadingShared ? (
-              <div className="w-full flex items-center justify-center py-8">
-                <Spinner />
-              </div>
-            ) : isSharedError ? (
-              <div className="text-center text-textDanger py-4">Failed to load shared users.</div>
-            ) : sharedUsers.length === 0 && pendingSharedUsers.length === 0 ? (
-              <div className="text-center opacity-70 py-4">No shared users yet.</div>
-            ) : (
-              <>
-                {pendingSharedUsers.map((user) => (
-                  <div key={user._id} className="flex items-center justify-between gap-2">
-                    <div className="min-w-0 flex-1 truncate">{user.invitedEmail}</div>
-                    <Button
-                      label="Pending"
-                      variant="outline"
-                      size="pill"
-                      iconRight={<FaX className="text-sm desktop:text-xs translate-y-[1px] text-textDanger" />}
-                      onClick={() => deletePendingSharedUser(user)}
-                      isLoading={status === `deletingPendingSharedUser${user._id}`}
-                      disabled={isPending}
-                    />
-                  </div>
-                ))}
-                {sharedUsers.map((user) => (
-                  <div key={user._id} className="flex items-center gap-2">
-                    <div className="min-w-0 flex-1 truncate">{user.email}</div>
-                    <Select
-                      selectSize="base"
-                      variant="primary"
-                      value={user.role}
-                      onChange={(e) => {
-                        if (e.currentTarget.value === "remove") {
-                          deleteSharedUser(user._id);
-                          return;
-                        }
-                        updateRole(user._id, e.currentTarget.value as "editor" | "viewer");
-                      }}
-                      disabled={isPending}
-                    >
-                      <option value="editor">Editor</option>
-                      <option value="viewer">Viewer</option>
-                      <option disabled>────</option>
-                      <option value="remove">Remove</option>
-                    </Select>
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
+        <p className="font-semibold textLg text-center">Current Shared Users</p>
+        <div className="mt-6 flex flex-col gap-4 textSm tablet:textBase">
+          {isLoadingShared ? (
+            <div className="w-full flex items-center justify-center py-8">
+              <Spinner />
+            </div>
+          ) : isSharedError ? (
+            <div className="text-center text-textDanger py-4">Failed to load shared users.</div>
+          ) : sharedUsers.length === 0 && pendingSharedUsers.length === 0 ? (
+            <div className="text-center opacity-70 py-4">No shared users yet.</div>
+          ) : (
+            <>
+              {pendingSharedUsers.map((user) => (
+                <div key={user._id} className="flex items-center justify-between gap-2">
+                  <div className="min-w-0 flex-1 truncate">{user.invitedEmail}</div>
+                  <Button
+                    label="Pending"
+                    variant="outline"
+                    size="pill"
+                    iconRight={<FaX className="text-sm desktop:text-xs translate-y-[1px] text-textDanger" />}
+                    onClick={() => deletePendingSharedUser(user)}
+                    isLoading={status === `deletingPendingSharedUser${user._id}`}
+                    disabled={isPending}
+                  />
+                </div>
+              ))}
+              {sharedUsers.map((user) => (
+                <div key={user._id} className="flex items-center gap-2">
+                  <div className="min-w-0 flex-1 truncate">{user.email}</div>
+                  <Select
+                    selectSize="base"
+                    variant="primary"
+                    value={user.role}
+                    onChange={(e) => {
+                      if (e.currentTarget.value === "remove") {
+                        deleteSharedUser(user._id);
+                        return;
+                      }
+                      updateRole(user._id, e.currentTarget.value as "editor" | "viewer");
+                    }}
+                    disabled={isPending}
+                  >
+                    <option value="editor">Editor</option>
+                    <option value="viewer">Viewer</option>
+                    <option disabled>────</option>
+                    <option value="remove">Remove</option>
+                  </Select>
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
+
+      {/*--- error modal ---*/}
+      <AnimatePresence>
+        {(errorMessage || isError) && (
+          <InnerErrorModal
+            errorMessage={errorMessage || error?.message || "Unknown error"}
+            onClose={() => {
+              setErrorMessage("");
+              resetUserMutation();
+            }}
+          />
+        )}
+      </AnimatePresence>
     </Modal>
   );
 }

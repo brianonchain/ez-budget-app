@@ -33,6 +33,8 @@ export default function ItemsClient() {
   const [draftItem, setDraftItem] = useState<DraftItem>(emptyItem);
   const [modalName, setModalName] = useState<"details" | "addItem" | null>(null);
 
+  console.log("modalName", modalName);
+
   // flatten pages into a single items array, then group by date
   const allItems = useMemo(() => itemsData?.pages.flatMap((p) => p.items) ?? [], [itemsData]);
   const dateGroups = useMemo(() => {
@@ -155,6 +157,7 @@ export default function ItemsClient() {
         {modalName === "addItem" && workspaceData && (
           <AddItemModal setDraftItem={setDraftItem} draftItem={draftItem} workspaceData={workspaceData} onClose={onClose} />
         )}
+
         {modalName === "details" && workspaceData && (
           <DetailsModal setDraftItem={setDraftItem} draftItem={draftItem} workspaceData={workspaceData} onClose={onClose} />
         )}

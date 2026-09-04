@@ -6,7 +6,8 @@ import { CategoryObject } from "@/db/WorkspaceModel";
 import Input from "@/utils/components/Input";
 import Select from "@/utils/components/Select";
 import { CURRENCIES } from "@/utils/constants";
-import ErrorMessage from "@/utils/components/ErrorMessage";
+import InnerErrorModal from "@/utils/components/simpleModal/InnerErrorModal";
+import { AnimatePresence } from "framer-motion";
 
 export default function BudgetModal({
   workspaceId,
@@ -21,9 +22,9 @@ export default function BudgetModal({
 }) {
   const [draftAmount, setDraftAmount] = useState(String(discretionaryBudget?.amount ?? 0));
   const [draftCurrency, setDraftCurrency] = useState(discretionaryBudget?.currency ?? "USD");
-  const [validationError, setValidationError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [draftBudgetCategoryObjects, setDraftBudgetCategoryObjects] = useState<CategoryObject[]>(discretionaryBudget.categoryObjects ?? []);
-  const { mutateAsync, error, isError, isPending } = useWorkspaceMutation();
+  const { mutateAsync, error, isError, isPending, reset: resetWorkspaceMutation } = useWorkspaceMutation();
 
   // update UI state with server state; but will not fire on mutation fire, so need rollback in update
   useEffect(() => {
@@ -110,18 +111,16 @@ export default function BudgetModal({
             value={draftAmount}
             onChange={(e) => {
               setDraftAmount(e.target.value);
-              if (validationError) setValidationError("");
+              if (errorMessage) setErrorMessage("");
             }}
             onBlur={onBlurAmount}
           />
         </div>
-        {/*--- validation error ---*/}
-        <ErrorMessage message={validationError ? validationError : isError ? error?.message : ""} />
+
+        <div className="w-full my-8 desktop:my-6 border-t border-borderFaint" />
 
         {/*--- category checkboxes ---*/}
-        <div className="pt-6 desktop:pt-4 font-medium border-t border-borderFaint">
-          Which categories are part of your discretionary budget?
-        </div>
+        <div className="font-medium">Which categories are part of your discretionary budget?</div>
         <div className="mt-6 grid grid-cols-2 gap-8">
           {categoryObjects.map((catObj) => {
             return (
@@ -152,6 +151,19 @@ export default function BudgetModal({
           })}
         </div>
       </div>
+
+      {/*--- error modal ---*/}
+      <AnimatePresence>
+        {(errorMessage || isError) && (
+          <InnerErrorModal
+            errorMessage={errorMessage || error?.message || "Unknown error"}
+            onClose={() => {
+              setErrorMessage("");
+              resetWorkspaceMutation();
+            }}
+          />
+        )}
+      </AnimatePresence>
     </Modal>
   );
 }

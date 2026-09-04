@@ -1,12 +1,17 @@
 import { useState } from "react";
-import type { Direction } from "@/utils/types";
 import Modal from "@/utils/components/modal/Modal";
 import EnterCostPage from "./EnterCostPage";
 import EnterNamePage from "./EnterNamePage";
 import DetailsPage from "./DetailsPage";
 import type { WorkspaceData, DraftItem } from "@/utils/types";
 
-type AddItemPage = "cost" | "name" | "details";
+type PageKey = "cost" | "name" | "details";
+
+const pageMap: Record<PageKey, { title: string; back?: PageKey }> = {
+  cost: { title: "Enter Cost" },
+  name: { title: "Enter Name", back: "cost" },
+  details: { title: "Item Info", back: "name" },
+};
 
 export default function AddItemModal({
   workspaceData,
@@ -19,29 +24,31 @@ export default function AddItemModal({
   setDraftItem: React.Dispatch<React.SetStateAction<DraftItem>>;
   onClose: () => void;
 }) {
-  const [page, setPage] = useState<AddItemPage>("cost");
-  const [direction, setDirection] = useState<Direction>(0);
+  const [pageKey, setPageKey] = useState<PageKey>("cost");
+  const [direction, setDirection] = useState<1 | -1>(1); // 1=forward, -1=back
 
-  function onNext(nextPage: AddItemPage) {
+  const { title, back } = pageMap[pageKey];
+
+  function onNext(nextPage: PageKey) {
     setDirection(1);
-    setPage(nextPage);
+    setPageKey(nextPage);
   }
 
-  function onBack(prevPage: AddItemPage) {
+  function onBack(prevPage: PageKey) {
     setDirection(-1);
-    setPage(prevPage);
+    setPageKey(prevPage);
   }
 
   return (
     <Modal
-      title={page === "cost" ? "Enter Cost" : page === "name" ? "Enter Name" : "Item Info"}
+      title={title}
       onClose={onClose}
       // multipage modal
-      pageKey={page}
+      pageKey={pageKey}
       direction={direction}
-      onBack={page === "name" ? () => onBack("cost") : page === "details" ? () => onBack("name") : undefined}
+      onBack={back ? () => onBack(back) : undefined}
     >
-      {page === "cost" && (
+      {pageKey === "cost" && (
         <EnterCostPage
           setDraftItem={setDraftItem}
           workspaceId={workspaceData.workspace._id}
@@ -49,8 +56,8 @@ export default function AddItemModal({
           onNext={() => onNext("name")}
         />
       )}
-      {page === "name" && <EnterNamePage setDraftItem={setDraftItem} onNext={() => onNext("details")} />}
-      {page === "details" && (
+      {pageKey === "name" && <EnterNamePage setDraftItem={setDraftItem} onNext={() => onNext("details")} />}
+      {pageKey === "details" && (
         <DetailsPage setDraftItem={setDraftItem} draftItem={draftItem} workspaceData={workspaceData} onClose={onClose} />
       )}
     </Modal>

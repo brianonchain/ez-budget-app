@@ -8,14 +8,13 @@ import { AnimatePresence } from "framer-motion";
 import { useQueryClient } from "@tanstack/react-query";
 // images
 import { FiShare2, FiTrash2, FiUserMinus } from "react-icons/fi";
-import { LuGripVertical } from "react-icons/lu";
 // components (modals)
 import PasswordModal from "./_components/modals/PasswordModal";
 import ChangeEmailModal from "./_components/modals/ChangeEmailModal";
 import AddCategoryModal from "./_components/modals/AddCategoryModal";
 import AddTagModal from "./_components/modals/AddTagModal";
 import ShareWorkspaceModal from "./_components/modals/ShareWorkspaceModal";
-import ConfirmHighRiskModal from "@/utils/components/modal/ConfirmHighRiskModal";
+import ConfirmHighRiskModal from "@/utils/components/modal/DeleteModalWithInput";
 import AddWorkspaceModal from "./_components/modals/AddWorkspaceModal";
 import ExportModal from "./_components/modals/ExportModal";
 import ErrorModal from "@/utils/components/simpleModal/ErrorModal";

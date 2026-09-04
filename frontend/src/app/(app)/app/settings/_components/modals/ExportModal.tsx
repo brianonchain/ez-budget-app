@@ -7,7 +7,7 @@ import { FaCalendar } from "react-icons/fa6";
 import { fetchGet } from "@/utils/functions";
 import { SYMBOLS, DECIMALS } from "@/utils/constants";
 import Calendar from "@/utils/components/Calendar";
-import ErrorMessage from "@/utils/components/ErrorMessage";
+import InnerErrorModal from "@/utils/components/simpleModal/InnerErrorModal";
 
 function toDateString(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -24,7 +24,7 @@ export default function ExportModal({
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [activeField, setActiveField] = useState<"start" | "end" | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   function onSelectDate(selected: Date | undefined) {
     if (!selected) return;
@@ -39,15 +39,16 @@ export default function ExportModal({
   }
 
   async function onExport() {
+    console.log("onExport", startDate, endDate);
     if (!startDate || !endDate) {
-      setError("Please select a start and end date.");
+      setErrorMessage("Please select a start and end date");
       return;
     }
 
     const start = toDateString(startDate);
     const end = toDateString(endDate);
 
-    setError("");
+    setErrorMessage("");
     setIsLoading(true);
     try {
       const resJson = await fetchGet(`/api/exportItems?workspaceId=${workspaceId}&startDate=${start}&endDate=${end}`);
@@ -64,7 +65,7 @@ export default function ExportModal({
       }[] = resJson.data.items;
 
       if (items.length === 0) {
-        setError("No items found in this date range.");
+        setErrorMessage("No items found in this date range");
         setIsLoading(false);
         return;
       }
@@ -91,7 +92,7 @@ export default function ExportModal({
 
       setExportModal(false);
     } catch (e: any) {
-      setError(e.message || "Export failed.");
+      setErrorMessage(e.message || "Export failed");
     } finally {
       setIsLoading(false);
     }
@@ -151,17 +152,20 @@ export default function ExportModal({
             )}
           </AnimatePresence>
         </div>
-        <ErrorMessage message={error} />
         <Button
-          className="mt-16 tablet:mt-50 desktop:mt-70 w-full"
+          className="mt-16 tablet:mt-70 desktop:mt-66 w-full"
           label="Export"
           variant="primary"
           size="base"
           onClick={onExport}
           isLoading={isLoading}
-          disabled={!startDate || !endDate}
         />
       </div>
+
+      {/*--- error modal ---*/}
+      <AnimatePresence>
+        {errorMessage && <InnerErrorModal errorMessage={errorMessage || "Unknown error"} onClose={() => setErrorMessage("")} />}
+      </AnimatePresence>
     </Modal>
   );
 }

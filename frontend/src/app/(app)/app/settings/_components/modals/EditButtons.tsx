@@ -5,8 +5,8 @@ import { SubcategoryWithId, AddCategoryModalStatus } from "./AddCategoryModal";
 
 export default function EditButtons({
   setSubcategoriesWithId,
-  validationError,
-  setValidationError,
+  errorMessage,
+  setErrorMessage,
   subcategoriesWithId,
   status,
   setStatus,
@@ -15,8 +15,8 @@ export default function EditButtons({
   workspaceId,
 }: {
   setSubcategoriesWithId: React.Dispatch<React.SetStateAction<SubcategoryWithId[]>>;
-  validationError: string;
-  setValidationError: React.Dispatch<React.SetStateAction<string>>;
+  errorMessage: string;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   subcategoriesWithId: SubcategoryWithId[];
   status: AddCategoryModalStatus;
   setStatus: React.Dispatch<React.SetStateAction<AddCategoryModalStatus>>;
@@ -28,7 +28,7 @@ export default function EditButtons({
 
   useEffect(() => {
     if (error) {
-      setValidationError(error.message);
+      setErrorMessage(error.message);
     }
   }, [error]);
 
@@ -39,7 +39,7 @@ export default function EditButtons({
       [next[from], next[to]] = [next[to], next[from]];
       return next;
     });
-    if (validationError) setValidationError("");
+    if (errorMessage) setErrorMessage("");
   }
 
   async function moveUp() {
@@ -59,7 +59,7 @@ export default function EditButtons({
   }
   async function moveDown() {
     if (status !== "initial" || isPending || rowIndex === subcategoriesWithId.length - 1) return;
-    setValidationError("");
+    setErrorMessage("");
 
     moveRow(rowIndex, rowIndex + 1);
     setStatus("editing");
@@ -80,7 +80,7 @@ export default function EditButtons({
   // not optimistic
   async function deleteSubcategory(index: number) {
     if (status !== "initial" || isPending) return;
-    setValidationError("");
+    setErrorMessage("");
     const subcategory = subcategoriesWithId[index].value.trim();
     // delete empty category without mutation (for new fields)
     if (!subcategory) {
