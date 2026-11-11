@@ -8,7 +8,7 @@ type InputProps = {
   isError?: boolean;
   errorMsg?: string;
   inputSize?: "xs" | "sm" | "default" | "login";
-  inputVariant?: "default" | "danger" | "login";
+  inputVariant?: "default" | "login";
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 export default function InputEmail({

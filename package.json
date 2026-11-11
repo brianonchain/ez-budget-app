@@ -1,0 +1,8 @@
+{
+  "name": "ez-budget-app",
+  "private": true,
+  "scripts": {
+    "dev:web": "pnpm --filter web dev",
+    "dev:mobile": "pnpm --filter mobile start"
+  }
+}
