@@ -1,0 +1,56 @@
+---
+description: Convert a copied shadcn component in utils/components into ez-budget style
+globs: web/src/shadcn/**/*.{tsx,ts},web/src/utils/components/**/*.{tsx,ts}
+alwaysApply: false
+---
+
+# Shadcn → app style
+
+## Workflow (human + AI)
+
+1. **Human** installs the default shadcn component into `web/src/shadcn/components/ui/`.
+2. **Human** manually copies that file into `web/src/utils/components/` (usually `controls/`).
+3. **Human** asks the AI to convert **only the copied file** to ez-budget style using this rule.
+4. Leave the `shadcn/components/ui/` original untouched as the upstream reference.
+5. Migrate feature call sites only when the human asks — after the control API is settled.
+
+## Paths
+
+| Layer | Path |
+| --- | --- |
+| Upstream shadcn (do not restyle) | `web/src/shadcn/components/ui/` |
+| App component (edit this) | `web/src/utils/components/` (usually `controls/`) |
+| Tokens | `web/src/styles/globals.css` (`:root` / `.dark` / `@theme inline`) |
+| Shared control utilities | `web/src/styles/components.css` |
+
+## When converting the copied file
+
+1. Keep the shadcn primitive + `cva` + `cn` structure.
+2. Prefer our tokens/utilities over shadcn defaults:
+   - Sizes → `heights` + `textXs`/`textSm`/`textBase` + `roundedButton*` where needed
+   - Responsive → `desktop:` / `tablet:` custom variants
+   - Inputs → `inputColor` / `inputRing` (`--inputBg`, `--inputBorder*`)
+   - Primary fill → `--primary` / `--primaryHover` / `--primaryBorder` (not only `bg-primary/80`)
+3. Preserve a11y classes (`focus-visible:ring-*`, `aria-invalid:*`, `aria-expanded:*`) unless intentionally replaced.
+4. Mark app-only variants/sizes with `// custom`; note dropped shadcn classes with `// removed: …`.
+5. Features should import the `utils/components` version, not `shadcn/components/ui`.
+
+## Reference: Button
+
+- App: `web/src/utils/components/controls/Button.tsx`
+- Upstream: `web/src/shadcn/components/ui/button.tsx`
+- Patterns: `text` / `iconLeft` / `iconRight` / `isLoading`; absolute spinner; optical `-ml-0.5` / `-mr-0.5`; `border` + color together
+
+## TODO — fill as you migrate
+
+- Input:
+- Select:
+- Toggle:
+- Other:
+
+## Do not
+
+- Don’t edit the `shadcn/components/ui/` original during conversion.
+- Don’t invent parallel token names when an existing `--*` / utility already covers it.
+- Don’t change `:root` / `.dark` token meaning just to match one shadcn class — map the class instead.
+- Don’t migrate call sites or delete old controls unless the human asks.

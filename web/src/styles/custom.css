@@ -1,0 +1,134 @@
+/*--- card shadows ---*/
+@utility cardShadow {
+  @apply shadow-[0px_2px_8px_0px_rgba(0,0,0,0.06)] dark:shadow-none;
+}
+@utility cardShadowWithHover {
+  @apply shadow-[0px_2px_10px_0px_rgba(20,38,52,0.05)] hover:shadow-[0px_6px_16px_0px_rgba(20,38,52,0.1)] dark:shadow-none;
+}
+
+/*--- buttons ---*/
+@utility buttonWhiteGradient {
+  @apply bg-[linear-gradient(to_top,rgb(255_255_255_/_0.2),rgb(255_255_255_/_0.05))];
+}
+
+/*--- login button ---*/
+.loginButtonBase {
+  @apply w-full h-16 desktop:h-15 px-8 tablet:px-9 flex items-center gap-4 select-none font-medium;
+}
+.loginButtonColor {
+  @apply bg-loginButtonBg hover:bg-loginButtonBgHover border border-loginButtonBorder cardShadowWithHover transition-all duration-300;
+}
+.loginButtonRoundness {
+  @apply rounded-[33px] desktop:rounded-[1.9rem];
+}
+
+.inputLoginColor {
+  @apply bg-inputBg placeholder:text-muted-foreground border border-inputLoginBorder hover:border-inputBorderHover focus:border-inputBorderHover inputRing transition-all duration-300;
+}
+
+/*--- labels ---*/
+.detailsLabel {
+  @apply textSm font-medium;
+}
+.settingsLabel {
+  @apply font-medium;
+}
+
+/*--- app: settings page ---*/
+.settingsDraggableElement {
+  @apply px-3.5 h-13 desktop:h-11 flex items-center justify-between hover:bg-muted;
+}
+
+.settingsOutlineContainer {
+  @apply my-3 px-3 xs:px-6 py-5 flex flex-col gap-6 rounded-2xl border border-borderStrong;
+}
+
+.settingsFilterContainer {
+  @apply w-full flex flex-col lg:flex-row items-center gap-3 lg:gap-2;
+}
+
+/*--- links ---*/
+
+@utility linkGrayColor {
+  @apply text-muted-foreground hover:text-accent-foreground active:text-accent-foreground;
+}
+@utility linkColor {
+  @apply text-link hover:text-linkHover active:text-linkHover;
+}
+
+/*--- GLOWS ---*/
+.dark .pageGlow {
+  background: radial-gradient(
+    ellipse at right center,
+    rgba(42, 84, 222, 0.6) 0%,
+    rgba(42, 84, 222, 0.45) 6%,
+    rgba(42, 84, 222, 0.35) 12%,
+    rgba(42, 84, 222, 0.17) 24%,
+    rgba(42, 84, 222, 0.07) 36%,
+    transparent 50%
+  );
+}
+/*--- modal glow is same as page glow for mobile But, it is brighter for tablet/desktop to contrast non-black background ---*/
+.dark .modalGlow {
+  background: radial-gradient(
+    ellipse at right center,
+    rgba(42, 84, 222, 0.6) 0%,
+    rgba(42, 84, 222, 0.45) 6%,
+    rgba(42, 84, 222, 0.35) 12%,
+    rgba(42, 84, 222, 0.17) 24%,
+    rgba(42, 84, 222, 0.07) 36%,
+    transparent 50%
+  );
+  @variant tablet {
+    background: radial-gradient(
+      ellipse at right center,
+      rgba(42, 84, 222, 0.6) 0%,
+      rgba(42, 84, 222, 0.5) 10%,
+      rgba(42, 84, 222, 0.35) 26%,
+      rgba(42, 84, 222, 0.25) 40%,
+      rgba(42, 84, 222, 0.15) 70%,
+      transparent 90%
+    );
+  }
+}
+.dark .simpleModalGlow {
+  background: radial-gradient(
+    ellipse at center bottom,
+    rgba(42, 84, 222, 0.9) 0%,
+    rgba(42, 84, 222, 0.68) 12%,
+    rgba(42, 84, 222, 0.48) 30%,
+    rgba(42, 84, 222, 0.34) 50%,
+    rgba(42, 84, 222, 0.26) 76%,
+    rgba(42, 84, 222, 0.14) 100%
+  );
+  @variant tablet {
+    background: radial-gradient(
+      ellipse at center bottom,
+      rgba(57, 91, 255, 0.5) 0%,
+      rgba(57, 91, 255, 0.36) 16%,
+      rgba(57, 91, 255, 0.22) 34%,
+      rgba(57, 91, 255, 0.12) 56%,
+      rgba(57, 91, 255, 0.08) 78%,
+      rgba(57, 91, 255, 0.045) 100%
+    );
+  }
+}
+
+/*--- underline animate ---*/
+.underline-animate {
+  position: relative;
+  display: inline-block;
+}
+.underline-animate::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 0;
+  background-color: currentColor;
+  transition: all 0.3s ease;
+}
+.underline-animate:hover::after {
+  width: 100%;
+}

@@ -1,0 +1,29 @@
+import Link from "next/link";
+import Ani from "./Ani";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utils/authOptions";
+
+export default async function Hero() {
+  const session = await getServerSession(authOptions);
+
+  return (
+    <div className="landingSectionSize min-h-[max(100vh,700px)] grid grid-cols-1 lg:grid-cols-[55%_45%] gap-3 lg:gap-0">
+      {/*--- text ---*/}
+      <div className="mt-[60px] lg:mt-0 w-full flex flex-col items-start lg:justify-center gap-[20px] text-center lg:text-start">
+        <div className="text-[58px] leading-[1.2] font-bold">
+          Track expenses{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#63CDF6] to-[#B568FF]">with fewer clicks</span>
+        </div>
+        <div className="text-xl leading-[1.6]">Use EZ Budget App to track your daily expenses with speed and customizability.</div>
+        <Link
+          className="mt-4 buttonPrimaryColor px-7 desktop:px-6 py-4 desktop:py-3 font-medium rounded-full mx-auto lg:mx-0"
+          href={session ? "/app/items" : "/login"}
+        >
+          Enter App
+        </Link>
+      </div>
+      {/*--- animation ---*/}
+      <Ani />
+    </div>
+  );
+}

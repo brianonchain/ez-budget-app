@@ -1,0 +1,74 @@
+/*--- CONTROLS ---*/
+
+/*--- important base styles ---*/
+button:not(:disabled),
+[role="button"]:not(:disabled) {
+  cursor: pointer;
+}
+/* adds outline for keyboard users (input, select, textarea uses ring) */
+:focus-visible:not(input, select, textarea) {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+:focus-visible:is(input, select, textarea) {
+  outline: none;
+}
+/* add this to <button> elements where outline overflows and becomes clipped (e.g., clickable items in a list, segmented control) */
+.innerOutline:focus-visible {
+  outline-offset: -2px;
+}
+
+/*--- button ---*/
+@utility buttonPrimaryColor {
+  @apply text-primary-foreground bg-primary hover:bg-primaryHover active:bg-primaryHover [transition:background-color_300ms];
+}
+
+/*--- input ---*/
+@utility inputRing {
+  @apply ring-2 ring-transparent focus:ring-inputRing;
+}
+.inputColor {
+  @apply bg-inputBg border border-input hover:border-inputBorderHover focus:border-inputBorderHover inputRing  placeholder:text-muted-foreground transition-all duration-300;
+}
+
+/*--- select ---*/
+.selectOutlineColor {
+  @apply border border-borderStrong hover:border-inputBorderHover focus:border-inputBorderHover inputRing transition-all duration-300;
+}
+
+/*--- labels ---*/
+.inputLabel {
+  @apply pb-1.5 font-medium;
+}
+
+/*--- MODAL ---*/
+
+@utility modalContentPadding {
+  @apply px-4 tablet:px-12 desktop:px-10 pt-6 tablet:pt-2 pb-12 tablet:pb-9 desktop:pb-7;
+}
+@utility modalColor {
+  @apply bg-modal tablet:border tablet:border-borderStrong;
+}
+@utility innerModalColor {
+  @apply bg-modal2 tablet:border tablet:border-borderStrong;
+}
+/*--- only applicable for tablet (as it's a custom scrollbar) ---*/
+.modalScroll::-webkit-scrollbar-button:vertical:start:decrement {
+  display: block;
+  height: var(--modalHeaderHeight);
+}
+.modalScroll::-webkit-scrollbar-button:vertical:end:increment {
+  display: block;
+  height: 1.25rem;
+}
+
+/*--- CONTAINERS ---*/
+
+/*--- landing ---*/
+.landingSectionSize {
+  @apply px-[16px] xs:px-[24px] lg:px-[100px] w-full max-w-[650px] lg:max-w-[calc(960px+200px)];
+}
+/*--- app ---*/
+.pageContentMaxWidth {
+  @apply tablet:max-w-150 desktop:max-w-140;
+}

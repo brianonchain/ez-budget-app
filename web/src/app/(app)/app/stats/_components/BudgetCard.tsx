@@ -1,0 +1,47 @@
+"use client";
+import { DiscretionaryBudget } from "@/utils/types";
+import { SYMBOLS, DECIMALS } from "@/utils/constants";
+import TextSkeleton from "@/utils/components/TextSkeleton";
+import EditIcon from "@/utils/components/EditIcon";
+
+function formatAmount(amount: number, currency: string) {
+  const sym = SYMBOLS[currency] ?? "";
+  const dec = DECIMALS[currency] ?? 2;
+  return `${sym}${amount.toLocaleString(undefined, { minimumFractionDigits: dec, maximumFractionDigits: dec })}`;
+}
+
+export default function BudgetCard({
+  discretionaryBudget,
+  monthlySpent,
+  setBudgetModal,
+}: {
+  discretionaryBudget: DiscretionaryBudget | undefined | null;
+  monthlySpent: number | undefined | null;
+  setBudgetModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  return (
+    <>
+      <EditIcon
+        className="absolute right-2 xs:right-3 top-2 xs:top-3"
+        onClick={() => setBudgetModal(true)}
+        ariaLabel="Edit discretionary budget"
+      />
+      {/* 0 is falsy so need != null, which checks for null and undefined */}
+      {discretionaryBudget && monthlySpent != null ? (
+        <>
+          <div className="mt-3 textXl font-semibold">
+            {formatAmount(discretionaryBudget.amount - monthlySpent, discretionaryBudget.currency)}
+          </div>
+          <div className="mt-1 textXs text-accent-foreground">
+            remaining from {formatAmount(discretionaryBudget.amount, discretionaryBudget.currency)}
+          </div>
+        </>
+      ) : (
+        <>
+          <TextSkeleton className="mt-3 textXl font-semibold w-40" />
+          <TextSkeleton className="mt-1 textXs w-40" />
+        </>
+      )}
+    </>
+  );
+}

@@ -1,0 +1,475 @@
+@import "tailwindcss";
+@import "./animations.css";
+@import "./splashscreen.css";
+@import "./recharts.css";
+@import "./calendar.css";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "./components.css";
+@import "./custom.css";
+
+/*--- custom variants ---*/
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant tablet {
+  @media (orientation: landscape) and (min-height: 600px), (orientation: portrait) and (min-width: 600px) {
+    @slot;
+  }
+}
+@custom-variant desktop {
+  @media (hover: hover) and (pointer: fine) {
+    @media (orientation: landscape) and (min-height: 600px), (orientation: portrait) and (min-width: 600px) {
+      @slot;
+    }
+  }
+}
+
+/* breakpoints */
+@theme {
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 750px;
+  --breakpoint-lg: 980px;
+  --breakpoint-xl: 1250px;
+  --breakpoint-2xl: 1440px;
+}
+
+/* COLORS */
+:root {
+  /* backgrounds */
+  --background: oklch(0.97 0.01 314);
+  --card: oklch(1 0 0);
+  --popover: var(--card);
+  --modal: var(--background);
+  --modal2: var(--background); /* inner modal color */
+  /* text */
+  --foreground: oklch(0.145 0 0);
+  --card-foreground: var(--foreground);
+  --popover-foreground: var(--foreground);
+  --accent-foreground: oklch(0.564 0.033 237.363);
+  --muted-foreground: oklch(0.693 0.024 237.815);
+  --link: oklch(0.567 0.144 245.441); /* 6% darker than --primary */
+  --linkHover: oklch(0.516 0.128 244.252); /* 12% darker than --link */
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary-foreground: var(--foreground);
+  /* borders */
+  --border: oklch(0.929 0.013 255.5); /* slate-200 */
+  --borderStrong: oklch(0.898 0.017 256.285); /* slate-250, used for input border, outline button border, modal border */
+  /* button */
+  --primary: oklch(0.588 0.158 241.966); /* sky-600 */
+  --primaryHover: oklch(0.544 0.146 242.358); /* sky-650 */
+  --primaryBorder: transparent; /* needed for dark mode glass effect */
+  --secondary: oklch(0.869 0.022 252.894); /* slate-300 */
+  --destructive: oklch(0.626 0.17371 20.734);
+  --ring: oklch(from var(--primary) l c h / 0.7);
+  /* hover colors */
+  --accent: oklch(0.898 0.017 256.285 / 0.35); /* originally --background, but opacity better (outline button on gray bg will show contrast)
+  --muted: oklch(0.898 0.017 256.285 / 0.2);
+  --navButtonHover: var(--card);
+  --navButtonTap: var(--card);
+  /* input */
+  --inputBg: var(--card);
+  --input: var(--borderStrong); /* shadcn var; see --borderStrong for use cases */
+  --inputBorderHover: oklch(from var(--primary) l c h / 0.7);
+  --inputRing: oklch(from var(--primary) l c h / 0.3);
+  --inputLoginBorder: oklch(0.789 0.031 252.988); /* slate-350 */
+  /* toggle */
+  --toggleOn: var(--primary);
+  --toggleOff: oklch(0.869 0.022 252.894); /* slate-300 */
+  /* custom colors */
+  --loginButtonBg: oklch(1 0 0);
+  --loginButtonBgHover: oklch(1 0 0);
+  --loginButtonBorder: var(--border);
+
+  /* sidebar */
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+  /* chart */
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+}
+
+.dark {
+  /* background */
+  --background: oklch(0.145 0.054 287.868);
+  --card: oklch(0.707 0.165 254.624 / 0.07); /* blue-400/7 */
+  --popover: var(--card);
+  --modal: #11142f; /* blue-400/7 overlaid on background */
+  --modal2: #18244a; /* inner modal color, blue-400/21 overlaid on background */
+  /* text */
+  --foreground: oklch(0.985 0 0);
+  --card-foreground: var(--foreground);
+  --popover-foreground: var(--foreground);
+  --accent-foreground: oklch(0.962 0.011 274.894 / 0.7); /* textSecondary */
+  --muted-foreground: oklch(0.962 0.011 274.894 / 0.45); /* textTertiary */
+  --link: oklch(0.583 0.212 260.112); /* 6% brighter than buttonPrimaryBg */
+  --linkHover: oklch(0.63 0.182 259.686); /* 9% brighter than link */
+  --primary-foreground: var(--foreground);
+  --secondary-foreground: var(--foreground);
+  /* borders */
+  --border: oklch(0.707 0.165 254.624 / 0.08); /* blue-400/8 */
+  --borderStrong: oklch(0.707 0.165 254.624 / 0.21); /* replaces shadcn --input; input border, outline button border, modal border */
+  /* button */
+  --primary: oklch(0.58 0.243 261.2 / 0.65);
+  --primaryHover: oklch(0.58 0.243 261.2 / 0.75);
+  --primaryBorder: oklch(1 0 0 / 0.1); /* needed for dark mode glass effect */
+  --secondary: oklch(0.269 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --ring: oklch(0.707 0.165 254.624 / 0.8); /* blue-400/80 */
+  /* hover colors */
+  --accent: oklch(0.707 0.165 254.624 / 0.14); /* blue-400/14 */
+  --muted: var(--card);
+  --navButtonHover: var(--accent);
+  --navButtonTap: oklch(1 0 0 / 0.4);
+  /* input */
+  --inputBg: var(--background);
+  --input: var(--borderStrong); /* shadcn input border, but use borderStrong instead */
+  --inputBorderHover: oklch(0.707 0.165 254.624 / 0.5); /* blue-400/50 */
+  --inputRing: oklch(0.707 0.165 254.624 / 0.2); /* blue-400/20 */
+  --inputLoginBorder: var(--borderStrong);
+  /* toggle */
+  --toggleOn: var(--primary);
+  --toggleOff: oklch(0.962 0.011 274.894 / 0.2);
+  /* custom colors */
+  --loginButtonBg: transparent;
+  --loginButtonBgHover: oklch(0.707 0.165 254.624 / 0.07); /* blue-400/7 */
+  --loginButtonBorder: oklch(1 0 0 / 0.21);
+
+  /* sidebar */
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 0.1);
+  --sidebar-ring: oklch(0.556 0 0);
+  /* chart */
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  /* --primary: oklch(0.56 0.243 261.2); */
+  /* --primaryHover: oklch(0.64 0.243 261.2); */
+}
+
+/* TYPOGRAPHY and RADIUS */
+/* must reapply text size (e.g., textBase, textSm) after using "app", and "login" classes) */
+/* for landing page */
+:root {
+  /* shadcn */
+  --radius: 0.625rem;
+
+  /* text sizes */
+  --font-xs: 0.875rem; /* 14px */
+  --font-sm: 1rem; /* 16px */
+  --font-base: 1.125rem; /* 18px */
+  --font-lg: 1.25rem; /* 20px */
+  --font-xl: 1.5rem; /* 24px */
+  --font-2xl: 1.875rem; /* 30px */
+  --leading-xs: 1.6;
+  --leading-sm: 1.5;
+  --leading-base: 1.5;
+  --leading-lg: 1.45;
+  --leading-xl: 1.4;
+  --leading-2xl: 1.3;
+  /* radius */
+  --radius-buttonSm: 0.325rem;
+  --radius-button: 0.5rem;
+  --radius-buttonLg: 0.75rem;
+  --radius-modal: 1rem;
+}
+/* for login page */
+.login {
+  /* desktop (LOGIN mobile/tablet is the same as APP mobile/tablet */
+  @variant desktop {
+    --font-xs: 0.875rem; /* 14px */
+    --font-sm: 0.9375rem; /* 15px */
+    --font-base: 1rem; /* 16px */
+    --font-lg: 1.125rem; /* 18px */
+    --font-xl: 1.375rem; /* 22px */
+    --font-2xl: 1.625rem; /* 26px */
+    --radius-buttonSm: 0.75rem; /* 12px */
+    --radius-button: 0.875rem; /* 14px */
+    --radius-buttonLg: 1.125rem; /* 18px */
+    --radius-modal: 1.375rem; /* 22px */
+  }
+}
+/* for app pages */
+.app {
+  /* mobile/tablet */
+  --font-xs: 0.9375rem; /* 15px */
+  --font-sm: 1rem; /* 16px */
+  --font-base: 1.0625rem; /* 17px */
+  --font-lg: 1.1875rem; /* 19px */
+  --font-xl: 1.4375rem; /* 23px */
+  --font-2xl: 1.8125rem; /* 29px */
+  --leading-xs: 1.5;
+  --leading-sm: 1.5;
+  --leading-base: 1.5;
+  --leading-lg: 1.5;
+  --leading-xl: 1.3;
+  --leading-2xl: 1.2;
+  --radius-buttonSm: 0.75rem; /* 12px */
+  --radius-button: 0.875rem; /* 14px */
+  --radius-buttonLg: 1.125rem; /* 18px */
+  --radius-modal: 1.75rem; /* 28px */
+  /* desktop */
+  @variant desktop {
+    --font-xs: 0.75rem; /* 12px */
+    --font-sm: 0.8125rem; /* 13px */
+    --font-base: 0.875rem; /* 14px */
+    --font-lg: 1rem; /* 16px */
+    --font-xl: 1.125rem; /* 18px */
+    --font-2xl: 1.5rem; /* 24px */
+    --leading-xs: 1.5;
+    --leading-sm: 1.5;
+    --leading-base: 1.5;
+    --leading-lg: 1.5;
+    --leading-xl: 1.35;
+    --leading-2xl: 1.2;
+    --radius-buttonSm: 0.625rem; /* 10px */
+    --radius-button: 0.75rem; /* 12px */
+    --radius-buttonLg: 1rem; /* 16px */
+    --radius-modal: 1.5rem; /* 24px */
+  }
+}
+@utility textXs {
+  font-size: var(--font-xs);
+  line-height: var(--leading-xs);
+}
+@utility textSm {
+  font-size: var(--font-sm);
+  line-height: var(--leading-sm);
+}
+@utility textBase {
+  font-size: var(--font-base);
+  line-height: var(--leading-base);
+}
+@utility textLg {
+  font-size: var(--font-lg);
+  line-height: var(--leading-lg);
+}
+@utility textXl {
+  font-size: var(--font-xl);
+  line-height: var(--leading-xl);
+}
+@utility text2xl {
+  font-size: var(--font-2xl);
+  line-height: var(--leading-2xl);
+}
+/*--- radius ---*/
+@utility roundedButtonSm {
+  border-radius: var(--radius-buttonSm);
+}
+@utility roundedButton {
+  border-radius: var(--radius-button);
+}
+@utility roundedButtonLg {
+  border-radius: var(--radius-buttonLg);
+}
+@utility roundedModal {
+  border-radius: var(--radius-modal);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50; /* few or no shadcn components use outline */
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/*--- APP ---*/
+
+/*--- app design tokens ---*/
+.app {
+  /* --- mobile --- */
+  --modalHeaderHeight: 3rem;
+  --modalNavButtonSize: 2.75rem;
+  --modalNavIconSize: 2.2rem;
+  --modalFadeExtension: 1rem;
+  @media (orientation: portrait) {
+    --menuHeight: 80px;
+    --menuWidth: 0px;
+  }
+  @media (orientation: landscape) {
+    --menuHeight: 0px;
+    --menuWidth: 120px;
+  }
+  /* --- tablet --- */
+  @variant tablet {
+    --modalHeaderHeight: 4.5rem;
+    --modalNavButtonSize: 3rem;
+    --modalNavIconSize: 2rem;
+    --modalFadeExtension: 0.75rem;
+    @media (orientation: portrait) {
+      --menuHeight: 100px;
+      --menuWidth: 0px;
+    }
+    @media (orientation: landscape) {
+      --menuHeight: 0px;
+      --menuWidth: 160px;
+    }
+  }
+  /* --- desktop --- */
+  @variant desktop {
+    --modalHeaderHeight: 4rem;
+    --modalNavButtonSize: 2.75rem;
+    --modalNavIconSize: 1.6rem;
+    --modalFadeExtension: 0.75rem;
+    @media (orientation: portrait) {
+      --menuHeight: 100px;
+      --menuWidth: 0px;
+    }
+    @media (orientation: landscape) {
+      --menuHeight: 0px;
+      --menuWidth: 160px;
+    }
+  }
+
+  /* --- derived --- */
+  --modalNavButtonOffset: calc(var(--modalHeaderHeight) / 2 - var(--modalNavButtonSize) / 2);
+  --modalFadeHeight: calc(env(safe-area-inset-top) + var(--modalHeaderHeight) + var(--modalFadeExtension));
+}
+
+@utility topFade {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) calc(var(--modalFadeHeight) * 0.3),
+    rgba(0, 0, 0, 0.3) calc(var(--modalFadeHeight) * 0.5),
+    rgba(0, 0, 0, 0.5) calc(var(--modalFadeHeight) * 0.7),
+    black var(--modalFadeHeight),
+    black 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) calc(var(--modalFadeHeight) * 0.3),
+    rgba(0, 0, 0, 0.3) calc(var(--modalFadeHeight) * 0.5),
+    rgba(0, 0, 0, 0.5) calc(var(--modalFadeHeight) * 0.7),
+    black var(--modalFadeHeight),
+    black 100%
+  );
+}
+
+/*--- autofill ---*/
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px var(--inputBg) inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
+}
+
+/*--- scrollbar ---*/
+@utility thinScroll {
+  --scrollbar-track: #f6f9fc;
+  --scrollbar-thumb: #cbd5e1;
+  .dark & {
+    --scrollbar-track: rgba(255, 255, 255, 0.07);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 6px;
+    background-color: var(--scrollbar-track);
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    background-color: var(--scrollbar-thumb);
+  }
+}
+
+/* @theme inline does not emit css variable */
+@theme inline {
+  /* font */
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  /* background */
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-popover: var(--popover);
+  --color-modal: var(--modal);
+  --color-modal2: var(--modal2);
+  /* text */
+  --color-foreground: var(--foreground);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  /* border */
+  --color-border: var(--border);
+  --color-borderStrong: var(--borderStrong);
+  /* button */
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-destructive: var(--destructive);
+  --color-muted: var(--muted); /* same color as accent in shadcn default, used for hover on ghost/outline buttons, skeleton fill */
+  --color-accent: var(--accent); /* selected item bg, highlighted row, hover in menus */
+  --color-navButtonHover: var(--navButtonHover);
+  --color-navButtonTap: var(--navButtonTap);
+  --color-ring: var(--ring);
+  /* inputs */
+
+  /* radius */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  /* sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  /* chart */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* CUSTOM */
+  /* text */
+  --color-link: var(--link);
+  --color-linkHover: var(--linkHover);
+  /* input */
+  --color-inputBg: var(--inputBg);
+  --color-input: var(--input);
+  --color-inputBorderHover: var(--inputBorderHover);
+  --color-inputRing: var(--inputRing);
+  --color-inputLoginBorder: var(--inputLoginBorder);
+  /* toggle */
+  --color-toggleOn: var(--toggleOn);
+  --color-toggleOff: var(--toggleOff);
+  /* custom colors */
+  --color-loginButtonBg: var(--loginButtonBg);
+  --color-loginButtonBgHover: var(--loginButtonBgHover);
+  --color-loginButtonBorder: var(--loginButtonBorder);
+  /* buttons glass */
+  --color-primaryHover: var(--primaryHover);
+  --color-primaryBorder: var(--primaryBorder);
+}
